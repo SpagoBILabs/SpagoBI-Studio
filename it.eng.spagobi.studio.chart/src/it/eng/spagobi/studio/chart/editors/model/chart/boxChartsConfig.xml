@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BOXCHARTS>
+	<BOXCHART name='commons'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplebox.xml'>
+		<!-- PARAMETERS FOR ALL BOXCHARTS -->
+		<DIMENSIONS>
+			<DIMENSION name='width' description='width of the chart'
+				type='INTEGER' />
+			<DIMENSION name='height' description='height of the chart'
+				type='INTEGER' />
+		</DIMENSIONS>
+		<COLORS name='background' description='Background color' type='COLOR' defaultValue='#FFFFFF' />		
+		<STYLES>
+			<STYLE name="STYLE_LABELS_DEFAULT" description='DEFAULT STYLE FOR LABELS' tooltip='choose a default style for labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_TITLE" description='STYLE FOR TITLE' tooltip='choose the style for title of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL' />
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_SUBTITLE" description='STYLE FOR SUBTITLE' tooltip='choose the style for subtitle of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_VALUE_LABELS" description='STYLE FOR VALUE LABELS' tooltip='choose the style for value labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>		
+		</STYLES>
+		<CONF>
+			<SECTION name="Parameters">
+				<PARAMETER name='category_label' description='x Axis label'
+					type='STRING' tooltip='Label for categories'/>
+				<PARAMETER name='value_label' description='y Axis label'
+					type='STRING' tooltip='Label for y axis'/>
+				<PARAMETER name='n_visualization' description='Number of visualization'
+					type='INTEGER' tooltip='Number of visualizations'/>
+			</SECTION>
+		</CONF>
+	</BOXCHART>
+	<BOXCHART name='simplebox'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplebox.xml'>
+		<CONF>
+		</CONF>
+	</BOXCHART>
+</BOXCHARTS>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DIALCHARTS>
+	<DIALCHART name='commons'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simpledial.xml'>
+		<!-- PARAMETERS FOR ALL DIALCHARTS -->
+		<DIMENSIONS>
+			<DIMENSION name='width' description='width of the chart'
+				type='INTEGER' tooltip='width of the chart'/>
+			<DIMENSION name='height' description='height of the chart'
+				type='INTEGER' tooltip='height of the chart'/>
+		</DIMENSIONS>
+		<COLORS name='background' description='Background color' type='COLOR' defaultValue='#FFFFFF' tooltip='set the background color '/>		
+		<STYLES type='COMBO'>
+			<STYLE name="STYLE_TICK_LABELS" description='' tooltip='Style for the tick labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" defaultValue='ARIAL' />
+				<STYLE_INFO name="size" description="" type="INTEGER"
+					defaultValue='10' />
+				<STYLE_INFO name="color" description="" type="COLOR"
+					defaultValue='#FF0000' />
+			</STYLE>
+			<STYLE name="STYLE_TITLE" description='' tooltip='Style of the title'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL' />
+				<STYLE_INFO name="size" description="" type="INTEGER"
+					defaultValue='10' />
+				<STYLE_INFO name="color" description="" type="COLOR"
+					defaultValue='#FF0000' />
+			</STYLE>
+			<STYLE name="STYLE_VALUE_LABELS" description='' tooltip='Style of the value labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL' />
+				<STYLE_INFO name="size" description="" type="INTEGER"
+					defaultValue='10' />
+				<STYLE_INFO name="color" description="" type="COLOR"
+					defaultValue='#FF0000' />
+			</STYLE>
+		</STYLES>
+		<CONF>
+			<SECTION name='others'>
+				<PARAMETER name='upper' description='upper bound' type='FLOAT' tooltip='set the upper bound' defaultValue='100.0'/>
+				<PARAMETER name='lower' description='lower bound' type='FLOAT' tooltip='set the lower bound' defaultValue='0.0'/>
+				<PARAMETER name='legend' description='Legend' type='BOOLEAN' tooltip='draw legend?' defaultValue='true'/>
+				<PARAMETER name="legend_position" description='Legend Position' type='COMBO'
+					values='top,left,right,bottom' tooltip='position of the legend' defaultValue='bottom'/>
+				<PARAMETER name='multichart' description='Multichart' type='BOOLEAN' tooltip='Is multichart?' defaultValue='false'/>
+				<PARAMETER name="orientation_multichart" description='Multichart Orientation' type='COMBO'
+					values='vertical,horizontal' tooltip='Multichart orientation' defaultValue='vertical'/>
+
+			</SECTION>
+		</CONF>
+	</DIALCHART>
+	<DIALCHART name='simpledial'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simpledial.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='orientation' description='Orientation'
+					type='COMBO' values='horizontal,vertical' tooltip='orientation of the chart' defaultValue='vertical'/>
+				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10'/>
+				<PARAMETER name='minortickcount' description='Minor tick count'
+					type='FLOAT' tooltip='set the minor tick count' defaultValue='1.0'/>
+			</SECTION>
+		</CONF>
+	</DIALCHART>
+	<DIALCHART name='speedometer'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/speedometer.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='orientation' description='Orientation'
+					type='COMBO' values='horizontal,vertical'  tooltip='orientation of the chart' defaultValue='vertical'/>
+				<PARAMETER name='increment' description='Increment' type='FLOAT' defaultValue='10.0'/>
+				<PARAMETER name='minortickcount' description='Minor tick count'
+					type='FLOAT' tooltip='set the increment value' defaultValue='1'/>
+				<PARAMETER name='dialtextuse' description='Dial Text Use'
+					type='BOOLEAN' tooltip='set the dial text use' defaultValue='false'/>
+			</SECTION>
+		</CONF>
+	</DIALCHART>
+	<DIALCHART name='meter'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/meter.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='orientation' description='Orientation'
+					type='COMBO' values='horizontal,vertical' tooltip='orientation of the chart' />
+				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10.0'/>
+				<PARAMETER name='minortickcount' description='Minor tick count'
+					type='FLOAT' defaultValue='1.0' />
+			</SECTION>
+		</CONF>
+	</DIALCHART>
+	<DIALCHART name='thermomether'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/thermomether.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10.0'/>
+				<PARAMETER name='minortickcount' description='Minor tick count'
+					type='FLOAT' tooltip='set the minor tick count' defaultValue='1.0'/>
+			</SECTION>
+		</CONF>
+	</DIALCHART>
+	<DIALCHART name='bullet'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/bullet.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='orientation' description='Orientation'
+					type='COMBO' values='horizontal,vertical' tooltip='orientation of the chart' defaultValue='vertical'/>
+				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10.0'/>
+				<PARAMETER name='minortickcount' description='Minor tick count'
+					type='FLOAT' tooltip='set the minor tick count' defaultValue='1.0'/>
+				<PARAMETER name='target' description='Target' type='FLOAT' tooltip='set the target' defaultValue='50.0'/>
+			</SECTION>
+		</CONF>
+	</DIALCHART>
+</DIALCHARTS>

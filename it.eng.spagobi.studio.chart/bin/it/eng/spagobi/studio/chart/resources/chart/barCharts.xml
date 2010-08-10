@@ -1,0 +1,24 @@
+<BARCHART type='simplebar' name='Title'>
+  	<DIMENSION width='465' height='300'/>
+      <STYLE_LABELS_DEFAULT font='Arial' size='10' color='#000000' orientation='vertical'/>
+      <STYLE_X_AXIS_LABELS font='Arial' size='10' color='#000000' orientation='vertical'/>
+      <STYLE_Y_AXIS_LABELS font='Arial' size='10' color='#000000' orientation='vertical'/>
+      <STYLE_TITLE font='Arial' size='13' color='#0C2D83'/>  
+      <STYLE_SUBTITLE font='Arial' size='12' color='#6699FF' name='Subtitle'/>  
+      <COLORS background='#FFFFFF'/>
+      <STYLE_VALUE_LABELS font='Arial' size='7' color='#000000' orientation='horizontal' />  
+   <CONF>
+      <PARAMETER name='category_label' value='Nome asse categorie'/>
+      <PARAMETER name='value_label' value='Nome asse valori'/>
+      <PARAMETER name='add_labels' value='false'/>
+      <PARAMETER name='n_visualization' value='60'/>
+      <PARAMETER name='view_filter' value='false'/>
+      <PARAMETER name='view_slider' value='false'/>
+      <PARAMETER name='filter_cat_groups' value='true'/>
+      <PARAMETER name='legend_position' value='right'/>
+      <PARAMETER name='legend' value='true'/>
+      <PARAMETER name='orientation' value='horizontal'/>
+   </CONF>
+      <SERIES_COLORS   SER1='#009999'  SER2='#8AA5CB' SER3='#CCCCFF' />
+      <SERIES_LABELS   SER1='serie prima'  SER2='serie seconda' SER3='serie terza' />
+</BARCHART>

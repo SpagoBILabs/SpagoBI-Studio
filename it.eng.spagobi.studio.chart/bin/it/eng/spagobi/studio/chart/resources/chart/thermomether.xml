@@ -1,0 +1,14 @@
+<DIALCHART type='thermomether' name='Title'>
+  <DIMENSION width='200' height='400'/>
+  <CONF>
+    <PARAMETER name='lower' value='0'/>
+    <PARAMETER name='upper' value='100'/>
+    <PARAMETER name='increment' value='20'/>
+    <PARAMETER name='minortickcount' value='20'/>
+</CONF>  
+    <INTERVALS>
+        <INTERVAL label='normal' min='0.0' max='30.0' color='#00FF00'/> 
+        <INTERVAL label='warning' min='30.0' max='60.0' color='#888888'/> 
+        <INTERVAL label='critical' min='60.0' max='100.0' color='#FF0000'/>
+    </INTERVALS>
+</DIALCHART>

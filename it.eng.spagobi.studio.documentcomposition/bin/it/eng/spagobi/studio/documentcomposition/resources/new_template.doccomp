@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENTS_COMPOSITION template_value="/jsp/engines/documentcomposition/template/dynamicTemplate.jsp">
+	<DOCUMENTS_CONFIGURATION video_width="1400" video_height="1050">
+		<DOCUMENT label="mapUsa"  sbi_obj_label="mapUsa" >
+		   <STYLE style="float:left;top:0px;margin:0px;width:50%;height:50%;" />
+			<PARAMETERS>
+			 <PARAMETER label="year" sbi_par_label="year" type="IN" default_value="1997" >
+            <REFRESH />
+				</PARAMETER>
+  			<PARAMETER label="state" sbi_par_label="state" type="OUT" default_value="CA" >
+            <REFRESH>
+              <REFRESH_DOC_LINKED labelDoc="chartSales" labelParam="state"/>
+              <REFRESH_DOC_LINKED labelDoc="rptBestSales" labelParam="state"/>
+      			</REFRESH>
+  			</PARAMETER>
+			</PARAMETERS>
+		</DOCUMENT> 
+		
+		<DOCUMENT label="rptBestSales"  sbi_obj_label="rptBestSales">
+     	<STYLE style="float:right;:0px;width:49%;height:100%;" />
+			<PARAMETERS>
+			 <PARAMETER label="year" sbi_par_label="year" type="IN" default_value="1997" >
+            <REFRESH />
+				</PARAMETER>
+				<PARAMETER label="state" sbi_par_label="state" type="IN" default_value="CA" >
+            <REFRESH />
+				</PARAMETER>
+				<PARAMETER label="month" sbi_par_label="month" type="IN" default_value="January" >
+            <REFRESH />
+				</PARAMETER>
+			</PARAMETERS>
+		</DOCUMENT>
+		
+	<DOCUMENT label="chartSales"  sbi_obj_label="Chart-linkable-USA_2" >
+		<STYLE style="float:left;top:500px;margin:0px;width:50%;height:50%;" />
+		<PARAMETERS>
+				<PARAMETER label="year" sbi_par_label="year" type="IN" default_value="1997" >
+            <REFRESH />
+				</PARAMETER>
+				<PARAMETER label="state" sbi_par_label="state" type="IN" default_value="CA" >
+				  <REFRESH>
+            <REFRESH_DOC_LINKED labelDoc="rptBestSales" labelParam="state"/>
+          </REFRESH>
+			</PARAMETER>
+			<PARAMETER label="month" sbi_par_label="month" type="OUT" default_value="" >
+          <REFRESH>
+            <REFRESH_DOC_LINKED labelDoc="rptBestSales" labelParam="month"/>
+    			</REFRESH>
+			</PARAMETER>
+			</PARAMETERS>
+	</DOCUMENT>	
+						
+	
+
+  </DOCUMENTS_CONFIGURATION>
+</DOCUMENTS_COMPOSITION>

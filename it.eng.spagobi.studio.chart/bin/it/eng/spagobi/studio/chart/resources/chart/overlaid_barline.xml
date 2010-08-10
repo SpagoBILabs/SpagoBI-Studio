@@ -1,0 +1,17 @@
+<BARCHART type='overlaid_barline' name='Indice di Turnover del Personale (2008)'>
+  <DIMENSION width='380' height='570'/>
+    <STYLE_TITLE font='Arial' size='14' color='#003366'/>  
+    <STYLE_SUBTITLE font='Arial' size='12' color='#1F57C5' name=''/>  
+    <STYLE_LABELS_DEFAULT font='Arial' size='12' color='#000000'/> 
+    <STYLE_X_AXIS_LABELS font='Arial' size='12' color='#000000'/> 
+    <STYLE_Y_AXIS_LABELS font='Arial' size='12' color='#000000'/> 
+  <CONF>
+  <PARAMETER name='category_label' value='Azienda'/>
+  <PARAMETER name='value_label' value='Indice di Turnover e Media Regionale'/>
+  <PARAMETER name='n_visualization' value='10'/>
+  <PARAMETER name='view_filter' value='false'/>
+  <PARAMETER name='view_slider' value='false'/>
+  <SERIES_COLORS INDICE_DI_TURNOVER='#1FC5B0' MEDIAREGIONALE='#1F57C5' />
+  <SERIES_DRAW INDICE_DI_TURNOVER='bar' MEDIAREGIONALE='line'  />
+  </CONF>
+</BARCHART>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Dashboard Editor"
+            extensions="sbidash"
+            icon="icons/objecticon_DASH.png"
+            class="it.eng.spagobi.studio.dashboard.editors.DashboardEditor"
+            id="it.eng.spagobi.studio.dashboard.editors.DashboardEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="it.eng.spagobi.studio.dashboard.popupmenus.ResourceNavigatorContribution"
+            targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
+         <action
+            id="it.eng.spagobi.studio.dashboard.actions.NewDashboardAction" 
+            label="Dashboard"
+            icon="icons/objecticon_DASH.png" 
+            style="push"
+            menubarPath="group.new"
+            class="it.eng.spagobi.studio.dashboard.actions.NewDashboardAction" />
+            <!-- menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" -->
+      </viewerContribution>
+   </extension>
+
+</plugin>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PIECHARTS>
+	<PIECHART name='commons'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplepie.xml'>
+		<!-- PARAMETERS FOR ALL PIECHARTS -->
+		<DIMENSIONS>
+			<DIMENSION name='width' description='width of the chart'
+				type='INTEGER' />
+			<DIMENSION name='height' description='height of the chart'
+				type='INTEGER' />
+		</DIMENSIONS>
+		<COLORS name='background' description='Background color' type='COLOR' defaultValue='#FFFFFF' />
+		<STYLES>
+			<STYLE name="STYLE_LABELS_DEFAULT" description='DEFAULT STYLE FOR LABELS' tooltip='choose a default style for labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_TITLE" description='STYLE FOR TITLE' tooltip='choose the style for title of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL' />
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_SUBTITLE" description='STYLE FOR SUBTITLE' tooltip='choose the style for subtitle of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+		</STYLES>
+		<CONF>
+			<SECTION name="slider">
+				<PARAMETER name='values' description='How to view values' type='COMBO' values='normal,percentage' tooltip='Select if view values in percentage form'/>
+				<PARAMETER name='dimensions' description='How many dimensions: ' type='COMBO' values='2d,3d' tooltip='select if view chart in 2d or 3d form'/>
+			</SECTION>
+		</CONF>
+	</PIECHART>
+	<PIECHART name='simplepie'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplepie.xml'>
+		<CONF>
+		</CONF>
+	</PIECHART>
+	<PIECHART name='linkablepie'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/linkablepie.xml'>
+		<CONF>
+		</CONF>
+		<DRILL document="DocLabel" type="STRING">
+			<PARAM name='categoryurlname' />
+			<PARAM name='seriesurlname' />
+			<PARAMS>   <!-- ignored by Reader -->
+				<PARAM name="ParName" type="STRING" />
+				<PARAM name="ParType" type="COMBO" values='relative,absolute' />
+				<PARAM name="ParValue" type="STRING" />
+			</PARAMS>
+		</DRILL>
+	</PIECHART>
+</PIECHARTS>

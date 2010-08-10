@@ -1,0 +1,17 @@
+<DIALCHART type='simpledial' name='Title'>
+  <DIMENSION width='250' height='250'/>
+  <STYLE_TITLE font='Arial' size='16' color='#000000'/>  
+  <STYLE_VALUE_LABEL font='Arial' size='18' color='#00EEEE'/> 
+  <STYLE_TICK_LABELS font='Arial' size='12' color='#FF0000'/> 
+  <CONF>
+    <PARAMETER name='orientation' value='horizontal'/>
+    <PARAMETER name='lower' value='0'/>
+    <PARAMETER name='upper' value='100'/>
+    <PARAMETER name='increment' value='20'/>
+    <PARAMETER name='minortickcount' value='10'/>
+  </CONF>
+    <INTERVALS>
+      <!--  <INTERVAL  min='0.0' max='100.0' color='#FFFFFF'/> -->
+    </INTERVALS>
+
+</DIALCHART>

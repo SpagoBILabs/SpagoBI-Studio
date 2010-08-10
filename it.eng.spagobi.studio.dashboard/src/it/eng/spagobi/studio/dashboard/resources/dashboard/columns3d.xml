@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DASHBOARD movie='/dashboards/columns3d.lzx.swf' displayTitleBar='true'>
+	<DIMENSION width='560' height='200' />
+	<CONF>
+		<PARAMETER name='paramWidth' value='500' />
+		<PARAMETER name='paramHeight' value='500' />
+		<PARAMETER name='xColName' value='xLabel' />
+		<PARAMETER name='valsColName' value='line1' />
+		<PARAMETER name='minYValue' value='0' />
+		<PARAMETER name='maxYValue' value='200' />
+		<PARAMETER name='yStepOnGrid' value='20' />
+		<PARAMETER name='column1Color' value='0xf92525' />
+		<PARAMETER name='column2Color' value='0x17e512' />
+		<PARAMETER name='column3Color' value='0xbe4ce3' />
+		<PARAMETER name='column4Color' value='0x5420ff' />
+		<PARAMETER name='column5Color' value='0xf442ff' />
+		<PARAMETER name='column6Color' value='0xfb7819' />
+		<PARAMETER name='column7Color' value='0x0f5004' />
+		<PARAMETER name='column8Color' value='0x19fbee' />
+		<PARAMETER name='column9Color' value='0x9cd000' />
+		<PARAMETER name='column10Color' value='0xfddd09' />	
+	</CONF>
+	<DATA url="/servlet/AdapterHTTP?ACTION_NAME=GET_DATASET_RESULT">
+	</DATA>
+</DASHBOARD>
+<!-- 
+	the displayTitleBar property works only when the portlet run in singleObjectModality 
+-->
+

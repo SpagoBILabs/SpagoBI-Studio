@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DASHBOARDS>
+	<DASHBOARD type='Rotation' templatePath='it/eng/spagobi/studio/dashboard/resources/dashboard/rotation.xml' movie='/dashboards/rot.lzx.swf' >
+		<CONF>
+			<PARAMETER name='value' description='Name of the value column' type='STRING' />
+			<PARAMETER name='paramWidth' description='Set table width' type='NUMBER' />
+			<PARAMETER name='paramHeight' description='Set table height' type='NUMBER' />
+			<PARAMETER name='refreshRate' description='Refresh rate (in ms)' type='NUMBER' />
+			<PARAMETER name='minValue' description='Minimum value' type='NUMBER' />
+			<PARAMETER name='lowValue' description='Low circular sector upper edge value' type='NUMBER' />
+			<PARAMETER name='highValue' description='High circular sector lower edge value' type='NUMBER' />
+			<PARAMETER name='maxValue' description='Maximum value' type='NUMBER' />
+			<PARAMETER name='colorArc1' description='Low circular sector color' type='COLOR' />
+			<PARAMETER name='colorArc2' description='Medium circular sector color' type='COLOR' />
+			<PARAMETER name='colorArc3' description='High circular sector color' type='COLOR' />
+			<PARAMETER name='numOfDivisions' description='Number of main divisions' type='NUMBER' />
+			<PARAMETER name='showMainDiv' description='Show main divisions' type='BOOLEAN' />
+			<PARAMETER name='showSecDiv' description='Show secondary divisions' type='BOOLEAN' />
+			<PARAMETER name='showMainText' description='Show labels of main divisions' type='BOOLEAN' />
+			<PARAMETER name='showSecText' description='Show labels of secondary divisions' type='BOOLEAN' />
+		</CONF>
+		<DATA>
+		</DATA>
+	</DASHBOARD>
+	<DASHBOARD type='Live lines' templatePath='it/eng/spagobi/studio/dashboard/resources/dashboard/livelines.xml' movie='/dashboards/livelines.lzx.swf' >
+		<CONF>
+			<PARAMETER name='paramWidth' description='Set table width' type='NUMBER' />
+			<PARAMETER name='paramHeight' description='Set table height' type='NUMBER' />
+			<PARAMETER name='xColName' description='BOOOOOOHHHHHH' type='STRING' />
+			<PARAMETER name='refreshRate' description='Refresh rate (in ms)' type='NUMBER' />
+			<PARAMETER name='timeStartValue' description='Start time (hh:mm) (current time if not specified)' type='STRING' />
+			<PARAMETER name='timeStopValue' description='Stop time (hh:mm) (calculated if not specified)' type='STRING' />
+			<PARAMETER name='timeGridStepValue' description='X axis grid step (hh:mm)' type='STRING' />
+			<PARAMETER name='stepNumValue' description='Number of X axis grid steps' type='NUMBER' />
+			<PARAMETER name='xLabelValue' description='X axis label' type='STRING' />
+			<PARAMETER name='yLabelValue' description='Y axis label' type='STRING' />
+			<PARAMETER name='minYValue' description='Y axis minimum value' type='NUMBER' />
+			<PARAMETER name='maxYValue' description='Y axis maximum value' type='NUMBER' />
+			<PARAMETER name='stepYValue' description='Y axis grid step' type='NUMBER' />
+			<PARAMETER name='line1Color' description='Color of line 1' type='COLOR' />
+			<PARAMETER name='line2Color' description='Color of line 2' type='COLOR' />
+			<PARAMETER name='line3Color' description='Color of line 3' type='COLOR' />
+			<PARAMETER name='line4Color' description='Color of line 4' type='COLOR' />
+			<PARAMETER name='line5Color' description='Color of line 5' type='COLOR' />
+			<PARAMETER name='line6Color' description='Color of line 6' type='COLOR' />
+			<PARAMETER name='line7Color' description='Color of line 7' type='COLOR' />
+			<PARAMETER name='line8Color' description='Color of line 8' type='COLOR' />
+			<PARAMETER name='line9Color' description='Color of line 9' type='COLOR' />
+			<PARAMETER name='line10Color' description='Color of line 10' type='COLOR' />
+		</CONF>
+		<DATA>
+		</DATA>
+	</DASHBOARD>
+	<DASHBOARD type='Live table' templatePath='it/eng/spagobi/studio/dashboard/resources/dashboard/livetable.xml' movie='/dashboards/livetable.lzx.swf' >
+		<CONF>
+			<PARAMETER name='paramWidth' description='Set table width' type='NUMBER' />
+			<PARAMETER name='paramHeight' description='Set table height' type='NUMBER' />
+			<PARAMETER name='xColName' description='Left column name' type='STRING' />
+			<PARAMETER name='refreshRate' description='Refresh rate (in ms)' type='NUMBER' />
+			<PARAMETER name='rowsNumber' description='Number of table rows' type='NUMBER' />
+			<PARAMETER name='rowsSpacing' description='Rows spacing' type='NUMBER' />
+			<PARAMETER name='headerHeight' description='Header height (in % respect to table)' type='NUMBER' />
+			<PARAMETER name='xColHeadBGcolor' description='Left column header background color' type='COLOR' />
+			<PARAMETER name='colHeadBGcolor' description='Other columns header background color' type='COLOR' />
+			<PARAMETER name='xColBGColor' description='Left column cells background color' type='COLOR' />
+			<PARAMETER name='colBGColor' description='Other columns cells background color' type='COLOR' />
+			<PARAMETER name='gradOpacityBck' description='Background opacity gradient' type='STRING' />
+			<PARAMETER name='gradOpacityCell' description='Cells opacity gradient' type='STRING' />
+			<PARAMETER name='vertScrollBar' description='Show vertical scrollbar if required' type='BOOLEAN' />
+			<PARAMETER name='horizScrollBar' description='Show horizontal scrollbar if required' type='BOOLEAN' />
+			<PARAMETER name='fontSizeHeader' description='Header font size' type='NUMBER' />
+			<PARAMETER name='fontSizeCell' description='Cells font size' type='NUMBER' />
+		</CONF>
+		<DATA>
+		</DATA>
+	</DASHBOARD>
+	<DASHBOARD type='Columns 3D' templatePath='it/eng/spagobi/studio/dashboard/resources/dashboard/columns3d.xml' movie='/dashboards/columns3d.lzx.swf' >
+		<CONF>
+			<PARAMETER name='paramWidth' description='Set table width' type='NUMBER' />
+			<PARAMETER name='paramHeight' description='Set table height' type='NUMBER' />
+			<PARAMETER name='xColName' description='Name of the column containing labels' type='STRING' />
+			<PARAMETER name='valsColName' description='Name of the column containing values' type='STRING' />
+			<PARAMETER name='minYValue' description='Y axis minimum value' type='NUMBER' />
+			<PARAMETER name='maxYValue' description='Y axis maximum value' type='NUMBER' />
+			<PARAMETER name='yStepOnGrid' description='Y axis grid step' type='NUMBER' />
+			<PARAMETER name='column1Color' description='Color of column 1' type='COLOR' />
+			<PARAMETER name='column2Color' description='Color of column 2' type='COLOR' />
+			<PARAMETER name='column3Color' description='Color of column 3' type='COLOR' />
+			<PARAMETER name='column4Color' description='Color of column 4' type='COLOR' />
+			<PARAMETER name='column5Color' description='Color of column 5' type='COLOR' />
+			<PARAMETER name='column6Color' description='Color of column 6' type='COLOR' />
+			<PARAMETER name='column7Color' description='Color of column 7' type='COLOR' />
+			<PARAMETER name='column8Color' description='Color of column 8' type='COLOR' />
+			<PARAMETER name='column9Color' description='Color of column 9' type='COLOR' />
+			<PARAMETER name='column10Color' description='Color of column 10' type='COLOR' />
+		</CONF>
+		<DATA>
+		</DATA>
+	</DASHBOARD>
+</DASHBOARDS>

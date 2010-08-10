@@ -1,0 +1,18 @@
+<DIALCHART type='bullet' name='Customer Capture'>
+  <DIMENSION width='350' height='70'/>
+  <STYLE_TITLE font='Arial' size='14' color='#000000'/>  
+  <STYLE_VALUE_LABEL font='Arial' size='9' color='#000000'/> 
+  <STYLE_TICK_LABELS font='Arial' size='9' color='#000000'/> 
+  <STYLE_SUBTITLE font='Arial' size='12' color='#6699FF' name=' '/>  
+  <CONF>
+    <PARAMETER name='orientation' value='horizontal'/>
+    <PARAMETER name='lower' value='0'/>
+    <PARAMETER name='upper' value='100'/>
+    <PARAMETER name='target' value='70'/>
+    <INTERVALS>
+      <INTERVAL  min='0.0' max='30.0' color='#FF3333'/>
+      <INTERVAL  min='30.0' max='80.0' color='#FFCC00'/>
+      <INTERVAL  min='80.0' max='100.0' color='#66FF00'/>
+    </INTERVALS>
+  </CONF>
+</DIALCHART>

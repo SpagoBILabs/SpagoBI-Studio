@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SCATTERCHARTS>
+	<SCATTERCHART name='commons'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplescatter.xml'>
+		<!-- PARAMETERS FOR ALL BOXCHARTS -->
+		<DIMENSIONS>
+			<DIMENSION name='width' description='width of the chart'
+				type='INTEGER' />
+			<DIMENSION name='height' description='height of the chart'
+				type='INTEGER' />
+		</DIMENSIONS>
+		<COLORS name='background' description='Background color' type='COLOR' defaultValue='#FFFFFF' />		
+		<STYLES type='COMBO'>
+			<STYLE name="STYLE_LABELS_DEFAULT" description=''>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_X_AXIS_LABELS" description=''>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_Y_AXIS_LABELS" description=''>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_TITLE" description=''>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_SUBTITLE" description=''>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_VALUE_LABELS" description=''>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+		</STYLES>
+		<CONF>
+			<SECTION name="Parameters">
+				<PARAMETER name='x_label' description='Label for x axis'
+					type='STRING' tooltip='Label for x axis' defaultValue='label x'/>
+				<PARAMETER name='y_label' description='Label for y axis'
+					type='STRING' tooltip='Label for y axis' defaultValue='label y'/>
+				<PARAMETER name='n_visualization' description='Number of visualization'
+					type='INTEGER' tooltip='Number of visualizations'/>
+				<PARAMETER name='default_color' description='Default color'
+					type='COLOR' tooltip='Default color' defaultValue='#000000'/>
+				<PARAMETER name='view_annotation' description='View annotation'
+					type='BOOLEAN' tooltip='View annotation' defaultValue='true'/>
+			</SECTION>
+			<SECTION name="Legend">
+				<PARAMETER name='legend' description='Draw legend'
+					type='BOOLEAN' tooltip='draw legend?' defaultValue='true'/>
+				<PARAMETER name='legend_position' description='Legend position'
+					type='COMBO' tooltip='Set the legend position' values='bottom,top,right,left' defaultValue='bottom'/>
+			</SECTION>	
+		</CONF>
+	</SCATTERCHART>
+	<SCATTERCHART name='simplescatter'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplescatter.xml'>
+		<CONF>
+		</CONF>
+	</SCATTERCHART>
+</SCATTERCHARTS>

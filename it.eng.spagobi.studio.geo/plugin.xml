@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="it.eng.spagobi.studio.geo.editors.GEOEditor"
+            default="true"
+            extensions="sbigeo"
+            icon="icons/objecticon_MAP.png"
+            id="it.eng.spagobi.studio.geo.editors.GEOEditor"
+            name="GEO Editor">
+      </editor>
+   </extension>
+  <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="it.eng.spagobi.studio.geo.popupmenus.ResourceNavigatorContribution"
+            targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
+         <action
+               class="it.eng.spagobi.studio.geo.actions.NewGEOAction"
+               icon="icons/objecticon_MAP.png"
+               id="it.eng.spagobi.studio.geo.actions.NewGEOAction"
+               label="GEO"
+               menubarPath="group.new"
+               style="push" />
+
+      </viewerContribution>
+   </extension>
+   
+ </plugin>

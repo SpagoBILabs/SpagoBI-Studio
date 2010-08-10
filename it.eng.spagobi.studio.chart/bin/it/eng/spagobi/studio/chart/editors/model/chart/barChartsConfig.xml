@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BARCHARTS>
+	<BARCHART name='commons'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplebar.xml'>
+		<!-- PARAMETERS FOR ALL BARCHARTS -->
+		<DIMENSIONS>
+			<DIMENSION name='width' description='width of the chart' tooltip='width of the chart'
+				type='INTEGER' defaultValue='400'/>
+			<DIMENSION name='height' description='height of the chart' tooltip='height of the chart'
+				type='INTEGER' defaultValue='400'/>
+		</DIMENSIONS>
+		<COLORS name='background' description='Background color' type='COLOR' defaultValue='#FFFFFF' tooltip='set the background color'/>
+		<STYLES type='COMBO'>
+			<STYLE name="STYLE_LABELS_DEFAULT" description='' tooltip='choose a default style for labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_X_AXIS_LABELS" description='' tooltip='choose the style for labels on x axis'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_Y_AXIS_LABELS" description='' tooltip='choose the style for labels on y axis'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_TITLE" description='' tooltip='choose the style for title of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL' />
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_SUBTITLE" description='' tooltip='choose the style for subtitle of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_VALUE_LABELS" description='' tooltip='choose the style for value labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+		</STYLES>
+		<CONF>
+			<SECTION name="slider">
+				<PARAMETER name='view_slider' description='Choose if view slider'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if view slider'/>
+				<PARAMETER name='position_slider' description='position of the slider'
+					type='COMBO' values='top,bottom' defaultValue='top' tooltip='Select position of the slider'/>
+				<PARAMETER name='slider_start_from_end' description='Slider start from end?'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if slider start from final position'/>
+			</SECTION>
+			<SECTION name="filter">
+				<PARAMETER name='filter_categories' description='Filter categories'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if Filter categories'/>
+				<PARAMETER name='filter_cat_groups' description='Filter Categories Groups'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if Filter categories groups'/>
+				<PARAMETER name='filter_series' description='Filter series'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if filter series'/>
+				<PARAMETER name='filter_series_buttons' description='Show filter series buttons'
+					type='BOOLEAN' defaultValue='true' tooltip='Show filter series buttons (if select serie)'/>
+				<PARAMETER name='n_cat_visualization' description='Number of categories to view'
+					type='INTEGER' defaultValue='5' tooltip='Number of categories to view'/>
+				<PARAMETER name='dynamic_n_visualization'
+					description='Dynamically change number of categories to view' type='BOOLEAN' defaultValue='false'/>
+				<PARAMETER name='n_ser_visualization' 
+					description='Dynamically change number of series to view' type='INTEGER' defaultValue='5'
+					tooltip='set if change dinamically the number of series to view' />
+				<PARAMETER name='view_filter' description='Choose if view filter'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if view filter'/>
+			</SECTION>
+			<SECTION name='legend'>
+				<PARAMETER name='legend' description='draw legend?'
+					type='BOOLEAN' defaultValue='true' tooltip='If draw Legend'/>
+				<PARAMETER name="legend_position" description='Position of the legend' type='COMBO'
+					values='top,left,right,bottom' defaultValue='bottom' tooltip='choose the legend position'/>
+			</SECTION>			
+			<SECTION name='others'>
+				<PARAMETER name='category_label' description='Name of category label'
+					type='STRING' defaultValue='cat_label' tooltip='Name of category label'/>
+				<PARAMETER name='value_label' description='Name of value label'
+					type='STRING' defaultValue='val_label' tooltip='Name of value label'/>
+				<PARAMETER name='maximum_bar_width' description='Maximum bar width'
+					type='FLOAT' defaultValue='5.01' tooltip='Percentage of maximum bar width'/>
+				<PARAMETER name='range_integer_values' description='Only integer values on value axis'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if view only Integer on y axis'/>
+				<PARAMETER name='range_axis_location' description='Location for value axis'
+					type='COMBO' values='BOTTOM_OR_LEFT, BOTTOM_OR_RIGHT, TOP_OR_RIGHT, TOP_OR_LEFT' defaultValue='BOTTOM_OR_LEFT'
+					tooltip='Location of the value axis'/>
+				<PARAMETER name='show_value_labels' description='Show value Labels'
+					type='BOOLEAN' defaultValue='true' tooltip='Choose if view value labels'/>
+				<PARAMETER name='enable_tooltips' description='Enable tooltips'
+					type='BOOLEAN' defaultValue='true' tooltip='enable tooltips in the chart'/>
+			</SECTION>
+		</CONF>
+	</BARCHART>
+	<BARCHART name='simplebar'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplebar.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='orientation' description='Orientation'
+					type='COMBO' values='vertical,horizontal' defaultValue='vertical'
+					tooltip='set the orientation of the chart'/>
+				<PARAMETER name='add_labels' description='Add Labels'
+					type='BOOLEAN' defaultValue='true' tooltip='add labels'/>
+			</SECTION>
+		</CONF>
+		<SERIES_COLORS />		
+	</BARCHART>
+	<BARCHART name='linkablebar'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/linkablebar.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='orientation' description='Orientation'
+					type='COMBO' values='vertical,horizontal' defaultValue='vertical'
+					tooltip='set the orientation of the chart'/>
+			</SECTION>
+		</CONF>
+		<DRILL document="DocLabel" type="STRING">
+			<PARAM name='categoryurlname' defaultValue='catName'/>
+			<PARAM name='seriesurlname' defaultValue='serName'/>
+			<PARAMS>   <!-- ignored by Reader -->
+				<PARAM name="ParName" type="STRING" />
+				<PARAM name="ParType" type="COMBO" values='relative,absolute' />
+				<PARAM name="ParValue" type="STRING" />
+			</PARAMS>
+		</DRILL>
+		<SERIES_COLORS />
+		<SERIES_LABELS />
+	</BARCHART>
+	<BARCHART name='stacked_bar'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/stacked_bar.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='Cumulative' description='Cumulative'
+					type='BOOLEAN' defaultValue='false' tooltip='add the cumulative serie in the chart'/>
+				<PARAMETER name='make_percentage' description='Make percentage'
+					type='BOOLEAN' defaultValue='false'/>
+				<PARAMETER name='percentage_value' description='Percentage Values'
+					type='BOOLEAN' defaultValue='false' tooltip='show percentage values'/>
+				<PARAMETER name='add_labels' description='Add Labels'
+					type='BOOLEAN' defaultValue='true' tooltip='add labels'/>
+			</SECTION>
+		</CONF>
+		<DRILL document="DocLabel" type="STRING" defaultValue='labeltocall'>
+			<PARAM name='categoryurlname' defaultValue='caturl'/>
+			<PARAM name='seriesurlname' defaultValue='serUrl'/>
+			<PARAMS>   <!-- ignored by Reader -->
+				<PARAM name="ParName" type="STRING" />
+				<PARAM name="ParType" type="COMBO" values='relative,absolute' />
+				<PARAM name="ParValue" type="STRING" />
+			</PARAMS>
+		</DRILL>
+		<SERIES_COLORS />
+		<SERIES_LABELS />
+	</BARCHART>
+	<BARCHART name='stacked_bar_group'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/stacked_bar_group.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='subcategory_label' description='Label for subcategory'
+					type='STRING' defaultValue='subCat_Label' tooltip='Label for subcategory'/>
+				<PARAMETER name='add_labels' description='Add Labels'
+					type='BOOLEAN' defaultValue='true' tooltip='add labels'/>
+				<PARAMETER name='percentage_value' description='Percentage Values'
+					type='BOOLEAN' defaultValue='true' tooltip='show percentage values'/>
+				<PARAMETER name='n_groups' description='Number of groups'
+					type='INTEGER' defaultValue='3' tooltip='NUmber of groups'/>
+				<PARAMETER name='n_serie_for_group' description='n_serie_for_group'
+					type='INTEGER' defaultValue='5' tooltip='Number of series for each group'/>
+			</SECTION>
+		</CONF>
+		<SERIES_COLORS />
+		<SERIES_LABELS />
+	</BARCHART>
+	<BARCHART name='overlaid_barline'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/overlaid_barline.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='second_axis_label' description='second_axis_label'
+					type='STRING' defaultValue='second axis label' tooltip='Activate the second axis and set the label'/>
+				<PARAMETER name='add_labels' description='Add Labels'
+					type='BOOLEAN' defaultValue='true' tooltip='add labels'/>
+			</SECTION>
+		</CONF>
+		<SERIES_DRAWS />
+		<SERIES_COLORS />
+		<SERIES_LABELS />
+		<SERIES_SCALES />
+	</BARCHART>
+	<BARCHART name='overlaid_stacked_barline'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/overlaid_stacked_barline.xml'>
+		<CONF>
+			<SECTION>
+				<PARAMETER name='second_axis_label' description='second_axis_label'
+					type='STRING' defaultValue='second axis label' tooltip='Activate the second axis and set the label'/>
+				<PARAMETER name='add_labels' description='Add Labels'
+					type='BOOLEAN' defaultValue='true' tooltip='add labels'/>
+			</SECTION>
+		</CONF>
+		<SERIES_DRAWS />
+		<SERIES_COLORS />
+		<SERIES_LABELS />
+	</BARCHART>
+</BARCHARTS>

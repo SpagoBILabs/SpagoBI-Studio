@@ -1,0 +1,18 @@
+<SCATTERCHART type='simplescatter' name='Matrice consumo DDD / valore medio'>
+  	<DIMENSION width='470' height='350'/>
+  	<STYLE_LABELS font='Arial' size='8' color='#000000' orientation='horizontal'/>
+    <STYLE_TITLE font='Arial' size='12' color='#0C2D83'/>  
+    <STYLE_SUBTITLE font='Arial' size='12' color='#6699FF' name='$P{ $P{'/>  
+  <CONF>
+    <PARAMETER name='x_label' value='% Scostamento ConsumoSMP'/>
+    <PARAMETER name='y_label' value='% Scostamento valore medio DDD da media SMP'/>
+    <PARAMETER name='x_range' value_low='-30' value_high='30' />
+    <PARAMETER name='y_range' value_low='-25' value_high='25' />
+    <PARAMETER name='x_marker' value_start_int='0' value_end_int='0' value_marker='0' color_int='' color='' label=''/>
+    <PARAMETER name='y_marker' value_start_int='0' value_end_int='0' value_marker='0' color_int='' color='' label=''/>
+    <PARAMETER name='legend' value='false'/>
+    <PARAMETER name='legend_position' value='right'/>
+    <PARAMETER name='view_annotation' value='true'/>
+    <PARAMETER name='default_color' value='#6699FF'/>
+  </CONF>
+</SCATTERCHART>

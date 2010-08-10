@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="spagoBIStudioBuilder"
+         name="SpagoBIStudio Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="it.eng.spagobi.studio.core.builder.SpagoBIStudioBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="spagoBIStudioNature"
+         name="SpagoBIStudio Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="it.eng.spagobi.studio.core.builder.SpagoBIStudioNature">
+         </run>
+      </runtime>
+      <builder
+            id="it.eng.spagobi.studio.core.spagoBIStudioBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="SpagoBI"
+            id="it.eng.spagobi.studio.core">
+      </category>
+  <!--    <view
+            name="SpagoBIStudio"
+            icon="icons/sbiproject.gif"
+            category="it.eng.spagobi.studio.core"
+            class="it.eng.spagobi.studio.core.views.SampleView"
+            id="it.eng.spagobi.studio.core.views.SampleView">
+      </view> -->
+   </extension> 
+   <!--
+   <extension point="org.eclipse.ui.views">
+        <view id="it.eng.spagobi.studio.core.views.ResourceNavigator"
+              name="SpagoBIStudio Resource Navigator"
+              category="it.eng.spagobi.studio.core"
+          	  class="it.eng.spagobi.studio.core.views.ResourceNavigator"
+              icon="icons/sbiproject.gif"/>
+	</extension>
+	-->
+	<extension
+         point="org.eclipse.ui.views">
+      <view
+            name="SpagoBIStudio Resource Navigator"
+            category="it.eng.spagobi.studio.core"
+            class="it.eng.spagobi.studio.core.views.ResourceNavigator"
+            id="it.eng.spagobi.studio.core.views.ResourceNavigator"
+            icon="icons/sbiproject.gif">
+      </view>
+   </extension>
+
+	<extension
+         point="org.eclipse.ui.navigator.viewer">
+       <viewerActionBinding
+            viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
+         <includes>
+             <actionExtension pattern="org.eclipse.ui.navigator.resources.*" />
+         </includes>
+       </viewerActionBinding>
+       <viewerContentBinding 
+            viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
+          <includes>
+       	     <contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />		       	      
+	     	 <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/>
+             <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/>
+             <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
+          </includes>
+       </viewerContentBinding>
+   </extension>
+	
+   <extension point="org.eclipse.ui.perspectives">
+	   <perspective
+	         name="SpagoBI"
+	         class="it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective"
+	         id="it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective"
+	         icon="icons/sbiproject.gif" >
+	   </perspective>
+	</extension>
+    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="SpagoBI"
+            class="it.eng.spagobi.studio.core.preferences.SpagoBIPreferencePage"
+            id="it.eng.spagobi.studio.core.preferences.SpagoBIPreferencePage">
+      </page>
+    </extension>
+    <extension point="org.eclipse.ui.newWizards">
+      <category id="SpagoBI" name="SpagoBI" />
+      <wizard
+            category="SpagoBI"
+            class="it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard"
+            hasPages="true"
+            icon="icons/sbiproject.gif"
+            id="it.eng.spagobi.studio.core.wizards.newSpagoBIProjectWizard"
+            name="SpagoBI Project"
+            project="true" 
+            finalPerspective="it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective" />
+   </extension>
+   <extension
+          point="org.eclipse.ui.popupMenus">
+       <viewerContribution
+             id="it.eng.spagobi.studio.core.popupmenu.ResourceNavigatorContribution"
+             targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
+         <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            path="additions" 
+            label="SpagoBI"> 
+            <separator name="SpagoBI"/> 
+         </menu> 
+         <action
+            id="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" 
+            label="Download document from server"
+            style="push"
+            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
+            class="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" />
+         <action
+            id="it.eng.spagobi.studio.core.actions.DeployDocumentAction" 
+            label="Deploy document into server"
+            style="push"
+            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
+            class="it.eng.spagobi.studio.core.actions.DeployDocumentAction" /> 
+         <action
+            id="it.eng.spagobi.studio.core.actions.RefreshTemplateAction" 
+            label="Refresh document template"
+            style="push"
+            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
+            class="it.eng.spagobi.studio.core.actions.RefreshTemplateAction" /> 
+       </viewerContribution>
+    </extension>
+
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="it.eng.spagobi.studio.core.properties.PropertyPage"
+            id="it.eng.spagobi.studio.core.propertyPage"
+            name="SpagoBI"
+            >
+      </page>
+   </extension>
+
+<!--
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="it.eng.spagobi.studio.core.properties.PropertyPage"
+            id="it.eng.spagobi.studio.core.propertyPage"
+            name="SpagoBI"
+            nameFilter="*.sbi*">
+      </page>
+   </extension>
+-->
+   
+   <!-- 
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            lightweight="true"
+            location="BOTTOM_RIGHT"
+            adaptable="true"
+            label="Resource Decorator"
+            icon="icons/sample_decorator.gif"
+            state="true"
+            id="it.eng.spagobi.studio.core.decorator">
+         <enablement>
+            <and>
+               <objectClass
+                     name="org.eclipse.core.resources.IResource">
+               </objectClass>
+               <or>
+                  <objectClass
+                        name="org.eclipse.core.resources.IProject">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.core.resources.IFile">
+                  </objectClass>
+               </or>
+            </and>
+         </enablement>
+      </decorator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Sample XML Editor"
+            extensions="xml"
+            icon="icons/sample.gif"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="it.eng.spagobi.studio.core.editors.XMLEditor"
+            id="it.eng.spagobi.studio.core.editors.XMLEditor">
+      </editor>
+      <editor
+            name="Sample Multi-page Editor"
+            extensions="mpe"
+            icon="icons/sample.gif"
+            contributorClass="it.eng.spagobi.studio.core.editors.MultiPageEditorContributor"
+            class="it.eng.spagobi.studio.core.editors.MultiPageEditor"
+            id="it.eng.spagobi.studio.core.editors.MultiPageEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Sample Category"
+            id="it.eng.spagobi.studio.core.commands.category">
+      </category>
+      <command
+            name="Sample Command"
+            categoryId="it.eng.spagobi.studio.core.commands.category"
+            id="it.eng.spagobi.studio.core.commands.sampleCommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="it.eng.spagobi.studio.core.commands.sampleCommand"
+            class="it.eng.spagobi.studio.core.handlers.SampleHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="it.eng.spagobi.studio.core.commands.sampleCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="Sample Menu"
+               mnemonic="M"
+               id="it.eng.spagobi.studio.core.menus.sampleMenu">
+            <command
+                  commandId="it.eng.spagobi.studio.core.commands.sampleCommand"
+                  mnemonic="S"
+                  id="it.eng.spagobi.studio.core.menus.sampleCommand">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="it.eng.spagobi.studio.core.toolbars.sampleToolbar">
+            <command
+                  commandId="it.eng.spagobi.studio.core.commands.sampleCommand"
+                  icon="icons/sample.gif"
+                  tooltip="Say hello world"
+                  id="it.eng.spagobi.studio.core.toolbars.sampleCommand">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Sample Action Set"
+            visible="true"
+            id="it.eng.spagobi.studio.core.actionSet">
+         <menu
+               label="Sample &amp;Menu"
+               id="sampleMenu">
+            <separator
+                  name="sampleGroup">
+            </separator>
+         </menu>
+         <action
+               label="&amp;Sample Action"
+               icon="icons/sample.gif"
+               class="it.eng.spagobi.studio.core.actions.SampleAction"
+               tooltip="Hello, Eclipse world"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               id="it.eng.spagobi.studio.core.actions.SampleAction">
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml">
+      </toc>
+      <toc
+            file="testToc.xml"
+            primary="true">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            name="Sample File Import"
+            id="it.eng.spagobi.studio.core.importWizards.sampleCategory">
+      </category>
+      <wizard
+            name="Import File"
+            icon="icons/sample.gif"
+            category="it.eng.spagobi.studio.core.importWizards.sampleCategory"
+            class="it.eng.spagobi.studio.core.importWizards.ImportWizard"
+            id="it.eng.spagobi.studio.core.importWizards.ImportWizard">
+         <description>
+            Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Sample Wizards"
+            id="it.eng.spagobi.studio.core">
+      </category>
+      <wizard
+            name="Multi-page Editor file"
+            icon="icons/sample.gif"
+            category="it.eng.spagobi.studio.core"
+            class="it.eng.spagobi.studio.core.wizards.SampleNewWizard"
+            id="it.eng.spagobi.studio.core.wizards.SampleNewWizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            id="it.eng.spagobi.studio.core.contribution1">
+         <menu
+               label="New Submenu"
+               path="additions"
+               id="it.eng.spagobi.studio.core.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="New Action"
+               class="it.eng.spagobi.studio.core.popup.actions.NewAction"
+               menubarPath="it.eng.spagobi.studio.core.menu1/group1"
+               enablesFor="1"
+               id="it.eng.spagobi.studio.core.newAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="it.eng.spagobi.studio.core.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="Sample Page"
+            nameFilter="*.*"
+            class="it.eng.spagobi.studio.core.properties.SamplePropertyPage"
+            id="it.eng.spagobi.studio.core.properties.samplePropertyPage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            class="it.eng.spagobi.studio.core.splashHandlers.InteractiveSplashHandler"
+            id="it.eng.spagobi.studio.core.splashHandlers.interactive">
+      </splashHandler>
+      <splashHandlerProductBinding
+            splashId="it.eng.spagobi.studio.core.splashHandlers.interactive"
+            productId="org.eclipse.sdk.ide">
+      </splashHandlerProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+            content="intro/sample.xml"
+            configId="org.eclipse.ui.intro.universalConfig">
+      </configExtension>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.TaskList"
+               relationship="right"
+               id="it.eng.spagobi.studio.core.views.SampleView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+  -->
+</plugin>

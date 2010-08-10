@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jasper Plug-in
+Bundle-SymbolicName: it.eng.spagobi.studio.jasper;singleton:=true
+Bundle-Version: 2.5.0
+Bundle-ClassPath: lib/dom4j.jar,.
+Bundle-Activator: it.eng.spagobi.studio.jasper.Activator
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.core.resources;bundle-version="3.4.2",
+ org.eclipse.ui.navigator;bundle-version="3.3.102",
+ org.eclipse.ui;bundle-version="3.4.2",
+ org.eclipse.core.runtime;bundle-version="3.4.0",
+ it.eng.spagobi.studio.core;bundle-version="2.5.0"
