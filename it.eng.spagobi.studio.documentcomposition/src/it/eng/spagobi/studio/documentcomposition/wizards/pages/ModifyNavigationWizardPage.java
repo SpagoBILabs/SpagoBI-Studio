@@ -65,19 +65,19 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 	Vector<Combo> destinationDocNameCombo;
 	Vector<Combo> destinationInputParam ;
 	Vector<Text> destinationInputParamDefaultValue ;
-	
+
 	HashMap <String, String> docInfoUtil = new HashMap<String, String>();
 	HashMap <String, String> deletedParams = new HashMap<String, String>();
 	HashMap <String, String> deletedRefresh = new HashMap<String, String>();
 
 	String name = "";
 	String paramIn = "";
-	
+
 	int destinCounter = -1;
 
 	private DestinationInfo destinationInfo;
 	private Vector<DestinationInfo> destinationInfos;
-	
+
 
 	Text navigationNameText;
 
@@ -109,7 +109,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 				int sel = destinationDocNameCombo.elementAt(destinCounter).getSelectionIndex();
 				if(sel != -1){
 					String destin = destinationDocNameCombo.elementAt(destinCounter).getItem(sel);
-					
+
 					if ((destinationInputParam.elementAt(destinCounter).getText() == null || destinationInputParam.elementAt(destinCounter).getText().length() == 0)
 							&&(sel ==-1 || destin == null )) {
 						return false;
@@ -122,79 +122,79 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 		return ret;
 	}
 
-	
-	
+
+
 	public void createControl(Composite parent) {
 
 		destinationInfo = new DestinationInfo();
 		destinationDocNameCombo = new Vector<Combo>();
 		destinationInputParam = new Vector<Combo>();
 		destinationInputParamDefaultValue = new Vector<Text>();
-		
+
 		fillDocInfoUtil();
 
 		final ScrolledComposite sc =  new ScrolledComposite(parent, SWT.V_SCROLL );
 		final Composite composite = new Composite(sc, SWT.NONE);
 		sc.setContent(composite);
-		
+
 		final GridLayout gl = new GridLayout();
 		gl.numColumns = 1;
 		composite.setLayout(gl);
-		
-	    FillLayout layout = new FillLayout();
-	    layout.type = SWT.VERTICAL;
-	    composite.setLayout(layout);
-		
+
+		FillLayout layout = new FillLayout();
+		layout.type = SWT.VERTICAL;
+		composite.setLayout(layout);
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.grabExcessHorizontalSpace = true;
 		gd.minimumWidth =260;
 		gd.widthHint = 285;
-		
-		
+
+
 		//primo composite
 		Composite composite1 = new Composite(composite, SWT.NONE);
 		composite1.setLayout(gl);
-		
+
 		final GridLayout glBlock = new GridLayout();
 		glBlock.numColumns = 3;		
-		
+
 		Composite singleBlock = new Composite(composite1, SWT.BORDER | SWT.FILL);
 		singleBlock.setLayout(glBlock);
 
 		new Label(singleBlock, SWT.NONE).setText("Navigation name:  ");				
 		navigationNameText = new Text(singleBlock, SWT.BORDER);
 		navigationNameText.setLayoutData(gd);
-		
-		
+
+
 		Composite singleBlockMaster = new Composite(composite1, SWT.BORDER | SWT.FILL);
 		singleBlockMaster.setLayout(glBlock);
-		
+
 		new Label(singleBlockMaster, SWT.NONE).setText("Master document:");				
 		masterDocName = new Text(singleBlockMaster, SWT.BORDER);		
 		masterDocName.setLayoutData(gd);
-		
+
 		new Label(singleBlockMaster, SWT.NONE).setText("Output parameter:");				
 		masterParamName = new Text(singleBlockMaster, SWT.BORDER);
 		masterParamName.setLayoutData(gd);	
-		
+
 		new Label(singleBlockMaster, SWT.NONE).setText("Default value:");
 		masterDefaultValueOutputParam = new Text(singleBlockMaster, SWT.BORDER);
 		masterDefaultValueOutputParam.setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL);
 		gd.horizontalSpan = 1;		
-		
+
 
 		getNavigationItem(composite);//riempie campi precedentemente inseriti
 
 
 		composite.pack();
 		composite.redraw();
-		
+
 		setControl(composite);
 	}
-	
+
 	private void fillDestinationCombo(String docDest, int comboToRedraw){
 		if(destinationDocNameCombo.elementAt(comboToRedraw) != null){
 			if(destinationDocNameCombo.elementAt(comboToRedraw).getItemCount() == 0){
@@ -209,11 +209,11 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 							if(doc.getMetadataParameters() != null && doc.getMetadataParameters().size()!=0){
 								if(destName != null && !destName.equals("")){
 									destinationDocNameCombo.elementAt(comboToRedraw).add(destName);
-									
+
 									if(docDest != null && docDest.equals(destLabel)){
 										int pos = destinationDocNameCombo.elementAt(comboToRedraw).getItemCount();
 										destinationDocNameCombo.elementAt(comboToRedraw).select(pos-1);
-										
+
 									}
 								}
 							}
@@ -223,13 +223,13 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 			}
 			String master = masterDocName.getText();
 			//per ridisegnare combo
-			
+
 			if(master != null && !master.equals("")){
-	
+
 				int posMaster =destinationDocNameCombo.elementAt(comboToRedraw).indexOf(master);
 				if(posMaster != -1){
 					destinationDocNameCombo.elementAt(comboToRedraw).remove(posMaster);
-					
+
 				}
 			}
 			//rimuove anche destination precedentemente selezionata
@@ -266,7 +266,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 								String destinationName = doc.getName();
 								if(destinationName != null && !presentItems.contains(destinationName)){
 									destinationDocNameCombo.elementAt(comboToRedraw).add(destinationName);
-									
+
 									if(docDest != null && docDest.equals(destinationName)){
 										int pos = destinationDocNameCombo.elementAt(comboToRedraw).getItemCount();
 										destinationDocNameCombo.elementAt(comboToRedraw).select(pos-1);
@@ -278,13 +278,13 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 				}
 				String master = masterDocName.getText();
 				//per ridisegnare combo
-				
+
 				if(master != null && !master.equals("")){
-		
+
 					int posMaster =destinationDocNameCombo.elementAt(comboToRedraw).indexOf(master);
 					if(posMaster != -1){
 						destinationDocNameCombo.elementAt(comboToRedraw).remove(posMaster);
-						
+
 					}
 				}
 				//rimuove anche destination precedentemente selezionata
@@ -312,7 +312,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 					MetadataDocument doc = (MetadataDocument)docs.elementAt(i);
 					String docName = doc.getName();
 					String docLabel= doc.getLabel();
-					
+
 					if(docLabel != null && !docLabel.equals("") &&(docLabel.equals(destDoc))){
 						Vector params = doc.getMetadataParameters();
 						if(params != null){
@@ -321,7 +321,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 								String label = param.getLabel();
 								destinationInputParam.elementAt(destinComboToRedraw).add(label);
 								destinationInputParam.elementAt(destinComboToRedraw).setData(label, param.getUrlName());
-								
+
 								String urlName= param.getUrlName();
 								if(paramInSel != null && paramInSel.equals(urlName)){
 									int pos = destinationInputParam.elementAt(destinComboToRedraw).getItemCount();
@@ -333,9 +333,9 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 				}
 			}
 		}
-		
+
 	}
-	
+
 	private void fillMasterParamsData(String masterDoc){
 		if(metaDoc != null){
 			Vector docs = metaDoc.getMetadataDocuments();
@@ -380,7 +380,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 
 	private Parameter getNavigationItem(final Composite composite){
 		Parameter param = null;
-		
+
 		IStructuredSelection selection =((SpagoBIModifyNavigationWizard)getWizard()).getSelection();
 		Object objSel = selection.toList().get(0);
 		Table listOfNavigations = (Table)objSel;
@@ -388,7 +388,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 		final GridLayout gl2 = new GridLayout();
 		gl2.numColumns = 3;
 		gl2.marginHeight =3;
-		
+
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 200;
 		gridData.minimumWidth =200;
@@ -404,208 +404,210 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 					for(int i=0; i<docs.size(); i++){
 						Parameters params = ((Document)docs.elementAt(i)).getParameters();
 						if(params != null){
-				    		for (int j = 0; j<params.getParameter().size(); j++){
-				    			param = params.getParameter().elementAt(j);
-				    			String navigName = itemsSel[0].getText();
-				    			
-				    			if(param.getType() != null && param.getType().equalsIgnoreCase("OUT") 
-				    					&& param.getNavigationName()!= null 
-				    					&& param.getNavigationName().equals(navigName)){
-				    				navigationNameText.setText(navigName);
-				    				navigationNameText.setEditable(false);
-				    				
-				    				String masterDoc = ((Document)docs.elementAt(i)).getSbiObjLabel();
-				    				String masterParam = param.getSbiParLabel();
-				    				String masterParamDefault = param.getDefaultVal();
-				    				
-				    				
-				    				masterDocName.setText(docInfoUtil.get(masterDoc));
-				    				masterDocName.setEditable(false);
-				    				
-				    				fillMasterParamsData(masterDoc);
-				    				
-				    				//masterParamName.setText(masterParam);
-				    				String labelMaster = (String)masterParamName.getData(masterParam);
-				    				if(labelMaster == null){
-				    					//edited by user
-				    					labelMaster=masterParam;
-				    				}
-				    				masterParamName.setText(labelMaster);
-				    				masterParamName.setEditable(false);
-				    				
-				    				masterDefaultValueOutputParam.setText(masterParamDefault);
-				    				masterDefaultValueOutputParam.setEditable(false);
-				    				
-				    				//cicla su destinazioni
-				    				Refresh refresh = param.getRefresh();
-				    				Vector<RefreshDocLinked> destinations = refresh.getRefreshDocLinked();
-				    				
-				    				for(int k =0; k<destinations.size(); k++){
-				    					
-				    					//secondo composite
-				    					final Composite composite2 = new Composite(composite, SWT.NONE);
-				    					composite2.setLayout(gl2);
-				    					
-				    					destinCounter++;
-				    					
-				    					final RefreshDocLinked destin = destinations.get(k);
-				    					
-				    					
-				    					String docDest = destin.getLabelDoc();
-				    					final String docDestParam = destin.getLabelParam();
-				    					
-				    					
-				    					//inserisce blocco x destinazione
-				    					Composite destBlock = new Composite(composite2, SWT.BORDER | SWT.FILL);
-				    					GridLayout glBlock = new GridLayout();
-				    					glBlock.numColumns = 3;
-				    					destBlock.setLayout(glBlock);
-				    					
-				    					new Label(destBlock, SWT.NONE).setText("Destination document:");	
-				    					destinationDocNameCombo.addElement(new Combo(destBlock, SWT.BORDER |SWT.READ_ONLY ));
+							for (int j = 0; j<params.getParameter().size(); j++){
+								param = params.getParameter().elementAt(j);
+								String navigName = itemsSel[0].getText();
 
-				    					destinationDocNameCombo.elementAt(destinCounter).setLayoutData(gridData);
-				    					destinationDocNameCombo.elementAt(destinCounter).setVisible(true);
-				    					
-				    					fillDestinationCombo(docDest, destinCounter);
+								if(param.getType() != null && param.getType().equalsIgnoreCase("OUT") 
+										&& param.getNavigationName()!= null 
+										&& param.getNavigationName().equals(navigName)){
+									navigationNameText.setText(navigName);
+									navigationNameText.setEditable(false);
 
-				    					//crea una nuovo output text
-				    					new Label(destBlock, SWT.NONE).setText("Input parameter:");
-				    					Combo newText =new Combo(destBlock, SWT.BORDER |SWT.READ_ONLY);
+									String masterDoc = ((Document)docs.elementAt(i)).getSbiObjLabel();
+									String masterParam = param.getSbiParLabel();
+									String masterParamDefault = param.getDefaultVal();
 
-				    					
-				    					destinationInputParam.addElement(newText);
-				    					newText.setLayoutData(gridData);
-				    					fillDestinationParamCombo(docDest, destinCounter, docDestParam);
 
-				    					new Label(destBlock, SWT.NONE).setText("Default value:");
-				    					destinationInputParamDefaultValue.addElement(new Text(destBlock, SWT.BORDER));
-				    					destinationInputParamDefaultValue.elementAt(destinCounter).setLayoutData(gridData);
-				    					setDefaultValue(docs,destinCounter,docDest,docDestParam);
-				    					
-				    					final int element = k;
-				    					
-				    					destinationDocNameCombo.elementAt(element).addModifyListener(new ModifyListener() {
-				    						public void modifyText(ModifyEvent event) {
-				    							Combo selectedCombo = (Combo) event.widget;
-				    							//ricavo dal vettore di combo la sua posizione
-				    							int destinComboToRedraw = destinationDocNameCombo.indexOf(selectedCombo);
-				    							//controlla se destinazione precedentem selezionata
-				    							boolean canSelect = canSelectDestination(selectedCombo.getText(), destinComboToRedraw);
-				    							if(!canSelect){
-				    								//messaggio di errore in dialog
-				    								
-				    								selectedCombo.deselect((selectedCombo).getSelectionIndex());
-				    								final boolean[] result = new boolean[1];
-				    						        Shell confirm = createErrorDialog(composite2.getParent(), result, 1);
-				    						        confirm.setText("Error");
-				    						        confirm.setSize(300,100);
-				    								confirm.open();
-				    							}else{
-				    								
-				    								name = destinationDocNameCombo.elementAt(element).getText();
-				    								destinationInfo = destinationInfos.get(element);
-				    								destinationInfo.setDocDestName(name);
-					    							destinationInputParam.elementAt(destinComboToRedraw).removeAll();
-					    							String label = docInfoUtil.get(name);
+									masterDocName.setText(docInfoUtil.get(masterDoc));
+									masterDocName.setEditable(false);
 
-					    							fillDestinationParamCombo(label, destinComboToRedraw, docDestParam);
-					    							destinationInputParam.elementAt(destinComboToRedraw).redraw();
-				    							}
+									fillMasterParamsData(masterDoc);
 
-				    						}
-				    					});		
-				    					destinationInputParam.elementAt(element).addModifyListener(new ModifyListener() {
-				    						public void modifyText(ModifyEvent event) {
-				    							//verifica se è già presente...
-				    							ParameterBO bo = new ParameterBO();
-				    							String docLab =docInfoUtil.get(destinationDocNameCombo.elementAt(element).getText());
-				    							boolean exists = bo.inputParameterExists(docComp, docLab, destinationInputParam.elementAt(element).getText());
-				    							if(exists){
-			    					        		
-				    								final boolean[] result = new boolean[1];
-				    						        Shell confirm = createConfirmDialog(composite2.getParent(), result, element, destin);				    						        
-				    								confirm.open();
+									//masterParamName.setText(masterParam);
+									String labelMaster = (String)masterParamName.getData(masterParam);
+									if(labelMaster == null){
+										//edited by user
+										labelMaster=masterParam;
+									}
+									masterParamName.setText(labelMaster);
+									masterParamName.setEditable(false);
 
-				    							}else{						    					
-					    							destinationInfo = destinationInfos.get(element);
-					    							//destinationInfo.setParamDestName(destinationInputParam.elementAt(element).getText());
-					    							String label = destinationInputParam.elementAt(element).getText();
-							    					String urlName= (String)destinationInputParam.elementAt(element).getData(label);
-							    					destinationInfo.setParamDestName(urlName);
-					    							destinationInfo.setParamDestId(destin.getIdParam());
-				    							}
-				    							
-				    						}
-				    					});	
-				    					destinationInputParamDefaultValue.elementAt(element).addModifyListener(new ModifyListener() {
-				    						public void modifyText(ModifyEvent event) {
-				    					
-				    							destinationInfo = destinationInfos.get(element);
-				    							destinationInfo.setParamDefaultValue(destinationInputParamDefaultValue.elementAt(element));
-				    							destinationInfo.setParamDestId(destin.getIdParam());
-				    							
-				    						}
-				    					});	
-				    					//pulsante delete
-				    					GridData gd = new GridData(GridData.FILL);
-				    					gd.horizontalSpan = 1;
-				    					Button deleteDestButton = new Button(composite2, SWT.PUSH) ;
-				    					deleteDestButton.setText("Delete");
-				    					deleteDestButton.setLayoutData(gd);
-				    					
-				    					Listener deleteListener = new Listener() {
-				    						public void handleEvent(Event event) {
-				    					        switch (event.type) {
-				    					        case SWT.Selection:
-				    					        	if(destinationDocNameCombo.size() == 1){
-				    					        		//non è possibile cancellare destination
-					    								final boolean[] result = new boolean[1];
-					    						        Shell confirm = createErrorDialog(composite2.getParent(), result, 3);
-					    						        confirm.setText("Error");
-					    						        confirm.setSize(300,100);
-					    								confirm.open();
-					    								
-				    					        	}else{
-						    							int selectionIndex = destinationDocNameCombo.elementAt(destinCounter).getSelectionIndex();
-						    							name = destinationDocNameCombo.elementAt(destinCounter).getItem(selectionIndex);
-						    							
-						    							deletedParams.put(destin.getIdParam(), name);
-						    							deleteDestination(destinCounter, composite2);
-						    							
-						    							for(int i=0; i<=destinCounter;i++){
-						    								refillDestinationCombo(null, i);
-						    							}
-				    					        	}
-					    							composite.pack();
-					    							composite.redraw();
-					    						}
+									masterDefaultValueOutputParam.setText(masterParamDefault);
+									masterDefaultValueOutputParam.setEditable(false);
 
-				    						}
-				    					};
-				    					deleteDestButton.addListener(SWT.Selection, deleteListener);
-				    					
-				    					destinationInfo = new DestinationInfo();
+									//cicla su destinazioni
+									Refresh refresh = param.getRefresh();
+									Vector<RefreshDocLinked> destinations = refresh.getRefreshDocLinked();
 
-				    					destinationInfo.setDocDestName(destinationDocNameCombo.elementAt(destinCounter).getText());				
-				    					//destinationInfo.setParamDestName(destinationInputParam.elementAt(destinCounter).getText());
-				    					String label = destinationInputParam.elementAt(destinCounter).getText();
-				    					String urlName= (String)destinationInputParam.elementAt(destinCounter).getData(label);
-				    					destinationInfo.setParamDestName(urlName);
-				    					destinationInfo.setParamDefaultValue(destinationInputParamDefaultValue.elementAt(destinCounter));
+									for(int k =0; k<destinations.size(); k++){
 
-				    					destinationInfos.add(destinationInfo);
-				    					composite2.pack();
-				    					composite2.redraw();
-				    				}				    				
-				    				//fine
+										//secondo composite
+										final Composite composite2 = new Composite(composite, SWT.NONE);
+										composite2.setLayout(gl2);
 
-				    			}	
+										destinCounter++;
 
-				    		}
-			    			
-		    				setPageComplete(true);
-		    				
+										final RefreshDocLinked destin = destinations.get(k);
+
+
+										String docDest = destin.getLabelDoc();
+										final String docDestParam = destin.getLabelParam();
+
+
+										//inserisce blocco x destinazione
+										Composite destBlock = new Composite(composite2, SWT.BORDER | SWT.FILL);
+										GridLayout glBlock = new GridLayout();
+										glBlock.numColumns = 3;
+										destBlock.setLayout(glBlock);
+
+										new Label(destBlock, SWT.NONE).setText("Destination document:");	
+										destinationDocNameCombo.addElement(new Combo(destBlock, SWT.BORDER |SWT.READ_ONLY ));
+
+										destinationDocNameCombo.elementAt(destinCounter).setLayoutData(gridData);
+										destinationDocNameCombo.elementAt(destinCounter).setVisible(true);
+
+										fillDestinationCombo(docDest, destinCounter);
+
+										//crea una nuovo output text
+										new Label(destBlock, SWT.NONE).setText("Input parameter:");
+										Combo newText =new Combo(destBlock, SWT.BORDER |SWT.READ_ONLY);
+
+
+										destinationInputParam.addElement(newText);
+										newText.setLayoutData(gridData);
+										fillDestinationParamCombo(docDest, destinCounter, docDestParam);
+
+										new Label(destBlock, SWT.NONE).setText("Default value:");
+										destinationInputParamDefaultValue.addElement(new Text(destBlock, SWT.BORDER));
+										destinationInputParamDefaultValue.elementAt(destinCounter).setLayoutData(gridData);
+										setDefaultValue(docs,destinCounter,docDest,docDestParam);
+
+										final int element = k;
+
+										destinationDocNameCombo.elementAt(element).addModifyListener(new ModifyListener() {
+											public void modifyText(ModifyEvent event) {
+												Combo selectedCombo = (Combo) event.widget;
+												//ricavo dal vettore di combo la sua posizione
+												int destinComboToRedraw = destinationDocNameCombo.indexOf(selectedCombo);
+												//controlla se destinazione precedentem selezionata
+												boolean canSelect = canSelectDestination(selectedCombo.getText(), destinComboToRedraw);
+												if(!canSelect){
+													//messaggio di errore in dialog
+
+													selectedCombo.deselect((selectedCombo).getSelectionIndex());
+													final boolean[] result = new boolean[1];
+													Shell confirm = createErrorDialog(composite2.getParent(), result, 1);
+													confirm.setText("Error");
+													confirm.setSize(300,100);
+													confirm.open();
+												}else{
+
+													name = destinationDocNameCombo.elementAt(element).getText();
+													destinationInfo = destinationInfos.get(element);
+													destinationInfo.setDocDestName(name);
+													destinationInputParam.elementAt(destinComboToRedraw).removeAll();
+													String label = docInfoUtil.get(name);
+
+													fillDestinationParamCombo(label, destinComboToRedraw, docDestParam);
+													destinationInputParam.elementAt(destinComboToRedraw).redraw();
+												}
+
+											}
+										});		
+										destinationInputParam.elementAt(element).addModifyListener(new ModifyListener() {
+											public void modifyText(ModifyEvent event) {
+												//verifica se è già presente...
+												ParameterBO bo = new ParameterBO();
+												String docLab =docInfoUtil.get(destinationDocNameCombo.elementAt(element).getText());
+												//				    							boolean exists = bo.inputParameterExists(docComp, docLab, destinationInputParam.elementAt(element).getText());
+												//				    							if(exists){
+												//			    					        		
+												//				    								final boolean[] result = new boolean[1];
+												//				    						        Shell confirm = createConfirmDialog(composite2.getParent(), result, element, destin);				    						        
+												//				    								confirm.open();
+												//
+												//				    							}else
+												//				    							{						    					
+
+												destinationInfo = destinationInfos.get(element);
+												//destinationInfo.setParamDestName(destinationInputParam.elementAt(element).getText());
+												String label = destinationInputParam.elementAt(element).getText();
+												String urlName= (String)destinationInputParam.elementAt(element).getData(label);
+												destinationInfo.setParamDestName(urlName);
+												destinationInfo.setParamDestId(destin.getIdParam());
+												//				    							}
+
+											}
+										});	
+										destinationInputParamDefaultValue.elementAt(element).addModifyListener(new ModifyListener() {
+											public void modifyText(ModifyEvent event) {
+
+												destinationInfo = destinationInfos.get(element);
+												destinationInfo.setParamDefaultValue(destinationInputParamDefaultValue.elementAt(element));
+												destinationInfo.setParamDestId(destin.getIdParam());
+
+											}
+										});	
+										//pulsante delete
+										GridData gd = new GridData(GridData.FILL);
+										gd.horizontalSpan = 1;
+										Button deleteDestButton = new Button(composite2, SWT.PUSH) ;
+										deleteDestButton.setText("Delete");
+										deleteDestButton.setLayoutData(gd);
+
+										Listener deleteListener = new Listener() {
+											public void handleEvent(Event event) {
+												switch (event.type) {
+												case SWT.Selection:
+													if(destinationDocNameCombo.size() == 1){
+														//non è possibile cancellare destination
+														final boolean[] result = new boolean[1];
+														Shell confirm = createErrorDialog(composite2.getParent(), result, 3);
+														confirm.setText("Error");
+														confirm.setSize(300,100);
+														confirm.open();
+
+													}else{
+														int selectionIndex = destinationDocNameCombo.elementAt(destinCounter).getSelectionIndex();
+														name = destinationDocNameCombo.elementAt(destinCounter).getItem(selectionIndex);
+
+														deletedParams.put(destin.getIdParam(), name);
+														deleteDestination(destinCounter, composite2);
+
+														for(int i=0; i<=destinCounter;i++){
+															refillDestinationCombo(null, i);
+														}
+													}
+													composite.pack();
+													composite.redraw();
+												}
+
+											}
+										};
+										deleteDestButton.addListener(SWT.Selection, deleteListener);
+
+										destinationInfo = new DestinationInfo();
+
+										destinationInfo.setDocDestName(destinationDocNameCombo.elementAt(destinCounter).getText());				
+										//destinationInfo.setParamDestName(destinationInputParam.elementAt(destinCounter).getText());
+										String label = destinationInputParam.elementAt(destinCounter).getText();
+										String urlName= (String)destinationInputParam.elementAt(destinCounter).getData(label);
+										destinationInfo.setParamDestName(urlName);
+										destinationInfo.setParamDefaultValue(destinationInputParamDefaultValue.elementAt(destinCounter));
+
+										destinationInfos.add(destinationInfo);
+										composite2.pack();
+										composite2.redraw();
+									}				    				
+									//fine
+
+								}	
+
+							}
+
+							setPageComplete(true);
+
 						}	
 					}
 				}
@@ -615,7 +617,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 		composite.layout();
 		return param;
 	}
-	
+
 	private void deleteDestination(int selectionIndex, Composite toDispose){
 		destinCounter--;
 		destinationInfos.remove(selectionIndex);
@@ -625,9 +627,9 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 		Composite parent =toDispose.getParent();
 		toDispose.dispose();
 
-		
+
 	}
-	
+
 	private void setDefaultValue(Vector<Document> docs, int destinPos, String destDoc, String parLabel){
 		if(docs != null){
 			for(int i=0; i<docs.size(); i++){
@@ -635,17 +637,17 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 				if(doc.getSbiObjLabel().equals(destDoc)){
 					Parameters params = (doc).getParameters();
 					if(params != null){
-			    		for (int j = 0; j<params.getParameter().size(); j++){
-			    			Parameter param = params.getParameter().elementAt(j);
-			    			if(param.getSbiParLabel().equals(parLabel )&& param.getType().equals("IN")){
-			    				destinationInputParamDefaultValue.elementAt(destinPos).setText(param.getDefaultVal());
-			    			}
-			    		}
+						for (int j = 0; j<params.getParameter().size(); j++){
+							Parameter param = params.getParameter().elementAt(j);
+							if(param.getSbiParLabel().equals(parLabel )&& param.getType().equals("IN")){
+								destinationInputParamDefaultValue.elementAt(destinPos).setText(param.getDefaultVal());
+							}
+						}
 					}
 				}
 			}
 		}	
-		
+
 	}
 	protected Shell createErrorDialog(Composite client, final boolean[] result, int messageType){
 		final Shell error = new Shell(client.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
@@ -660,75 +662,75 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 
 		String message = "No more destination documents available.";
 		if(messageType == 1){
-			 message = "Destination already selected.";
+			message = "Destination already selected.";
 		}else if(messageType == 2){
 			message = "Select a destination.";
 		}else if(messageType == 3){
 			message = "Operation denied.";
 		}
 		new Label(error, SWT.NONE).setText(message);
-		
+
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 3;
-	    final Button cancel = new Button(error, SWT.PUSH);
-	    cancel.setLayoutData(gd);
-	    cancel.setText("Cancel");
+		final Button cancel = new Button(error, SWT.PUSH);
+		cancel.setLayoutData(gd);
+		cancel.setText("Cancel");
 
-	    error.isReparentable();
+		error.isReparentable();
 
-	    Listener dialogListener = new Listener() {
-	        public void handleEvent(Event event) {
-	          result[0] = event.widget == cancel;
-	          error.notifyListeners(event.type, event);
-	          error.close();
-	        }
-	      };
-	    cancel.addListener(SWT.Selection, dialogListener);
-	    return error;
-		
+		Listener dialogListener = new Listener() {
+			public void handleEvent(Event event) {
+				result[0] = event.widget == cancel;
+				error.notifyListeners(event.type, event);
+				error.close();
+			}
+		};
+		cancel.addListener(SWT.Selection, dialogListener);
+		return error;
+
 	}
-	
+
 	protected Shell createConfirmDialog(Composite client, final boolean[] result, int element, RefreshDocLinked destin){
-final Shell confirm = new Shell(client.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		
+		final Shell confirm = new Shell(client.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		layout.marginWidth = 6;
 		layout.marginHeight = 6;
-		
+
 		confirm.setLayout(layout);
-		
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		confirm.setSize(400, 120);
-		
+
 		String message = "Warning! Another navigation uses the same destination parameter. \n This operation will modify both. \nContinue? ";
 		Label label = new Label(confirm, SWT.NONE);
 		label.setText(message);
 		label.setLayoutData(gd);
-		
+
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 1;
-		
+
 		Point pt = client.getDisplay().getCursorLocation ();
 		confirm.setLocation (pt.x, pt.y);
 
-	    final Button ok = new Button(confirm, SWT.PUSH);
-	    ok.setText("Confirm");
-	    ok.setLayoutData(gd);
-	    Button cancel = new Button(confirm, SWT.PUSH);
-	    cancel.setText("Cancel");
-	    cancel.setLayoutData(gd);
-	    confirm.isReparentable();
-	    
-	    final int elem =element;
-	    final String refreshID =destin.getIdParam();
-	    
-	    Listener dialogListener = new Listener() {
-	        public void handleEvent(Event event) {
-	          result[0] = event.widget == ok;
-	          confirm.notifyListeners(event.type, event);
-	          confirm.close();
+		final Button ok = new Button(confirm, SWT.PUSH);
+		ok.setText("Confirm");
+		ok.setLayoutData(gd);
+		Button cancel = new Button(confirm, SWT.PUSH);
+		cancel.setText("Cancel");
+		cancel.setLayoutData(gd);
+		confirm.isReparentable();
+
+		final int elem =element;
+		final String refreshID =destin.getIdParam();
+
+		Listener dialogListener = new Listener() {
+			public void handleEvent(Event event) {
+				result[0] = event.widget == ok;
+				confirm.notifyListeners(event.type, event);
+				confirm.close();
 				if(result[0]){
 					destinationInfo = destinationInfos.get(elem);
 					//destinationInfo.setParamDestName(destinationInputParam.elementAt(elem).getText());
@@ -737,13 +739,13 @@ final Shell confirm = new Shell(client.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLI
 					destinationInfo.setParamDestName(urlName);
 					destinationInfo.setParamDestId(refreshID);
 				}
-	        }
-	      };
-	      
-	    ok.addListener(SWT.Selection, dialogListener);
-	    cancel.addListener(SWT.Selection, dialogListener);
-	    return confirm;
-		
+			}
+		};
+
+		ok.addListener(SWT.Selection, dialogListener);
+		cancel.addListener(SWT.Selection, dialogListener);
+		return confirm;
+
 	}
 	private boolean canSelectDestination(String currentDest, int currentCombo){
 		boolean canSel = true;
@@ -825,7 +827,7 @@ final Shell confirm = new Shell(client.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLI
 	public void setDeletedParams(HashMap<String, String> deletedParams) {
 		this.deletedParams = deletedParams;
 	}
-	
+
 	public HashMap<String, String> getDeletedRefresh() {
 		return deletedRefresh;
 	}

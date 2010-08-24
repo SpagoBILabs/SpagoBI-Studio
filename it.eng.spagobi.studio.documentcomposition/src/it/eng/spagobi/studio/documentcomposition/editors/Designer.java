@@ -27,11 +27,13 @@ import it.eng.spagobi.studio.core.util.FileFinder;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Document;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentComposition;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentsConfiguration;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameter;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Style;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ModelBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocumentComposition;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataParameter;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataStyle;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentParametersView;
@@ -505,7 +507,7 @@ public class Designer {
 			return;
 		}
 		Vector<Document> documentsToIterate=new Vector<Document>(documentComposition.getDocumentsConfiguration().getDocuments());
-		// Run all the documents
+		// Run all the documents, for each one calculate the style and search for paramters.. parameters must be inserted in model
 		for (Iterator iterator = documentsToIterate.iterator(); iterator.hasNext();) {
 			Document document = (Document) iterator.next();
 			String sbiObjectLabel =	document.getSbiObjLabel();
@@ -533,10 +535,6 @@ public class Designer {
 					
 					// search for the right file
 					
-//					IPath w=new Path(localFileName);					
-//					IFile fileToGet = ResourcesPlugin.getWorkspace().getRoot().getFile(w);
-//					IFile fileToGet =null;
-					
 					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 					IPath workspacePath=root.getLocation();
 					IProject project = root.getProject(getProjectName());
@@ -545,30 +543,31 @@ public class Designer {
 					IFile fileToGet = ResourcesPlugin.getWorkspace().getRoot().getFile(pathRetrieved);
 					
 					if(fileToGet.exists()){
-						String name=fileToGet.getName();
-						String ciao=fileToGet.getPersistentProperty(PropertyPage.DOCUMENT_NAME);
-						IPath f=fileToGet.getFullPath(); 
 						// not put yet Id beacuase not linked yet to the group
 						metadataDocument=new MetadataDocument(fileToGet);
+						// add the metadata document to the metadata container
 						(new MetadataBO()).getMetadataDocumentComposition().addMetadataDocument(metadataDocument);
 
+						// add metadata parameters to document
+						(new ModelBO()).addMetadataParametersToDocumentParameters(documentComposition, document, metadataDocument);
+						
+						
 						// ************		PREPARE MEASURES FOR THE DESIGNER	*****************
 						String videoWidth=(new ModelBO()).getModel().getDocumentsConfiguration().getVideoWidth();
 						String videoHeight=(new ModelBO()).getModel().getDocumentsConfiguration().getVideoHeight();
 						int vWidth=Integer.valueOf(videoWidth);
 						int vHeight=Integer.valueOf(videoHeight);
 
-						//int widthToPut=metadataStyle.getWidthFromPerc(mainComposite);
-						//int heightToPut=metadataStyle.getHeightFromPerc(mainComposite);
 						int widthToPut=MetadataStyle.fromVideoWidthToDesignerWidth(metadataStyle.getWidth(), vWidth, DESIGNER_WIDTH);
 						int heightToPut=MetadataStyle.fromVideoHeightToDesignerHeight(metadataStyle.getHeight(), vHeight, DESIGNER_HEIGHT);
 
 						// scale x and y to default designer sizes
-
 						int scaledX=(DESIGNER_WIDTH*metadataStyle.getX())/vWidth;
 						int scaledY=(DESIGNER_HEIGHT*metadataStyle.getY())/vHeight;
 
 						addDocContainerFromTemplate(mainComposite, scaledX, scaledY, widthToPut, heightToPut, metadataDocument, document);
+
+					
 					}
 					else{
 						MessageDialog.openError(mainComposite.getShell(), 

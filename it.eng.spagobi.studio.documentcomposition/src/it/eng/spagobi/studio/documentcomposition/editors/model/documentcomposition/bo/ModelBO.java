@@ -24,8 +24,12 @@ import it.eng.spagobi.studio.documentcomposition.Activator;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Document;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentComposition;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentsConfiguration;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameter;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameters;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Style;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocumentComposition;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataParameter;
 import it.eng.spagobi.studio.documentcomposition.util.XmlTemplateGenerator;
 
 import java.util.Iterator;
@@ -36,11 +40,20 @@ import org.eclipse.core.runtime.CoreException;
 
 public class ModelBO {
 
+/** create the DocumentCOmposition model by reading the file: the documentCOmposition model will contain everything that will be mapped on the template on saving action
+ * 
+ * @param file
+ * @return
+ * @throws CoreException
+ */
+	
 	public DocumentComposition createModel(IFile file) throws CoreException{
+		// read the XML File
 		DocumentComposition documentComposition = XmlTemplateGenerator.readXml(file);
 		if(documentComposition.getDocumentsConfiguration()==null){
 			documentComposition.setDocumentsConfiguration(new DocumentsConfiguration());
 		}
+
 		return documentComposition;
 	}
 
@@ -63,10 +76,15 @@ public class ModelBO {
 			documentsConfiguration.setDocuments(new Vector<Document>());
 		}
 		Document newDocument=new Document(_metadataDocument,style);
+		
+		// add parameters
+		//addMetadataParametersToDocumentParameters(documentComposition, newDocument, _metadataDocument);
+		
 		//		newDocument.setSbiObjLabel(_metadataDocument.getLabel());
 		//		newDocument.setLocalFileName(_metadataDocument.getLocalFileName());
 		//		newDocument.setStyle(style);
 		//		newDocument.setId(_metadataDocument.getIdMetadataDocument());
+		
 		documentsConfiguration.getDocuments().add(newDocument);
 		saveModel(documentComposition);
 	}
@@ -109,7 +127,7 @@ public class ModelBO {
 		saveModel(documentComposition);
 	}
 
-	
+
 	/** update the model with a new document!
 	 * 
 	 */
@@ -132,6 +150,31 @@ public class ModelBO {
 
 
 
-
+	/** insert into the model all parameters SpagoBi from contained documetn that are not already in template
+	 *  called when inserting a new Document and when loading the designer
+	 * @param documentComposition
+	 * @param document
+	 * @param metadataDocument
+	 */
+		
+		public void addMetadataParametersToDocumentParameters(DocumentComposition documentComposition, Document document, MetadataDocument metadataDocument){
+			// add to the model all parameters found in metadata, if not already present, because we have to put in template all inputs parameters
+			Vector<MetadataParameter> metaParameters = metadataDocument.getMetadataParameters();
+			for (Iterator iterator2 = metaParameters.iterator(); iterator2.hasNext();) {
+				MetadataParameter metadataParameter = (MetadataParameter) iterator2.next();
+				// if not alredy contained in document
+				if(!document.containsParameter(metadataParameter.getUrlName())){
+					Parameter par = new Parameter(documentComposition);
+					par.setSbiParLabel(metadataParameter.getUrlName());
+					par.setType("IN");
+					par.setNavigationName(metadataParameter.getUrlName());
+					//par.setNavigationName(metadataParameter.getUrlName());
+					// add the analaytical driver of the contained document to in parameters.
+					document.getParameters().getParameter().add(par);
+				}
+			}
+		return;
+		}
+		
 
 }

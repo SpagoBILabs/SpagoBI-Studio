@@ -289,6 +289,7 @@ public class NavigationView extends ViewPart {
 					Document doc = (Document)docs.elementAt(i);
 					Parameters params = doc.getParameters();
 					Vector par = params.getParameter();
+					if(par != null){
 					for(int j =0; j<par.size(); j++){
 
 						Parameter paramOut = (Parameter)par.elementAt(j);
@@ -329,7 +330,8 @@ public class NavigationView extends ViewPart {
 										boolean isUsedByOther = bo.inputParameterIsUsedByOther(documentComp, idParam);
 										//cancella IN parameter corrispondente
 										if(!isUsedByOther){
-											boolean result =paramBo.deleteParameterById(documentComp, idParam);
+											// commented to keep input parameters even if not used by navigations
+											//boolean result =paramBo.deleteParameterById(documentComp, idParam);
 										}
 										refreshes.remove(refresh);
 										if(refreshes.size()== 0){
@@ -352,6 +354,7 @@ public class NavigationView extends ViewPart {
 
 					}
 
+					}
 				}
 			}
 		}

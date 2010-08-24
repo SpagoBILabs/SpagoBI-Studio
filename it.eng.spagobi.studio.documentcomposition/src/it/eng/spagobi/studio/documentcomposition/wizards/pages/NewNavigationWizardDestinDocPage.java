@@ -58,21 +58,21 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 	Vector<Combo> destinationDocNameCombo;
 	Vector<Combo> destinationInputParam ;
 	Vector<Text> destinationInputParamDefaultValue ;
-	
+
 	private MetadataDocumentComposition metaDoc;
-	
+
 
 	String name = "";
 	String paramIn = "";
-	
+
 	int destinCounter = 0;
 
 	HashMap <String, String> docInfoUtil = new HashMap<String, String>();
 
 	private DestinationInfo destinationInfo;
 	private Vector<DestinationInfo> destinationInfos;
-	
-	
+
+
 	public NewNavigationWizardDestinDocPage() {		
 		super("New Document - Destination document");
 		setTitle("Insert Destination Document");
@@ -84,27 +84,27 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 		destinationInfos = new Vector<DestinationInfo>();
 
 	}
-	
+
 	@Override
 	public boolean isPageComplete() {
-				
+
 		boolean ret= super.isPageComplete();
 		for(int i = 0; i<destinCounter; i++){
 			int sel = destinationDocNameCombo.elementAt(destinCounter).getSelectionIndex();
 			String destin = destinationDocNameCombo.elementAt(destinCounter).getItem(sel);
-			
+
 			if ((destinationInputParam.elementAt(destinCounter).getText() == null || destinationInputParam.elementAt(destinCounter).getText().length() == 0)
 					&&(sel ==-1 || destin == null )) {
 				return false;
 			}
 		}	
-		
+
 		return ret;
 	}
 
 	public void createControl(Composite parent) {
 		destinationInfo = new DestinationInfo();
-		
+
 		destinationDocNameCombo = new Vector<Combo>();
 		destinationInputParam = new Vector<Combo>();
 		destinationInputParamDefaultValue = new Vector<Text>();
@@ -113,28 +113,28 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 		final Composite composite = new Composite(sc, SWT.BORDER);
 		sc.setContent(composite);
 
-		
+
 		composite.addListener(SWT.Show, new Listener() {
 			public void handleEvent(Event event) {
 				fillDestinationCombo();
 			}
 		});	
 
-		
+
 		final GridLayout gl = new GridLayout();
 		int ncol = 2;
 		gl.numColumns = ncol;
 		composite.setLayout(gl);
-	
-		
+
+
 		new Label(composite, SWT.NONE).setText("Destination document:");				
 		destinationDocNameCombo.addElement(new Combo(composite, SWT.BORDER |SWT.READ_ONLY ));
-		
+
 		/////////////riempie documenti dest
 		fillDestinationCombo();
-		
 
-		
+
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 1;
 		destinationDocNameCombo.elementAt(destinCounter).setLayoutData(gd);
@@ -144,16 +144,18 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 		gd.grabExcessHorizontalSpace = true;
 		gd.minimumWidth =200;
 		gd.widthHint = 250;
-		
+
 		new Label(composite, SWT.NONE).setText("Input parameter:");
 		destinationInputParam.addElement(new Combo(composite, SWT.BORDER | SWT.READ_ONLY));
-		
+
 		destinationInputParam.elementAt(destinCounter).setLayoutData(gd);
-		
+
 		new Label(composite, SWT.NONE).setText("Default value:");
-		destinationInputParamDefaultValue.addElement(new Text(composite, SWT.BORDER));
+		Text def = new Text(composite, SWT.BORDER);
+		def.setText("%");
+		destinationInputParamDefaultValue.addElement(def);
 		destinationInputParamDefaultValue.elementAt(destinCounter).setLayoutData(gd);
-		
+
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gd.horizontalSpan =2;
 
@@ -163,7 +165,7 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 		addButton.setLayoutData(gd);
 
 
-		
+
 		destinationInputParam.elementAt(destinCounter).addListener( SWT.FocusIn, new Listener() {
 			public void handleEvent(Event event) {
 				int numberOfDestinations = destinationDocNameCombo.elementAt(destinCounter).getItemCount();
@@ -182,9 +184,9 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 					//messaggio di errore in dialog
 					addButton.setVisible(false);
 					final boolean[] result = new boolean[1];
-			        Shell confirm = createErrorDialog(composite, result, 0);
-			        confirm.setText("Error");
-			        confirm.setSize(300,100);
+					Shell confirm = createErrorDialog(composite, result, 0);
+					confirm.setText("Error");
+					confirm.setSize(300,100);
 					confirm.open();
 					return;
 				}
@@ -192,32 +194,32 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 				destinationInfo = new DestinationInfo();
 				int sel = destinationDocNameCombo.elementAt(destinCounter).getSelectionIndex();
 				destinationInfo.setDocDestName(destinationDocNameCombo.elementAt(destinCounter).getItem(sel));
-				
+
 				int selIn = destinationInputParam.elementAt(destinCounter).getSelectionIndex();		
 				//destinationInfo.setParamDestName(destinationInputParam.elementAt(destinCounter).getItem(selIn));
 				String label = destinationInputParam.elementAt(destinCounter).getText();
 				String urlName= (String)destinationInputParam.elementAt(destinCounter).getData(label);
 				destinationInfo.setParamDestName(urlName);
-				
+
 				destinationInfo.setParamDefaultValue(destinationInputParamDefaultValue.elementAt(destinCounter));
 				destinationInfos.add(destinationInfo);	
 
-				
+
 				destinCounter++;	
-				
-				
+
+
 				GridData gridData = new GridData();
 				gridData.horizontalAlignment = GridData.FILL_HORIZONTAL;
 				gridData.horizontalSpan = 1;
 				gridData.widthHint = 250;
-				
+
 				new Label(composite, SWT.NONE).setText("Destination document:");	
 				destinationDocNameCombo.addElement(new Combo(composite, SWT.BORDER |SWT.READ_ONLY ));
-				
+
 				/////////////riempie documenti dest
 				fillDestinationCombo();
 				//destinationInputParam.elementAt(destinCounter).removeAll();
-				
+
 				destinationDocNameCombo.elementAt(destinCounter).setLayoutData(gridData);
 				destinationDocNameCombo.elementAt(destinCounter).setVisible(true);
 
@@ -227,19 +229,21 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 				Combo newText =new Combo(composite, SWT.BORDER |SWT.READ_ONLY );
 
 				destinationInputParam.addElement(newText);
-				
+
 				newText.setLayoutData(gridData);
 
-				
+
 				new Label(composite, SWT.NONE).setText("Default value:");
-				destinationInputParamDefaultValue.addElement(new Text(composite, SWT.BORDER));
+				Text def = new Text(composite, SWT.BORDER);
+				def.setText("%");
+				destinationInputParamDefaultValue.addElement(def);
 				destinationInputParamDefaultValue.elementAt(destinCounter).setLayoutData(gridData);
-				
-				
+
+
 				destinationDocNameCombo.elementAt(destinCounter).addModifyListener(new ModifyListener() {
 					public void modifyText(ModifyEvent event) {
 						Combo selectedCombo = (Combo) event.widget;
-						
+
 						//ricavo dal vettore di combo la sua posizione
 						int destinComboToRedraw = destinationDocNameCombo.indexOf(selectedCombo);
 						//controlla se destinazione precedentem selezionata
@@ -249,35 +253,35 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 							addButton.setVisible(false);
 							selectedCombo.deselect((selectedCombo).getSelectionIndex());
 							final boolean[] result = new boolean[1];
-					        Shell confirm = createErrorDialog(composite, result, 1);
-					        confirm.setText("Error");
-					        confirm.setSize(300,100);
+							Shell confirm = createErrorDialog(composite, result, 1);
+							confirm.setText("Error");
+							confirm.setSize(300,100);
 							confirm.open();
 						}else{
 							ParameterBO bo = new ParameterBO();
 							String docLab =docInfoUtil.get(destinationDocNameCombo.elementAt(destinCounter).getText());
 							boolean exists = bo.inputParameterExists(Activator.getDefault().getDocumentComposition(), docLab, selectedCombo.getText());
 							if(exists){
-				        		
+
 								final boolean[] result = new boolean[1];
-						        Shell confirm = createConfirmDialog(composite.getParent(), result, destinCounter);				    						        
+								Shell confirm = createConfirmDialog(composite.getParent(), result, destinCounter);				    						        
 								confirm.open();
 
 							}else{						    					
 								int sel = destinationDocNameCombo.elementAt(destinCounter).getSelectionIndex();
 								if(sel != -1){
 									setPageComplete(true);
-									
+
 									name = destinationDocNameCombo.elementAt(destinCounter).getItem(sel);
-									
+
 									destinationInputParam.elementAt(destinComboToRedraw).removeAll();
-									
+
 									fillDestinationParamCombo(name, destinComboToRedraw);
 									destinationInputParam.elementAt(destinComboToRedraw).redraw();
 								}
 							}
 						}
-						
+
 
 
 					}
@@ -295,9 +299,9 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 				if(!canSelect){
 					//messaggio di errore in dialog
 					final boolean[] result = new boolean[1];
-			        Shell confirm = createErrorDialog(composite, result, 1);
-			        confirm.setText("Error");
-			        confirm.setSize(300,100);
+					Shell confirm = createErrorDialog(composite, result, 1);
+					confirm.setText("Error");
+					confirm.setSize(300,100);
 					confirm.open();
 					return;
 				}
@@ -309,7 +313,7 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 					fillDestinationParamCombo(name, 0);
 					destinationInputParam.elementAt(0).redraw();
 				}
-				
+
 			}
 
 			public void widgetSelected(SelectionEvent e) {
@@ -319,9 +323,9 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 					//messaggio di errore in dialog
 					((Combo)e.widget).deselect(((Combo)e.widget).getSelectionIndex());
 					final boolean[] result = new boolean[1];
-			        Shell confirm = createErrorDialog(composite, result, 1);
-			        confirm.setText("Error");
-			        confirm.setSize(300,100);
+					Shell confirm = createErrorDialog(composite, result, 1);
+					confirm.setText("Error");
+					confirm.setSize(300,100);
 					confirm.open();
 				}
 				int sel = destinationDocNameCombo.elementAt(0).getSelectionIndex();
@@ -333,40 +337,39 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 				}
 			}
 		});	
-		
+
 		destinationInputParam.elementAt(0).addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent event) {
 				setPageComplete(true);
 				//aggiunge pulsante x add delle pagine
 				addButton.setVisible(true);
-				
+
 				ParameterBO bo = new ParameterBO();
 				String docLab =docInfoUtil.get(destinationDocNameCombo.elementAt(0).getText());
-				boolean exists = bo.inputParameterExists(Activator.getDefault().getDocumentComposition(), docLab, ((Combo)event.widget).getText());
-				if(exists){
-	        		
-					final boolean[] result = new boolean[1];
-			        Shell confirm = createConfirmDialog(composite.getParent(), result, 0);				    						        
-					confirm.open();
+				//				boolean exists = bo.inputParameterExists(Activator.getDefault().getDocumentComposition(), docLab, ((Combo)event.widget).getText());
+				//				if(exists){
+				//	        		
+				//					final boolean[] result = new boolean[1];
+				//			        Shell confirm = createConfirmDialog(composite.getParent(), result, 0);				    						        
+				//					confirm.open();
+				//				}else{						    					
+				paramIn = destinationInputParam.elementAt(0).getText();	
+				//				}
 
-				}else{						    					
-					paramIn = destinationInputParam.elementAt(0).getText();	
-				}
-					
-				
+
 				composite.redraw();
 			}
 		});		
-		
+
 		composite.pack(false);
 		composite.redraw();
-		
+
 		setControl(composite);
 		setPageComplete(false);
 
 	}
 
-	
+
 	private void fillDestinationCombo(){
 
 		metaDoc = Activator.getDefault().getMetadataDocumentComposition();
@@ -393,13 +396,13 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 		}
 		String master = wizard.getSelectedMaster();
 		//per ridisegnare combo
-		
+
 		if(master != null && !master.equals("")){
 
 			int posMaster =destinationDocNameCombo.elementAt(destinCounter).indexOf(master);
 			if(posMaster != -1){
 				destinationDocNameCombo.elementAt(destinCounter).remove(posMaster);
-				
+
 			}
 		}
 		//rimuove anche destination precedentemente selezionata
@@ -412,11 +415,11 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 				}
 			}
 		}
-		
+
 		destinationDocNameCombo.elementAt(destinCounter).redraw();
 	}
 	private void fillDestinationParamCombo(String destDoc, int destinComboToRedraw){
-		
+
 		if(destinComboToRedraw == 0){
 			destinationInputParam.elementAt(destinComboToRedraw).removeAll();
 		}
@@ -440,7 +443,7 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 				}
 			}
 		}
-		
+
 	}
 	protected Shell createErrorDialog(Composite client, final boolean[] result, int messageType){
 		final Shell error = new Shell(client.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
@@ -455,77 +458,77 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 
 		String message = "No more destination documents available.";
 		if(messageType == 1){
-			 message = "Destination already selected.";
+			message = "Destination already selected.";
 		}else if(messageType == 2){
 			message = "Select a destination.";
 		}
 		new Label(error, SWT.NONE).setText(message);
-		
+
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 3;
-	    final Button cancel = new Button(error, SWT.PUSH);
-	    cancel.setLayoutData(gd);
-	    cancel.setText("Cancel");
+		final Button cancel = new Button(error, SWT.PUSH);
+		cancel.setLayoutData(gd);
+		cancel.setText("Cancel");
 
-	    error.isReparentable();
+		error.isReparentable();
 
-	    Listener dialogListener = new Listener() {
-	        public void handleEvent(Event event) {
-	          result[0] = event.widget == cancel;
-	          error.notifyListeners(event.type, event);
-	          error.close();
-	        }
-	      };
-	    cancel.addListener(SWT.Selection, dialogListener);
-	    return error;
-		
+		Listener dialogListener = new Listener() {
+			public void handleEvent(Event event) {
+				result[0] = event.widget == cancel;
+				error.notifyListeners(event.type, event);
+				error.close();
+			}
+		};
+		cancel.addListener(SWT.Selection, dialogListener);
+		return error;
+
 	}
 	protected Shell createConfirmDialog(Composite client, final boolean[] result, int element){
 		final Shell confirm = new Shell(client.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		
+
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		layout.marginWidth = 6;
 		layout.marginHeight = 6;
-		
+
 		confirm.setLayout(layout);
-		
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		confirm.setSize(400, 120);
-		
+
 		String message = "Warning! Another navigation uses the same destination parameter. \n This operation will modify both. \nContinue? ";
 		Label label = new Label(confirm, SWT.NONE);
 		label.setText(message);
 		label.setLayoutData(gd);
-		
+
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 1;
-		
+
 		Point pt = client.getDisplay().getCursorLocation ();
 		confirm.setLocation (pt.x, pt.y);
 
-	    final Button ok = new Button(confirm, SWT.PUSH);
-	    ok.setText("Confirm");
-	    ok.setLayoutData(gd);
-	    Button cancel = new Button(confirm, SWT.PUSH);
-	    cancel.setText("Cancel");
-	    cancel.setLayoutData(gd);
-	    confirm.isReparentable();
+		final Button ok = new Button(confirm, SWT.PUSH);
+		ok.setText("Confirm");
+		ok.setLayoutData(gd);
+		Button cancel = new Button(confirm, SWT.PUSH);
+		cancel.setText("Cancel");
+		cancel.setLayoutData(gd);
+		confirm.isReparentable();
 
-	    Listener dialogListener = new Listener() {
-	        public void handleEvent(Event event) {
-	          result[0] = event.widget == ok;
-	          confirm.notifyListeners(event.type, event);
-	          confirm.close();
+		Listener dialogListener = new Listener() {
+			public void handleEvent(Event event) {
+				result[0] = event.widget == ok;
+				confirm.notifyListeners(event.type, event);
+				confirm.close();
 
-	        }
-	      };
-	      
-	    ok.addListener(SWT.Selection, dialogListener);
-	    cancel.addListener(SWT.Selection, dialogListener);
-	    return confirm;
-		
+			}
+		};
+
+		ok.addListener(SWT.Selection, dialogListener);
+		cancel.addListener(SWT.Selection, dialogListener);
+		return confirm;
+
 	}
 	private boolean canSelectDestination(String currentDest, int currentCombo){
 		boolean canSel = true;
@@ -577,7 +580,7 @@ public class NewNavigationWizardDestinDocPage extends WizardPage {
 	public void setDocInfoUtil(HashMap<String, String> docInfoUtil) {
 		this.docInfoUtil = docInfoUtil;
 	}
-	
+
 }
 
 

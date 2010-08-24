@@ -533,6 +533,7 @@ public class DocContainer {
 			public void drop(DropTargetEvent event) {
 				boolean doTransfer=false;
 				if (localTransfer.isSupportedType(event.currentDataType)){
+					// Associate a document to a container
 					Object selectedObject = event.data;
 					if(selectedObject instanceof TreeSelection)
 					{

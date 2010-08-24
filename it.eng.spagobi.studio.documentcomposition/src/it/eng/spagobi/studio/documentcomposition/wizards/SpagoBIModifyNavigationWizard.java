@@ -190,12 +190,12 @@ public class SpagoBIModifyNavigationWizard extends Wizard implements INewWizard{
 	    			fillNavigationOutParam(outputPram, masterPar);
 	    			
 		    	}else{
+		    		
 		    		Parameters params = doc.getParameters();//tag già presente nel modello riempito precedentemente
 
 	    			if(params == null){
 	    				params = new Parameters();//altrimenti lo crea
-	    			}
-	
+	    			}	
 		    		Vector<Parameter> parameters =params.getParameter();
 	    			if(parameters == null){
 	    				parameters = new Vector<Parameter>();
@@ -206,17 +206,22 @@ public class SpagoBIModifyNavigationWizard extends Wizard implements INewWizard{
 		    	}
 		    	
 		    }
-		    cleanInputParameters();
+		    // From 2.5 no more cleaning input parameters, they are always present
+		 //   cleanInputParameters();
 	    }
 	    DocumentCompositionEditor editor= (DocumentCompositionEditor)DocCompUtilities.getEditorReference(DocCompUtilities.DOCUMENT_COMPOSITION_EDITOR_ID); 
 		editor.setIsDirty(true);
 
 	    return true;
 	}
+	
+	// No more use, TODO Cancel
 	private void cleanInputParameters(){
 		Vector<String> idParamUsedByRefresh = refreshBO.getIdParamsUsedByRefreshes(docComp);
 		paramBO.cleanUnusedInputParameters(docComp, idParamUsedByRefresh);
 	}
+	
+	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle("Modify navigation");
 		
@@ -319,7 +324,6 @@ public class SpagoBIModifyNavigationWizard extends Wizard implements INewWizard{
 		ouputparam.setRefresh(refresh);		
 
 	}
-
 	private void fillInNavigationParams(Vector<Parameter> parameters, Document doc){
 		//cicla su destinazioni
 		HashMap<String, String> docInfoUtil= modifyNavigationWizardPage.getDocInfoUtil();

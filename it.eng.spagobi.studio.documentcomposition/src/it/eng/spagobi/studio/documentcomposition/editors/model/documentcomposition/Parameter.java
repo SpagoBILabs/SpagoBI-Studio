@@ -31,29 +31,27 @@ public class Parameter {
 	{
 		long last = Integer.valueOf(lastId).intValue();
 		last = last + (idCounter++);
-	    return String.valueOf(last);
+		return String.valueOf(last);
 	}
 
-/*	public Parameter() {
-		this.id = createID();
-		// TODO Auto-generated constructor stub
-	}*/
+
 	public Parameter(DocumentComposition docComp) {
 
 		this.id = createID(bo.getLastId(docComp));
 		// TODO Auto-generated constructor stub
 	}
+
 	private String type;
 	private String sbiParLabel;
 	private String defaultVal;
 	private Refresh refresh;
-	
+
 	//per gestire modifica/cancellazione parametro
 	private String id ;
 
 	//attributo che non verrà salvato nell'xml del template ma individua la navigazione
 	private String navigationName;
-	
+
 
 	public String getNavigationName() {
 		return navigationName;
@@ -87,7 +85,7 @@ public class Parameter {
 		this.defaultVal = defaultVal;
 	}
 
-	
+
 	public String getId() {
 		return id;
 	}

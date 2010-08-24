@@ -71,6 +71,10 @@ public class ParameterBO {
 		}		
 		return paramFound;
 	}
+	
+	
+	// No more used, TODO CAncel
+	
 	public void cleanUnusedInputParameters(DocumentComposition docComp, Vector<String> idParamUsedByRefresh){
 		DocumentsConfiguration docConf = docComp.getDocumentsConfiguration();
 		if(docConf != null){
@@ -243,6 +247,16 @@ public class ParameterBO {
 		return paramFound;
 	}
 
+	
+	
+	/** method used to see if a parameter is already present in input destination parameters TODO: cancel
+	 * 
+	 * @param docComp
+	 * @param destinDocLabel
+	 * @param destinParamLabel
+	 * @return
+	 */
+	
 	public boolean inputParameterExists(DocumentComposition docComp, String destinDocLabel, String destinParamLabel){
 		boolean ret = false;
 		DocumentsConfiguration docConf = docComp.getDocumentsConfiguration();

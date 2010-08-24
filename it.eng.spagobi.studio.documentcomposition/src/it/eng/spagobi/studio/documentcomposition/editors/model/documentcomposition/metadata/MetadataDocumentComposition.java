@@ -95,5 +95,22 @@ public class MetadataDocumentComposition {
 	}
 
 
+	/** taking in input a label return the relative metadataDOcument
+	 * 
+	 * @param _metadataDocument
+	 * @return
+	 */
+
+	public MetadataDocument retrieveMetadataDocumentByLabel(String label){
+		MetadataDocument toReturn = null;
+		for (Iterator iterator = metadataDocuments.iterator(); iterator.hasNext() && toReturn == null;) {
+			MetadataDocument metaDocument = (MetadataDocument) iterator.next();
+			if(metaDocument.getLabel().equals(label)){
+				toReturn = metaDocument;
+			}
+		}
+		return toReturn;
+	}
+
 
 }

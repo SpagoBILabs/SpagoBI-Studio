@@ -62,6 +62,11 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
+/** this is the editor of a file that terminates with .doccomp
+ * 
+ * @author gavardi
+ *
+ */
 
 public class DocumentCompositionEditor extends EditorPart {
 
@@ -72,18 +77,23 @@ public class DocumentCompositionEditor extends EditorPart {
 	private XmlTemplateGenerator generator = new XmlTemplateGenerator();
 	protected boolean isDirty = false;
 
+	
+	/**
+	 *  Dispose of the editor
+	 */
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		super.dispose();
 
+		// construct navigationVie
 		IViewPart navigationView = DocCompUtilities.getViewReference(DocCompUtilities.NAVIGATION_VIEW_ID);
 		if(navigationView != null && navigationView instanceof NavigationView){
 			navigationView = (NavigationView)navigationView;
 			getSite().getPage().hideView(navigationView);
-
 		}
+
+		// construct navigationVie
 		IViewPart propertiesView = DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PROPERTIES_VIEW_ID);
 		if(propertiesView != null && propertiesView instanceof DocumentPropertiesView){
 			propertiesView = (DocumentPropertiesView)propertiesView;
@@ -181,8 +191,10 @@ public class DocumentCompositionEditor extends EditorPart {
 			templateName=file.getName();
 			ModelBO bo=new ModelBO();
 			try {
+				// create the model from the file and save it
 				DocumentComposition documentComposition = bo.createModel(file);
 				bo.saveModel(documentComposition);
+				// create the metadatamodel that will be filled later in designer initialization
 				new MetadataBO().createMetadataDocumentComposition(file);
 			} catch (CoreException e) {
 				e.printStackTrace();

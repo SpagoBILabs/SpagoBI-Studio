@@ -142,6 +142,12 @@ public class MetadataDocument {
 //	public MetadataDocument() {
 //	}
 
+	
+	
+	/**
+ *      COnstructor of MetadataDocument
+ *      Initialize the object with all informations found in file; also by parsing xmlParametersString
+ */
 
 	public MetadataDocument(IFile file) throws CoreException {
 		String documentId=file.getPersistentProperty(PropertyPage.DOCUMENT_ID);
@@ -176,6 +182,8 @@ public class MetadataDocument {
 		setState(documentState);
 		setLocalFileName(file.getName());
 
+		
+		metadataParameters = new Vector<MetadataParameter>();
 //		String idMetadataDocument=idContainer+"_"+documentLabel;
 //		setIdMetadataDocument(idMetadataDocument);
 

@@ -112,7 +112,7 @@ public class DocumentParametersView extends ViewPart {
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.heightHint = 200;
 		table.setLayoutData(data);
-		String[] titles = {"    Id    ","          Label          ", "          Type          ","          UrlName          ", "      Default Value     "};
+		String[] titles = {"    Id    ","          Label          ", "          Type          ","          UrlName          ", "      Default Value (Edit)    "};
 		for (int i=0; i<titles.length; i++) {
 			TableColumn column = new TableColumn (table, SWT.NONE);
 			column.setText (titles [i]);
@@ -142,6 +142,7 @@ public class DocumentParametersView extends ViewPart {
 						try{
 							editor.getItem().setText(DEFAULT_VALUE, text.getText());
 							String documentLabel = item.getData().toString();
+							String label = item.getText(LABEL);							
 							String urlName = item.getText(URLNAME);
 							DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
 							Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, documentLabel);

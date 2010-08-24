@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition;
 
 import it.eng.spagobi.studio.documentcomposition.Activator;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ModelBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataParameter;
 
@@ -79,42 +80,70 @@ public class Document {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	/** crate a new document: populate wth parameters taken from file metadata
+	 * 
+	 * @param metadataDocument
+	 * @param _style
+	 */
+	
 	public Document(MetadataDocument metadataDocument, Style _style) {
 		super();
 		sbiObjLabel=metadataDocument.getLabel();
 		localFileName=metadataDocument.getLocalFileName();
 		style=_style;
+		parameters = new Parameters(); 
+		parameters.setParameter(new Vector<Parameter>());
+		
+		DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
+ 		new ModelBO().addMetadataParametersToDocumentParameters(docComposition, this, metadataDocument);
+		
+		
 		// Set also the input parameters of the document!
-		if(metadataDocument.getMetadataParameters()!=null){
-			for (Iterator iterator = metadataDocument.getMetadataParameters().iterator(); iterator.hasNext();) {
-				MetadataParameter metaParameter = (MetadataParameter) iterator.next();
-				String label=metaParameter.getLabel();
-				//String type=metaParameter.getType();			
-				String type="IN";
-				String urlName=metaParameter.getUrlName();
-				Integer id=metaParameter.getId();
-				// if not already present add it
-				if(parameters==null) {
-					parameters=new Parameters();	
-				}
-				Vector<Parameter> vector=parameters.getParameter();
-				if(vector==null){
-					parameters.setParameter(new Vector<Parameter>());
-				}
-				DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
-				Parameter par=new Parameter(docComposition);
-				par.setDefaultVal("");
-				par.setSbiParLabel(urlName);
-				par.setType(type);
-				par.setNavigationName(label);
-				parameters.getParameter().add(par);
-			}
-
-
-		}
+//		if(metadataDocument.getMetadataParameters()!=null){
+//			for (Iterator iterator = metadataDocument.getMetadataParameters().iterator(); iterator.hasNext();) {
+//				MetadataParameter metaParameter = (MetadataParameter) iterator.next();
+//				String label=metaParameter.getLabel();
+//				//String type=metaParameter.getType();			
+//				String type="IN";
+//				String label = metaParameter.getLabel();
+//				String urlName=metaParameter.getUrlName();
+//				Integer id=metaParameter.getId();
+//				// if not already present add it
+//				if(parameters==null) {
+//					parameters=new Parameters();	
+//				}
+//				Vector<Parameter> vector=parameters.getParameter();
+//				if(vector==null){
+//					parameters.setParameter(new Vector<Parameter>());
+//				}
+//				DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
+//				Parameter par=new Parameter(docComposition);
+//				par.setDefaultVal("");
+//				par.setSbiParLabel(label);
+//				par.setType(type);
+//				par.setNavigationName(label);
+//				parameters.getParameter().add(par);
+//			}
+//		}
 		this.id = metadataDocument.getIdMetadataDocument();
 	}	
 
 
+	/** return true if document already contains the parameter with the label
+	 * 
+	 */
+	public boolean containsParameter(String urlName){
+		boolean toRet = false;
+		
+		for (Iterator iterator = getParameters().getParameter().iterator(); iterator.hasNext() && !toRet;) {
+			Parameter par = (Parameter) iterator.next();
+			if(par.getSbiParLabel().equals(urlName)){
+				toRet = true;
+			}
+		}
+		return toRet;
+	}
+	
 
 }
