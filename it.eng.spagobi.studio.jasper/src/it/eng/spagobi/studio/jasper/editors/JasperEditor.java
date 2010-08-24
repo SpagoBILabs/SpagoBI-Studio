@@ -74,6 +74,7 @@ public final class JasperEditor implements IEditorLauncher {
 				SpagoBILogger.infoLog("start execution");
 
 				Process proc  = rt.exec(command, null, iReportDirectory);		
+				//proc.waitFor();
 //				System.out.println(proc.toString());
 				//int returnValue=proc.waitFor();
 //				int returnValue=0;
