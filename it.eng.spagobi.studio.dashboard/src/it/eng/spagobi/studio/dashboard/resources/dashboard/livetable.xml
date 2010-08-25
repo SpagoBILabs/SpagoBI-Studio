@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DASHBOARD movie='/dashboards/livetable.lzx.swf' displayTitleBar='true'>
-	<DIMENSION width='200' height='200' />
+	<DIMENSION width='300' height='300' />
 	<CONF>
 		<PARAMETER name='paramWidth' value='300' />
 		<PARAMETER name='paramHeight' value='180' />
@@ -18,7 +18,7 @@
 		<PARAMETER name='vertScrollBar' value='true' />
 		<PARAMETER name='horizScrollBar' value='true' />
 		<PARAMETER name='fontSizeHeader' value='12' />
-		<PARAMETER name='fontSizeCell' value='12' />
+		<PARAMETER name='fontSizeCell' value='10' />
 	</CONF>
 	<DATA url="/servlet/AdapterHTTP?ACTION_NAME=GET_DATASET_RESULT">
 	</DATA>

@@ -6,17 +6,10 @@
 		<PARAMETER name='maxYValue' value='200' />
 		<PARAMETER name='stepNumValue' value='10' />
 		<PARAMETER name='refreshRate' value='15000' />
-		<PARAMETER name='xColName' value='name' />
 		<PARAMETER name='paramWidth' value='500' />
 		<PARAMETER name='paramHeight' value='300' />
-		<PARAMETER name='xColName' value='xLabel' />
 		<PARAMETER name='refreshRate' value='15000' />
-		<PARAMETER name='timeStartValue' value='' />
-		<PARAMETER name='timeStopValue' value='' />
-		<PARAMETER name='timeGridStepValue' value='0:01' />
 		<PARAMETER name='stepNumValue' value='10' />
-		<PARAMETER name='xLabelValue' value='Time' />
-		<PARAMETER name='yLabelValue' value='' />
 		<PARAMETER name='minYValue' value='0' />
 		<PARAMETER name='maxYValue' value='200' />
 		<PARAMETER name='stepYValue' value='25' />

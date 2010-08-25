@@ -60,9 +60,9 @@ public class DashboardEditor extends EditorPart {
 
 	protected boolean isDirty = false;
 	protected DashboardModel model = null;
-    static public final int COLORDIALOG_WIDTH = 222;
-    static public final int COLORDIALOG_HEIGHT = 306;
-	
+	static public final int COLORDIALOG_WIDTH = 222;
+	static public final int COLORDIALOG_HEIGHT = 306;
+
 	public void doSave(IProgressMonitor monitor) {
 		ByteArrayInputStream bais = null;
 		try {
@@ -100,7 +100,7 @@ public class DashboardEditor extends EditorPart {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+
 		setInput(input);
 		setSite(site);
 
@@ -131,7 +131,7 @@ public class DashboardEditor extends EditorPart {
 		layout.topMargin = 20;
 		layout.leftMargin = 20;
 		form.getBody().setLayout(layout);
-		
+
 		// Dashboard general information section
 		Section section = toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE|Section.EXPANDED);
@@ -151,16 +151,16 @@ public class DashboardEditor extends EditorPart {
 		Label typeLabel = new Label(sectionClient, SWT.NULL);
 		typeLabel.setText("Type:");
 		Label type = new Label(sectionClient, SWT.NULL);
-		
+
 		type.setText(model.getType());
-		
-		
+
+
 		Label movieLabel = new Label(sectionClient, SWT.NULL);
 		movieLabel.setText("Movie:");
 		Label movie = new Label(sectionClient, SWT.NULL);
 		movie.setText(model.getMovie());
 		section.setClient(sectionClient);
-		
+
 		// Dashboard internal settings section
 		section = toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE|Section.EXPANDED);
@@ -177,7 +177,7 @@ public class DashboardEditor extends EditorPart {
 		sectionClient = toolkit.createComposite(section);
 		model.getConfiguration().createForm(this, sectionClient, toolkit);
 		section.setClient(sectionClient);
-		
+
 		// Dashboard dimension settings section
 		section = toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE|Section.EXPANDED);
@@ -194,18 +194,24 @@ public class DashboardEditor extends EditorPart {
 		gl = new GridLayout();
 		gl.numColumns = 2;
 		sectionClient.setLayout(gl);
-		final Button button = toolkit.createButton(sectionClient, "Display title bar", SWT.CHECK);
+
+		/*no more display title bar, linked to old portlet mode
+
+				final Button button = toolkit.createButton(sectionClient, "Display title bar", SWT.CHECK);
 		button.setSelection(model.isDisplayTitleBar());
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				setIsDirty(true);
 				model.setDisplayTitleBar(button.getSelection());
 			}
-			
+
 		});
+		button.setVisible(false);		
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		button.setLayoutData(gd);
+		 */
+
 		Label widthLabel = new Label(sectionClient, SWT.NULL);
 		widthLabel.setText("Width (in pixel):");
 		final Text widthText = new Text(sectionClient, SWT.BORDER);
@@ -231,7 +237,7 @@ public class DashboardEditor extends EditorPart {
 		section.setClient(sectionClient);
 
 		// Dashboard source configuration section
-	/*	section = toolkit.createSection(form.getBody(), 
+		/*	section = toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE|Section.EXPANDED);
 		td = new TableWrapData(TableWrapData.FILL);
 		section.setLayoutData(td);
@@ -247,7 +253,7 @@ public class DashboardEditor extends EditorPart {
 		gl.numColumns = 2;
 		sectionClient.setLayout(gl);*/	
 
-		
+
 		Parameter[] dataParameters = model.getData().getParameters();
 		for (int i = 0; i < dataParameters.length; i++) {
 			final Parameter aParameter = dataParameters[i];
@@ -272,35 +278,35 @@ public class DashboardEditor extends EditorPart {
 			}
 		}
 		section.setClient(sectionClient);
-		
+
 	}
 
 	public void setFocus() {
 	}
-	
+
 	public void setIsDirty(boolean isDirty) {
 		this.isDirty = isDirty;
 		firePropertyChange(PROP_DIRTY);
 	}
-	
-//	public static RGB convertHexadecimalToRGB(String hexadecimal) {
-//	
-//		
-//		
-//		String redHexadecimal = hexadecimal.substring(2, 4);
-//	    String greenHexadecimal = hexadecimal.substring(4, 6);
-//	    String blueHexadecimal = hexadecimal.substring(6, 8);
-//	    int red = Integer.parseInt(redHexadecimal, 16);
-//	    int green = Integer.parseInt(greenHexadecimal, 16);
-//	    int blue = Integer.parseInt(blueHexadecimal, 16);
-//	    return new RGB(red, green, blue);
-//
-//	
-//	}
 
-	
-	
-	
+	//	public static RGB convertHexadecimalToRGB(String hexadecimal) {
+	//	
+	//		
+	//		
+	//		String redHexadecimal = hexadecimal.substring(2, 4);
+	//	    String greenHexadecimal = hexadecimal.substring(4, 6);
+	//	    String blueHexadecimal = hexadecimal.substring(6, 8);
+	//	    int red = Integer.parseInt(redHexadecimal, 16);
+	//	    int green = Integer.parseInt(greenHexadecimal, 16);
+	//	    int blue = Integer.parseInt(blueHexadecimal, 16);
+	//	    return new RGB(red, green, blue);
+	//
+	//	
+	//	}
+
+
+
+
 	public static RGB convertHexadecimalToRGB(String hexadecimal) throws NumberFormatException{
 		java.awt.Color col=null;
 		try{
@@ -315,26 +321,26 @@ public class DashboardEditor extends EditorPart {
 
 		return new RGB(red, green, blue);
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public static String convertRGBToHexadecimal(RGB rgb) {
-	    int red = rgb.red;
-	    int green = rgb.green;
-	    int blue = rgb.blue;
-	    String redHexadecimal = Integer.toHexString(red);
-	    String greenHexadecimal = Integer.toHexString(green);
-	    String blueHexadecimal = Integer.toHexString(blue);
-	    if (redHexadecimal.length() == 1) redHexadecimal = "0" + redHexadecimal;
-	    if (greenHexadecimal.length() == 1) greenHexadecimal = "0" + greenHexadecimal;
-	    if (blueHexadecimal.length() == 1) blueHexadecimal = "0" + blueHexadecimal;
-	    return "0x" + redHexadecimal + greenHexadecimal + blueHexadecimal;
+		int red = rgb.red;
+		int green = rgb.green;
+		int blue = rgb.blue;
+		String redHexadecimal = Integer.toHexString(red);
+		String greenHexadecimal = Integer.toHexString(green);
+		String blueHexadecimal = Integer.toHexString(blue);
+		if (redHexadecimal.length() == 1) redHexadecimal = "0" + redHexadecimal;
+		if (greenHexadecimal.length() == 1) greenHexadecimal = "0" + greenHexadecimal;
+		if (blueHexadecimal.length() == 1) blueHexadecimal = "0" + blueHexadecimal;
+		return "0x" + redHexadecimal + greenHexadecimal + blueHexadecimal;
 	}
 
 	public DashboardModel getModel() {
 		return model;
 	}
-	
+
 }
