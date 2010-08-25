@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.15" id="1">
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.21" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 2.6.0.v20100531 Build &lt;2.6.0.v20100609-1613></property>
     <property name="units">in</property>
-    <property name="comments">Copyright (c) 2007 &lt;&lt;Your Company Name here>></property>
-    <html-property name="description">Creates a blank report with no predefined content.</html-property>
-    <text-property name="displayName">Blank Report</text-property>
     <property name="iconFile">/templates/blank_report.gif</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <property name="imageDPI">96</property>
     <styles>
-        <style name="crosstab" id="4">
+        <style name="report" id="4">
+            <property name="fontFamily">sans-serif</property>
+            <property name="fontSize">10pt</property>
+        </style>
+        <style name="crosstab" id="5">
             <property name="borderBottomColor">#CCCCCC</property>
             <property name="borderBottomStyle">solid</property>
             <property name="borderBottomWidth">1pt</property>
@@ -20,7 +24,7 @@
             <property name="borderTopStyle">solid</property>
             <property name="borderTopWidth">1pt</property>
         </style>
-        <style name="crosstab-cell" id="5">
+        <style name="crosstab-cell" id="6">
             <property name="borderBottomColor">#CCCCCC</property>
             <property name="borderBottomStyle">solid</property>
             <property name="borderBottomWidth">1pt</property>
