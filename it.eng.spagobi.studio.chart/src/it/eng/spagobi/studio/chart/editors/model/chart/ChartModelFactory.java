@@ -30,6 +30,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 public class ChartModelFactory {
 
@@ -48,7 +50,7 @@ public class ChartModelFactory {
 	public static final String XYCHART="XYCHART";
 	public static final String SCATTERCHART="SCATTERCHART";
 
-	public static ChartModel createChartModel(IFile file) throws Exception  {
+	public static ChartModel createChartModel(IFile file, Shell shell) throws Exception  {
 		SpagoBILogger.infoLog("Start Creating Chart Model");
 		ChartModel model = null;
 		InputStream thisIs = null;
@@ -74,6 +76,12 @@ public class ChartModelFactory {
 			if(subType==null || subType.equalsIgnoreCase("")){
 				SpagoBILogger.infoLog("Get default subtype");			
 				subType=ChartEditorUtils.getDefaultSubtype(type);
+			}
+			// if subtype is overlaid_stacked_barline put it to overlaid_barline 
+			if(subType.equalsIgnoreCase("overlaid_stacked_barline")){
+				SpagoBILogger.infoLog("Type changed from overlaid_stacked_barline no more supported to overlaid_barline");			
+				MessageDialog.openInformation(shell, "No more supported type", "Chart subType overlaid_stacked_barline no more supported, you can use an overlaid_barline and stack bars by checking configuration parameters");
+				subType = "overlaid_barline";
 			}
 
 			SpagoBILogger.infoLog("Actual subtype is "+subType);			

@@ -140,7 +140,7 @@ public final class ChartEditor extends EditorPart {
 		try {
 			// Create the model of the chart that will store informations
 			components=new ChartEditorComponents();
-			model = ChartModelFactory.createChartModel(file);
+			model = ChartModelFactory.createChartModel(file, site.getShell());
 			model.setEditor(this);
 		} catch (Exception e) {
 			SpagoBILogger.errorLog("Error during Editor Initialization",e);

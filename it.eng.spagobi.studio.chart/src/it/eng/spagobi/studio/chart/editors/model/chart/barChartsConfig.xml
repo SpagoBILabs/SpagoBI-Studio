@@ -213,8 +213,11 @@
 					type='BOOLEAN' defaultValue='true' tooltip='add labels'/>
 				<PARAMETER name='stacked_bar_renderer_1' description='StackedBar renderer'
 					type='BOOLEAN' defaultValue='true' tooltip='Put bars in stake'/>
-				<PARAMETER name='stacked_bar_renderer_2' description='StackedBar renderer'
-					type='BOOLEAN' defaultValue='true' tooltip='Put bars in stake'/>
+				<PARAMETER name='stacked_bar_renderer_2' description='StackedBar 2nd axis renderer'
+					type='BOOLEAN' defaultValue='true' tooltip='Put bars referring to 2nd axis in stake'/>
+				<PARAMETER name='value_labels_position' description='Value Labels Position'
+					type='COMBO' values='outside,inside' defaultValue='inside'
+					tooltip='set the Position of the labels'/>										
 			</SECTION>
 		</CONF>
 		<SERIES_DRAW />
@@ -222,7 +225,7 @@
 		<SERIES_LABELS />
 		<SERIES_SCALES />
 	</BARCHART>
-	<BARCHART name='overlaid_stacked_barline'
+<!-- 	<BARCHART name='overlaid_stacked_barline'
 		templatePath='it/eng/spagobi/studio/chart/resources/chart/overlaid_stacked_barline.xml'>
 		<CONF>
 			<SECTION>
@@ -236,4 +239,5 @@
 		<SERIES_COLORS />
 		<SERIES_LABELS />
 	</BARCHART>
+	 -->
 </BARCHARTS>
