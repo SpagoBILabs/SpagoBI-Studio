@@ -9,8 +9,6 @@
 		<PARAMETER name='rowsNumber' value='5' />
 		<PARAMETER name='rowsSpacing' value='0' />
 		<PARAMETER name='headerHeight' value='20' />
-		<PARAMETER name='xColHeadBGcolor' value='0x140f7e' />
-		<PARAMETER name='colHeadBGcolor' value='0x140f7e' />
 		<PARAMETER name='xColBGColor' value='0xf2f4c5' />
 		<PARAMETER name='colBGColor' value='0xffffff' />
 		<PARAMETER name='gradOpacityBck' value='0.5' />

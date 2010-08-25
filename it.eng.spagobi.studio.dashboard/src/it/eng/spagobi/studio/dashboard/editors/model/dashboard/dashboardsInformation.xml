@@ -63,8 +63,6 @@
 			<PARAMETER name='rowsNumber' description='Number of table rows' type='NUMBER' />
 			<PARAMETER name='rowsSpacing' description='Rows spacing' type='NUMBER' />
 			<PARAMETER name='headerHeight' description='Header height (in % respect to table)' type='NUMBER' />
-			<PARAMETER name='xColHeadBGcolor' description='Left column header background color' type='COLOR' />
-			<PARAMETER name='colHeadBGcolor' description='Other columns header background color' type='COLOR' />
 			<PARAMETER name='xColBGColor' description='Left column cells background color' type='COLOR' />
 			<PARAMETER name='colBGColor' description='Other columns cells background color' type='COLOR' />
 			<PARAMETER name='gradOpacityBck' description='Background opacity gradient' type='STRING' />
