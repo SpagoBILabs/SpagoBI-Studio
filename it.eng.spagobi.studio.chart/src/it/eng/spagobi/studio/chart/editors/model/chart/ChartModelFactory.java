@@ -158,7 +158,7 @@ public class ChartModelFactory {
 		} 
 		catch (Exception e) {
 			SpagoBILogger.errorLog("Error in reading the xml template", e);
-			throw new Exception("Error while reading " + ChartModel.CHART_INFO_FILE + " file: " + e.getMessage());
+			throw new Exception("Error while reading xml file: check Xml syntax and assure that type and subtype of the chart are supported by SpagoBI");
 		}
 		finally {
 			if (thisIs != null) thisIs.close();

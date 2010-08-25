@@ -36,6 +36,7 @@ import org.dom4j.io.SAXReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -143,9 +144,11 @@ public final class ChartEditor extends EditorPart {
 			model = ChartModelFactory.createChartModel(file, site.getShell());
 			model.setEditor(this);
 		} catch (Exception e) {
-			SpagoBILogger.errorLog("Error during Editor Initialization",e);
+			SpagoBILogger.errorLog("Error during Editor Initialization "+e.getMessage(),e);
+			MessageDialog.openError(site.getShell(), "Error", e.getMessage());
 			return;
 		}
+		
 		setInput(input);
 		setSite(site);
 	}
