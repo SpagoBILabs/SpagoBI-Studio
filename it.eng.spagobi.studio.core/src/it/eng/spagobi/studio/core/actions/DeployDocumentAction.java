@@ -71,7 +71,7 @@ public class DeployDocumentAction implements IViewActionDelegate {
 	public void run(IAction action) {
 
 		SpagoBIDeployWizard sbindw = new SpagoBIDeployWizard();
-
+		
 		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
 		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
 
@@ -101,6 +101,7 @@ public class DeployDocumentAction implements IViewActionDelegate {
 		}
 
 		// IF File selected has already and id of document associated do the upload wiyhout asking further informations
+		boolean newDeploy = false;
 		if(document_idString!=null){
 			SpagoBILogger.infoLog("Template already associated to document "+document_idString);	
 			final Integer idInteger=Integer.valueOf(document_idString);
@@ -110,7 +111,7 @@ public class DeployDocumentAction implements IViewActionDelegate {
 			IRunnableWithProgress op = new IRunnableWithProgress() {			
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
 					monitor.beginTask("Deploying to document "+label2, IProgressMonitor.UNKNOWN);
-			
+
 					// document associated, upload the template
 					SDKProxyFactory proxyFactory=new SDKProxyFactory();
 					DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
@@ -176,17 +177,25 @@ public class DeployDocumentAction implements IViewActionDelegate {
 			if(documentException.isNoDocument()){
 				SpagoBILogger.errorLog("Document no more present", null);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error upload", "Document is no more present on server");	
-				return;
+						"Error upload", "Document is no more present on server; you can do a new deploy");	
+				newDeploy = true;
+				sbindw.setNewDeployFromOld(true);
+				//return;
 			}
 
 
 			dialog.close();
-
-			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated document "+document_label+" succesfull");		
-			SpagoBILogger.infoLog("Deployed to the associated document "+document_label+" succesfull");		
+			if(!newDeploy){
+				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated document "+document_label+" succesfull");		
+				SpagoBILogger.infoLog("Deployed to the associated document "+document_label+" succesfull");		
+			}		
 		}
 		else{
+			newDeploy = true;
+		}
+
+		if(newDeploy)
+		{
 			SpagoBILogger.infoLog("deploy a new Document: start wizard");		
 			// init wizard
 			sbindw.init(PlatformUI.getWorkbench(), sel);

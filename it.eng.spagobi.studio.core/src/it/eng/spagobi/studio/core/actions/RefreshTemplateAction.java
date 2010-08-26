@@ -203,7 +203,7 @@ public class RefreshTemplateAction implements IViewActionDelegate {
 				SpagoBILogger.warningLog("Document no more present on server "+document_label);					
 				SpagoBILogger.errorLog("Document no more present", null);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error upload", "Document is no more present on server");	
+						"Error upload", "Document is no more present on server. Make a new Deploy.");	
 				return;
 			}
 			if(alreadyPresentException!=null && alreadyPresentException.isAlreadyPresent()){
@@ -295,7 +295,7 @@ public class RefreshTemplateAction implements IViewActionDelegate {
 
 			//Set File Metadata	
 			try{
-				newFile=BiObjectUtilities.setFileMetaData(newFile,document);
+				newFile=BiObjectUtilities.setFileMetaData(newFile,document, true);
 				//newFile=BiObjectUtilities.setFileMetaData(newFile,document);
 
 				//Set ParametersFile Metadata	
