@@ -53,6 +53,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	public SpagoBIDeployWizard() {
 		super();
 		setNeedsProgressMonitor(true);
+	
 	}
 
 

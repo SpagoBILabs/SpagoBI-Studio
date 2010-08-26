@@ -15,6 +15,7 @@ import it.eng.spagobi.studio.core.util.SdkSelectFolderTreeGenerator;
 import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,7 +98,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 		Shell shell = parent.getShell();
-		//		shell.setSize(1000,1000);
+		//shell.setSize(1300,500);
 		monitor=new ProgressMonitorPart(getShell(), null);
 
 		// first of all get info from server		
@@ -150,11 +151,14 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 
 
-		Label label=null;
 
 		FillLayout fl2=new FillLayout();
 		fl2.type=SWT.HORIZONTAL;
 		parent.setLayout(fl2);
+
+		
+		
+		
 		Composite left=new Composite(parent,SWT.BORDER);
 		Composite right =  new Composite(parent, SWT.BORDER);
 
@@ -162,7 +166,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		int ncol = 2;
 		gl.numColumns = ncol;
 		left.setLayout(gl);
-
+		
 		FillLayout fl=new FillLayout();
 		right.setLayout(fl);
 
@@ -227,6 +231,8 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		engineCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
 		engineLabelIdMap=new HashMap<String, Integer>();
+
+
 		for (SDKEngine engine : enginesList) {
 			if(engine.getDocumentType().equalsIgnoreCase(typeLabel)){		
 				engineCombo.add(engine.getLabel());
@@ -239,22 +245,44 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		dataSetCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
 
 		dataSetLabelIdMap=new HashMap<String, Integer>();
-		for (SDKDataSet dataSet : datasetList) {
-			dataSetCombo.add(dataSet.getLabel());
+		// sort the items
+		String[] datasetLabels = new String[datasetList.length];
+		for (int i = 0; i < datasetLabels.length; i++) {
+			SDKDataSet dataSet =datasetList[i];
+			datasetLabels[i] = dataSet.getLabel();
 			dataSetLabelIdMap.put(dataSet.getLabel(), dataSet.getId());
 		}
+		Arrays.sort(datasetLabels);
+		dataSetCombo.setItems(datasetLabels);
+		//		for (SDKDataSet dataSet : datasetList) {
+		//			dataSetCombo.add(dataSet.getLabel());
+		//			dataSetLabelIdMap.put(dataSet.getLabel(), dataSet.getId());
+		//		}
+
+
 		dataSetCombo.setEnabled(false);
 
 
 		// Select datasource
 		new Label(left, SWT.NONE).setText("Datasource");
 		dataSourceCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
-
 		dataSourceLabelIdMap=new HashMap<String, Integer>();
-		for (SDKDataSource dataSource : datasourceList) {
-			dataSourceCombo.add(dataSource.getLabel());
+		String[] datasourceLabels = new String[datasourceList.length];
+		for (int i = 0; i < datasourceLabels.length; i++) {
+			SDKDataSource dataSource =datasourceList[i];
+			datasourceLabels[i] = dataSource.getLabel();
 			dataSourceLabelIdMap.put(dataSource.getLabel(), dataSource.getId());
 		}
+		Arrays.sort(datasourceLabels);
+		dataSourceCombo.setItems(datasourceLabels);
+
+		//		for (SDKDataSource dataSource : datasourceList) {
+		//			dataSourceCombo.add(dataSource.getLabel());
+		//			dataSourceLabelIdMap.put(dataSource.getLabel(), dataSource.getId());
+		//		}
+
+
+
 		dataSourceCombo.setEnabled(false);
 
 

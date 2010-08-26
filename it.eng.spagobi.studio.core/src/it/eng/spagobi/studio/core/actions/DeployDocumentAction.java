@@ -48,6 +48,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
@@ -71,7 +72,7 @@ public class DeployDocumentAction implements IViewActionDelegate {
 	public void run(IAction action) {
 
 		SpagoBIDeployWizard sbindw = new SpagoBIDeployWizard();
-		
+
 		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
 		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
 
@@ -201,6 +202,15 @@ public class DeployDocumentAction implements IViewActionDelegate {
 			sbindw.init(PlatformUI.getWorkbench(), sel);
 			// Create the wizard dialog
 			WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbindw);
+			
+//			{
+//				@Override
+//				protected void configureShell(Shell newShell) {
+//					super.configureShell(newShell);
+//					newShell.setSize(1300, 600);
+//				}
+//			};
+
 			// Open the wizard dialog
 			dialog.open();	
 		}
