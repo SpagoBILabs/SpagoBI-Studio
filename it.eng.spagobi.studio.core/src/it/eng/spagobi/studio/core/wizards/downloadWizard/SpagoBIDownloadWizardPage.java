@@ -200,25 +200,22 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 		this.tree = tree;
 	}
 
-
+/**
+ *  DOwnlaod wizard page is complete if something has been selected, both one or more document or one or more folders
+ */
 
 	public boolean isPageComplete() {
 		boolean isComplete=false;
 		if(tree!=null){
 			TreeItem[] treeItems=tree.getSelection();
-			//			if(treeItems!=null && treeItems.length==1){
-			//				TreeItem treeItem=treeItems[0];
-			//				Object data=treeItem.getData();
-			//				if(data!=null && data instanceof SDKDocument){
-			//					isComplete=true;
-			//				}
-			//			}
 			if(treeItems!=null && treeItems.length>=1){
-				TreeItem treeItem=treeItems[0];
-				Object data=treeItem.getData();
-				if(data!=null && data instanceof SDKDocument){
-					isComplete=true;
-				}
+				isComplete=true;
+//
+//				TreeItem treeItem=treeItems[0];
+//				Object data=treeItem.getData();
+//				if(data!=null && data instanceof SDKDocument){
+//					isComplete=true;
+//				}
 			}			
 		}
 

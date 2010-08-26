@@ -3,6 +3,7 @@ package it.eng.spagobi.studio.core.wizards.downloadWizard;
 import it.eng.spagobi.commons.constants.SpagoBIConstants;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
+import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
 import it.eng.spagobi.sdk.engines.bo.SDKEngine;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
@@ -18,7 +19,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import javax.activation.DataHandler;
 
@@ -45,8 +48,10 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
 	protected IWorkbench workbench;
 
-
-
+	/**
+	 *  vector that stores user messages to show at the end of download
+	 */
+	Vector<String> messages = new Vector<String>();
 
 	/**
 	 * Constructor for SampleNewWizard.
@@ -67,31 +72,87 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	}
 
 	/**
+	 *  Download document, if it is a document composition ask if want to download all
+	 * @param document
+	 */
+
+	public boolean downloadDocument(SDKDocument document){
+		// if it is a document composed download also contained documents
+		if(document.getType().equalsIgnoreCase(SpagoBIConstants.DOCUMENT_COMPOSITE_TYPE) ){
+			// ask user if wants to download related template
+			boolean downloadContained=MessageDialog.openQuestion(getShell(), "Download contained Documents?", "You have selected a document composition, do you want to download contained documents? You will be notified if they already esists in your workspace");	
+			if(downloadContained==true){
+				downloadContainedTemplate(document);
+			}
+		}
+		return downloadTemplate(document);		
+	}
+
+	/** Download contained documents and also nto subfolders
+	 * 
+	 * @param functionality
+	 * @return
+	 */
+
+	public boolean downloadDocumentsFromFunctionality(SDKFunctionality functionality){
+		SDKDocument[] documents = functionality.getContainedDocuments();
+		// Download contained Documents
+		for (int i = 0; i < documents.length; i++) {
+			SDKDocument document = documents[i];	
+			downloadDocument(document);
+		}
+		SDKFunctionality[] funcitonalities = functionality.getContainedFunctionalities();
+		// Download contained subfolders
+		for (int i = 0; i < funcitonalities.length; i++) {
+			SDKFunctionality funct = funcitonalities[i];	
+			downloadDocumentsFromFunctionality(funct);
+		}		
+		return true;
+	}
+
+	/**
 	 * This method is called when 'Finish' button is pressed in
 	 * the wizard. We will create an operation and run it
 	 * using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		boolean toReturn;
 		TreeItem[] selectedItems=page.getTree().getSelection();
 		if(selectedItems==null){
-			SpagoBILogger.warningLog("Error; no item or multiple items selected");
+			SpagoBILogger.warningLog("Error; no item selected");
 		}
 		else{	
+			// cycle on selected items
 			for (int i = 0; i < selectedItems.length; i++) {
 				TreeItem selectedItem=selectedItems[i];
 				Object docObject=selectedItem.getData();	
-				SDKDocument document=(SDKDocument)docObject;
-				// if it is a document composed download also contained documents
-				if(document.getType().equalsIgnoreCase(SpagoBIConstants.DOCUMENT_COMPOSITE_TYPE) ){
-					// ask user if wants to download related template
-					boolean downloadContained=MessageDialog.openQuestion(getShell(), "Download contained Documents?", "You have selected a document composition, do you want to download contained documents? You will be notified if they already esists in your workspace");	
-					if(downloadContained==true){
-						downloadContainedTemplate(document);
+				// check if it is a folder or a document
+				if(docObject instanceof SDKDocument){
+					SDKDocument document=(SDKDocument)docObject;
+					downloadDocument(document);
+				}
+				else if(docObject instanceof SDKFunctionality){
+					// cycle on all document contained (also subfolders?)
+					SDKFunctionality functionality=(SDKFunctionality)docObject;
+					downloadDocumentsFromFunctionality(functionality);
+				}
+
+			}
+
+			// print messages on file that could not be written
+			if(messages.size()>0){
+				String message = "Following files could not be added because already exist in project with the same name. You must delete firstly the existing ones: ";
+				for (Iterator iterator = messages.iterator(); iterator.hasNext();) {
+					String msg = (String) iterator.next();
+					message += msg;
+					if(iterator.hasNext()){
+						message += ", ";
 					}
 				}
-				toReturn=downloadTemplate(document);
+				MessageDialog.openWarning(page.getShell(), "Warning", message);
+				messages= new Vector<String>();
+
 			}
+
 			doFinish();
 		}
 
@@ -319,8 +380,8 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		boolean alreadyFound=FileFinder.fileExistsInSubtree(fileName, projectFolder.toString());
 
 		if(alreadyFound){
-			MessageDialog.openWarning(workbench.getActiveWorkbenchWindow().getShell(), 
-					"Error", "File "+fileName+" already exists in your project: to download it againg you must first delete the existing one");
+
+			messages.add(fileName);
 			SpagoBILogger.warningLog("File "+fileName+" already exists in your project: to download it againg you must first delete the existing one");
 			return false;
 			//write=MessageDialog.openQuestion(workbench.getActiveWorkbenchWindow().getShell(), "File exists: Overwrite?", "File "+newFile.getName()+" already exists, overwrite?"); 
