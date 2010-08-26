@@ -88,11 +88,51 @@ public class BiObjectUtilities {
 
 
 	}
-	
 
-	
 
-	public static IFile setFileMetaData(IFile newFile, SDKDocument document) throws CoreException{
+	/** erase all persistent properties from the file, called before doing a new deploy after a previous one
+	 * 
+	 * @param newFile
+	 */
+
+	 public static void erasePersistentProperties(IFile newFile) throws CoreException{
+		newFile.setPersistentProperty(PropertyPage.DOCUMENT_ID, null);
+		newFile.setPersistentProperty(PropertyPage.DOCUMENT_LABEL, null);
+		newFile.setPersistentProperty(PropertyPage.DOCUMENT_NAME, null);
+		newFile.setPersistentProperty(PropertyPage.DOCUMENT_DESCRIPTION, null);
+		newFile.setPersistentProperty(PropertyPage.DOCUMENT_STATE, null);
+		newFile.setPersistentProperty(PropertyPage.DOCUMENT_TYPE, null);
+		newFile.setPersistentProperty(PropertyPage.ENGINE_ID, null);
+		newFile.setPersistentProperty(PropertyPage.ENGINE_LABEL, null);
+		newFile.setPersistentProperty(PropertyPage.ENGINE_NAME, null);
+		newFile.setPersistentProperty(PropertyPage.ENGINE_DESCRIPTION, null);
+		newFile.setPersistentProperty(PropertyPage.DATASET_LABEL, null);
+		newFile.setPersistentProperty(PropertyPage.DATASET_NAME, null);
+		newFile.setPersistentProperty(PropertyPage.DATASET_DESCRIPTION, null);
+		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_ID, null);
+		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_LABEL, null);
+		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_NAME, null);
+		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_DESCRIPTION, null);
+		newFile.setPersistentProperty(PropertyPage.LAST_REFRESH_DATE, null);
+		newFile.setPersistentProperty(PropertyPage.DOCUMENT_PARAMETERS_XML, null);
+	}
+
+
+
+	/** Sets all file metadata, for what regards document, engine, datasource, dataset. If is a new deploy from a previous one delete all existings metadata
+	 * 
+	 * @param newFile
+	 * @param document
+	 * @param newDeployFromOld
+	 * @return
+	 * @throws CoreException
+	 */
+
+	public static IFile setFileMetaData(IFile newFile, SDKDocument document, boolean newDeployFromOld) throws CoreException{
+
+		if(newDeployFromOld){
+			erasePersistentProperties(newFile);
+		}
 
 		// DAtaset Infomation field
 		SDKDataSet sdkDataSet=null;
@@ -265,7 +305,7 @@ public class BiObjectUtilities {
 		return newFile;
 	}
 
-	
+
 	public static String getFileExtension(String type, String engine){
 		String extension=null;
 		if(type.equalsIgnoreCase(SpagoBIConstants.DASH_TYPE_CODE) && engine.equalsIgnoreCase(SpagoBIStudioConstants.DASHBOARD_ENGINE_LABEL) ){
