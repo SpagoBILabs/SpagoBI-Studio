@@ -44,7 +44,8 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	int refreshSeconds;
 	SDKFunctionality functionality;
 
-
+	// boolean tells if file was already previously deployed (delete old metadata).
+	boolean newDeployFromOld = false;
 
 	/**
 	 * Constructor for SampleNewWizard.
@@ -93,7 +94,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		if(selectedDataSourceIndex!=-1){
 			labelDataSource=formPage.getDataSourceCombo().getItem(selectedDataSourceIndex);
 		}
-		
+
 		int selectedStateIndex=formPage.getStateCombo().getSelectionIndex();
 		if(selectedStateIndex!=-1){
 			labelState=formPage.getStateCombo().getItem(selectedStateIndex);
@@ -155,7 +156,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 			}
 		}
 
-		
+
 		newDocument.setState(labelState);
 		newDocument.setType(type);
 
@@ -196,7 +197,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 						"Error", "Error during file deploy: label already present");		
 				return;
 			}
-//			System.out.println(returnCode);
+			//			System.out.println(returnCode);
 			newDocument.setId(returnCode);
 		}  catch (Exception e) {
 			SpagoBILogger.errorLog("No comunication with server, cannot deploy document on server", e);			
@@ -207,7 +208,8 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		}
 
 		try{
-			fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setFileMetaData(fileSel,newDocument);
+			// it is important to delete previous metadata!
+			fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setFileMetaData(fileSel,newDocument, newDeployFromOld);
 		}
 		catch (CoreException e) {
 			SpagoBILogger.errorLog("Error while setting meta data",e);		
@@ -243,6 +245,17 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 
 	}
 
+
+	public boolean isNewDeployFromOld() {
+		return newDeployFromOld;
+	}
+
+
+	public void setNewDeployFromOld(boolean newDeployFromOld) {
+		this.newDeployFromOld = newDeployFromOld;
+	}
+
+	
 
 }
 
