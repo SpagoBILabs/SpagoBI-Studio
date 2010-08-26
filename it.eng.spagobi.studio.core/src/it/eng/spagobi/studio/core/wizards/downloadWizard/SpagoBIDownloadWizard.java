@@ -400,8 +400,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 			//Set File Metadata	
 			try{
-				newFile=BiObjectUtilities.setFileMetaData(newFile,document);
-				//newFile=BiObjectUtilities.setFileMetaData(newFile,document);
+				newFile=BiObjectUtilities.setFileMetaData(newFile,document, false);
 			}
 			catch (CoreException e) {
 				SpagoBILogger.errorLog("Error while setting meta data", e);	
