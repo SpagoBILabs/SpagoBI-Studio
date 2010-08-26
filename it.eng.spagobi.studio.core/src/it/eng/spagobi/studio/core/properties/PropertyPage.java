@@ -587,6 +587,8 @@ IWorkbenchPropertyPage {
 			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not retrieve document parameters", e);
 		}			
 
+		// firstly I have to call delete on all metadata in order to refresh!
+		BiObjectUtilities.erasePersistentProperties(file);
 
 		// Reload Documents Metadata
 		if(document!=null){
