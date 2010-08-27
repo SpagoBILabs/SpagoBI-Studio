@@ -29,31 +29,25 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.ui.IViewActionDelegate;
-import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.navigator.CommonNavigator;
-import org.eclipse.ui.navigator.CommonViewer;
 
 /** DownloadDocumentAction calls the SpagoBI Download Wizard
  * 
  */
 
-public class DownloadDocumentAction implements IViewActionDelegate {
+public class DownloadDocumentAction implements IObjectActionDelegate {
 
-	private IViewPart view = null;
+	ISelection selection;
 
 	public DownloadDocumentAction() {
 	}
 
-	public void init(IViewPart view) {
-		this.view = view;
-	}
 
 	public void run(IAction action) {
 		SpagoBIDownloadWizard sbindw = new SpagoBIDownloadWizard();
-		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
-		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
+		IStructuredSelection sel=(IStructuredSelection)selection;
 
 		// go on only if you selected a folder
 		Object objSel = sel.toList().get(0);
@@ -79,8 +73,12 @@ public class DownloadDocumentAction implements IViewActionDelegate {
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
+		this.selection = selection;		
+	}
 
+	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

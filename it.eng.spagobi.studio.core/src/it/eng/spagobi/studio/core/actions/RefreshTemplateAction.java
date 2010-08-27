@@ -59,19 +59,20 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
-import org.eclipse.ui.IViewActionDelegate;
+import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
-public class RefreshTemplateAction implements IViewActionDelegate {
+public class RefreshTemplateAction implements IObjectActionDelegate {
 
-	private IViewPart view = null;
 	private final SDKTemplate template= new SDKTemplate();
 
 	SDKDocument document=null;
-
+	ISelection selection;
+	
 	// fields to retrieve only once
 	String[] roles=null;
 	SDKDocumentParameter[] parameters=null;
@@ -84,14 +85,9 @@ public class RefreshTemplateAction implements IViewActionDelegate {
 	}
 
 
-	public void init(IViewPart view) {
-		this.view = view;
-	}
-
 	public void run(IAction action) {
 		SpagoBIDeployWizard sbindw = new SpagoBIDeployWizard();
-		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
-		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
+		IStructuredSelection sel=(IStructuredSelection)selection;
 
 		// go on only if you selected a document (a file)
 		Object objSel = sel.toList().get(0);
@@ -230,10 +226,6 @@ public class RefreshTemplateAction implements IViewActionDelegate {
 		}
 	}
 
-	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
-	}
 
 
 	public void overwriteTemplate(SDKTemplate template, org.eclipse.core.internal.resources.File fileSel, String extension) throws CoreException{
@@ -390,4 +382,18 @@ public class RefreshTemplateAction implements IViewActionDelegate {
 		return extension;
 	}
 
+	public void selectionChanged(IAction action, ISelection selection) {
+		this.selection = selection;		
+	}
+
+	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
+	
+	
+	
 }

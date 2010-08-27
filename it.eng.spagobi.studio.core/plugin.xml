@@ -108,21 +108,23 @@
    </extension>
    <extension
           point="org.eclipse.ui.popupMenus">
-       <viewerContribution
+          
+<!--       <viewerContribution
              id="it.eng.spagobi.studio.core.popupmenu.ResourceNavigatorContribution"
              targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
+-->
+<objectContribution
+             id="it.eng.spagobi.studio.core.popupmenu.ResourceNavigatorContribution"
+            objectClass="org.eclipse.core.internal.resources.File"
+             targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
+
          <menu
             id="it.eng.spagobi.studio.core.main.menu" 
+            icon="icons/sbiproject.gif"            
             path="additions" 
             label="SpagoBI"> 
             <separator name="SpagoBI"/> 
          </menu> 
-         <action
-            id="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" 
-            label="Download document from server"
-            style="push"
-            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
-            class="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" />
          <action
             id="it.eng.spagobi.studio.core.actions.DeployDocumentAction" 
             label="Deploy document into server"
@@ -135,7 +137,31 @@
             style="push"
             menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
             class="it.eng.spagobi.studio.core.actions.RefreshTemplateAction" /> 
-       </viewerContribution>
+
+</objectContribution>
+<objectContribution
+             id="it.eng.spagobi.studio.core.popupmenu.ResourceNavigatorContribution2"
+            objectClass="org.eclipse.core.internal.resources.Folder"
+             targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
+
+         <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            path="additions" 
+            label="SpagoBI"> 
+            <separator name="SpagoBI"/> 
+         </menu> 
+         <action
+            id="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" 
+            label="Download document from server"
+            style="push"
+            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI?after=it.eng.spagobi.studio.birt.actions.NewBirtAction" 
+            class="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" />
+</objectContribution>
+
+
+
+<!--       </viewerContribution> -->
+
     </extension>
 
    <extension

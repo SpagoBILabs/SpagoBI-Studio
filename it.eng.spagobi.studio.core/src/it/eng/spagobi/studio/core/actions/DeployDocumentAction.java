@@ -49,16 +49,18 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
-public class DeployDocumentAction implements IViewActionDelegate {
+public class DeployDocumentAction implements IObjectActionDelegate {
 
 	private IViewPart view = null;
-
+	ISelection selection;
 
 
 	public DeployDocumentAction() {
@@ -73,8 +75,9 @@ public class DeployDocumentAction implements IViewActionDelegate {
 
 		SpagoBIDeployWizard sbindw = new SpagoBIDeployWizard();
 
-		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
-		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
+//		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
+//		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
+		IStructuredSelection sel=(IStructuredSelection)selection;
 
 		// go on only if you selected a document
 		Object objSel = sel.toList().get(0);
@@ -218,8 +221,13 @@ public class DeployDocumentAction implements IViewActionDelegate {
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
+		this.selection = selection;		
+	}
 
+
+	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
