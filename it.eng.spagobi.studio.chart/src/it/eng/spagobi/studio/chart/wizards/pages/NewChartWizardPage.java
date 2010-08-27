@@ -153,7 +153,7 @@ public class NewChartWizardPage extends WizardPage {
 				final String t = (String) iterator.next();
 				final Composite compImage = new Composite(belowComposite, SWT.NONE);
 				compImage.setLayout(new RowLayout());
-				compImage.setLayoutData(new RowData(300,200));
+				//compImage.setLayoutData(new RowData(300,200));
 
 				compImage.addPaintListener(new PaintListener() {
 					public void paintControl(PaintEvent e) {
@@ -180,7 +180,8 @@ public class NewChartWizardPage extends WizardPage {
 						catch (Exception e2) {
 							SpagoBILogger.errorLog("Error while drawing image for type "+t, e2);
 						}
-						e.gc.drawImage(scaledImage, 20, 30);
+						// insert scaledImage to Have image scalation!
+						e.gc.drawImage(image, 20, 30);
 						image.dispose();
 					}
 				});
