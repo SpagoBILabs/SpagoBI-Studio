@@ -11,17 +11,25 @@
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
-      <viewerContribution
+      <objectContribution
             id="it.eng.spagobi.studio.birt.popupmenus.ResourceNavigatorContribution"
+            objectClass="org.eclipse.core.internal.resources.Folder"
             targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
+           <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            path="additions" 
+            icon="icons/sbiproject.gif"            
+            label="SpagoBI"> 
+            <separator name="SpagoBI"/> 
+         </menu> 
          <action
             id="it.eng.spagobi.studio.birt.actions.NewBirtAction" 
             label="Birt"
             icon="icons/objecticon_REPORT.png" 
             style="push"
-            menubarPath="group.new"
+            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
             class="it.eng.spagobi.studio.birt.actions.NewBirtAction" />
             <!-- menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" -->
-      </viewerContribution>
+      </objectContribution>
    </extension>
 </plugin>
