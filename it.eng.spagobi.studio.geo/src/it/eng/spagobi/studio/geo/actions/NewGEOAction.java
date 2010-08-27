@@ -9,15 +9,18 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.ui.IViewActionDelegate;
+import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
-public class NewGEOAction implements IViewActionDelegate {
+public class NewGEOAction implements IObjectActionDelegate {
 
 	private IViewPart view = null;
+
+	ISelection selection;
 
 	public NewGEOAction() {
 		// TODO Auto-generated constructor stub
@@ -29,8 +32,9 @@ public class NewGEOAction implements IViewActionDelegate {
 
 	public void run(IAction action) {
 		SpagoBIGEOWizard sbindw = new SpagoBIGEOWizard();
-		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
-		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
+//		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
+//		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
+		IStructuredSelection sel=(IStructuredSelection)selection;
 
 		Object objSel = sel.toList().get(0);
 		Folder folderSel = null;		
@@ -56,10 +60,15 @@ public class NewGEOAction implements IViewActionDelegate {
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
+		this.selection = selection;
+		
 	}
 
+	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 
 }

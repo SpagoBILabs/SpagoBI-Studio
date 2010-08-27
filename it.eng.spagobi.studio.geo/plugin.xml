@@ -14,18 +14,25 @@
    </extension>
   <extension
          point="org.eclipse.ui.popupMenus">
-      <viewerContribution
+      <objectContribution
             id="it.eng.spagobi.studio.geo.popupmenus.ResourceNavigatorContribution"
+            objectClass="org.eclipse.core.internal.resources.Folder"
             targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
-         <action
+           <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            icon="icons/sbiproject.gif"            
+            path="additions" 
+            label="SpagoBI"> 
+            <separator name="SpagoBI"/> 
+         </menu> 
+        <action
                class="it.eng.spagobi.studio.geo.actions.NewGEOAction"
                icon="icons/objecticon_MAP.png"
                id="it.eng.spagobi.studio.geo.actions.NewGEOAction"
                label="GEO"
-               menubarPath="group.new"
+               menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
                style="push" />
-
-      </viewerContribution>
+      </objectContribution>
    </extension>
    
  </plugin>
