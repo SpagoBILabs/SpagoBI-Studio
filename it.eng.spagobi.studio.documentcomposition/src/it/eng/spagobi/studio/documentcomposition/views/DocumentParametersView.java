@@ -43,6 +43,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -97,7 +99,7 @@ public class DocumentParametersView extends ViewPart {
 		// Creating the Screen
 		Section section = toolkit.createSection(parent, Section.DESCRIPTION
 				| Section.TITLE_BAR);
-		section.setText("Parameters of selected document"); //$NON-NLS-1$
+		section.setText("Parameters of selected document: select a row to edit default value"); //$NON-NLS-1$
 		client = toolkit.createComposite(section, SWT.WRAP);
 		layout = new GridLayout();
 		layout.numColumns = 1;
@@ -112,7 +114,7 @@ public class DocumentParametersView extends ViewPart {
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.heightHint = 200;
 		table.setLayoutData(data);
-		String[] titles = {"    Id    ","          Label          ", "          Type          ","          UrlName          ", "      Default Value (Edit)    "};
+		String[] titles = {"    Id    ","          Label          ", "          Type          ","          UrlName          ", "      Default Value (Editable)    "};
 		for (int i=0; i<titles.length; i++) {
 			TableColumn column = new TableColumn (table, SWT.NONE);
 			column.setText (titles [i]);
@@ -219,7 +221,7 @@ public class DocumentParametersView extends ViewPart {
 					// try searching for a default value
 					String def = defaults.get(metadataParameter.getUrlName());
 					item.setText (DEFAULT_VALUE, def != null ? def : "");
-
+					item.setBackground(DEFAULT_VALUE, new Color(item.getDisplay(), new RGB(220,220,245)));
 				}
 			}
 		}

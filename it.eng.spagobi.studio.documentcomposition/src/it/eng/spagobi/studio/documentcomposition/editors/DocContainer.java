@@ -149,9 +149,9 @@ public class DocContainer {
 					reloadStyleDocumentProperties();
 					//System.out.println(designer.getEditor().isDirty);
 
-					// Reload navigations view
+					// Reload navigations view (Really need???)
 					if(documentContained.getMetadataDocument()!=null){
-						reloadNavigationView(idContainer.toString());
+						designer.reloadNavigationView();
 					}
 
 					//  If in resizing state mouse button on Container causes end resizing	
@@ -555,9 +555,9 @@ public class DocContainer {
 					if(documentContained.getMetadataDocument()!=null)
 						reloadDocumentPropertiesView(idContainer.toString());
 					reloadStyleDocumentProperties();
-					// Reload navigations view
+					// Reload navigations view (Really need???)
 					if(documentContained.getMetadataDocument()!=null){
-						reloadNavigationView(idContainer.toString());
+						designer.reloadNavigationView();
 					}
 					designer.setState(Designer.SELECTION);
 					composite.setBackground(new Color(composite.getDisplay(),new RGB(193,214,255)));
@@ -751,29 +751,6 @@ public class DocContainer {
 	}
 
 
-	/** Reload the view with navigations
-	 * 
-	 * @param id
-	 */
-
-	public void reloadNavigationView(String id){
-		IWorkbenchWindow a=PlatformUI.getWorkbench().getWorkbenchWindows()[0];
-		try{
-			// Navigation
-			IViewPart object=DocCompUtilities.getViewReference(DocCompUtilities.NAVIGATION_VIEW_ID);
-			if(object!=null && object instanceof NavigationView){
-				NavigationView view=(NavigationView)object;
-				view.reloadNavigations(documentContained.getMetadataDocument());
-			}
-			else{
-				SpagoBILogger.warningLog("view Document navigation closed");
-			}
-
-		}catch (Exception e) {
-			SpagoBILogger.errorLog("Error reloading navigation view", e);
-			e.printStackTrace();
-		}
-	}
 
 	public Designer getDesigner() {
 		return designer;

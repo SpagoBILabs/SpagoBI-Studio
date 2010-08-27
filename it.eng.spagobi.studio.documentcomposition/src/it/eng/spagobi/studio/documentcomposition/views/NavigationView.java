@@ -458,7 +458,11 @@ public class NavigationView extends ViewPart {
 
 	}
 	
-	public void reloadNavigations(MetadataDocument document){
+	
+	/**
+	 *    Reload the navigation from the document composition
+	 */
+	public void reloadNavigations(){
 		
 		metadataDoc = Activator.getDefault().getMetadataDocumentComposition();
 		documentComp= Activator.getDefault().getDocumentComposition();
@@ -483,6 +487,9 @@ public class NavigationView extends ViewPart {
 		client.layout();
 		client.redraw();
 	}
+	
+	
+	
 	
 	@Override
 	public void setFocus() {

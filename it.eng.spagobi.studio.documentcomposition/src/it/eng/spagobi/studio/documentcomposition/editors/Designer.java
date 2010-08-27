@@ -38,6 +38,7 @@ import it.eng.spagobi.studio.documentcomposition.editors.model.documentcompositi
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentParametersView;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentPropertiesView;
+import it.eng.spagobi.studio.documentcomposition.views.NavigationView;
 
 import java.io.File;
 import java.util.HashMap;
@@ -66,6 +67,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public class Designer {
@@ -587,6 +589,10 @@ public class Designer {
 
 			}
 		}
+		
+		// reloading navigation view
+		reloadNavigationView();
+		
 		SpagoBILogger.infoLog("END "+Designer.class.toString()+": Initialize designer function");
 
 	}
@@ -621,6 +627,31 @@ public class Designer {
 		this.projectName = projectName;
 	}
 
+
 	
+	
+	/** Reload the view with navigations
+	 * 
+	 * @param id
+	 */
+
+	public void reloadNavigationView(){
+		IWorkbenchWindow a=PlatformUI.getWorkbench().getWorkbenchWindows()[0];
+		try{
+			// Navigation
+			IViewPart object=DocCompUtilities.getViewReference(DocCompUtilities.NAVIGATION_VIEW_ID);
+			if(object!=null && object instanceof NavigationView){
+				NavigationView view=(NavigationView)object;
+				view.reloadNavigations();
+			}
+			else{
+				SpagoBILogger.warningLog("view Document navigation closed");
+			}
+
+		}catch (Exception e) {
+			SpagoBILogger.errorLog("Error reloading navigation view", e);
+			e.printStackTrace();
+		}
+	}
 
 }
