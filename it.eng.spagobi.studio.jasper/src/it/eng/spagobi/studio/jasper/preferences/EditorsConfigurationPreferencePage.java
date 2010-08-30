@@ -53,7 +53,7 @@ public class EditorsConfigurationPreferencePage
 	public EditorsConfigurationPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("( In order for iReport to work be sure that the workspace path has no empty spaces ) ");
+		//setDescription("( In order for iReport to work be sure that the workspace path has no empty spaces ) ");
 	}
 	
 	/**

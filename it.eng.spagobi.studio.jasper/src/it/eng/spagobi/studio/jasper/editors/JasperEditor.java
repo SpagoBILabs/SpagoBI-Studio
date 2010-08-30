@@ -68,7 +68,7 @@ public final class JasperEditor implements IEditorLauncher {
 				//				Date newD=new Date();
 				//				String temp=iReportDirectory.getPath()+"/"+newD.toString()+".txt";
 				//				new File(temp);
-				String command=iReportPath+" "+fileToEditPath;
+				String command=iReportPath+" \""+fileToEditPath+"\"";
 				SpagoBILogger.infoLog("Command to launch: "+command+" --- in iReport Directory: "+iReportDirectory);
 				Runtime rt = Runtime.getRuntime();
 				SpagoBILogger.infoLog("start execution");
