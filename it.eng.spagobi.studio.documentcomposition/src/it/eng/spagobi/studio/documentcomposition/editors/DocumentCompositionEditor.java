@@ -196,6 +196,11 @@ public class DocumentCompositionEditor extends EditorPart {
 				bo.saveModel(documentComposition);
 				// create the metadatamodel that will be filled later in designer initialization
 				new MetadataBO().createMetadataDocumentComposition(file);
+			
+			// make the editor dirty; that s needed because metadata on parameters of contained
+			// documents could have changed, and in order to be persisted user will have to save them!
+				setIsDirty(true);
+				
 			} catch (CoreException e) {
 				e.printStackTrace();
 				SpagoBILogger.errorLog(DocumentCompositionEditor.class.toString()+": Error in reading template", e);
