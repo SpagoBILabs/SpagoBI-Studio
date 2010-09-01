@@ -62,7 +62,7 @@ public class DataSetInformationEditor {
 				form.reflow(true);
 			}
 		});
-		sectionDatasetInformation.setText("Dataset Metadata");
+		sectionDatasetInformation.setText("Dataset Metadata (Read only)");
 		//sectionDatasetInformation.setDescription("All the selected Dataset Metadata");
 
 
@@ -91,16 +91,18 @@ public class DataSetInformationEditor {
 					fillDatasetTable(dataStoreMetadata);
 				}
 				else{
-					SpagoBILogger
-					.errorLog("No comunication with SpagoBI server, could not retrieve dataset informations",null);
 					//MessageDialog.openError(sectionDatasetInformation.getShell(), "Error", "Could not retrieve metadata for dataset with ID "+model.getSdkDataSetId());
-					noDataSet.setText("No comunication with SpagoBI server, could not retrieve dataset informations");
+					noDataSet.setText("Could not retrieve dataset informations, check that: \n" +
+							" - communication with SpagoBIServer is avalaible \n" +
+							" - document metadata are refreshed and referring to the right dataset (right click on resource => SpagoBI => Properties => Refresh metadata) \n" +
+							" - the dataset on Server is rightly configured (in order to obtain its metadata you should have succesfully tested it at least once on server)");
 				}
 			} catch (Exception e) {
-				SpagoBILogger
-				.errorLog("No comunication with SpagoBI server, could not retrieve dataset informations",e);
 				//MessageDialog.openError(sectionDatasetInformation.getShell(), "Error", "Could not retrieve metadata for dataset with ID "+model.getSdkDataSetId());
-				noDataSet.setText("No comunication with SpagoBI server, could not retrieve dataset informations");
+				noDataSet.setText("Could not retrieve dataset informations, check that: \n" +
+						" - communication with SpagoBIServer is avalaible \n" +
+						" - document metadata are refreshed and referring to the right dataset (right click on resource => SpagoBI => Properties => Refresh metadata) \n" +
+						" - the dataset on Server is rightly configured (in order to obtain its metadata you should have succesfully tested it at least once on server)");
 			}
 
 		}
