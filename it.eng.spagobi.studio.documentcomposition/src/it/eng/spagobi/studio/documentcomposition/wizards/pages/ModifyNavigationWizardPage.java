@@ -35,6 +35,7 @@ import it.eng.spagobi.studio.documentcomposition.wizards.SpagoBIModifyNavigation
 import it.eng.spagobi.studio.documentcomposition.wizards.pages.util.DestinationInfo;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -47,7 +48,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -58,6 +58,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 
 public class ModifyNavigationWizardPage  extends WizardPage{
 
@@ -72,6 +73,8 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 
 	String name = "";
 	String paramIn = "";
+
+	Vector<Button> deleteDestButtonVector = new Vector<Button>();
 
 	int destinCounter = -1;
 
@@ -188,6 +191,14 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 
 		getNavigationItem(composite);//riempie campi precedentemente inseriti
 
+		// if destination is one delete not visible!
+		// check how many destinations there are if only one disable delete button
+		if(destinationDocNameCombo.size() == 1){
+			for (Iterator iterator = deleteDestButtonVector.iterator(); iterator.hasNext();) {
+				Button button = (Button) iterator.next();
+				button.setVisible(false);
+			}	
+		}
 
 		composite.pack();
 		composite.redraw();
@@ -553,9 +564,12 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 										GridData gd = new GridData(GridData.FILL);
 										gd.horizontalSpan = 1;
 										Button deleteDestButton = new Button(composite2, SWT.PUSH) ;
+										deleteDestButtonVector.add(deleteDestButton);
 										deleteDestButton.setText("Delete");
 										deleteDestButton.setLayoutData(gd);
-
+// set the counter id!!
+										deleteDestButton.setData((Integer)destinCounter);
+										
 										Listener deleteListener = new Listener() {
 											public void handleEvent(Event event) {
 												switch (event.type) {
@@ -569,15 +583,43 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 														confirm.open();
 
 													}else{
-														int selectionIndex = destinationDocNameCombo.elementAt(destinCounter).getSelectionIndex();
-														name = destinationDocNameCombo.elementAt(destinCounter).getItem(selectionIndex);
+														
+//														I must get the selected combo!
+														Button b = (Button)event.widget;
+														Integer numero = (Integer)b.getData();
+														int selectionIndex = destinationDocNameCombo.elementAt(numero).getSelectionIndex();
+														
+														name = destinationDocNameCombo.elementAt(numero).getItem(selectionIndex);
+														String nomen = destinationDocNameCombo.elementAt(numero).getItem(selectionIndex);
 
 														deletedParams.put(destin.getIdParam(), name);
-														deleteDestination(destinCounter, composite2);
+														deleteDestination(numero, composite2);
 
 														for(int i=0; i<=destinCounter;i++){
 															refillDestinationCombo(null, i);
 														}
+
+														// after delete if remains only one make not visible all delete buttons!
+														if(destinationDocNameCombo.size() == 1){
+															for (Iterator iterator = deleteDestButtonVector.iterator(); iterator.hasNext();) {
+																Button button = (Button) iterator.next();
+																if(!button.isDisposed())
+																	button.setVisible(false);
+															}	
+														}
+														
+														// move index of other button:
+														for (Iterator iterator = deleteDestButtonVector.iterator(); iterator.hasNext();) {
+															Button button = (Button) iterator.next();
+															if (!button.isDisposed()){
+																Integer data = (Integer)button.getData();
+																if(data.intValue() > numero.intValue()){
+																	button.setData(new Integer(data.intValue()-1));
+																}
+															}
+														}
+														
+
 													}
 													composite.pack();
 													composite.redraw();
@@ -597,6 +639,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 										destinationInfo.setParamDefaultValue(destinationInputParamDefaultValue.elementAt(destinCounter));
 
 										destinationInfos.add(destinationInfo);
+
 										composite2.pack();
 										composite2.redraw();
 									}				    				
@@ -640,7 +683,7 @@ public class ModifyNavigationWizardPage  extends WizardPage{
 						for (int j = 0; j<params.getParameter().size(); j++){
 							Parameter param = params.getParameter().elementAt(j);
 							if(param.getSbiParLabel().equals(parLabel )&& param.getType().equals("IN")){
-								destinationInputParamDefaultValue.elementAt(destinPos).setText(param.getDefaultVal());
+								destinationInputParamDefaultValue.elementAt(destinPos).setText(param.getDefaultVal()!= null ? param.getDefaultVal() : "");
 							}
 						}
 					}
