@@ -1,7 +1,0 @@
-<PIECHART type='simplepie' name='Title'>
-        <DIMENSION width='400' height='400'/>
-        <CONF>
-          <PARAMETER name='values' value='percentage'/>
-          <PARAMETER name='dimensions' value='3d'/>
-        </CONF>
-</PIECHART>

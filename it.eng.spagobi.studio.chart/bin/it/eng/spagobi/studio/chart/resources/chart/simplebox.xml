@@ -1,9 +1,0 @@
-<BOXCHART type='simplebox' name='Title'>
-       <DIMENSION width='600' height='500'/>
-  <CONF>
-  <PARAMETER name='category_label' value='X Axis Label'/>
-  <PARAMETER name='value_label' value='Y axis Label'/>
-  <PARAMETER name='n_visualization' value='10'/>
-   <SERIES_COLORS miao='#000000' bau='#00FF00' />
-  </CONF>
-</BOXCHART>
