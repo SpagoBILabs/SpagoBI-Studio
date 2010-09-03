@@ -120,7 +120,7 @@ public class DocumentParametersView extends ViewPart {
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.heightHint = 200;
 		table.setLayoutData(data);
-		String[] titles = {"    Id    ","          Label          ", "          Type          ","          UrlName          ", "      Default Value (Editable)    "};
+		String[] titles = {"Use as Input Parameter","          Label          ", "          Type          ","          UrlName          ", "      Default Value (Editable)    "};
 		for (int i=0; i<titles.length; i++) {
 			TableColumn column = new TableColumn (table, SWT.NONE);
 			column.setText (titles [i]);
@@ -310,7 +310,8 @@ public class DocumentParametersView extends ViewPart {
 					TableItem item = new TableItem (table, SWT.NONE);
 					// put as data the label f the document
 					item.setData(metadataDocument.getLabel());
-					item.setText (ID, metadataParameter.getId()!=null ? metadataParameter.getId().toString() : "");
+					//item.setText (ID, metadataParameter.getId()!=null ? metadataParameter.getId().toString() : "");
+					item.setText (ID, "");					
 					item.setText (LABEL, metadataParameter.getLabel()!=null ? metadataParameter.getLabel() : "");
 					item.setText (TYPE, metadataParameter.getType()!=null ? metadataParameter.getType() : "");
 					item.setText (URLNAME, metadataParameter.getUrlName()!=null ? metadataParameter.getUrlName() : "");
