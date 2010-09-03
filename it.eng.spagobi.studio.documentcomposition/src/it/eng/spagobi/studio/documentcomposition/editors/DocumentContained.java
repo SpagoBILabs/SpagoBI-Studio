@@ -33,13 +33,13 @@ import java.io.InputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 
 public class DocumentContained {
@@ -47,7 +47,9 @@ public class DocumentContained {
 	Group group;	
 	MetadataDocument metadataDocument;	
 	Image image=null;
+	Image whiteImage=null;
 	Image scaledImage=null;
+	Image natureImage=null;
 	String imagePath=null;
 	Designer designer;
 
@@ -63,6 +65,7 @@ public class DocumentContained {
 	public static final String IMG_DATAMART="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
 	public static final String IMG_DOSSIER="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
 	public static final String IMG_DATA_MINING="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
+	public static final String BACKGROUND="it/eng/spagobi/studio/documentcomposition/resources/images/white.png";
 
 	public static final String TYPE_REPORT=SpagoBIConstants.REPORT_TYPE_CODE;
 	public static final String TYPE_DOSSIER="DOSSIER";
@@ -78,6 +81,8 @@ public class DocumentContained {
 
 	public DocumentContained(Composite parent, int style, Designer _designer) throws Exception{
 		group=new Group(parent, style);
+		group.setBackground(new Color(parent.getDisplay(), DocContainer.COLOR_CONTAINERS));
+		//group.setForeground(new Color(parent.getDisplay(), new RGB(255,0,0)));
 		group.setSize(DocContainer.DEFAULT_WIDTH, DocContainer.DEFAULT_HEIGHT);
 		designer=_designer;
 	}
@@ -103,7 +108,7 @@ public class DocumentContained {
 			}
 			else{			
 				i++;
-				
+
 				String localFileName=file.getName();
 				IPath ia=file.getFullPath();
 				//String localFileName=ia.toString();
@@ -176,8 +181,8 @@ public class DocumentContained {
 			String titleGroup="Name: "+metadataDocument.getName() != null ? metadataDocument.getName() : metadataDocument.getLabel();
 			group.setText(titleGroup);
 			group.setToolTipText(metadataDocument.getLocalFileName());
-//			Label nameLabelName=new Label(group,SWT.NULL);
-//			nameLabelName.setText("Name: "+metadataDocument.getName() != null ? metadataDocument.getName() : "" );			
+			//			Label nameLabelName=new Label(group,SWT.NULL);
+			//			nameLabelName.setText("Name: "+metadataDocument.getName() != null ? metadataDocument.getName() : "" );			
 		}
 		return true;
 
@@ -185,6 +190,11 @@ public class DocumentContained {
 
 	public void drawImage(){
 		try{
+			// white background image
+			String whiteBgImage = BACKGROUND;
+			InputStream isW=DocCompUtilities.getInputStreamFromResource(whiteBgImage);
+			whiteImage = new Image(group.getDisplay(), isW);
+
 			if(imagePath!=null){
 				final String imagePathFinal=imagePath;
 				InputStream is=DocCompUtilities.getInputStreamFromResource(imagePathFinal);
@@ -202,16 +212,17 @@ public class DocumentContained {
 		}
 		final int originalWidth = image.getBounds().width;
 		final int originalHeight = image.getBounds().height; 				
-		int containerHeight=group.getBounds().height;
-		int containerWidth=group.getBounds().width;
+		final int containerHeight=group.getBounds().height;
+		final int containerWidth=group.getBounds().width;
 
 
-		double rapportoHeight=(double)containerHeight / (double)originalHeight;
-		double rapportoWidth=(double)containerWidth / (double)originalWidth;
+		final double rapportoHeight=(double)containerHeight / (double)originalHeight;
+		final double rapportoWidth=(double)containerWidth / (double)originalWidth;
 
 
-		 scaledImage = new Image(group.getDisplay(),
-				image.getImageData().scaledTo((int)(originalWidth*rapportoWidth-20),(int)(originalHeight*rapportoHeight-20)));
+		scaledImage = new Image(group.getDisplay(),
+				whiteImage.getImageData().scaledTo((int)(originalWidth*rapportoWidth-20),(int)(originalHeight*rapportoHeight-20)));
+		natureImage = new Image(group.getDisplay(), image.getImageData());
 
 
 		group.addPaintListener(new PaintListener() {
@@ -228,7 +239,10 @@ public class DocumentContained {
 				//
 				//					e2.printStackTrace();
 				//				}
+
 				e.gc.drawImage(scaledImage,20,20);
+				e.gc.drawImage(natureImage,(int)((containerWidth-originalWidth)/2),(int)((containerHeight-originalHeight)/2));
+
 				image.dispose();
 				//				e.gc.drawImage(image, 20, 30);
 				//				image.dispose();

@@ -79,6 +79,9 @@ public class DocContainer {
 	public static final int DEFAULT_HEIGHT=200;
 	public static final int MIN_MARGIN_BOUNDS=0;
 	public static final int ALIGNMENT_MARGIN=20;
+	
+	// default color for containers
+	public static RGB COLOR_CONTAINERS = new RGB(255,255,255);
 
 	Cursor cursor=null;
 
@@ -202,7 +205,7 @@ public class DocContainer {
 						else{ 
 							if(idPreviousSel.intValue()!=-1){
 								Composite toDeselect=designer.getContainers().get(idPreviousSel).getDocumentContained().getGroup();
-								toDeselect.setBackground(new Color(toDeselect.getDisplay(),new RGB(189,189,189)));
+								toDeselect.setBackground(new Color(toDeselect.getDisplay(),COLOR_CONTAINERS));
 							}
 						}
 
@@ -393,7 +396,7 @@ public class DocContainer {
 						docContainer.getDocumentContained().setImage(null);
 						docContainer.getDocumentContained().setScaledImage(null);
 						docContainer.getDocumentContained().getGroup().setText(idContainer.toString());
-						docContainer.getDocumentContained().getGroup().setBackground(new Color(docContainer.getDocumentContained().getGroup().getDisplay(),new RGB(189,189,189)));
+						docContainer.getDocumentContained().getGroup().setBackground(new Color(docContainer.getDocumentContained().getGroup().getDisplay(),COLOR_CONTAINERS));
 
 						IViewPart viewPart=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PROPERTIES_VIEW_ID);
 						if(viewPart!=null)((DocumentPropertiesView)viewPart).setVisible(false);
@@ -563,7 +566,7 @@ public class DocContainer {
 					composite.setBackground(new Color(composite.getDisplay(),new RGB(193,214,255)));
 					if(designer.getCurrentSelection().intValue()!=-1){
 						Composite toDeselect=designer.getContainers().get(designer.getCurrentSelection()).getDocumentContained().getGroup();
-						toDeselect.setBackground(new Color(toDeselect.getDisplay(),new RGB(189,189,189)));
+						toDeselect.setBackground(new Color(toDeselect.getDisplay(),COLOR_CONTAINERS));
 					}
 					designer.setCurrentSelection(idContainer);
 				}

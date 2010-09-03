@@ -75,7 +75,7 @@ public class Designer {
 	private static long idCounter = 0;
 
 	DocumentCompositionEditor editor=null;
-
+	
 	public static synchronized String createID()
 	{
 		return String.valueOf(idCounter++);
@@ -300,7 +300,7 @@ public class Designer {
 						setCurrentSelection(new Integer(-1));
 						if(selected!=null){
 
-							selected.setBackground(new Color(selected.getDisplay(),new RGB(189,189,189)));
+							selected.setBackground(new Color(selected.getDisplay(), DocContainer.COLOR_CONTAINERS));
 						}
 						editor.setIsDirty(true);
 					}
@@ -310,7 +310,7 @@ public class Designer {
 						offset[0] = null;							
 						setCurrentSelection(new Integer(-1));
 						if(selected!=null){
-							selected.setBackground(new Color(selected.getDisplay(),new RGB(189,189,189)));
+							selected.setBackground(new Color(selected.getDisplay(), DocContainer.COLOR_CONTAINERS));
 						}
 						// set Views Invisible
 						IViewPart viewPart=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PROPERTIES_VIEW_ID);
@@ -503,7 +503,8 @@ public class Designer {
 
 	public void initializeDesigner(DocumentComposition documentComposition){
 		SpagoBILogger.infoLog(Designer.class.toString()+": Initialize designer function");
-		if(documentComposition.getDocumentsConfiguration()==null 
+		if(documentComposition == null || 
+				documentComposition.getDocumentsConfiguration()==null 
 				|| (documentComposition.getDocumentsConfiguration()!= null && documentComposition.getDocumentsConfiguration().getDocuments()==null) 
 				|| (documentComposition.getDocumentsConfiguration()!= null && documentComposition.getDocumentsConfiguration().getDocuments()!=null && documentComposition.getDocumentsConfiguration().getDocuments().size()==0)){
 			return;
