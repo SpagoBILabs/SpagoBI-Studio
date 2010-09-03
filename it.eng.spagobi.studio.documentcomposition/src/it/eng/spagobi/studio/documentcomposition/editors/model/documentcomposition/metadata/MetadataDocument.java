@@ -46,6 +46,7 @@ public class MetadataDocument {
 	private String engineId;
 	private String dataSetId;
 	private String dataSourceId;
+	private String engineLabel;
 	private String engine;
 	private String dataSet;
 	private String dataSource;
@@ -155,6 +156,7 @@ public class MetadataDocument {
 		String documentType=file.getPersistentProperty(PropertyPage.DOCUMENT_TYPE);
 		String documentEngineId=file.getPersistentProperty(PropertyPage.ENGINE_ID);
 		String documentEngineName=file.getPersistentProperty(PropertyPage.ENGINE_NAME);
+		String documentEngineLabel = file.getPersistentProperty(PropertyPage.ENGINE_LABEL);
 		String documentLabel=file.getPersistentProperty(PropertyPage.DOCUMENT_LABEL);
 		String documentState=file.getPersistentProperty(PropertyPage.DOCUMENT_STATE);
 		String documentDescription=file.getPersistentProperty(PropertyPage.DOCUMENT_DESCRIPTION);
@@ -178,6 +180,8 @@ public class MetadataDocument {
 		setEngine(documentEngineName);
 		setDataSet(documentDatasetName);
 		setDataSource(documentDatasourceName);
+		
+		setEngineLabel(documentEngineLabel);
 		
 		setState(documentState);
 		setLocalFileName(file.getName());
@@ -229,6 +233,12 @@ public class MetadataDocument {
 	}
 	public void setDataSourceId(String dataSourceId) {
 		this.dataSourceId = dataSourceId;
+	}
+	public String getEngineLabel() {
+		return engineLabel;
+	}
+	public void setEngineLabel(String engineLabel) {
+		this.engineLabel = engineLabel;
 	}
 
 

@@ -24,6 +24,7 @@ package it.eng.spagobi.studio.documentcomposition.editors;
 import it.eng.spagobi.commons.constants.SpagoBIConstants;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
@@ -53,18 +54,19 @@ public class DocumentContained {
 	String imagePath=null;
 	Designer designer;
 
-	public static final String IMG_JASPER_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconJasperReport.PNG";
-	public static final String IMG_BIRT_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/birt.png";
-	public static final String IMG_DASHBOARD="it/eng/spagobi/studio/documentcomposition/resources/images/IconChartEditor.PNG";
-	public static final String IMG_CHART="it/eng/spagobi/studio/documentcomposition/resources/images/IconChartEditor.PNG";
-	public static final String IMG_DOCUMENT_COMPOSITION="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
-	public static final String IMG_OLAP="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
-	public static final String IMG_ETL="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
-	public static final String IMG_OFFICE_DOC="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
+	public static final String IMG_JASPER_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.png";
+	public static final String IMG_BIRT_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.png";
+	public static final String IMG_DASHBOARD="it/eng/spagobi/studio/documentcomposition/resources/images/IconDashboard.png";
+	public static final String IMG_CHART="it/eng/spagobi/studio/documentcomposition/resources/images/IconChart.png";
+	public static final String IMG_DOCUMENT_COMPOSITION="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
+	public static final String IMG_OLAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconOlap.png";
+	public static final String IMG_ETL="it/eng/spagobi/studio/documentcomposition/resources/images/IconEtl.png";
+	public static final String IMG_OFFICE_DOC="it/eng/spagobi/studio/documentcomposition/resources/images/IconOfficeDoc.png";
 	public static final String IMG_MAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconMap.PNG";
-	public static final String IMG_DATAMART="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
-	public static final String IMG_DOSSIER="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
-	public static final String IMG_DATA_MINING="it/eng/spagobi/studio/documentcomposition/resources/images/olap.png";
+	public static final String IMG_DATAMART="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
+	public static final String IMG_DOSSIER="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
+	public static final String IMG_DATA_MINING="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
+	public static final String IMG_GENERAL="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
 	public static final String BACKGROUND="it/eng/spagobi/studio/documentcomposition/resources/images/white.png";
 
 	public static final String TYPE_REPORT=SpagoBIConstants.REPORT_TYPE_CODE;
@@ -152,7 +154,13 @@ public class DocumentContained {
 				imagePath=IMG_JASPER_REPORT;
 			}
 			else if(metadataDocument.getType().equalsIgnoreCase(TYPE_DASH)){
-				imagePath=IMG_CHART;
+				// distinguish chart and dashboard
+				if(metadataDocument.getEngineLabel() != null && metadataDocument.getEngineLabel().equals(SpagoBIStudioConstants.DASHBOARD_ENGINE_LABEL)){
+					imagePath=IMG_DASHBOARD;
+				}
+				else{
+					imagePath=IMG_CHART;	
+				}
 			}
 			else if(metadataDocument.getType().equalsIgnoreCase(TYPE_DATA_MINING)){
 				imagePath=IMG_DATA_MINING;
@@ -174,6 +182,12 @@ public class DocumentContained {
 			}
 			else if(metadataDocument.getType().equalsIgnoreCase(TYPE_OFFICE_DOC)){
 				imagePath=IMG_OFFICE_DOC;
+			}
+			else if(metadataDocument.getType().equalsIgnoreCase(TYPE_OLAP)){
+				imagePath=IMG_OLAP;
+			}
+			else {
+				imagePath=IMG_GENERAL;
 			}
 
 			drawImage();
