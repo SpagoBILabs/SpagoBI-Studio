@@ -96,7 +96,8 @@ public class Document {
 		parameters.setParameter(new Vector<Parameter>());
 		
 		DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
- 		new ModelBO().addMetadataParametersToDocumentParameters(docComposition, this, metadataDocument);
+ 		// NO MORE 20100902
+		//new ModelBO().addMetadataParametersToDocumentParameters(docComposition, this, metadataDocument);
 		
 		
 		// Set also the input parameters of the document!

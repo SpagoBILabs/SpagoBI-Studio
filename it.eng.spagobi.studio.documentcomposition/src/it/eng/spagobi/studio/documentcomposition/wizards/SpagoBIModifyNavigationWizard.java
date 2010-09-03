@@ -220,6 +220,10 @@ public class SpagoBIModifyNavigationWizard extends Wizard implements INewWizard{
 		Vector<String> idParamUsedByRefresh = refreshBO.getIdParamsUsedByRefreshes(docComp);
 		paramBO.cleanUnusedInputParameters(docComp, idParamUsedByRefresh);
 	}
+
+
+	
+	
 	
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

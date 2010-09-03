@@ -509,7 +509,7 @@ public class Designer {
 			return;
 		}
 		Vector<Document> documentsToIterate=new Vector<Document>(documentComposition.getDocumentsConfiguration().getDocuments());
-		// Run all the documents, for each one calculate the style and search for paramters.. parameters must be inserted in model
+		// Run all the documents, for each one calculate the style and search for paramters.. 
 		for (Iterator iterator = documentsToIterate.iterator(); iterator.hasNext();) {
 			Document document = (Document) iterator.next();
 			String sbiObjectLabel =	document.getSbiObjLabel();
@@ -545,13 +545,10 @@ public class Designer {
 					IFile fileToGet = ResourcesPlugin.getWorkspace().getRoot().getFile(pathRetrieved);
 					
 					if(fileToGet.exists()){
-						// not put yet Id beacuase not linked yet to the group
-						metadataDocument=new MetadataDocument(fileToGet);
+						// not put yet Id beacuase not linked yet to the group;  create the metadata document from FIles METADATA
 						// add the metadata document to the metadata container
+						metadataDocument=new MetadataDocument(fileToGet);
 						(new MetadataBO()).getMetadataDocumentComposition().addMetadataDocument(metadataDocument);
-
-						// add metadata parameters to document
-						(new ModelBO()).addMetadataParametersToDocumentParameters(documentComposition, document, metadataDocument);
 						
 						
 						// ************		PREPARE MEASURES FOR THE DESIGNER	*****************

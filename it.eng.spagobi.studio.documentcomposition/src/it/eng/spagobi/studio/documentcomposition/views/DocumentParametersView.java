@@ -25,8 +25,12 @@ import it.eng.spagobi.studio.documentcomposition.Activator;
 import it.eng.spagobi.studio.documentcomposition.editors.DocumentCompositionEditor;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Document;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentComposition;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentsConfiguration;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameter;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameters;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Refresh;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.RefreshDocLinked;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ParameterBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataParameter;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
@@ -37,6 +41,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
@@ -49,7 +54,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -73,6 +77,7 @@ public class DocumentParametersView extends ViewPart {
 	public static final int TYPE=2;
 	public static final int URLNAME=3;
 	public static final int DEFAULT_VALUE=4;
+	public static final int ADD=4;
 
 
 	public void init(IViewSite site) throws PartInitException {
@@ -108,7 +113,8 @@ public class DocumentParametersView extends ViewPart {
 		client.setLayout(layout);
 
 
-		table = new Table (client, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table (client, SWT.MULTI | SWT.BORDER
+				| SWT.FULL_SELECTION | SWT.CHECK);
 		table.setLinesVisible (true);
 		table.setHeaderVisible (true);
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -124,73 +130,164 @@ public class DocumentParametersView extends ViewPart {
 		}	
 
 		final TableEditor editor = new TableEditor(table);
-		// Add selection listener
+
+
+		//		table.addListener(SWT.Selection, new Listener() {
+		//			public void handleEvent(Event e) {
+		//				TableItem item = (TableItem)e.item;
+		//				if(item != null){
+		//					String selType = e.detail == SWT.CHECK ? "Checked" : "Selected";
+		//					if(selType != null && selType.equals("Checked")){
+		//						String columnName = item.getText();
+		////						Column col = ColumnBO.getColumnByName(geoDocument, columnName);
+		////						col.setChoosenForTemplate(item.getChecked());
+		////						setIsDirty(true);
+		//					}
+		//				}
+		//			}
+		//		});
+
+		// Add selection listener, could be a selection or a check event
 		table.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// Clean up any previous editor control
-				Control oldEditor = editor.getEditor();
-				if (oldEditor != null) oldEditor.dispose();
 
-				// Identify the selected row
 				final TableItem item = (TableItem)e.item;
-				if (item == null) return;
+				if(item == null) return;
 
-				// The control that will be the editor must be a child of the Table
-				Text newEditor = new Text(table, SWT.NONE);
-				newEditor.setText(item.getText(DEFAULT_VALUE));
-				newEditor.addModifyListener(new ModifyListener() {
-					public void modifyText(ModifyEvent me) {
-						Text text = (Text)editor.getEditor();
-						try{
-							editor.getItem().setText(DEFAULT_VALUE, text.getText());
-							String documentLabel = item.getData().toString();
-							String label = item.getText(LABEL);							
-							String urlName = item.getText(URLNAME);
-							DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
+				if(SWT.CHECK == e.detail){
+					IEditorPart editorPart=DocCompUtilities.getEditorReference(DocCompUtilities.DOCUMENT_COMPOSITION_EDITOR_ID);					
+					if(editorPart!=null) ((DocumentCompositionEditor)editorPart).setIsDirty(true);				
+
+					boolean checked = item.getChecked();
+					ParameterBO parameterBO = new ParameterBO();
+					// if checked == true is going to be selected, if checked == false is going to be deselected
+					try{
+						//String parameterId = item.getText(ID);
+						DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
+						String documentLabel = item.getData().toString();
+
+						// add parameter to model
+						if(checked){  
+
 							Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, documentLabel);
-							String defaultVal = editor.getItem().getText(DEFAULT_VALUE);
-							
-							// get the parameter to insert the value
-							for (Iterator iterator = vectPars.iterator(); iterator.hasNext();) {
-								Parameter parameter = (Parameter) iterator.next();
-								if(parameter.getSbiParLabel().equals(urlName)){
-									parameter.setDefaultVal(defaultVal);
-								}
+							// if it is selected add it to document!
+							String parameterLabel = item.getText(LABEL);
+							String parameterUrl = item.getText(URLNAME);
+							String parameterType = item.getText(TYPE);
+							String defaultValue = item.getText(DEFAULT_VALUE);						
 
+							Parameter parameter = new Parameter(docComposition);
+							parameter.setDefaultVal(defaultValue);
+							parameter.setSbiParLabel(parameterUrl);
+							parameter.setType("IN");
+
+							// devo mettere il navigation name????
+							vectPars.add(parameter);
+						}
+						else // remove parameter from model if not associated with a navigation
+						{
+							String parameterUrl = item.getText(URLNAME);
+
+							// get parameter ID from template 
+							if(parameterUrl == null) {
+								SpagoBILogger.errorLog("parameter url not found", null);
+								return;
 							}
-							IEditorPart editorPart=DocCompUtilities.getEditorReference(DocCompUtilities.DOCUMENT_COMPOSITION_EDITOR_ID);
-							if(editorPart!=null) ((DocumentCompositionEditor)editorPart).setIsDirty(true);				
-						}
-						catch (Exception e) {
-							SpagoBILogger.warningLog("error in modifying default value");
-						}
+
+							Parameter par = parameterBO.getInputParameterByDocumentLabelAndParameterLabel(docComposition, documentLabel, parameterUrl);
+							if(par == null) return;
+
+							String navigationId = par.getId();
+
+							// check parameter not used! I must check all documentCOmposition Navigation assuring the id is not used
+							String  navigation = parameterBO.isParameterUsedInNavigation(docComposition, navigationId);
+
+							if(navigation != null){	// if used in navigation cannot remove
+								MessageDialog.openWarning(table.getShell(), "Warning", "Cannot remove parameter from template; " +
+										navigation);
+								item.setChecked(true);
+							}
+							else{	// if not used can remove
+								boolean deleted = parameterBO.deleteParameterById(docComposition, navigationId);
+								
+							}
+
+
+						}	
 
 					}
-				});
-							newEditor.selectAll();
-							newEditor.setFocus();
-							editor.setEditor(newEditor, item, DEFAULT_VALUE);
+
+					catch (Exception ex) {
+						SpagoBILogger.errorLog("Error in treating parameter", ex);
+					}
+				}
+				else // This is selection Mode
+				{
+
+					// Clean up any previous editor control
+					Control oldEditor = editor.getEditor();
+					if (oldEditor != null) oldEditor.dispose();
+
+					// The control that will be the editor must be a child of the Table
+					Text newEditor = new Text(table, SWT.NONE);
+					newEditor.setText(item.getText(DEFAULT_VALUE));
+					newEditor.addModifyListener(new ModifyListener() {
+						public void modifyText(ModifyEvent me) {
+							Text text = (Text)editor.getEditor();
+							try{
+								editor.getItem().setText(DEFAULT_VALUE, text.getText());
+								String documentLabel = item.getData().toString();
+								String label = item.getText(LABEL);							
+								String urlName = item.getText(URLNAME);
+								DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
+								Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, documentLabel);
+								String defaultVal = editor.getItem().getText(DEFAULT_VALUE);
+
+								// get the parameter to insert the value
+								for (Iterator iterator = vectPars.iterator(); iterator.hasNext();) {
+									Parameter parameter = (Parameter) iterator.next();
+									if(parameter.getSbiParLabel().equals(urlName)){
+										parameter.setDefaultVal(defaultVal);
+									}
+
+								}
+								IEditorPart editorPart=DocCompUtilities.getEditorReference(DocCompUtilities.DOCUMENT_COMPOSITION_EDITOR_ID);
+								if(editorPart!=null) ((DocumentCompositionEditor)editorPart).setIsDirty(true);				
+							}
+							catch (Exception e) {
+								SpagoBILogger.warningLog("error in modifying default value");
+							}
+
+						}
+					});
+					newEditor.selectAll();
+					newEditor.setFocus();
+					editor.setEditor(newEditor, item, DEFAULT_VALUE);
+
+				}
 			}
 		});
 
 
 
-				client.pack();
+		client.pack();
 
 
-				toolkit.paintBordersFor(client);
-				section.setClient(client);
-				viewSelectedProperties();
-				setVisible(false);
+		toolkit.paintBordersFor(client);
+		section.setClient(client);
+		viewSelectedProperties();
+		setVisible(false);
 	}
 
 	public void reloadParametersProperties(MetadataDocument metadataDocument){
 		table.removeAll();
 		if(metadataDocument!=null){		
-
 			DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
-			// check if I can find a default value
+
+
+			// check if I can find a default value, these are also all selected!
 			Map<String, String> defaults = new HashMap<String, String>();
+
 			try{
 				String label = metadataDocument.getLabel();
 				Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, label);
@@ -222,6 +319,15 @@ public class DocumentParametersView extends ViewPart {
 					String def = defaults.get(metadataParameter.getUrlName());
 					item.setText (DEFAULT_VALUE, def != null ? def : "");
 					item.setBackground(DEFAULT_VALUE, new Color(item.getDisplay(), new RGB(220,220,245)));
+
+					// if value is inside the map means it is selected!
+					if(defaults.containsKey(metadataParameter.getUrlName())){
+						item.setChecked(true);	
+					}
+					else {
+						item.setChecked(false);	
+					}
+
 				}
 			}
 		}

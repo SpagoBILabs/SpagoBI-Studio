@@ -122,7 +122,7 @@ public class XmlTemplateGenerator {
 			return xml;
 		}
 
-
+/** populate the documentComposition Object from template*/
 		public static DocumentComposition readXml(IFile file) throws CoreException{
 			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("grfthscv", "_");
 			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 

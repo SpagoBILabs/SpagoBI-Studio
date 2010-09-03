@@ -20,10 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 public class Parameters {
-	
+
 	private Vector<Parameter> parameter;
 
 	public Vector<Parameter> getParameter() {
@@ -33,6 +34,16 @@ public class Parameters {
 	public void setParameter(Vector<Parameter> parameter) {
 		this.parameter = parameter;
 	}
-	
 
+
+	public Parameter getINParameterById(Integer id){
+		Parameter toReturn = null;
+		for (Iterator iterator = parameter.iterator(); iterator.hasNext() && toReturn == null;) {
+			Parameter par = (Parameter) iterator.next();
+			if(par.getType().equalsIgnoreCase("IN") && par.getId().equals(id)){
+				toReturn = par;
+			}
+		}
+		return toReturn;
+	}
 }
