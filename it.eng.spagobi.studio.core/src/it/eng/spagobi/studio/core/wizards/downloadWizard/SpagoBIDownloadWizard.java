@@ -269,6 +269,11 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			return false;
 		}			
 
+		if(template == null){
+			SpagoBILogger.errorLog("Template download is null for documentId "+id+" and label "+document.getLabel(), null);
+			return false;
+		}
+		
 		// Recover information field like dataSource, dataSet, engine names!
 
 
