@@ -94,11 +94,11 @@ public class NewNavigationWizardMasterDocPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 
-		error.setSize(300, 100);
+		error.setSize(400, 200);
 		Point pt = client.getDisplay().getCursorLocation ();
 		error.setLocation (pt.x, pt.y);
 
-		String message = "Operation denied! Master output parameter already exists.";
+		String message = "Master output parameter already used. Change it!";
 		
 		new Label(error, SWT.NONE).setText(message);
 		
