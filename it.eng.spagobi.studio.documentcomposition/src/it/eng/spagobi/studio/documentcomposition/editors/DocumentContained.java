@@ -54,20 +54,20 @@ public class DocumentContained {
 	String imagePath=null;
 	Designer designer;
 
-	public static final String IMG_JASPER_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.png";
-	public static final String IMG_BIRT_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.png";
-	public static final String IMG_DASHBOARD="it/eng/spagobi/studio/documentcomposition/resources/images/IconDashboard.png";
-	public static final String IMG_CHART="it/eng/spagobi/studio/documentcomposition/resources/images/IconChart.png";
-	public static final String IMG_DOCUMENT_COMPOSITION="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_OLAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconOlap.png";
-	public static final String IMG_ETL="it/eng/spagobi/studio/documentcomposition/resources/images/IconEtl.png";
-	public static final String IMG_OFFICE_DOC="it/eng/spagobi/studio/documentcomposition/resources/images/IconOfficeDoc.png";
+	public static final String IMG_JASPER_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.PNG";
+	public static final String IMG_BIRT_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.PNG";
+	public static final String IMG_DASHBOARD="it/eng/spagobi/studio/documentcomposition/resources/images/IconDashboard.PNG";
+	public static final String IMG_CHART="it/eng/spagobi/studio/documentcomposition/resources/images/IconChart.PNG";
+	public static final String IMG_DOCUMENT_COMPOSITION="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.PNG";
+	public static final String IMG_OLAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconOlap.PNG";
+	public static final String IMG_ETL="it/eng/spagobi/studio/documentcomposition/resources/images/IconEtl.PNG";
+	public static final String IMG_OFFICE_DOC="it/eng/spagobi/studio/documentcomposition/resources/images/IconOfficeDoc.PNG";
 	public static final String IMG_MAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconMap.PNG";
-	public static final String IMG_DATAMART="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_DOSSIER="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_DATA_MINING="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_GENERAL="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String BACKGROUND="it/eng/spagobi/studio/documentcomposition/resources/images/white.png";
+	public static final String IMG_DATAMART="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.PNG";
+	public static final String IMG_DOSSIER="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.PNG";
+	public static final String IMG_DATA_MINING="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.PNG";
+	public static final String IMG_GENERAL="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.PNG";
+	public static final String BACKGROUND="it/eng/spagobi/studio/documentcomposition/resources/images/white.PNG";
 
 	public static final String TYPE_REPORT=SpagoBIConstants.REPORT_TYPE_CODE;
 	public static final String TYPE_DOSSIER="DOSSIER";
@@ -203,23 +203,54 @@ public class DocumentContained {
 	}
 
 	public void drawImage(){
+		InputStream is = null;
+		InputStream isW = null;
 		try{
 			// white background image
 			String whiteBgImage = BACKGROUND;
-			InputStream isW=DocCompUtilities.getInputStreamFromResource(whiteBgImage);
+			isW=DocCompUtilities.getInputStreamFromResource(whiteBgImage);
 			whiteImage = new Image(group.getDisplay(), isW);
-
-			if(imagePath!=null){
-				final String imagePathFinal=imagePath;
-				InputStream is=DocCompUtilities.getInputStreamFromResource(imagePathFinal);
-				image = new Image(group.getDisplay(), is);
-			}
 		}
 		catch (Exception e) {
 			SpagoBILogger.errorLog("COuld not find image "+imagePath, e);
 			return;
 			// TODO: handle exception
 		}
+		finally{
+			try{
+				if(is != null) is.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+		try{	
+
+			final String imagePathFinal=imagePath;
+			is=DocCompUtilities.getInputStreamFromResource(imagePathFinal);
+			if(is != null){
+				SpagoBILogger.warningLog("immagine trovata");
+			}
+			else{
+				SpagoBILogger.warningLog("immagine NON trovata");					
+			}
+			image = new Image(group.getDisplay(), is);
+		}
+		catch (Exception e) {
+			SpagoBILogger.errorLog("COuld not find image "+imagePath, e);
+			return;
+			// TODO: handle exception
+		}
+		finally{
+			try{
+				if(isW != null)
+					isW.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}	
+
+
 		if(image==null){
 			SpagoBILogger.errorLog("COuld not find image "+imagePath, null);
 			return;
