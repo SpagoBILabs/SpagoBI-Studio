@@ -209,7 +209,7 @@ public class DocumentParametersView extends ViewPart {
 							}
 							else{	// if not used can remove
 								boolean deleted = parameterBO.deleteParameterById(docComposition, navigationId);
-								
+
 							}
 
 
@@ -292,11 +292,12 @@ public class DocumentParametersView extends ViewPart {
 				String label = metadataDocument.getLabel();
 				Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, label);
 				// fill the map with default values
-				for (Iterator iterator = vectPars.iterator(); iterator.hasNext();) {
-					Parameter parameter = (Parameter) iterator.next();
-					defaults.put(parameter.getSbiParLabel(), parameter.getDefaultVal());
+				if(vectPars != null){
+					for (Iterator iterator = vectPars.iterator(); iterator.hasNext();) {
+						Parameter parameter = (Parameter) iterator.next();
+						defaults.put(parameter.getSbiParLabel(), parameter.getDefaultVal());
+					}
 				}
-
 			}
 			catch (Exception e) {
 				// exception proof cause next to release!

@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.util;
 
+import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.documentcomposition.Activator;
 import it.eng.spagobi.studio.documentcomposition.editors.DocumentCompositionEditor;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Document;
@@ -60,7 +61,9 @@ public class DocCompUtilities {
 
 
 	public static InputStream getInputStreamFromResource(String resourcePath) throws IOException {
+		SpagoBILogger.infoLog("IN");
 		Bundle b = org.eclipse.core.runtime.Platform.getBundle(it.eng.spagobi.studio.documentcomposition.Activator.PLUGIN_ID);
+		SpagoBILogger.infoLog(b.getLocation()+" -  "+b.getSymbolicName());
 		URL res = b.getResource(resourcePath);
 		InputStream is = res.openStream();
 		return is;
@@ -87,10 +90,12 @@ public class DocCompUtilities {
 		IEditorPart toReturn=null;
 		IWorkbenchWindow a=PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		IWorkbenchPage aa=a.getActivePage();		
-		IEditorReference[] editors=aa.findEditors(null, editorId, IWorkbenchPage.MATCH_ID);
-		if(editors!=null && editors.length>0){
-			EditorReference editorReference=(EditorReference)editors[0];
-			toReturn=(IEditorPart)editorReference.getPart(false);
+		if(aa != null){
+			IEditorReference[] editors=aa.findEditors(null, editorId, IWorkbenchPage.MATCH_ID);
+			if(editors!=null && editors.length>0){
+				EditorReference editorReference=(EditorReference)editors[0];
+				toReturn=(IEditorPart)editorReference.getPart(false);
+			}
 		}
 		return toReturn;
 	}
@@ -100,10 +105,12 @@ public class DocCompUtilities {
 		IWorkbenchWindow a=PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		// Document properties
 		IWorkbenchPage aa=a.getActivePage();
-		IViewReference w=aa.findViewReference(viewId);
-		Object p=w.getPart(false);
-		if(p!=null){
-			toReturn=(IViewPart)p;
+		if(aa != null){
+			IViewReference w=aa.findViewReference(viewId);
+			Object p=w.getPart(false);
+			if(p!=null){
+				toReturn=(IViewPart)p;
+			}
 		}
 		return toReturn;
 	}
