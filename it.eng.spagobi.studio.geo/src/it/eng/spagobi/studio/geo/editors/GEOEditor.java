@@ -16,8 +16,6 @@ import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.editors.model.bo.ColumnBO;
-import it.eng.spagobi.studio.geo.editors.model.bo.DatasetBO;
-import it.eng.spagobi.studio.geo.editors.model.bo.DatasourceBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.LayerBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.LayersBO;
@@ -25,7 +23,6 @@ import it.eng.spagobi.studio.geo.editors.model.bo.LevelBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.MetadataBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.ModelBO;
 import it.eng.spagobi.studio.geo.editors.model.geo.Column;
-import it.eng.spagobi.studio.geo.editors.model.geo.Datasource;
 import it.eng.spagobi.studio.geo.editors.model.geo.GEODocument;
 import it.eng.spagobi.studio.geo.editors.model.geo.Hierarchies;
 import it.eng.spagobi.studio.geo.editors.model.geo.Hierarchy;
@@ -39,6 +36,7 @@ import it.eng.spagobi.studio.geo.util.XmlTemplateGenerator;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
@@ -96,8 +94,8 @@ public class GEOEditor extends EditorPart {
 
 	protected boolean isDirty = false;
 	final ImageDescriptor measureIcon = AbstractUIPlugin
-			.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/measure.gif");
-	
+	.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/measure.gif");
+
 	final ImageDescriptor idIcon = AbstractUIPlugin
 	.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/key.gif");
 
@@ -175,14 +173,14 @@ public class GEOEditor extends EditorPart {
 		try {
 			SDKProxyFactory proxyFactory = new SDKProxyFactory();
 			DataSetsSDKServiceProxy dataSetsServiceProxy = proxyFactory
-					.getDataSetsSDKServiceProxy();
+			.getDataSetsSDKServiceProxy();
 			sdkDataSets = dataSetsServiceProxy.getDataSets();
 			int i = 0;
 		} catch (Exception e) {
 			SpagoBILogger
-					.errorLog(
-							"No comunication with SpagoBI server, could not retrieve dataset informations",
-							e);
+			.errorLog(
+					"No comunication with SpagoBI server, could not retrieve dataset informations",
+					e);
 		}
 
 		SpagoBIServerObjects sbso = new SpagoBIServerObjects();
@@ -191,7 +189,7 @@ public class GEOEditor extends EditorPart {
 			datasetVector = sbso.getAllDatasets();
 
 			for (Iterator iterator = datasetVector.iterator(); iterator
-					.hasNext();) {
+			.hasNext();) {
 				Dataset dataset = (Dataset) iterator.next();
 				datasetInfos.put(dataset.getLabel(), dataset);
 			}
@@ -255,8 +253,8 @@ public class GEOEditor extends EditorPart {
 		Group datasetGroup = new Group(sectionClient, SWT.FILL | SWT.RESIZE);
 		datasetGroup.setSize(800, 600);
 		datasetGroup.setLayout(sectionClient.getLayout());
-		
-		
+
+
 		Group mapGroup = new Group(sectionClient, SWT.FILL | SWT.RESIZE);
 		mapGroup.setSize(800, 600);
 		mapGroup.setLayout(sectionClient.getLayout());
@@ -274,7 +272,7 @@ public class GEOEditor extends EditorPart {
 
 		createMapTable(sectionClient, mapGroup);
 		section.setClient(sectionClient);
-		
+
 		Section section0 = toolkit.createSection(form.getBody(), Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE);
 		Composite sectionHier = toolkit.createComposite(section0, SWT.RESIZE);
 		sectionHier.setLayout(gl);
@@ -283,7 +281,7 @@ public class GEOEditor extends EditorPart {
 				form.reflow(true);
 			}
 		});
-		
+
 
 		section0.setText("Hierarchies");
 		section0.setDescription("Define Hierarchies and Levels");
@@ -292,9 +290,9 @@ public class GEOEditor extends EditorPart {
 		geoDocument = Activator.getDefault().getGeoDocument();
 		designer.setGeoDocument(geoDocument);
 		designer.createHierarchiesTree(sectionHier, toolkit);
-		
+
 		section0.setClient(sectionHier);
-		
+
 		Section section1 = toolkit.createSection(form.getBody(), Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE);
 		Composite sectionCrossNav = toolkit.createComposite(section1, SWT.RESIZE);
 		sectionCrossNav.setLayout(gl);
@@ -307,10 +305,10 @@ public class GEOEditor extends EditorPart {
 		section1.setDescription("Fill parameters for Cross Navigation");
 		CrossNavigationDesigner crossNavigationDesigner = new CrossNavigationDesigner(sectionCrossNav, this, geoDocument);
 		crossNavigationDesigner.createCrossnavigationTable(sectionCrossNav, toolkit);
-		
+
 		section1.setClient(sectionCrossNav);
-		
-		
+
+
 		Section section2 = toolkit.createSection(form.getBody(), Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE);
 		Composite sectionGUI = toolkit.createComposite(section2, SWT.RESIZE);
 		sectionGUI.setLayout(gl);
@@ -323,9 +321,9 @@ public class GEOEditor extends EditorPart {
 		section2.setDescription("Insert parameters for GUI Settings Windows");
 		GuiSettingsDesigner guiSettingsDesigner = new GuiSettingsDesigner(sectionGUI, this, geoDocument);
 		guiSettingsDesigner.createGuiSettingsWindows(sectionGUI, toolkit);
-		
+
 		section2.setClient(sectionGUI);
-		
+
 		Section section3 = toolkit.createSection(form.getBody(), Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE);
 		Composite sectionGUIParams = toolkit.createComposite(section3, SWT.RESIZE);
 		sectionGUIParams.setLayout(gl);
@@ -338,11 +336,11 @@ public class GEOEditor extends EditorPart {
 		section3.setDescription("Insert parameters for GUI Settings Params");
 		GuiSettingsDesigner guiSettingsDesignerParams = new GuiSettingsDesigner(sectionGUIParams, this, geoDocument);
 		guiSettingsDesignerParams.createGuiSettingsParams(sectionGUIParams, toolkit);
-		
+
 		section3.setClient(sectionGUIParams);
-		
+
 		Section section4 = toolkit.createSection(form.getBody(), Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE | SWT.RESIZE);
-		
+
 		Composite sectionGUILabels = toolkit.createComposite(section4, SWT.NONE);
 		sectionGUILabels.setLayout(gl);
 		section4.addExpansionListener(new ExpansionAdapter() {
@@ -354,7 +352,7 @@ public class GEOEditor extends EditorPart {
 		section4.setDescription("Insert parameters for GUI Settings Labels");
 		GuiSettingsLabelDesigner guiSettingsDesignerLabels = new GuiSettingsLabelDesigner(sectionGUILabels, this, geoDocument);
 		guiSettingsDesignerLabels.createGuiSettingsLabels(sectionGUILabels, toolkit, form);
-		
+
 		section4.setClient(sectionGUILabels);
 
 		section.pack();
@@ -385,28 +383,47 @@ public class GEOEditor extends EditorPart {
 				| SWT.READ_ONLY);
 		int index = 0;
 		Iterator<String> iterator = datasetInfos.keySet().iterator();
+
+		String[] datasets = new String[datasetInfos.keySet().size()];
+
+		int i =0;		
+
 		while (iterator.hasNext()) {
 			String name = (String) iterator.next();
-			datasetCombo.add(name);
-			if (metadata != null && metadata.getDataset() != null
-					&& metadata.getDataset().equals(name)) {
-				datasetCombo.select(index);
-
-			}
+			datasets[i] = name;
+			//datasetCombo.add(name);
+			i++;
 			index++;
 		}
+
+		Arrays.sort(datasets);
+		datasetCombo.setItems(datasets);
+
+		// get the selection one! Index are changed so check out for name
+		boolean found = false;
+		for (int j = 0; j<datasetCombo.getItems().length && !found;j++) {
+			String name = datasetCombo.getItems()[j];
+			if (metadata != null && metadata.getDataset() != null
+					&& metadata.getDataset().equals(name)) {
+				datasetCombo.select(j);	
+				found = true;
+			}
+
+		}		
+
+
 		///datasource
 		if(metadata != null){
-			Dataset dataset = datasetInfos.get(metadata.getDataset());
-/*			if(dataset != null){
+			//Dataset dataset = datasetInfos.get(metadata.getDataset());
+			/*			if(dataset != null){
 				Integer datasourceId = dataset.getJdbcDataSourceId();
-				
+
 				SpagoBIServerObjects sbso=new SpagoBIServerObjects();
 				DataSource sdkdataSource;
 				try {
 					sdkdataSource = sbso.getDataSourceById(datasourceId);
 					sdkdataSource.getUrlConnection();
-					
+
 					Datasource datasource = DatasourceBO.setNewDatasource(geoDocument);
 					datasource.setDriver(sdkdataSource.getDriver());
 					datasource.setPassword(sdkdataSource.getPwd());
@@ -445,17 +462,17 @@ public class GEOEditor extends EditorPart {
 					dataStoreMetadata = tempDsMetadataInfos.get(datasetLabel);
 				} else {
 					Dataset dataset = datasetInfos.get(datasetLabel);
-/*					it.eng.spagobi.studio.geo.editors.model.geo.Dataset datasetGeo = DatasetBO
+					/*					it.eng.spagobi.studio.geo.editors.model.geo.Dataset datasetGeo = DatasetBO
 							.setNewDataset(geoDocument, dataset.getJdbcQuery());*/
 					Integer datasourceId = dataset.getJdbcDataSourceId();
-					
+
 					SpagoBIServerObjects sbso=new SpagoBIServerObjects();
 					DataSource sdkdataSource;
 					try {
 						sdkdataSource = sbso.getDataSourceById(datasourceId);
 						sdkdataSource.getUrlConnection();
-						
-/*						Datasource datasource = DatasourceBO.setNewDatasource(geoDocument);
+
+						/*						Datasource datasource = DatasourceBO.setNewDatasource(geoDocument);
 						datasource.setDriver(sdkdataSource.getDriver());
 						datasource.setPassword(sdkdataSource.getPwd());
 						datasource.setType("connection");
@@ -467,40 +484,40 @@ public class GEOEditor extends EditorPart {
 
 					try {
 						dataStoreMetadata = new SpagoBIServerObjects()
-								.getDataStoreMetadata(dataset.getId());
+						.getDataStoreMetadata(dataset.getId());
 						if (dataStoreMetadata != null) {
 							tempDsMetadataInfos.put(datasetLabel,
 									dataStoreMetadata);
 						} else {
 							SpagoBILogger
-									.warningLog("Dataset returned no metadata");
+							.warningLog("Dataset returned no metadata");
 							MessageDialog.openWarning(sectionClient.getShell(),
 									"Warning", "Dataset with label = "
-											+ datasetLabel
-											+ " returned no metadata");
+									+ datasetLabel
+									+ " returned no metadata");
 						}
 					} catch (MissingParameterValue e2) {
 						SpagoBILogger
-								.errorLog(
-										"Could not execute dataset with label = "
-												+ datasetLabel
-												+ " due to parameters lack: execute dataset test in server to retrieve metadata",
-										e2);
+						.errorLog(
+								"Could not execute dataset with label = "
+								+ datasetLabel
+								+ " due to parameters lack: execute dataset test in server to retrieve metadata",
+								e2);
 						MessageDialog
-								.openError(
-										sectionClient.getShell(),
-										"Error",
-										"Could not execute dataset with label = "
-												+ datasetLabel
-												+ " due to parameters lack: execute dataset test in server to retrieve metadata");
+						.openError(
+								sectionClient.getShell(),
+								"Error",
+								"Could not execute dataset with label = "
+								+ datasetLabel
+								+ " due to parameters lack: execute dataset test in server to retrieve metadata");
 					} catch (NoServerException e1) {
 						SpagoBILogger.errorLog(
 								"Error No comunciation with server retrieving dataset with label = "
-										+ datasetLabel + " metadata", e1);
+								+ datasetLabel + " metadata", e1);
 						MessageDialog.openError(sectionClient.getShell(),
 								"Error",
 								"No comunciation with server retrieving dataset with label = "
-										+ datasetLabel + " metadata");
+								+ datasetLabel + " metadata");
 					}
 				}
 				if (dataStoreMetadata != null) {
@@ -517,7 +534,7 @@ public class GEOEditor extends EditorPart {
 				datasetTable.pack();
 				datasetGroup.pack();
 				datasetGroup.redraw();
-/*				sectionClient.getParent().pack();
+				/*				sectionClient.getParent().pack();
 				sectionClient.getParent().redraw();*/
 				form.reflow(true);
 				setIsDirty(true);
@@ -545,15 +562,31 @@ public class GEOEditor extends EditorPart {
 		final Combo mapCombo = new Combo(mapGroup, SWT.SIMPLE | SWT.DROP_DOWN
 				| SWT.READ_ONLY);
 		int index = 0;
-		for (Iterator<String> iterator = mapInfos.keySet().iterator(); iterator
-				.hasNext();) {
+		String[] maps = new String[mapInfos.keySet().size()];
+		Iterator<String> iterator = mapInfos.keySet().iterator();
+
+		int i =0;		
+
+		while (iterator.hasNext()) {
 			String name = (String) iterator.next();
-			mapCombo.add(name);
+			maps[i] = name;
+			i++;
+			index++;
+		}
+		Arrays.sort(maps);
+		mapCombo.setItems(maps);
+		
+
+		// get the selection one! Index are changed so check out for name
+		boolean found = false;
+		for (int j = 0; j<mapCombo.getItems().length && !found;j++) {
+			String name = mapCombo.getItems()[j];
 			if (layers != null && layers.getMapName() != null
 					&& layers.getMapName().equals(name)) {
-				mapCombo.select(index);
+				mapCombo.select(j);	
+				found = true;
 			}
-			index++;
+
 		}
 
 		mapCombo.setLayoutData(gd);
@@ -579,7 +612,7 @@ public class GEOEditor extends EditorPart {
 				selectedMap = mapLabel;
 				//add mapName to mapprovider
 				geoDocument.getMapProvider().setMapName(selectedMap);
-				
+
 				GeoFeature[] geoFeatures = null;
 				// get the metadata
 				if (tempMapMetadataInfos.get(mapLabel) != null) {
@@ -588,26 +621,26 @@ public class GEOEditor extends EditorPart {
 					GeoMap geoMap = mapInfos.get(mapLabel);
 					try {
 						geoFeatures = new SpagoBIServerObjects()
-								.getFeaturesByMapId(geoMap.getMapId());
+						.getFeaturesByMapId(geoMap.getMapId());
 						if (geoFeatures != null) {
 							tempMapMetadataInfos.put(mapLabel, geoFeatures);
 						} else {
 							SpagoBILogger
-									.warningLog("No features returned from map with label "
-											+ mapLabel);
+							.warningLog("No features returned from map with label "
+									+ mapLabel);
 							MessageDialog.openWarning(sectionClient.getShell(),
 									"Warning",
 									"No features returned from map with label "
-											+ mapLabel);
+									+ mapLabel);
 						}
 					} catch (NoServerException e1) {
 						SpagoBILogger.errorLog(
 								"Could not get features associated to map with label = "
-										+ mapLabel, e1);
+								+ mapLabel, e1);
 						MessageDialog.openError(sectionClient.getShell(),
 								"Error",
 								"Could not get features associated to map with label = "
-										+ mapLabel);
+								+ mapLabel);
 					}
 				}
 				if (geoFeatures != null) {
@@ -649,7 +682,7 @@ public class GEOEditor extends EditorPart {
 
 		String[] titles = { "  Column name   ",
 				"               Type               ", "     Select       ",
-				"   Aggregation mode   " };
+		"   Aggregation mode   " };
 		for (int i = 0; i < titles.length; i++) {
 			TableColumn column = new TableColumn(datasetTable, SWT.NONE);
 			column.setText(titles[i]);
@@ -714,7 +747,7 @@ public class GEOEditor extends EditorPart {
 						}else{
 							MessageDialog.openWarning(sectionClient.getShell(), "Warning", "Another column of type geoid is already defined.");							
 						}
-						
+
 					} else {
 						MessageDialog.openWarning(sectionClient.getShell(),
 								"Warning", "Operation denied.");
@@ -765,8 +798,8 @@ public class GEOEditor extends EditorPart {
 		data.top = new FormAttachment (label, 0, SWT.CENTER);
 
 		hierCombo.setLayoutData (data);
-		
-		
+
+
 		//Level
 		data = new FormData ();
 		data.width = 100;
@@ -775,7 +808,7 @@ public class GEOEditor extends EditorPart {
 		Label labelLevel = new Label (dialog, SWT.RIGHT);
 		labelLevel.setText ("Level:");		
 		labelLevel.setLayoutData (data);
-		
+
 		String hierarchyName = hierCombo.getText();
 		final Combo levelCombo = createLevelsCombo(dialog, hierarchyName);
 		if(column != null && column.getLevel()!= null){
@@ -788,19 +821,19 @@ public class GEOEditor extends EditorPart {
 		data.top = new FormAttachment (labelLevel, 0, SWT.CENTER);
 		data.bottom = new FormAttachment (cancel, 0, SWT.DEFAULT);
 		levelCombo.setLayoutData (data);
-		
+
 		hierCombo.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				String hierarchySelected = ((Combo)e.widget).getText();
 				recreateLevelsCombo(dialog, levelCombo, hierarchySelected);
 				setIsDirty(true);
-				
+
 				levelCombo.redraw();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		Button ok = new Button (dialog, SWT.PUSH);
@@ -819,7 +852,7 @@ public class GEOEditor extends EditorPart {
 					column.setHierarchy(hierarchy);
 					column.setLevel(level);
 				}
-				
+
 				dialog.close ();
 			}
 		});
@@ -828,7 +861,7 @@ public class GEOEditor extends EditorPart {
 		dialog.pack ();
 		dialog.open ();
 	}
-	
+
 	private Combo createHierachiesCombo(Composite dialog){
 		Combo hierCombo = new Combo(dialog, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY);
 		Hierarchies hierarchies=HierarchyBO.getAllHierarchies(geoDocument);
@@ -873,25 +906,25 @@ public class GEOEditor extends EditorPart {
 			selectedMap = layers.getMapName();
 			GeoMap geoMap = mapInfos.get(selectedMap);
 			GeoFeature[] geoFeatures = new SpagoBIServerObjects()
-					.getFeaturesByMapId(geoMap.getMapId());
+			.getFeaturesByMapId(geoMap.getMapId());
 			if (geoFeatures != null) {
 				tempMapMetadataInfos.put(selectedMap, geoFeatures);
 				fillMapTable(geoFeatures, sectionClient, false);
 			} else {
 				SpagoBILogger
-						.warningLog("No features returned from map with label "
-								+ selectedMap);
+				.warningLog("No features returned from map with label "
+						+ selectedMap);
 				MessageDialog.openWarning(sectionClient.getShell(), "Warning",
 						"No features returned from map with label "
-								+ selectedMap);
+						+ selectedMap);
 			}
 		} catch (NoServerException e1) {
 			SpagoBILogger.errorLog(
 					"Could not get features associated to map with label = "
-							+ selectedMap, e1);
+					+ selectedMap, e1);
 			MessageDialog.openError(sectionClient.getShell(), "Error",
 					"Could not get features associated to map with label = "
-							+ selectedMap);
+					+ selectedMap);
 		}
 	}
 
@@ -901,7 +934,7 @@ public class GEOEditor extends EditorPart {
 			selectedDataset = metadata.getDataset();
 			Dataset dataset = datasetInfos.get(metadata.getDataset());
 			DataStoreMetadata dataStoreMetadata = new SpagoBIServerObjects()
-					.getDataStoreMetadata(dataset.getId());
+			.getDataStoreMetadata(dataset.getId());
 			if (dataStoreMetadata != null) {
 				tempDsMetadataInfos.put(metadata.getDataset(),
 						dataStoreMetadata);
@@ -910,7 +943,7 @@ public class GEOEditor extends EditorPart {
 				SpagoBILogger.warningLog("Dataset returned no metadata");
 				MessageDialog.openWarning(sectionClient.getShell(), "Warning",
 						"Dataset with label = " + metadata.getDataset()
-								+ " returned no metadata");
+						+ " returned no metadata");
 			}
 		} catch (MissingParameterValue e2) {
 			SpagoBILogger.errorLog("Could not execute dataset with label = "
@@ -918,19 +951,19 @@ public class GEOEditor extends EditorPart {
 					+ " due to parameter lack: execute dataset test in server to retrieve metadata", e2);
 			MessageDialog.openError(sectionClient.getShell(), "Error",
 					"Could not execute dataset with label = "
-							+ metadata.getDataset()
-							+ " due to parameter lack: execute dataset test in server to retrieve metadata");
+					+ metadata.getDataset()
+					+ " due to parameter lack: execute dataset test in server to retrieve metadata");
 		} catch (NoServerException e1) {
 			SpagoBILogger.errorLog(
 					"Error No comunciation with server retrieving dataset with label = "
-							+ metadata.getDataset() + " metadata", e1);
+					+ metadata.getDataset() + " metadata", e1);
 			MessageDialog.openError(sectionClient.getShell(), "Error",
 					"No comunciation with server retrieving dataset with label = "
-							+ metadata.getDataset() + " metadata");
+					+ metadata.getDataset() + " metadata");
 		}
 	}
 
-	
+
 
 	private void createMapTable(Composite sectionClient, Group mapGroup) {
 
@@ -945,7 +978,7 @@ public class GEOEditor extends EditorPart {
 
 		String[] titles = { "   Feature name      ",
 				"           Description        ", "Select Default ",
-				"  Default Color    " };
+		"  Default Color    " };
 		for (int i = 0; i < titles.length; i++) {
 			TableColumn column = new TableColumn(mapTable, SWT.NONE);
 			column.setText(titles[i]);
@@ -1025,7 +1058,7 @@ public class GEOEditor extends EditorPart {
 
 			newDescr.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent me) {
-//					System.out.println("Changed");
+					//					System.out.println("Changed");
 					selectedLayer.setDescription(((Text) me.widget).getText());
 					setIsDirty(true);
 				}
@@ -1076,8 +1109,8 @@ public class GEOEditor extends EditorPart {
 				defaultFillColour[0] = selectedLayer.getDefaultFillColour();
 			}
 			final Composite colorSection = DesignerUtils
-					.createColorPickerFillLayer(mapTable, defaultFillColour[0],
-							selectedLayer, this);
+			.createColorPickerFillLayer(mapTable, defaultFillColour[0],
+					selectedLayer, this);
 			String col = (String) colorSection.getData();
 			selectedLayer.setDefaultFillColour(defaultFillColour[0]);
 
@@ -1138,7 +1171,7 @@ public class GEOEditor extends EditorPart {
 				item.setText(2, comboSel.getText());
 				if (comboSel.getText().equalsIgnoreCase("measure")) {
 					item.setImage(0, measureIcon.createImage());
-					
+
 				} else if(comboSel.getText().equalsIgnoreCase("geoid")){
 					item.setImage(0, idIcon.createImage());
 				}else{
@@ -1146,9 +1179,9 @@ public class GEOEditor extends EditorPart {
 						item.setImage(0, null);
 					}
 				}
-				
+
 			}
-			
+
 
 			comboSel.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent event) {
@@ -1224,7 +1257,7 @@ public class GEOEditor extends EditorPart {
 			editor.grabVertical = true;
 			editor.setEditor(comboAgg, item, DATASET_AGGREGATION);
 			datasetTableEditors.add(editor);
-			
+
 			item.setData(comboSel);
 
 			datasetTable.pack();
@@ -1265,15 +1298,15 @@ public class GEOEditor extends EditorPart {
 		try {
 			FileEditorInput fei = (FileEditorInput) getEditorInput();
 			IFile file = fei.getFile();
-			
+
 			ModelBO modelBO = new ModelBO();
-			
+
 			GEODocument geoDocumentToSaveOnFile = (GEODocument)DeepCopy.copy(geoDocument);
 			modelBO.cleanGEODocument(geoDocumentToSaveOnFile);
 			String newContent = XmlTemplateGenerator
-					.transformToXml(geoDocumentToSaveOnFile);
-//			System.out.println("******** SAVING ***************");
-//			System.out.println(newContent);
+			.transformToXml(geoDocumentToSaveOnFile);
+			//			System.out.println("******** SAVING ***************");
+			//			System.out.println(newContent);
 			byte[] bytes = newContent.getBytes();
 			bais = new ByteArrayInputStream(bytes);
 			file.setContents(bais, IFile.FORCE, null);
