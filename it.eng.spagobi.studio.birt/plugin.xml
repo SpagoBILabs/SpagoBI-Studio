@@ -19,7 +19,7 @@
             id="it.eng.spagobi.studio.core.main.menu" 
             path="additions" 
             icon="icons/sbiproject.gif"            
-            label="SpagoBI"> 
+            label="SpagoBI Documents"> 
             <separator name="SpagoBI"/> 
          </menu> 
          <action
