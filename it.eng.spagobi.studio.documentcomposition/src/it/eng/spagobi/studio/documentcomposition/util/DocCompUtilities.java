@@ -61,7 +61,6 @@ public class DocCompUtilities {
 
 
 	public static InputStream getInputStreamFromResource(String resourcePath) throws IOException {
-		SpagoBILogger.infoLog("IN");
 		Bundle b = org.eclipse.core.runtime.Platform.getBundle(it.eng.spagobi.studio.documentcomposition.Activator.PLUGIN_ID);
 		SpagoBILogger.infoLog(b.getLocation()+" -  "+b.getSymbolicName());
 		URL res = b.getResource(resourcePath);
