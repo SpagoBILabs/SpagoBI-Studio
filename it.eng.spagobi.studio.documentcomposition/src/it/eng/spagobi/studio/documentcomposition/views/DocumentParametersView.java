@@ -30,6 +30,7 @@ import it.eng.spagobi.studio.documentcomposition.editors.model.documentcompositi
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameters;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Refresh;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.RefreshDocLinked;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ModelBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ParameterBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataParameter;
@@ -151,6 +152,7 @@ public class DocumentParametersView extends ViewPart {
 		table.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 
+				ModelBO modelBO = new ModelBO();
 				final TableItem item = (TableItem)e.item;
 				if(item == null) return;
 
@@ -169,7 +171,9 @@ public class DocumentParametersView extends ViewPart {
 						// add parameter to model
 						if(checked){  
 
-							Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, documentLabel);
+							Document document = docComposition.retrieveDocumentFromDocumentLabel(documentLabel);
+							Vector<Parameter> vectPars = document.getParameters().getParameter();
+
 							// if it is selected add it to document!
 							String parameterLabel = item.getText(LABEL);
 							String parameterUrl = item.getText(URLNAME);
@@ -182,7 +186,13 @@ public class DocumentParametersView extends ViewPart {
 							parameter.setType("IN");
 
 							// devo mettere il navigation name????
+							if(vectPars == null){
+								vectPars = new Vector<Parameter>();
+							}
 							vectPars.add(parameter);
+							document.getParameters().setParameter(vectPars);
+
+							int i = 0;
 						}
 						else // remove parameter from model if not associated with a navigation
 						{
@@ -214,6 +224,7 @@ public class DocumentParametersView extends ViewPart {
 
 
 						}	
+						modelBO.saveModel(docComposition);
 
 					}
 
@@ -240,7 +251,7 @@ public class DocumentParametersView extends ViewPart {
 								String label = item.getText(LABEL);							
 								String urlName = item.getText(URLNAME);
 								DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
-								Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, documentLabel);
+								Vector<Parameter> vectPars = docComposition.retrieveParametersVectorFromDocumentLabel(documentLabel);
 								String defaultVal = editor.getItem().getText(DEFAULT_VALUE);
 
 								// get the parameter to insert the value
@@ -290,7 +301,7 @@ public class DocumentParametersView extends ViewPart {
 
 			try{
 				String label = metadataDocument.getLabel();
-				Vector<Parameter> vectPars = retrieveParametersVectorFromDocumentLabel(docComposition, label);
+				Vector<Parameter> vectPars = docComposition.retrieveParametersVectorFromDocumentLabel(label);
 				// fill the map with default values
 				if(vectPars != null){
 					for (Iterator iterator = vectPars.iterator(); iterator.hasNext();) {
@@ -338,20 +349,6 @@ public class DocumentParametersView extends ViewPart {
 		setVisible(true);
 	}
 
-	public Vector<Parameter> retrieveParametersVectorFromDocumentLabel(DocumentComposition docComposition, String label) throws Exception{
-		// get the document
-		Vector<Document> documents = docComposition.getDocumentsConfiguration().getDocuments();
-		Document actualDoc = null;
-		for (Iterator iterator = documents.iterator(); iterator.hasNext();) {
-			Document doc = (Document) iterator.next();
-			if (doc.getSbiObjLabel().equals(label)){
-				actualDoc = doc;						
-			}
-		}
-		Parameters parameters = actualDoc.getParameters();
-		Vector<Parameter> vectPars = parameters.getParameter();
-		return vectPars;
-	}
 
 
 

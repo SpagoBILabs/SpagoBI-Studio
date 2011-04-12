@@ -29,6 +29,7 @@ import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentPropertiesView;
 
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
@@ -101,5 +102,49 @@ public class DocumentComposition {
 		}
 	}
 
+	/** return the parameters vector associated to a document
+	 * 
+	 * @param label
+	 * @return
+	 * @throws Exception
+	 */
+	
+	
+	public Vector<Parameter> retrieveParametersVectorFromDocumentLabel(String label) throws Exception{
+		// get the document
+		Vector<Document> documents = getDocumentsConfiguration().getDocuments();
+		Document actualDoc = null;
+		for (Iterator iterator = documents.iterator(); iterator.hasNext();) {
+			Document doc = (Document) iterator.next();
+			if (doc.getSbiObjLabel().equals(label)){
+				actualDoc = doc;						
+			}
+		}
+		Parameters parameters = actualDoc.getParameters();
+		Vector<Parameter> vectPars = parameters.getParameter();
+		return vectPars;
+	}
+	
+	/** return the document associated to the doucment label
+	 * 
+	 * @param label
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public Document retrieveDocumentFromDocumentLabel(String label) throws Exception{
+		// get the document
+		Vector<Document> documents = getDocumentsConfiguration().getDocuments();
+		Document actualDoc = null;
+		for (Iterator iterator = documents.iterator(); iterator.hasNext();) {
+			Document doc = (Document) iterator.next();
+			if (doc.getSbiObjLabel().equals(label)){
+				actualDoc = doc;						
+			}
+		}
+		return actualDoc;
+	}
+	
+	
 	
 }
