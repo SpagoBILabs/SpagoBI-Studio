@@ -60,7 +60,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 public class DeployDocumentAction implements IObjectActionDelegate {
 
 	private IViewPart view = null;
-	ISelection selection;
+	ISelection selection; 
 
 
 	public DeployDocumentAction() {
