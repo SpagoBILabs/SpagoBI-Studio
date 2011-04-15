@@ -31,6 +31,8 @@ public class SpagoBIStudioConstants {
 	public final static String DOCUMENT_COMPOSITION_ENGINE_EXTENSION="sbidoccomp";
 	public final static String GEO_ENGINE_EXTENSION="sbigeo";
 
+	
+	// Engine Labels
 	public final static String DASHBOARD_ENGINE_LABEL="DashboardInternalEng";
 	public final static String CHART_ENGINE_LABEL="ChartEngine";
 	public final static String JASPER_REPORT_ENGINE_LABEL="JasperReportEngine";
@@ -48,5 +50,25 @@ public class SpagoBIStudioConstants {
 	public final static int BIOBJECT_NAME_LIMIT=40;
 	public final static int BIOBJECT_DESCRIPTION_LIMIT=160;
 	
+	// Name of prohect folders
+	public static final String FOLDER_RESOURCE= "Resources";
+	public static final String FOLDER_SERVER = "Server";
+	public static final String FOLDER_DATA_SOURCE = "Data Source";
+	public static final String FOLDER_METADATA_MODEL = "Metadata Model";
+	public static final String FOLDER_DATASET = "DataSet";
+	public static final String FOLDER_ANALYSIS = "Sbi Analysis";	
+	public static final String FOLDER_PRIVATE_DOCUMENTS = "Private Documents";
+	
+	// name of project folder icons 
+	public static final String FOLDER_ICON_RESOURCE= "resources.png";
+	public static final String FOLDER_ICON_SERVER = "server.png";
+	public static final String FOLDER_ICON_DATA_SOURCE = "datasource.png";
+	public static final String FOLDER_ICON_METADATA_MODEL = "metadata.png";
+	public static final String FOLDER_ICON_DATASET = "dataset.png";
+	public static final String FOLDER_ICON_ANALYSIS = "analysis.png";	
+	public static final String FOLDER_ICON_PRIVATE_DOCUMENTS = "private.png";
+	public static final String FOLDER_ICON_SBI_PROJECT = "sbiproject.gif";
+	
+
 	
 }
