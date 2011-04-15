@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jasper Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.jasper;singleton:=true
-Bundle-Version: 2.6.0
+Bundle-Version: 2.6.5
 Bundle-ClassPath: lib/dom4j.jar,.
 Bundle-Activator: it.eng.spagobi.studio.jasper.Activator
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
