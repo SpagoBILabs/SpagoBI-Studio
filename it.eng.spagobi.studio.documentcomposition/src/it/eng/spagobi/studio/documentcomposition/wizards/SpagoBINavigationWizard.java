@@ -306,6 +306,7 @@ public class SpagoBINavigationWizard extends Wizard implements INewWizard{
 				for (int i = 0; i< documents.size(); i++){
 					Document doc = (Document)documents.elementAt(i);			    	
 					Vector parameters = doc.getParameters().getParameter();
+					if(parameters == null) parameters = new Vector();
 					if(destLabel != null && destLabel.equals(doc.getSbiObjLabel())){
 						String paramName = destInfo.getParamDestName();
 						Parameter param =bo.getDocInputParameterByLabel(parameters, paramName);
