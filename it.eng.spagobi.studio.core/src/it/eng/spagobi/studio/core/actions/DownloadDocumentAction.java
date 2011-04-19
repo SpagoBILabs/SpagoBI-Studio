@@ -32,6 +32,8 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** DownloadDocumentAction calls the SpagoBI Download Wizard
  * 
@@ -41,11 +43,15 @@ public class DownloadDocumentAction implements IObjectActionDelegate {
 
 	ISelection selection;
 
+	private static Logger logger = LoggerFactory.getLogger(DownloadDocumentAction.class);
+	
 	public DownloadDocumentAction() {
 	}
 
 
 	public void run(IAction action) {
+		logger.debug("IN");
+		
 		SpagoBIDownloadWizard sbindw = new SpagoBIDownloadWizard();
 		IStructuredSelection sel=(IStructuredSelection)selection;
 

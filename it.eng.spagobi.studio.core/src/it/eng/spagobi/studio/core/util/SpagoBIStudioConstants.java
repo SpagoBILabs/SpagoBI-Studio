@@ -31,6 +31,9 @@ public class SpagoBIStudioConstants {
 	public final static String DOCUMENT_COMPOSITION_ENGINE_EXTENSION="sbidoccomp";
 	public final static String GEO_ENGINE_EXTENSION="sbigeo";
 
+	public final static String SERVER_EXTENSION="sbiserver";
+
+	
 	
 	// Engine Labels
 	public final static String DASHBOARD_ENGINE_LABEL="DashboardInternalEng";
@@ -62,6 +65,8 @@ public class SpagoBIStudioConstants {
 	// name of project folder icons 
 	public static final String FOLDER_ICON_RESOURCE= "resources.png";
 	public static final String FOLDER_ICON_SERVER = "server.png";
+	public static final String FOLDER_ICON_SERVER_ACTIVE = "server_active.png";
+	public static final String FOLDER_ICON_SERVER_INACTIVE = "server_inactive.png";
 	public static final String FOLDER_ICON_DATA_SOURCE = "datasource.png";
 	public static final String FOLDER_ICON_METADATA_MODEL = "metadata.png";
 	public static final String FOLDER_ICON_DATASET = "dataset.png";
@@ -69,6 +74,8 @@ public class SpagoBIStudioConstants {
 	public static final String FOLDER_ICON_PRIVATE_DOCUMENTS = "private.png";
 	public static final String FOLDER_ICON_SBI_PROJECT = "sbiproject.gif";
 	
-
+// 	Component ID
+	public static final String SERVER_EDITOR_ID = "it.eng.spagobi.studio.core.editors.ServerEditor";
+	
 	
 }

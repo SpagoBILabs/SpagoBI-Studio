@@ -24,11 +24,14 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import it.eng.spagobi.studio.core.bo.xmlMapping.XmlServerGenerator;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
+import it.eng.spagobi.studio.core.services.server.ServerHandler;
 import it.eng.spagobi.studio.core.util.ImageDescriptorGatherer;
 import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
 import org.eclipse.core.internal.resources.Folder;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -63,6 +66,8 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 		ImageDescriptor privateDocumentsDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_PRIVATE_DOCUMENTS);
 		ImageDescriptor resourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_RESOURCE);
 		ImageDescriptor serverDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER);
+		ImageDescriptor serverActiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_ACTIVE);
+		ImageDescriptor serverInactiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_INACTIVE);
 		ImageDescriptor sbiProjectDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SBI_PROJECT);
 		/**  vector containing images*/
 		Vector<Image> images = new Vector<Image>();
@@ -86,6 +91,7 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 
 				// if father is project means they are system tables (to avoid name mismatches)
 				String name = folder.getName();
+				String fatherName = container != null ? container.getName() : "";
 				if(container instanceof IProject){
 					if(name.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
 						imageToReturn = resourceDescriptor.createImage();
@@ -107,7 +113,6 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 				else{
 					// there asre some structure folders that have a father folder
 
-					String fatherName = container != null ? container.getName() : "";
 
 					// dataset have father metadata
 					if(name.equals(SpagoBIStudioConstants.FOLDER_DATASET)){
@@ -137,6 +142,18 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 				imageToReturn = sbiProjectDescriptor.createImage();
 				images.add(imageToReturn);
 			}
+			// if it is a file
+			else if (object instanceof IFile) {
+				IFile file = (IFile)object;
+				// if it is a server file
+				String fatherName = (file.getParent() != null) ? file.getParent().getName() : "";
+				if(fatherName.equals(SpagoBIStudioConstants.FOLDER_SERVER) && file.getName().endsWith("."+SpagoBIStudioConstants.SERVER_EXTENSION)){
+					boolean isActive =new XmlServerGenerator().isServerActive(file);
+					if(isActive) imageToReturn = serverActiveDescriptor.createImage();
+					else imageToReturn = serverInactiveDescriptor.createImage();
+				}
+
+			}
 
 			// default case
 			if(imageToReturn == null){
@@ -146,7 +163,8 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 			return imageToReturn;
 		}
 
-		
+
+
 		public void dispose() {
 			for (Iterator iterator = images.iterator(); iterator.hasNext();) {
 				Image imagesIt = (Image) iterator.next();
