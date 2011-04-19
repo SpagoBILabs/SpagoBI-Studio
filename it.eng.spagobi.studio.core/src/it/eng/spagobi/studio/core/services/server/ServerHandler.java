@@ -49,7 +49,7 @@ public class ServerHandler {
 			boolean result = proxy.connect();
 			if (result) {
 				logger.debug("test to "+server.getUrl()+ " succesfull");
-				message = "test succesfull";
+				message = "                                                                                                     Test Succesfull";
 				testResult = true;
 			} else {
 				logger.warn("test to "+server.getUrl()+ " failed");

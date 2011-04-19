@@ -118,6 +118,10 @@ public class ServerEditor extends EditorPart {
 				}
 		}
 		setDirty(false);
+		
+		// refresh the Resource navigator
+		SWTComponentUtilities.getNavigatorReference(SpagoBIStudioConstants.RESOURCE_NAVIGATOR_ID);
+		
 		logger.debug("OUT");
 	}
 

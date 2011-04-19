@@ -76,6 +76,6 @@ public class SpagoBIStudioConstants {
 	
 // 	Component ID
 	public static final String SERVER_EDITOR_ID = "it.eng.spagobi.studio.core.editors.ServerEditor";
-	
+	public static final String RESOURCE_NAVIGATOR_ID = "it.eng.spagobi.studio.core.views.ResourceNavigator";
 	
 }
