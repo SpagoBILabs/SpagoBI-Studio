@@ -21,13 +21,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata;
 
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
-import it.eng.spagobi.studio.documentcomposition.Activator;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
@@ -77,7 +75,7 @@ public class MetadataDocumentComposition {
 	public boolean calculateIfMadeWithStudio(IFile newFile) {
 		String date=null;
 		try {
-			date=newFile.getPersistentProperty(PropertyPage.MADE_WITH_STUDIO);
+			date=newFile.getPersistentProperty(SpagoBIStudioConstants.MADE_WITH_STUDIO);
 		} catch (CoreException e) {
 			SpagoBILogger.errorLog("Could not retrieve metadata", e);			
 			e.printStackTrace();

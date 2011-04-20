@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.documentcomposition.wizards;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.documentcomposition.Activator;
 import it.eng.spagobi.studio.documentcomposition.wizards.pages.NewDocumentCompositionWizardPage;
 
@@ -133,7 +134,7 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 		//		}
 
 		try {
-			newFile.setPersistentProperty(PropertyPage.MADE_WITH_STUDIO, (new Date()).toString());
+			newFile.setPersistentProperty(SpagoBIStudioConstants.MADE_WITH_STUDIO, (new Date()).toString());
 		} catch (CoreException e) {
 			SpagoBILogger.errorLog("Error while setting made with studio meatdata", e);
 		}

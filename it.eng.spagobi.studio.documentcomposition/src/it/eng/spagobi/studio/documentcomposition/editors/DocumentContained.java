@@ -97,7 +97,7 @@ public class DocumentContained {
 	public boolean recoverDocumentMetadata(Integer idContainer,IFile file){
 		try{
 			int i=0;
-			String id=file.getPersistentProperty(PropertyPage.DOCUMENT_ID);
+			String id=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 			if(metadataDocument!=null){
 				MessageDialog.openWarning(group.getShell(), 
 						"Warning", "Container has already Document in!");

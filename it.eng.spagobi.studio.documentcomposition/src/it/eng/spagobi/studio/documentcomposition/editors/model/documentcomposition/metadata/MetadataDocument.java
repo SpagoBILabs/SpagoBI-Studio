@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata;
 
 import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.util.SDKDocumentParameters;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
 import java.util.Iterator;
 import java.util.List;
@@ -151,21 +151,21 @@ public class MetadataDocument {
  */
 
 	public MetadataDocument(IFile file) throws CoreException {
-		String documentId=file.getPersistentProperty(PropertyPage.DOCUMENT_ID);
-		String documentName=file.getPersistentProperty(PropertyPage.DOCUMENT_NAME);
-		String documentType=file.getPersistentProperty(PropertyPage.DOCUMENT_TYPE);
-		String documentEngineId=file.getPersistentProperty(PropertyPage.ENGINE_ID);
-		String documentEngineName=file.getPersistentProperty(PropertyPage.ENGINE_NAME);
-		String documentEngineLabel = file.getPersistentProperty(PropertyPage.ENGINE_LABEL);
-		String documentLabel=file.getPersistentProperty(PropertyPage.DOCUMENT_LABEL);
-		String documentState=file.getPersistentProperty(PropertyPage.DOCUMENT_STATE);
-		String documentDescription=file.getPersistentProperty(PropertyPage.DOCUMENT_DESCRIPTION);
-		String documentDatasetId=file.getPersistentProperty(PropertyPage.DATASET_ID);
-		String documentDatasourceId=file.getPersistentProperty(PropertyPage.DATA_SOURCE_ID);
-		String documentDatasetName=file.getPersistentProperty(PropertyPage.DATASET_NAME);
-		String documentDatasourceName=file.getPersistentProperty(PropertyPage.DATA_SOURCE_NAME);
+		String documentId=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
+		String documentName=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_NAME);
+		String documentType=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE);
+		String documentEngineId=file.getPersistentProperty(SpagoBIStudioConstants.ENGINE_ID);
+		String documentEngineName=file.getPersistentProperty(SpagoBIStudioConstants.ENGINE_NAME);
+		String documentEngineLabel = file.getPersistentProperty(SpagoBIStudioConstants.ENGINE_LABEL);
+		String documentLabel=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
+		String documentState=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_STATE);
+		String documentDescription=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_DESCRIPTION);
+		String documentDatasetId=file.getPersistentProperty(SpagoBIStudioConstants.DATASET_ID);
+		String documentDatasourceId=file.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_ID);
+		String documentDatasetName=file.getPersistentProperty(SpagoBIStudioConstants.DATASET_NAME);
+		String documentDatasourceName=file.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_NAME);
 
-		String xmlParameters=file.getPersistentProperty(PropertyPage.DOCUMENT_PARAMETERS_XML);
+		String xmlParameters=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML);
 
 		setId(id!=null ? Integer.valueOf(id) : -1);
 		setLabel(documentLabel);
