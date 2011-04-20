@@ -14,6 +14,7 @@ import it.eng.spagobi.studio.core.exceptions.NoServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.editors.model.bo.ColumnBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;
@@ -99,6 +100,7 @@ public class GEOEditor extends EditorPart {
 	final ImageDescriptor idIcon = AbstractUIPlugin
 	.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/key.gif");
 
+	String projectName = null;
 	private Vector<String> dataSets;
 	private Vector<String> maps;
 	private HashMap<String, Dataset> datasetInfos;
@@ -118,7 +120,7 @@ public class GEOEditor extends EditorPart {
 	private Vector<TableEditor> datasetTableEditors = new Vector<TableEditor>();
 	private Vector<TableEditor> mapTableEditors = new Vector<TableEditor>();
 	private MeasuresDesigner measuresDesigner;
-
+String projectname = null;
 	private static final int DATASET_NAME = 0;
 	private static final int DATASET_CLASS = 1;
 	private static final int DATASET_SELECT = 2;
@@ -135,9 +137,10 @@ public class GEOEditor extends EditorPart {
 		try {
 			this.setPartName(input.getName());
 
-			QualifiedName ciao = PropertyPage.MADE_WITH_STUDIO;
+			QualifiedName ciao = SpagoBIStudioConstants.MADE_WITH_STUDIO;
 			FileEditorInput fei = (FileEditorInput) input;
 			IFile file = fei.getFile();
+			projectname = file.getProject().getName();
 			ModelBO bo = new ModelBO();
 			try {
 				geoDocument = bo.createModel(file);
@@ -171,7 +174,7 @@ public class GEOEditor extends EditorPart {
 
 		SDKDataSet[] sdkDataSets = null;
 		try {
-			SDKProxyFactory proxyFactory = new SDKProxyFactory();
+			SDKProxyFactory proxyFactory = new SDKProxyFactory(projectname);
 			DataSetsSDKServiceProxy dataSetsServiceProxy = proxyFactory
 			.getDataSetsSDKServiceProxy();
 			sdkDataSets = dataSetsServiceProxy.getDataSets();
@@ -183,7 +186,7 @@ public class GEOEditor extends EditorPart {
 					e);
 		}
 
-		SpagoBIServerObjects sbso = new SpagoBIServerObjects();
+		SpagoBIServerObjects sbso = new SpagoBIServerObjects(projectname);
 		Vector<Dataset> datasetVector;
 		try {
 			datasetVector = sbso.getAllDatasets();
@@ -466,7 +469,7 @@ public class GEOEditor extends EditorPart {
 							.setNewDataset(geoDocument, dataset.getJdbcQuery());*/
 					Integer datasourceId = dataset.getJdbcDataSourceId();
 
-					SpagoBIServerObjects sbso=new SpagoBIServerObjects();
+					SpagoBIServerObjects sbso=new SpagoBIServerObjects(projectname);
 					DataSource sdkdataSource;
 					try {
 						sdkdataSource = sbso.getDataSourceById(datasourceId);
@@ -483,7 +486,7 @@ public class GEOEditor extends EditorPart {
 					}
 
 					try {
-						dataStoreMetadata = new SpagoBIServerObjects()
+						dataStoreMetadata = new SpagoBIServerObjects(projectname)
 						.getDataStoreMetadata(dataset.getId());
 						if (dataStoreMetadata != null) {
 							tempDsMetadataInfos.put(datasetLabel,
@@ -620,7 +623,7 @@ public class GEOEditor extends EditorPart {
 				} else {
 					GeoMap geoMap = mapInfos.get(mapLabel);
 					try {
-						geoFeatures = new SpagoBIServerObjects()
+						geoFeatures = new SpagoBIServerObjects(projectname)
 						.getFeaturesByMapId(geoMap.getMapId());
 						if (geoFeatures != null) {
 							tempMapMetadataInfos.put(mapLabel, geoFeatures);
@@ -905,7 +908,7 @@ public class GEOEditor extends EditorPart {
 		try {
 			selectedMap = layers.getMapName();
 			GeoMap geoMap = mapInfos.get(selectedMap);
-			GeoFeature[] geoFeatures = new SpagoBIServerObjects()
+			GeoFeature[] geoFeatures = new SpagoBIServerObjects(projectname)
 			.getFeaturesByMapId(geoMap.getMapId());
 			if (geoFeatures != null) {
 				tempMapMetadataInfos.put(selectedMap, geoFeatures);
@@ -933,7 +936,7 @@ public class GEOEditor extends EditorPart {
 		try {
 			selectedDataset = metadata.getDataset();
 			Dataset dataset = datasetInfos.get(metadata.getDataset());
-			DataStoreMetadata dataStoreMetadata = new SpagoBIServerObjects()
+			DataStoreMetadata dataStoreMetadata = new SpagoBIServerObjects(projectname)
 			.getDataStoreMetadata(dataset.getId());
 			if (dataStoreMetadata != null) {
 				tempDsMetadataInfos.put(metadata.getDataset(),
@@ -1388,4 +1391,15 @@ public class GEOEditor extends EditorPart {
 	public void setDatasetTable(Table datasetTable) {
 		this.datasetTable = datasetTable;
 	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	
+
 }

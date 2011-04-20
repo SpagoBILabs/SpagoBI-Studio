@@ -646,7 +646,7 @@ public class HierarchiesDesigner {
 			Dataset dataset = editor.getDatasetInfos().get(datasetLabel);
 			try{
 				if(dataset.getId() != null){
-					dataStoreMetadata=new SpagoBIServerObjects().getDataStoreMetadata(dataset.getId());
+					dataStoreMetadata=new SpagoBIServerObjects(editor.getProjectName()).getDataStoreMetadata(dataset.getId());
 				}
 
 				if(dataStoreMetadata!=null){
@@ -683,7 +683,7 @@ public class HierarchiesDesigner {
 		GeoFeature[] geoFeatures=null;
 
 		try{
-			geoFeatures=new SpagoBIServerObjects().getAllFeatures();
+			geoFeatures=new SpagoBIServerObjects(editor.getProjectName()).getAllFeatures();
 			if(geoFeatures==null){
 				SpagoBILogger.warningLog("No features returned");
 				MessageDialog.openWarning(mainComposite.getShell(), "Warning", "No features returned");			

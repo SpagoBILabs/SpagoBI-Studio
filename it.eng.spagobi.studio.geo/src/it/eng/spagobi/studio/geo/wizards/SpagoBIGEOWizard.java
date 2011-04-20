@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.geo.wizards;
 
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.wizards.pages.NewGEOWizardPage;
 
@@ -116,7 +116,7 @@ public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 
 
 		try {
-			newFile.setPersistentProperty(PropertyPage.MADE_WITH_STUDIO, (new Date()).toString());
+			newFile.setPersistentProperty(SpagoBIStudioConstants.MADE_WITH_STUDIO, (new Date()).toString());
 		} catch (CoreException e) {
 			SpagoBILogger.errorLog("Error while setting made with studio metadata", e);
 		}
