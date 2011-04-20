@@ -4,6 +4,7 @@ import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
@@ -22,8 +23,8 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
-import org.eclipse.ui.PlatformUI;import org.slf4j.Logger;
-
+import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SpagoBIDeployWizard extends Wizard implements INewWizard {
@@ -131,9 +132,17 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	 */
 
 	private void doFinish() {
+		SDKProxyFactory proxyFactory= null;
+		try{
+			proxyFactory=new SDKProxyFactory(projectName);
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return;
+		}
 
-		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
-		
 		// ********** CREATE THE NEW DOCUMENT ************
 		SDKDocument newDocument=new SDKDocument();
 		newDocument.setLabel(label);
@@ -218,6 +227,12 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		}
 		catch (CoreException e) {
 			SpagoBILogger.errorLog("Error while setting meta data",e);		
+			return;
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
 			return;
 		}
 

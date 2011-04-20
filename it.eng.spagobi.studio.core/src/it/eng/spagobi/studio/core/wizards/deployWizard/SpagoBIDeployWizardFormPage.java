@@ -8,6 +8,7 @@ import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
@@ -47,6 +48,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 /**
@@ -108,7 +110,16 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		projectName = fileSelected.getProject().getName();
 
 		// first of all get info from server		
-		final SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
+		SDKProxyFactory proxyFactory= null;
+		try{
+			 proxyFactory=new SDKProxyFactory(projectName);
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return;
+		}
 
 		final EnginesServiceProxy engineService=proxyFactory.getEnginesServiceProxy();
 		final DataSetsSDKServiceProxy datasetService=proxyFactory.getDataSetsSDKServiceProxy();
@@ -161,9 +172,9 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		fl2.type=SWT.HORIZONTAL;
 		parent.setLayout(fl2);
 
-		
-		
-		
+
+
+
 		Composite left=new Composite(parent,SWT.BORDER);
 		Composite right =  new Composite(parent, SWT.BORDER);
 
@@ -171,7 +182,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		int ncol = 2;
 		gl.numColumns = ncol;
 		left.setLayout(gl);
-		
+
 		FillLayout fl=new FillLayout();
 		right.setLayout(fl);
 

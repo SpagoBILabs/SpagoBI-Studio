@@ -28,6 +28,7 @@ import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
 import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 
 public class SDKProxyFactory {
 
@@ -37,7 +38,7 @@ public class SDKProxyFactory {
 	SpagoBIServerConnectionDefinition connection = null;
 
 
-	public SDKProxyFactory(String projectname) {
+	public SDKProxyFactory(String projectname) throws NoActiveServerException {
 		super();
 		connection = new SpagoBIServerConnectionDefinition(projectname);
 		if(connection == null){

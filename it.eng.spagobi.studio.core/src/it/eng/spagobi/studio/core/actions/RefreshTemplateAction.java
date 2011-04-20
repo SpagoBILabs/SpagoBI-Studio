@@ -28,9 +28,9 @@ import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
 import it.eng.spagobi.studio.core.exceptions.AlreadyPresentException;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.core.util.FileFinder;
@@ -61,11 +61,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.navigator.CommonNavigator;
-import org.eclipse.ui.navigator.CommonViewer;
 
 public class RefreshTemplateAction implements IObjectActionDelegate {
 
@@ -74,7 +71,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 	SDKDocument document=null;
 	ISelection selection;
 	String projectName = null;
-	
+
 	// fields to retrieve only once
 	String[] roles=null;
 	SDKDocumentParameter[] parameters=null;
@@ -96,7 +93,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 		org.eclipse.core.internal.resources.File fileSel = null;		
 		try{
 			fileSel=(org.eclipse.core.internal.resources.File)objSel;
-		projectName = fileSel.getProject().getName();
+			projectName = fileSel.getProject().getName();
 		}
 		catch (Exception e) {
 			SpagoBILogger.errorLog("No file selected",e);		
@@ -132,10 +129,11 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 					monitor.beginTask("Template Refresh for document "+label2, IProgressMonitor.UNKNOWN);
 
 					// document associated, upload the template
-					SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
-					DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
 
-					try {
+					try{
+						SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
+						DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
+
 						// check document still exists
 						document=docServiceProxy.getDocumentById(idInteger);
 						if(document==null){
@@ -158,7 +156,14 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error upload", "Error while uploading the template: not allowed operation");	
 						return;
-					} catch (RemoteException e) {
+					} 
+					catch (NoActiveServerException e1) {
+						SpagoBILogger.errorLog("No active server found", e1);			
+						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+								"Error", "No active server found");	
+						return;
+					}
+					catch (RemoteException e) {
 						SpagoBILogger.errorLog("Error comunicating with server",e);		
 						SpagoBILogger.errorLog("Error comunicating with server", e);			
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
@@ -326,7 +331,16 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 	public String recoverFileExtension(SDKDocument document, Integer documentId){
 		//Get the parameters
-		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
+		SDKProxyFactory proxyFactory = null;
+		try{
+			proxyFactory=new SDKProxyFactory(projectName);
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return null;
+		}		
 
 		try{
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
@@ -391,12 +405,12 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-	
-	
-	
-	
+
+
+
+
+
 }

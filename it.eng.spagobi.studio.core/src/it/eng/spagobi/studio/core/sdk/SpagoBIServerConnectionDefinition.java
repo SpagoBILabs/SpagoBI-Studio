@@ -22,6 +22,7 @@ package it.eng.spagobi.studio.core.sdk;
 
 import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.core.bo.Server;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.preferences.PreferenceConstants;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.services.server.ServerHandler;
@@ -61,18 +62,17 @@ public class SpagoBIServerConnectionDefinition {
 
 	}
 
-	public SpagoBIServerConnectionDefinition(String projectname) {
+	public SpagoBIServerConnectionDefinition(String projectname) throws NoActiveServerException {
 		logger.debug("IN");
 		Server server = new ServerHandler().getCurrentActiveServer(projectname);
+		if(server == null){
+			throw new NoActiveServerException();
+		}
+		
 		serverUrl = server.getUrl();
 		userName = server.getUser();
 		password = server.getPassword();
 
-		//		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		//		serverUrl = store.getString(PreferenceConstants.SPAGOBI_SERVER_URL);
-		//		userName = store.getString(PreferenceConstants.SPABOGI_USER_NAME);
-		//		password = store.getString(PreferenceConstants.SPABOGI_USER_PASSWORD);
-		//new ServerHandler().getCurrentActiveServer(analysis);
 		logger.debug("OUT");
 
 	}

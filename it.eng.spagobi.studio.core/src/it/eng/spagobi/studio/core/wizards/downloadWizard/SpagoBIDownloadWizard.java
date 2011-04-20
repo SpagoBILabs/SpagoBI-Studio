@@ -8,6 +8,7 @@ import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
 import it.eng.spagobi.sdk.engines.bo.SDKEngine;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,7 +178,17 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		boolean toReturn=true;
 		Integer id=document.getId();
 		SDKTemplate template=null;
-		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
+		SDKProxyFactory proxyFactory = null;
+		try{
+		proxyFactory  = new SDKProxyFactory(projectName);
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return false;
+		}
+		
 		DocumentsServiceProxy docServiceProxy=null;
 		int numDocs=0;
 		try{
@@ -267,10 +279,17 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		//try{
 		Integer id=document.getId();
 		SDKTemplate template=null;
+		SDKProxyFactory proxyFactory = null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
+			proxyFactory=new SDKProxyFactory(projectName);
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
 			template=docServiceProxy.downloadTemplate(id);
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return false;
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
@@ -281,7 +300,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			logger.error("No comunication with SpagoBI server, could not retrieve template",e);
 			MessageDialog.openError(getShell(), "Error", "Could not get the template from server");	
 			return false;
-		}			
+		}	
 
 		if(template == null){
 			logger.error("Template download is null for documentId "+id+" and label "+document.getLabel());
@@ -294,7 +313,6 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		//Get the parameters
 		String[] roles;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
 			roles=docServiceProxy.getCorrectRolesForExecution(id);
 		}
@@ -317,8 +335,6 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		//SDKDocumentParameter[] parameters=null;
 
 		SDKDocumentParameter[] parameters=null;
-		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
-
 		try{
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
 			parameters=docServiceProxy.getDocumentParameters(id, roles[0]);
@@ -423,6 +439,12 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			}
 			catch (CoreException e) {
 				logger.error("Error while setting meta data", e);	
+				return false;
+			}
+			catch (NoActiveServerException e1) {
+				SpagoBILogger.errorLog("No active server found", e1);			
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+						"Error", "No active server found");	
 				return false;
 			}
 

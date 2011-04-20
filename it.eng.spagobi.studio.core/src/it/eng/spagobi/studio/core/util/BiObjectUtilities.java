@@ -31,6 +31,7 @@ import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
 import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
@@ -132,7 +133,7 @@ public class BiObjectUtilities {
 	 * @throws CoreException
 	 */
 
-	public static IFile setFileMetaData(IFile newFile, SDKDocument document, boolean newDeployFromOld) throws CoreException{
+	public static IFile setFileMetaData(IFile newFile, SDKDocument document, boolean newDeployFromOld) throws CoreException, NoActiveServerException{
 
 		if(newDeployFromOld){
 			erasePersistentProperties(newFile);

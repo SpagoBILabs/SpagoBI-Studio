@@ -3,6 +3,7 @@ package it.eng.spagobi.studio.core.wizards.downloadWizard;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.SdkFunctionalityTreeGenerator;
@@ -71,20 +72,38 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 		logger.debug("IN");
 		monitor=new ProgressMonitorPart(getShell(), null);
 		initialize();
-		
+
 		Composite container = new Composite(parent, SWT.NULL);
 		FillLayout layout= new FillLayout();
 		container.setLayout(layout);
+		SDKProxyFactory proxyFactory = null;
+		try{
+			proxyFactory=new SDKProxyFactory(projectName);
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return;
+		}
 
-		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 		DocumentsServiceProxy docServiceProxy=null;
 
 
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Download documents tree", IProgressMonitor.UNKNOWN);
+				SDKProxyFactory proxyFactory = null;
+				try {
+					proxyFactory=new SDKProxyFactory(projectName);
+				}
+				catch (NoActiveServerException e1) {
+					SpagoBILogger.errorLog("No active server found", e1);			
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"Error", "No active server found");	
+					return;
+				}
 
-				SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 				DocumentsServiceProxy docServiceProxy=null;
 
 				try{

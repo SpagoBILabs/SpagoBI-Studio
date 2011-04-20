@@ -24,6 +24,7 @@ import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
 import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
@@ -124,6 +125,8 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 					if(projectname == null){
 						projectname = fileSel2.getProject().getName();
 					}
+
+					try{
 					// document associated, upload the template
 					SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
 					DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
@@ -137,7 +140,6 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 					sdkTemplate.setFileName(fileSel2.getName());
 					sdkTemplate.setContent(dataHandler);
 
-					try {
 						// check document still exists
 						SDKDocument doc=docServiceProxy.getDocumentById(idInteger);
 						if(doc==null){
@@ -156,7 +158,14 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error upload", "Error while uploading the template: not allowed operation");	
 						return;
-					} catch (RemoteException e) {
+					}
+					catch (NoActiveServerException e1) {
+						SpagoBILogger.errorLog("No active server found", e1);			
+						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+								"Error", "No active server found");	
+						return;
+					}
+					catch (RemoteException e) {
 						SpagoBILogger.errorLog("Error comunicating with server", e);		
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
