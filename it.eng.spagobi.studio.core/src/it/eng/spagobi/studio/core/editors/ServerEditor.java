@@ -71,7 +71,7 @@ public class ServerEditor extends EditorPart {
 	protected boolean isDirty = false;
 
 	protected final static RGB RED = new RGB(255, 0, 0);
-	protected final static RGB GREEN = new RGB(0, 255, 0);
+	protected final static RGB GREEN = new RGB(10, 255, 30);
 
 	private Label labelName =null;
 	private Label labelUrl =null;
@@ -99,7 +99,7 @@ public class ServerEditor extends EditorPart {
 			String xmlString = xmlgen.transformToXml(server);
 			// if is active and before was inactive check that other servers are not active
 			if(previouslyActive == false && server.isActive()){
-				new ServerHandler(server).setActiveServer(file);
+				new ServerHandler(server).deactivateOtherServers(file);
 			}
 
 			byte[] bytes = xmlString.getBytes();

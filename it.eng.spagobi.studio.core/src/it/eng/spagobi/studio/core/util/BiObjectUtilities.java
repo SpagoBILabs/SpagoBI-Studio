@@ -34,6 +34,7 @@ import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.core.services.server.MetadataHandler;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +42,8 @@ import java.util.Date;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -53,6 +56,7 @@ public class BiObjectUtilities {
 	 *   TYPE => EXTENSION
 	 */
 
+	private static Logger logger = LoggerFactory.getLogger(BiObjectUtilities.class);
 
 
 
@@ -95,26 +99,26 @@ public class BiObjectUtilities {
 	 * @param newFile
 	 */
 
-	 public static void erasePersistentProperties(IFile newFile) throws CoreException{
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_ID, null);
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_LABEL, null);
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_NAME, null);
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_DESCRIPTION, null);
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_STATE, null);
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_TYPE, null);
-		newFile.setPersistentProperty(PropertyPage.ENGINE_ID, null);
-		newFile.setPersistentProperty(PropertyPage.ENGINE_LABEL, null);
-		newFile.setPersistentProperty(PropertyPage.ENGINE_NAME, null);
-		newFile.setPersistentProperty(PropertyPage.ENGINE_DESCRIPTION, null);
-		newFile.setPersistentProperty(PropertyPage.DATASET_LABEL, null);
-		newFile.setPersistentProperty(PropertyPage.DATASET_NAME, null);
-		newFile.setPersistentProperty(PropertyPage.DATASET_DESCRIPTION, null);
-		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_ID, null);
-		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_LABEL, null);
-		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_NAME, null);
-		newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_DESCRIPTION, null);
-		newFile.setPersistentProperty(PropertyPage.LAST_REFRESH_DATE, null);
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_PARAMETERS_XML, null);
+	public static void erasePersistentProperties(IFile newFile) throws CoreException{
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_NAME, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_DESCRIPTION, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_STATE, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_ID, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_LABEL, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_NAME, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_DESCRIPTION, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_NAME, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_ID, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_LABEL, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_NAME, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_DESCRIPTION, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.LAST_REFRESH_DATE, null);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML, null);
 	}
 
 
@@ -134,11 +138,17 @@ public class BiObjectUtilities {
 			erasePersistentProperties(newFile);
 		}
 
+		String projectname = newFile.getProject().getName();
+		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
+		if(proxyFactory == null){
+			logger.error("No active server is defined");
+					return null;
+		}
+
 		// DAtaset Infomation field
 		SDKDataSet sdkDataSet=null;
 		if(document.getDataSetId()!=null){
 			try{
-				SDKProxyFactory proxyFactory=new SDKProxyFactory();
 				DataSetsSDKServiceProxy dataSetServiceProxy=proxyFactory.getDataSetsSDKServiceProxy();
 				sdkDataSet=dataSetServiceProxy.getDataSet(document.getDataSetId());
 			}
@@ -151,7 +161,6 @@ public class BiObjectUtilities {
 		SDKDataSource sdkDataSource=null;
 		if(document.getDataSourceId()!=null){
 			try{
-				SDKProxyFactory proxyFactory=new SDKProxyFactory();
 				DataSourcesSDKServiceProxy dataSourcesServiceProxy=proxyFactory.getDataSourcesSDKServiceProxy();
 				sdkDataSource=dataSourcesServiceProxy.getDataSource(document.getDataSourceId());
 			}
@@ -163,7 +172,7 @@ public class BiObjectUtilities {
 
 		// get the extension
 		Integer engineId=document.getEngineId();
-		SDKProxyFactory proxyFactory=new SDKProxyFactory();
+
 		EnginesServiceProxy engineProxy=proxyFactory.getEnginesServiceProxy();
 
 		SDKEngine sdkEngine=null;
@@ -176,22 +185,22 @@ public class BiObjectUtilities {
 		}	
 
 		if(document.getId()!=null){
-			newFile.setPersistentProperty(PropertyPage.DOCUMENT_ID, document.getId().toString());			
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID, document.getId().toString());			
 		}
 		if(document.getLabel()!=null){
-			newFile.setPersistentProperty(PropertyPage.DOCUMENT_LABEL, document.getLabel());
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL, document.getLabel());
 		}
 		if(document.getName()!=null){
-			newFile.setPersistentProperty(PropertyPage.DOCUMENT_NAME, document.getName());
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_NAME, document.getName());
 		}
 		if(document.getDescription()!=null){
-			newFile.setPersistentProperty(PropertyPage.DOCUMENT_DESCRIPTION, document.getDescription());
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_DESCRIPTION, document.getDescription());
 		}
 		if(document.getState()!=null){
-			newFile.setPersistentProperty(PropertyPage.DOCUMENT_STATE, document.getState());
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_STATE, document.getState());
 		}
 		if(document.getType()!=null){
-			newFile.setPersistentProperty(PropertyPage.DOCUMENT_TYPE, document.getType());
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE, document.getType());
 		}
 
 		setFileEngineMetaData(newFile, sdkEngine);
@@ -204,16 +213,16 @@ public class BiObjectUtilities {
 	public static IFile setFileEngineMetaData(IFile newFile, SDKEngine engine) throws CoreException{
 		if(engine!=null){
 			if(engine.getId()!=null){
-				newFile.setPersistentProperty(PropertyPage.ENGINE_ID, engine.getId().toString());			
+				newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_ID, engine.getId().toString());			
 			}
 			if(engine.getLabel()!=null){
-				newFile.setPersistentProperty(PropertyPage.ENGINE_LABEL, engine.getLabel());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_LABEL, engine.getLabel());
 			}
 			if(engine.getName()!=null){
-				newFile.setPersistentProperty(PropertyPage.ENGINE_NAME, engine.getName());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_NAME, engine.getName());
 			}
 			if(engine.getDescription()!=null){
-				newFile.setPersistentProperty(PropertyPage.ENGINE_DESCRIPTION, engine.getDescription());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_DESCRIPTION, engine.getDescription());
 			}
 		}
 		return newFile;
@@ -222,16 +231,16 @@ public class BiObjectUtilities {
 	public static IFile setFileDataSetMetaData(IFile newFile, SDKDataSet dataset) throws CoreException{
 		if(dataset!=null){
 			if(dataset.getId()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATASET_ID, dataset.getId().toString());			
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_ID, dataset.getId().toString());			
 			}
 			if(dataset.getLabel()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATASET_LABEL, dataset.getLabel());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL, dataset.getLabel());
 			}
 			if(dataset.getName()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATASET_NAME, dataset.getName());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_NAME, dataset.getName());
 			}
 			if(dataset.getDescription()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATASET_DESCRIPTION, dataset.getDescription());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION, dataset.getDescription());
 			}
 		}
 		return newFile;
@@ -240,16 +249,16 @@ public class BiObjectUtilities {
 	public static IFile setFileDataSourceMetaData(IFile newFile, SDKDataSource datasource) throws CoreException{
 		if(datasource!=null){
 			if(datasource.getId()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_ID, datasource.getId().toString());			
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_ID, datasource.getId().toString());			
 			}
 			if(datasource.getLabel()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_LABEL, datasource.getLabel());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_LABEL, datasource.getLabel());
 			}
 			if(datasource.getName()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_NAME, datasource.getName());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_NAME, datasource.getName());
 			}
 			if(datasource.getDescr()!=null){
-				newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_DESCRIPTION, datasource.getDescr());
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_DESCRIPTION, datasource.getDescr());
 			}
 		}
 		return newFile;
@@ -258,13 +267,13 @@ public class BiObjectUtilities {
 
 	public static IFile setFileInformativeMetaData(IFile newFile, String engineName, String dataSetName, String dataSourceName) throws CoreException{
 		if(dataSetName!=null){
-			newFile.setPersistentProperty(PropertyPage.DATASET_NAME, dataSetName);			
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_NAME, dataSetName);			
 		}
 		if(engineName!=null){
-			newFile.setPersistentProperty(PropertyPage.ENGINE_NAME, engineName);			
+			newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_NAME, engineName);			
 		}
 		if(dataSourceName!=null){
-			newFile.setPersistentProperty(PropertyPage.DATA_SOURCE_NAME, dataSourceName);			
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_NAME, dataSourceName);			
 		}
 		return newFile;
 	}
@@ -276,7 +285,7 @@ public class BiObjectUtilities {
 	public static IFile setFileLastRefreshDateMetaData(IFile newFile) throws CoreException {
 		Date current=new Date();
 		String currentString=current.toString();
-		newFile.setPersistentProperty(PropertyPage.LAST_REFRESH_DATE, currentString);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.LAST_REFRESH_DATE, currentString);
 		return newFile;
 	}	
 
@@ -301,7 +310,7 @@ public class BiObjectUtilities {
 		xstream.omitField(SDKDocumentParameter.class, "constraints");
 		xstream.omitField(SDKDocumentParameter.class, "__hashCodeCalc");
 		xml = xstream.toXML(pars);		
-		newFile.setPersistentProperty(PropertyPage.DOCUMENT_PARAMETERS_XML,xml);
+		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML,xml);
 		return newFile;
 	}
 
@@ -359,7 +368,7 @@ public class BiObjectUtilities {
 	//		}
 	//
 	//		xml+="</PARAMETERS>";
-	//		newFile.setPersistentProperty(PropertyPage.DOCUMENT_PARAMETERS_XML,xml);
+	//		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML,xml);
 	//		return newFile;
 	//
 	//	}

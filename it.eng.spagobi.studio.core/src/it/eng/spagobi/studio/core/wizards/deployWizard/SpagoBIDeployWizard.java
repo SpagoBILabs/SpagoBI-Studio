@@ -10,7 +10,6 @@ import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 
 import java.io.File;
 import java.net.URI;
-import java.util.logging.Logger;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -23,13 +22,18 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.PlatformUI;import org.slf4j.Logger;
+
+import org.slf4j.LoggerFactory;
 
 public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	private SpagoBIDeployWizardFormPage formPage;
 
 	private IStructuredSelection selection;
 	protected IWorkbench workbench;
+	String projectName = null;
+
+	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployWizard.class);
 
 	String label;
 	String name;
@@ -53,7 +57,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	public SpagoBIDeployWizard() {
 		super();
 		setNeedsProgressMonitor(true);
-	
+
 	}
 
 
@@ -128,8 +132,8 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 
 	private void doFinish() {
 
-		SDKProxyFactory proxyFactory=new SDKProxyFactory();
-
+		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
+		
 		// ********** CREATE THE NEW DOCUMENT ************
 		SDKDocument newDocument=new SDKDocument();
 		newDocument.setLabel(label);
@@ -180,7 +184,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		}
 
 		URI uri=fileSel.getLocationURI();
-
+		projectName = fileSel.getProject().getName();
 		File fileJava=new File(uri.getPath()); 
 		FileDataSource fileDataSource=new FileDataSource(fileJava);
 		DataHandler dataHandler=new DataHandler(fileDataSource);
@@ -256,7 +260,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		this.newDeployFromOld = newDeployFromOld;
 	}
 
-	
+
 
 }
 

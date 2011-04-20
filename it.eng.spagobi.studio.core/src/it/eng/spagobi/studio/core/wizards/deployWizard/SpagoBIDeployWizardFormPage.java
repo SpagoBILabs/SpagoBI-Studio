@@ -63,6 +63,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 	private Combo dataSourceCombo; 
 	private Combo stateCombo; 
 	private Spinner refreshSecondsSpinner; 
+	String projectName = null;
 
 	private IStructuredSelection selection;
 	private Tree tree;
@@ -101,9 +102,13 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		//shell.setSize(1300,500);
 		monitor=new ProgressMonitorPart(getShell(), null);
 
-		// first of all get info from server		
-		final SDKProxyFactory proxyFactory=new SDKProxyFactory();
 
+		Object objSel = selection.toList().get(0);
+		File fileSelected=(File)objSel;
+		projectName = fileSelected.getProject().getName();
+
+		// first of all get info from server		
+		final SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 
 		final EnginesServiceProxy engineService=proxyFactory.getEnginesServiceProxy();
 		final DataSetsSDKServiceProxy datasetService=proxyFactory.getDataSetsSDKServiceProxy();
@@ -211,9 +216,6 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		descriptionText = new Text(left, SWT.BORDER);
 		descriptionText.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 		descriptionText.setTextLimit(SpagoBIStudioConstants.BIOBJECT_DESCRIPTION_LIMIT);
-
-		Object objSel = selection.toList().get(0);
-		File fileSelected=(File)objSel;
 
 		typeLabel=BiObjectUtilities.getTypeFromExtension(fileSelected.getName());
 

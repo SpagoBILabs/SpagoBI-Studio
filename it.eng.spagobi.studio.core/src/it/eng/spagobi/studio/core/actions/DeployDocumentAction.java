@@ -28,6 +28,7 @@ import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 
 import java.io.File;
@@ -38,6 +39,7 @@ import java.rmi.RemoteException;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -61,7 +63,7 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 
 	private IViewPart view = null;
 	ISelection selection; 
-
+	String projectname = null;
 
 	public DeployDocumentAction() {
 	}
@@ -69,14 +71,17 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 
 	public void init(IViewPart view) {
 		this.view = view;
+		IFile file = (IFile)selection;	
+		projectname = file.getProject().getName();
+
 	}
 
 	public void run(IAction action) {
 
 		SpagoBIDeployWizard sbindw = new SpagoBIDeployWizard();
 
-//		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
-//		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
+		//		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
+		//		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
 		IStructuredSelection sel=(IStructuredSelection)selection;
 
 		// go on only if you selected a document
@@ -97,8 +102,8 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 		String document_idString=null;
 		String document_label=null;
 		try {
-			document_idString=fileSel.getPersistentProperty(PropertyPage.DOCUMENT_ID);			
-			document_label=fileSel.getPersistentProperty(PropertyPage.DOCUMENT_LABEL);
+			document_idString=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);			
+			document_label=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
 		} catch (CoreException e) {
 			SpagoBILogger.errorLog("Error in retrieving document Label", e);		
 			//SpagoBILogger.errorLog("Error in retrieving document Label", e);
@@ -116,8 +121,11 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
 					monitor.beginTask("Deploying to document "+label2, IProgressMonitor.UNKNOWN);
 
+					if(projectname == null){
+						projectname = fileSel2.getProject().getName();
+					}
 					// document associated, upload the template
-					SDKProxyFactory proxyFactory=new SDKProxyFactory();
+					SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
 					DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
 
 					URI uri=fileSel2.getLocationURI();
@@ -205,14 +213,14 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 			sbindw.init(PlatformUI.getWorkbench(), sel);
 			// Create the wizard dialog
 			WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbindw);
-			
-//			{
-//				@Override
-//				protected void configureShell(Shell newShell) {
-//					super.configureShell(newShell);
-//					newShell.setSize(1300, 600);
-//				}
-//			};
+
+			//			{
+			//				@Override
+			//				protected void configureShell(Shell newShell) {
+			//					super.configureShell(newShell);
+			//					newShell.setSize(1300, 600);
+			//				}
+			//			};
 
 			// Open the wizard dialog
 			dialog.open();	
@@ -227,7 +235,7 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 
 	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

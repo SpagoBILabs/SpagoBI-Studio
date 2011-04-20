@@ -6,10 +6,12 @@ import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.SdkFunctionalityTreeGenerator;
+import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,6 +31,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thre Download Wizard let the user to navigate the funcitonalities tree and select a document to download
@@ -39,11 +43,13 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 	//private Text containerText;
 
 	//private Text fileText;
+	private static Logger logger = LoggerFactory.getLogger(SpagoBIDownloadWizardPage.class);
 
 	private IStructuredSelection selection;
 	private Tree tree;
 	private ProgressMonitorPart monitor;
 	private SDKFunctionality functionality;
+	String projectName = null;
 
 
 	/**
@@ -62,13 +68,15 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
+		logger.debug("IN");
 		monitor=new ProgressMonitorPart(getShell(), null);
-
+		initialize();
+		
 		Composite container = new Composite(parent, SWT.NULL);
 		FillLayout layout= new FillLayout();
 		container.setLayout(layout);
 
-		SDKProxyFactory proxyFactory=new SDKProxyFactory();
+		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 		DocumentsServiceProxy docServiceProxy=null;
 
 
@@ -76,7 +84,7 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Download documents tree", IProgressMonitor.UNKNOWN);
 
-				SDKProxyFactory proxyFactory=new SDKProxyFactory();
+				SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 				DocumentsServiceProxy docServiceProxy=null;
 
 				try{
@@ -136,8 +144,10 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 			}
 		});
 
-		initialize();
+
 		setControl(container);
+		logger.debug("OUT");
+
 	}
 
 
@@ -147,6 +157,8 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 	 */
 
 	private void initialize() {
+		logger.debug("IN");
+
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
@@ -160,9 +172,11 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 				else
 					container = ((IResource) obj).getParent();
 
-
+				projectName =container.getProject().getName();
 			}
 		}
+		logger.debug("OUT");
+
 	}
 
 	/**
@@ -171,6 +185,7 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 	 */
 
 	private void handleBrowse() {
+		logger.debug("IN");
 		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
 				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
 		"Select new file container");
@@ -180,6 +195,7 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 				//containerText.setText(((Path) result[0]).toString());
 			}
 		}
+		logger.debug("OUT");
 	}
 
 	/**
@@ -200,38 +216,20 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 		this.tree = tree;
 	}
 
-/**
- *  DOwnlaod wizard page is complete if something has been selected, both one or more document or one or more folders
- */
+	/**
+	 *  DOwnlaod wizard page is complete if something has been selected, both one or more document or one or more folders
+	 */
 
 	public boolean isPageComplete() {
 		boolean isComplete=false;
 		if(tree!=null){
 			TreeItem[] treeItems=tree.getSelection();
 			if(treeItems!=null && treeItems.length>=1){
-				isComplete=true;
-//
-//				TreeItem treeItem=treeItems[0];
-//				Object data=treeItem.getData();
-//				if(data!=null && data instanceof SDKDocument){
-//					isComplete=true;
-//				}
+
 			}			
 		}
 
 		return isComplete;
 	}
 
-
-
-
-
-
-	//	public String getContainerName() {
-	//		return containerText.getText();
-	//	}
-
-	//	public String getFileName() {
-	//		return fileText.getText();
-	//	}
 }

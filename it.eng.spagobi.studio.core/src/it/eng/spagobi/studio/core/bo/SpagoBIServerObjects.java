@@ -22,6 +22,9 @@ package it.eng.spagobi.studio.core.bo;
 
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.sdk.datasources.bo.SDKDataSource;
@@ -33,18 +36,30 @@ import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
 import it.eng.spagobi.studio.core.exceptions.NoServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
+import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 
 
 public class SpagoBIServerObjects {
 
+	private static Logger logger = LoggerFactory.getLogger(SpagoBIServerObjects.class);
+
+	String projectName = null;
+	
+	
+
+	public SpagoBIServerObjects(String projectName) {
+		super();
+		this.projectName = projectName;
+	}
 
 
 	public DataStoreMetadata getDataStoreMetadata(Integer datasetId) throws NoServerException, MissingParameterValue{
+		logger.debug("IN");
 		SDKDataStoreMetadata sdkDataStoreMetadata=null;
 		DataStoreMetadata toReturn=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			DataSetsSDKServiceProxy datasetsServiceProxy=proxyFactory.getDataSetsSDKServiceProxy();
 			SDKDataSet sdkDataSet=datasetsServiceProxy.getDataSet(datasetId);
 
@@ -62,15 +77,18 @@ public class SpagoBIServerObjects {
 		if(sdkDataStoreMetadata!=null){
 			toReturn=new DataStoreMetadata(sdkDataStoreMetadata);
 		}
+		logger.debug("OUT");
+
 		return toReturn;
 	}
 
 
 	public DataSource getDataSourceById(Integer dsId) throws NoServerException{
+		logger.debug("IN");
 		DataSource toReturn=null;
 		SDKDataSource sdkDS=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			DataSourcesSDKServiceProxy dsServiceProxy=proxyFactory.getDataSourcesSDKServiceProxy();
 			sdkDS = dsServiceProxy.getDataSource(dsId);
 		}
@@ -81,15 +99,17 @@ public class SpagoBIServerObjects {
 		if(sdkDS!=null){
 			toReturn=new DataSource(sdkDS);
 		}
+		logger.debug("OUT");
 		return toReturn;	
 	}
 
 
 	public GeoFeature[] getFeaturesByMapId(Integer mapId) throws NoServerException{
+		logger.debug("IN");
 		GeoFeature[] toReturn=null;
 		SDKFeature[] sdkFeatures=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			MapsSDKServiceProxy mapsServiceProxy=proxyFactory.getMapsSDKServiceProxy();
 			sdkFeatures =mapsServiceProxy.getMapFeatures(mapId);
 		}
@@ -106,15 +126,17 @@ public class SpagoBIServerObjects {
 				toReturn[i]=geoFeature;
 			}
 		}
+		logger.debug("OUT");
 		return toReturn;	
 	}
 
 	
 	public GeoFeature[] getAllFeatures() throws NoServerException{
+		logger.debug("IN");
 		GeoFeature[] toReturn=null;
 		SDKFeature[] sdkFeatures=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			MapsSDKServiceProxy mapsServiceProxy=proxyFactory.getMapsSDKServiceProxy();
 			sdkFeatures =mapsServiceProxy.getFeatures();
 		}
@@ -131,17 +153,19 @@ public class SpagoBIServerObjects {
 				toReturn[i]=geoFeature;
 			}
 		}
+		logger.debug("OUT");
 		return toReturn;	
 	}
 
 	
 
 	public GeoMap getGeoMapById(Integer geoId) throws NoServerException{
+		logger.debug("IN");
 		GeoMap toReturn=null;
 
 		SDKMap sdkMap=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			MapsSDKServiceProxy mapsServiceProxy=proxyFactory.getMapsSDKServiceProxy();
 			sdkMap=mapsServiceProxy.getMapById(geoId);
 		}
@@ -153,6 +177,7 @@ public class SpagoBIServerObjects {
 			toReturn=new GeoMap(sdkMap);
 
 		}
+		logger.debug("OUT");
 		return toReturn;		
 
 	}
@@ -160,11 +185,12 @@ public class SpagoBIServerObjects {
 	
 	
 	public Vector<GeoMap> getAllGeoMaps() throws NoServerException{
+		logger.debug("IN");
 		Vector<GeoMap> toReturn=new Vector<GeoMap>();
 
 		SDKMap[] sdkMaps=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			MapsSDKServiceProxy mapsServiceProxy=proxyFactory.getMapsSDKServiceProxy();
 			sdkMaps=mapsServiceProxy.getMaps();
 		}
@@ -180,17 +206,19 @@ public class SpagoBIServerObjects {
 				toReturn.add(geoMap);
 			}
 		}
+		logger.debug("OUT");
 		return toReturn;		
 
 	}
 
 
 	public Vector<Dataset> getAllDatasets() throws NoServerException{
+		logger.debug("IN");
 		Vector<Dataset> toReturn=new Vector<Dataset>();
 
 		SDKDataSet[] sdkDataSets=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			DataSetsSDKServiceProxy datasetsServiceProxy=proxyFactory.getDataSetsSDKServiceProxy();
 			sdkDataSets=datasetsServiceProxy.getDataSets();
 		}
@@ -207,6 +235,7 @@ public class SpagoBIServerObjects {
 				toReturn.add(dataset);
 			}
 		}
+		logger.debug("OUT");
 		return toReturn;		
 	}
 

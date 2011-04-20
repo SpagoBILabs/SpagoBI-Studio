@@ -113,6 +113,7 @@
 	         <action
 	            id="it.eng.spagobi.studio.core.actions.NewServerAction" 
             	label="New server"
+            	icon="icons/server_active.png"
             	style="push"
             	menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
             	class="it.eng.spagobi.studio.core.actions.NewServerAction" /> 
@@ -176,9 +177,17 @@
          point="org.eclipse.ui.propertyPages">
       <page
             class="it.eng.spagobi.studio.core.properties.PropertyPage"
+            icon="icons/metadata.png"            
             id="it.eng.spagobi.studio.core.propertyPage"
             name="SpagoBI"
             >
+            <enabledWhen>
+           	<!--  <and> -->
+           	<adapt type="org.eclipse.core.internal.resources.File" />
+            <!--<path type="*Sbi*" />-->
+            <!-- </and> -->
+            </enabledWhen>
+            
       </page>
 </extension>
 <!--  EDITORS      -->

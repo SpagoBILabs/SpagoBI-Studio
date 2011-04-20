@@ -28,6 +28,7 @@ import javax.activation.DataHandler;
 import org.dom4j.Document;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -42,11 +43,16 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	private SpagoBIDownloadWizardPage page;
 	private IStructuredSelection selection;
 	protected IWorkbench workbench;
+	String projectName = null;
+
+	private static Logger logger = LoggerFactory.getLogger(SpagoBIDownloadWizard.class);
 
 	/**
 	 *  vector that stores user messages to show at the end of download
@@ -77,6 +83,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	 */
 
 	public boolean downloadDocument(SDKDocument document){
+		logger.debug("IN");
 		// if it is a document composed download also contained documents
 		if(document.getType().equalsIgnoreCase(SpagoBIConstants.DOCUMENT_COMPOSITE_TYPE) ){
 			// ask user if wants to download related template
@@ -85,6 +92,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 				downloadContainedTemplate(document);
 			}
 		}
+		logger.debug("OUT");
 		return downloadTemplate(document);		
 	}
 
@@ -95,6 +103,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	 */
 
 	public boolean downloadDocumentsFromFunctionality(SDKFunctionality functionality){
+		logger.debug("IN");
 		SDKDocument[] documents = functionality.getContainedDocuments();
 		// Download contained Documents
 		for (int i = 0; i < documents.length; i++) {
@@ -107,6 +116,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			SDKFunctionality funct = funcitonalities[i];	
 			downloadDocumentsFromFunctionality(funct);
 		}		
+		logger.debug("OUT");
 		return true;
 	}
 
@@ -116,9 +126,10 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	 * using wizard as execution context.
 	 */
 	public boolean performFinish() {
+		logger.debug("IN");
 		TreeItem[] selectedItems=page.getTree().getSelection();
 		if(selectedItems==null){
-			SpagoBILogger.warningLog("Error; no item selected");
+			logger.warn("Error; no item selected");
 		}
 		else{	
 			// cycle on selected items
@@ -155,16 +166,17 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 			doFinish();
 		}
-
+		logger.debug("OUT");
 		return true;
 	}
 
 
 	public boolean downloadContainedTemplate(SDKDocument document){
+		logger.debug("IN");
 		boolean toReturn=true;
 		Integer id=document.getId();
 		SDKTemplate template=null;
-		SDKProxyFactory proxyFactory=new SDKProxyFactory();
+		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 		DocumentsServiceProxy docServiceProxy=null;
 		int numDocs=0;
 		try{
@@ -172,12 +184,12 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			template=docServiceProxy.downloadTemplate(id);
 		}	
 		catch (NullPointerException e) {
-			SpagoBILogger.errorLog("No comunication with server, check SpagoBi Server definition in preferences page", e);
+			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
 			MessageDialog.openError(getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
 			return false;
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not retrieve template",e);
+			logger.error("No comunication with SpagoBI server, could not retrieve template",e);
 			MessageDialog.openError(getShell(), "Error", "Could not get the template from server for document with id "+id);	
 			return false;
 		}	
@@ -218,7 +230,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 				correctParsing=false;
 			}
 			if(correctParsing==false){
-				SpagoBILogger.errorLog("error in reading the file searching for document labels ", null);				
+				logger.error("error in reading the file searching for document labels ");				
 				MessageDialog.openWarning(getShell(), "Warning", "error in reading template searching for document labels: will not download contained documents but only composed one");	
 				return false;
 			}
@@ -230,47 +242,49 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 					toReturn = downloadTemplate(docToDownload);
 					if(toReturn==true){
 						numDocs++;
-						SpagoBILogger.infoLog("Download document with label "+docToDownload.getName());
+						logger.debug("Download document with label "+docToDownload.getName());
 					}
 				}
 			}
 
 
 		} catch (Exception e1) {
-			SpagoBILogger.errorLog("Error in writing the file", e1);
+			logger.error("Error in writing the file", e1);
 			MessageDialog.openWarning(getShell(), "Warning", "Error in downloading contained documents; will not download contained documents but only composed one");	
 
 			return false;
 		}
 
 
-		SpagoBILogger.infoLog("Downloaded # document "+numDocs);
+		logger.debug("Downloaded # document "+numDocs);
+		logger.debug("OUT");
 		return toReturn;
 	}
 
 	public boolean downloadTemplate(SDKDocument document){
+		logger.debug("IN");
 		InputStream is=null;
 		//try{
 		Integer id=document.getId();
 		SDKTemplate template=null;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
 			template=docServiceProxy.downloadTemplate(id);
 		}
 		catch (NullPointerException e) {
-			SpagoBILogger.errorLog("No comunication with server, check SpagoBi Server definition in preferences page",e);
+			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
 			MessageDialog.openError(getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
 			return false;
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not retrieve template",e);
+			logger.error("No comunication with SpagoBI server, could not retrieve template",e);
 			MessageDialog.openError(getShell(), "Error", "Could not get the template from server");	
 			return false;
 		}			
 
 		if(template == null){
-			SpagoBILogger.errorLog("Template download is null for documentId "+id+" and label "+document.getLabel(), null);
+			logger.error("Template download is null for documentId "+id+" and label "+document.getLabel());
 			return false;
 		}
 		
@@ -280,22 +294,22 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		//Get the parameters
 		String[] roles;
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
+			SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
 			roles=docServiceProxy.getCorrectRolesForExecution(id);
 		}
 		catch (NullPointerException e) {
-			SpagoBILogger.errorLog("No comunication with server, check SpagoBi Server definition in preferences page",e);
+			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
 			MessageDialog.openError(getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
 			return false;
 		}		
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not retrieve roles for execution",e);
+			logger.error("No comunication with SpagoBI server, could not retrieve roles for execution",e);
 			MessageDialog.openError(getShell(), "Could not retrieve roles for execution", "Could not retrieve roles for execution");	
 			return false;
 		}			
 		if(roles==null || roles.length==0){
-			SpagoBILogger.errorLog("No roles for execution found",null);
+			logger.error("No roles for execution found");
 			MessageDialog.openError(getShell(), "No roles for execution found", "No roles for execution found");	
 			return false;			
 		}
@@ -303,18 +317,19 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		//SDKDocumentParameter[] parameters=null;
 
 		SDKDocumentParameter[] parameters=null;
+		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
+
 		try{
-			SDKProxyFactory proxyFactory=new SDKProxyFactory();
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
 			parameters=docServiceProxy.getDocumentParameters(id, roles[0]);
 		}
 		catch (NullPointerException e) {
-			SpagoBILogger.errorLog("No comunication with server, check SpagoBi Server definition in preferences page",e);
+			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
 			MessageDialog.openError(getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
 			return false;
 		}		
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not retrieve document parameters",e);
+			logger.error("No comunication with SpagoBI server, could not retrieve document parameters",e);
 			MessageDialog.openError(getShell(), "Could not retrieve document parameters for execution", "Could not retrieve roles for execution");	
 			return false;
 		}			
@@ -324,7 +339,6 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 		// get the extension
 		Integer engineId=document.getEngineId();
-		SDKProxyFactory proxyFactory=new SDKProxyFactory();
 		EnginesServiceProxy engineProxy=proxyFactory.getEnginesServiceProxy();
 
 		SDKEngine sdkEngine=null;
@@ -332,7 +346,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			sdkEngine=engineProxy.getEngine(engineId);
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not get engine", e);
+			logger.error("No comunication with SpagoBI server, could not get engine", e);
 			MessageDialog.openError(getShell(), "", "Could not get engine the template from server");	
 			return false;
 		}		
@@ -371,12 +385,12 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 		IPath pathNewFile = pathFolder.append(fileName); 
 		IFile newFile = project.getFile(pathNewFile);
-		SpagoBILogger.infoLog("file path to download "+pathNewFile.toString());
+		logger.debug("file path to download "+pathNewFile.toString());
 		DataHandler dh=template.getContent(); 
 		try {
 			is=dh.getInputStream();
 		} catch (IOException e1) {
-			SpagoBILogger.errorLog("Error in writing the file", e1);
+			logger.error("Error in writing the file", e1);
 			return false;
 		}
 
@@ -387,7 +401,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		if(alreadyFound){
 
 			messages.add(fileName);
-			SpagoBILogger.warningLog("File "+fileName+" already exists in your project: to download it againg you must first delete the existing one");
+			logger.warn("File "+fileName+" already exists in your project: to download it againg you must first delete the existing one");
 			return false;
 			//write=MessageDialog.openQuestion(workbench.getActiveWorkbenchWindow().getShell(), "File exists: Overwrite?", "File "+newFile.getName()+" already exists, overwrite?"); 
 		}
@@ -398,7 +412,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 				newFile.create(is, true, null);
 			}
 			catch (CoreException e) {
-				SpagoBILogger.errorLog("error while creating new file", e);	
+				logger.error("error while creating new file", e);	
 				return false;
 			}
 
@@ -408,7 +422,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 				newFile=BiObjectUtilities.setFileMetaData(newFile,document, false);
 			}
 			catch (CoreException e) {
-				SpagoBILogger.errorLog("Error while setting meta data", e);	
+				logger.error("Error while setting meta data", e);	
 				return false;
 			}
 
@@ -420,7 +434,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 				}
 				catch (Exception e) {
 					e.printStackTrace();
-					SpagoBILogger.errorLog("Error while setting meta data", e);	
+					logger.error("Error while setting meta data", e);	
 					return false;
 				}			
 			}
@@ -430,15 +444,15 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				SpagoBILogger.errorLog("Error while setting last refresh date", e);	
+				logger.error("Error while setting last refresh date", e);	
 				return false;
 			}			
 		}
 		else // choose not to overwrite the file
 		{
-			SpagoBILogger.infoLog("Choose to not overwrite file "+newFile.getName());	
+			logger.debug("Choose to not overwrite file "+newFile.getName());	
 		}
-
+		logger.debug("OUT");
 		return true;
 
 	}
@@ -452,7 +466,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	 */
 
 	private void doFinish() {
-		SpagoBILogger.infoLog("Documents downloaded");
+		logger.debug("Documents downloaded");
 	}
 
 	/**
@@ -463,13 +477,18 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	public void init(IWorkbench _workbench, IStructuredSelection _selection) {
 		this.selection = _selection;
 		this.workbench=_workbench;
+		
+		Object objSel = selection.toList().get(0);
+		Folder fileSelected=(Folder)objSel;
+		projectName = fileSelected.getProject().getName();
+
 
 	}
 
 
 	public static String readInputStreamAsString(InputStream in) 
 	throws IOException {
-
+		logger.debug("IN");
 		BufferedInputStream bis = new BufferedInputStream(in);
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
 		int result = bis.read();
@@ -478,6 +497,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			buf.write(b);
 			result = bis.read();
 		}        
+		logger.debug("OUT");
 		return buf.toString();
 	}
 

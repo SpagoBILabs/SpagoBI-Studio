@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.sdk;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
@@ -28,10 +31,28 @@ import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
 
 public class SDKProxyFactory {
 
-	public static DocumentsServiceProxy getDocumentsServiceProxy() {
-		SpagoBIServerConnectionDefinition def = new SpagoBIServerConnectionDefinition();
-		DocumentsServiceProxy proxy = new DocumentsServiceProxy(def.getUserName(), def.getPassword());
-		String serverUrl = def.getServerUrl();
+	private static Logger logger = LoggerFactory.getLogger(SDKProxyFactory.class);
+
+
+	SpagoBIServerConnectionDefinition connection = null;
+
+
+	public SDKProxyFactory(String projectname) {
+		super();
+		connection = new SpagoBIServerConnectionDefinition(projectname);
+		if(connection == null){
+			logger.error("active server not defined");
+			connection = SpagoBIServerConnectionDefinition.createErrorConnection();
+		}
+		else{
+			logger.debug("active connection to "+connection.getServerUrl());
+		}
+	}
+
+
+	public DocumentsServiceProxy getDocumentsServiceProxy() {
+		DocumentsServiceProxy proxy = new DocumentsServiceProxy(connection.getUserName(), connection.getPassword());
+		String serverUrl = connection.getServerUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -39,11 +60,10 @@ public class SDKProxyFactory {
 		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
 		return proxy;
 	}
-	
-	public static EnginesServiceProxy getEnginesServiceProxy() {
-		SpagoBIServerConnectionDefinition def = new SpagoBIServerConnectionDefinition();
-		EnginesServiceProxy proxy = new EnginesServiceProxy(def.getUserName(), def.getPassword());
-		String serverUrl = def.getServerUrl();
+
+	public EnginesServiceProxy getEnginesServiceProxy() {
+		EnginesServiceProxy proxy = new EnginesServiceProxy(connection.getUserName(), connection.getPassword());
+		String serverUrl = connection.getServerUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -51,11 +71,10 @@ public class SDKProxyFactory {
 		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
 		return proxy;
 	}
-	
-	public static DataSetsSDKServiceProxy getDataSetsSDKServiceProxy() {
-		SpagoBIServerConnectionDefinition def = new SpagoBIServerConnectionDefinition();
-		DataSetsSDKServiceProxy proxy = new DataSetsSDKServiceProxy(def.getUserName(), def.getPassword());
-		String serverUrl = def.getServerUrl();
+
+	public DataSetsSDKServiceProxy getDataSetsSDKServiceProxy() {
+		DataSetsSDKServiceProxy proxy = new DataSetsSDKServiceProxy(connection.getUserName(), connection.getPassword());
+		String serverUrl = connection.getServerUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -64,10 +83,10 @@ public class SDKProxyFactory {
 		return proxy;
 	}
 
-	public static DataSourcesSDKServiceProxy getDataSourcesSDKServiceProxy() {
-		SpagoBIServerConnectionDefinition def = new SpagoBIServerConnectionDefinition();
-		DataSourcesSDKServiceProxy proxy = new DataSourcesSDKServiceProxy(def.getUserName(), def.getPassword());
-		String serverUrl = def.getServerUrl();
+	public DataSourcesSDKServiceProxy getDataSourcesSDKServiceProxy() {
+
+		DataSourcesSDKServiceProxy proxy = new DataSourcesSDKServiceProxy(connection.getUserName(), connection.getPassword());
+		String serverUrl = connection.getServerUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -76,10 +95,9 @@ public class SDKProxyFactory {
 		return proxy;
 	}
 
-	public static MapsSDKServiceProxy getMapsSDKServiceProxy() {
-		SpagoBIServerConnectionDefinition def = new SpagoBIServerConnectionDefinition();
-		MapsSDKServiceProxy proxy = new MapsSDKServiceProxy(def.getUserName(), def.getPassword());
-		String serverUrl = def.getServerUrl();
+	public MapsSDKServiceProxy getMapsSDKServiceProxy() {
+		MapsSDKServiceProxy proxy = new MapsSDKServiceProxy(connection.getUserName(), connection.getPassword());
+		String serverUrl = connection.getServerUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -87,5 +105,5 @@ public class SDKProxyFactory {
 		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
 		return proxy;
 	}
-	
+
 }

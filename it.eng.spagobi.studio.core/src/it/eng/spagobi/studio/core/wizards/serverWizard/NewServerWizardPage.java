@@ -1,11 +1,18 @@
 package it.eng.spagobi.studio.core.wizards.serverWizard;
 
 import it.eng.spagobi.studio.core.actions.NewServerAction;
+import it.eng.spagobi.studio.core.bo.Server;
+import it.eng.spagobi.studio.core.services.server.ServerHandler;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -24,9 +31,6 @@ import ch.qos.logback.classic.Logger;
  */
 
 public class NewServerWizardPage extends WizardPage {
-	//private Text containerText;
-
-	//private Text fileText;
 
 	private IStructuredSelection selection;
 
@@ -41,10 +45,15 @@ public class NewServerWizardPage extends WizardPage {
 	private Text textPwd = null;
 	private Text textUrl = null;
 	private Button checkActive = null;
-
+	private Button buttonTest = null;
+	private Label labelStatus =null;
+	
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewServerAction.class);
 
+	protected final static RGB RED = new RGB(255, 0, 0);
+	protected final static RGB GREEN = new RGB(10, 255, 30);
 
+	
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -55,6 +64,7 @@ public class NewServerWizardPage extends WizardPage {
 		super("wizardPage");
 		setTitle("New Server Wizard");
 		setDescription("This wizard lets you define a new server");
+		setImageDescriptor(SpagoBIStudioConstants.serverBigDescriptor);
 		this.selection = selection;
 	}
 
@@ -63,19 +73,16 @@ public class NewServerWizardPage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 		logger.debug("IN");
-		Composite container = parent;
+		final Composite container = parent;
 		//new Composite(parent, SWT.NULL);
-		GridLayout gl = new GridLayout();
-		int ncol = 2;
-		gl.numColumns = ncol;
-		container.setLayout(gl);
+		container.setLayout(new GridLayout(2,true));
 
 		labelName = new Label(container, SWT.NONE);
 		labelName.setText("Tempalte file name: ");
-		labelName.setLayoutData(new GridData(GridData.FILL_BOTH));
+		labelName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		textName = new Text(container, SWT.BORDER);
-		textName.setLayoutData(new GridData(GridData.FILL_BOTH));
+		textName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		textName.addListener(SWT.KeyUp, new Listener() {
 			public void handleEvent(Event event) {
 				boolean complete=isPageComplete();
@@ -86,10 +93,10 @@ public class NewServerWizardPage extends WizardPage {
 
 		labelName = new Label(container, SWT.NONE);
 		labelName.setText("Server Name: ");
-		labelName.setLayoutData(new GridData(GridData.FILL_BOTH));
+		labelName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		textUrl = new Text(container, SWT.BORDER);
-		textUrl.setLayoutData(new GridData(GridData.FILL_BOTH));
+		textUrl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		textUrl.addListener(SWT.KeyUp, new Listener() {
 			public void handleEvent(Event event) {
 				boolean complete=isPageComplete();
@@ -100,10 +107,10 @@ public class NewServerWizardPage extends WizardPage {
 
 		labelUser = new Label(container, SWT.NONE);
 		labelUser.setText("User: ");
-		labelUser.setLayoutData(new GridData(GridData.FILL_BOTH));
+		labelUser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		textUser = new Text(container, SWT.BORDER);
-		textUser.setLayoutData(new GridData(GridData.FILL_BOTH));
+		textUser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		textUser.addListener(SWT.KeyUp, new Listener() {
 			public void handleEvent(Event event) {
 				boolean complete=isPageComplete();
@@ -114,32 +121,45 @@ public class NewServerWizardPage extends WizardPage {
 
 		labelPwd = new Label(container, SWT.NONE);
 		labelPwd.setText("Password: ");
-		labelPwd.setLayoutData(new GridData(GridData.FILL_BOTH));
+		labelPwd.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		textPwd = new Text(container, SWT.BORDER | SWT.PASSWORD);
-		textPwd.setLayoutData(new GridData(GridData.FILL_BOTH));
+		textPwd.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		labelActive = new Label(container, SWT.NONE);
 		labelActive.setText("Active: ");
-		labelActive.setLayoutData(new GridData(GridData.FILL_BOTH));
+		labelActive.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		checkActive = new Button(container, SWT.CHECK);
-		checkActive.setLayoutData(new GridData(GridData.FILL_BOTH));
+		checkActive.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		initialize();
+		Label labelEmpty = new Label(container, SWT.NULL);
+		labelEmpty.setText("                                           ");
+		labelEmpty.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		buttonTest = new Button(container, SWT.PUSH);
+		buttonTest.setText("Test");
+		buttonTest.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		buttonTest.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				ServerHandler sh = new ServerHandler(getCurrentServer());
+				boolean result = sh.testConnection();
+				RGB setForeground = (result== true) ? GREEN : RED;
+				labelStatus.setForeground(new Color(container.getDisplay(), setForeground));
+				labelStatus.redraw();
+				labelStatus.setText(sh.getMessage());
+			}
+		});
+		GridData statusGrid=new GridData(GridData.FILL_HORIZONTAL);
+		statusGrid.horizontalSpan=2;
+		labelStatus = new Label(container, SWT.NULL);
+		labelStatus.setLayoutData(statusGrid);
+		labelStatus.setText("                                                                                      ");
+		
 		setControl(container);
 		logger.debug("OUT");
 
 	}
 
-
-
-	/**
-	 * Tests if the current workbench selection is a suitable container to use.
-	 */
-
-	private void initialize() {
-	}
 
 
 	/**
@@ -169,6 +189,17 @@ public class NewServerWizardPage extends WizardPage {
 		)
 			return false;
 		else return true;
+	}
+	
+	
+	public Server getCurrentServer(){
+		String name = textName.getText();
+		String url = textUrl.getText();
+		String user = textUser.getText();
+		String password = textPwd.getText();		
+		boolean active = checkActive.getSelection();
+		Server server = new Server(name, url, user, password, active);
+		return server;
 	}
 
 	public Text getTextUser() {

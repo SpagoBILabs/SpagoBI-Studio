@@ -20,6 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.util;
 
+import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.RGB;
+
 public class SpagoBIStudioConstants {
 
 
@@ -65,6 +69,7 @@ public class SpagoBIStudioConstants {
 	// name of project folder icons 
 	public static final String FOLDER_ICON_RESOURCE= "resources.png";
 	public static final String FOLDER_ICON_SERVER = "server.png";
+	public static final String FOLDER_ICON_SERVER_BIG = "server_big.png";
 	public static final String FOLDER_ICON_SERVER_ACTIVE = "server_active.png";
 	public static final String FOLDER_ICON_SERVER_INACTIVE = "server_inactive.png";
 	public static final String FOLDER_ICON_DATA_SOURCE = "datasource.png";
@@ -77,5 +82,54 @@ public class SpagoBIStudioConstants {
 // 	Component ID
 	public static final String SERVER_EDITOR_ID = "it.eng.spagobi.studio.core.editors.ServerEditor";
 	public static final String RESOURCE_NAVIGATOR_ID = "it.eng.spagobi.studio.core.views.ResourceNavigator";
+
+	// IMAGE
+	public static final	ImageDescriptor datasourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATA_SOURCE);
+	public static final ImageDescriptor dataseDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATASET);
+	public static final ImageDescriptor analysisDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_ANALYSIS);
+	public static final	ImageDescriptor metadataDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_METADATA_MODEL);
+	public static final	ImageDescriptor privateDocumentsDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_PRIVATE_DOCUMENTS);
+	public static final ImageDescriptor resourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_RESOURCE);
+	public static final	ImageDescriptor serverDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER);
+	public static final	ImageDescriptor serverBigDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_BIG);
+	public static final	ImageDescriptor serverActiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_ACTIVE);
+	public static final ImageDescriptor serverInactiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_INACTIVE);
+	public static final ImageDescriptor sbiProjectDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SBI_PROJECT);
+
+	// COlors
+	public final static RGB RED = new RGB(255, 0, 0);
+	public final static RGB GREEN = new RGB(10, 255, 30);
+	public final static RGB BLUE = new RGB(10, 30, 255);
+
+	
+	// Metadata Qualified names
+	public static QualifiedName DOCUMENT_ID = new QualifiedName("it.eng.spagobi.sdk.document.id", "Identifier");
+	public static QualifiedName DOCUMENT_LABEL = new QualifiedName("it.eng.spagobi.sdk.document.label", "Label");
+	public static QualifiedName DOCUMENT_NAME = new QualifiedName("it.eng.spagobi.sdk.document.name", "Name");
+	public static QualifiedName DOCUMENT_DESCRIPTION = new QualifiedName("it.eng.spagobi.sdk.document.description", "Description");
+	public static QualifiedName DOCUMENT_TYPE = new QualifiedName("it.eng.spagobi.sdk.document.type", "Type");
+	public static QualifiedName DOCUMENT_STATE = new QualifiedName("it.eng.spagobi.sdk.document.description", "State");
+	public static QualifiedName DOCUMENT_PARAMETERS_XML = new QualifiedName("it.eng.spagobi.sdk.document.parametersxml", "Parameters");
+
+	public static QualifiedName DATASET_ID = new QualifiedName("it.eng.spagobi.sdk.dataset.id", "Identifier");
+	public static QualifiedName DATASET_LABEL = new QualifiedName("it.eng.spagobi.sdk.dataset.label", "Label");
+	public static QualifiedName DATASET_NAME = new QualifiedName("it.eng.spagobi.sdk.dataset.name", "Name");
+	public static QualifiedName DATASET_DESCRIPTION = new QualifiedName("it.eng.spagobi.sdk.dataset.description", "Description");
+
+	public static QualifiedName DATA_SOURCE_ID = new QualifiedName("it.eng.spagobi.sdk.datasource.id", "Identifier");
+	public static QualifiedName DATA_SOURCE_NAME = new QualifiedName("it.eng.spagobi.sdk.datasource.name", "Name");
+	public static QualifiedName DATA_SOURCE_LABEL = new QualifiedName("it.eng.spagobi.sdk.datasource.label", "Label");
+	public static QualifiedName DATA_SOURCE_DESCRIPTION = new QualifiedName("it.eng.spagobi.sdk.datasource.description", "Description");
+
+	public static QualifiedName ENGINE_ID = new QualifiedName("it.eng.spagobi.sdk.engine.id", "Identifier");
+	public static QualifiedName ENGINE_LABEL = new QualifiedName("it.eng.spagobi.sdk.engine.label", "Label");
+	public static QualifiedName ENGINE_NAME = new QualifiedName("it.eng.spagobi.sdk.engine.name", "Name");
+	public static QualifiedName ENGINE_DESCRIPTION = new QualifiedName("it.eng.spagobi.sdk.engine.description", "Description");
+
+	public static QualifiedName LAST_REFRESH_DATE = new QualifiedName("last_refresh_date", "Last Refresh Date");
+	public static QualifiedName MADE_WITH_STUDIO = new QualifiedName("made_with_studio", "Created With SpagoBi Studio");
+
+	public static QualifiedName SERVER = new QualifiedName("server", "Server");
+	
 	
 }

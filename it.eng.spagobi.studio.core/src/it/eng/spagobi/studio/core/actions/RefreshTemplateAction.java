@@ -34,6 +34,7 @@ import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.core.util.FileFinder;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 
 import java.io.IOException;
@@ -72,6 +73,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 	SDKDocument document=null;
 	ISelection selection;
+	String projectName = null;
 	
 	// fields to retrieve only once
 	String[] roles=null;
@@ -94,6 +96,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 		org.eclipse.core.internal.resources.File fileSel = null;		
 		try{
 			fileSel=(org.eclipse.core.internal.resources.File)objSel;
+		projectName = fileSel.getProject().getName();
 		}
 		catch (Exception e) {
 			SpagoBILogger.errorLog("No file selected",e);		
@@ -107,8 +110,8 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 		String document_idString=null;
 		String document_label=null;
 		try {
-			document_idString=fileSel.getPersistentProperty(PropertyPage.DOCUMENT_ID);			
-			document_label=fileSel.getPersistentProperty(PropertyPage.DOCUMENT_LABEL);
+			document_idString=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);			
+			document_label=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
 		} catch (CoreException e) {
 			SpagoBILogger.errorLog("Error in retrieving document Label",e);		
 		}
@@ -129,7 +132,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 					monitor.beginTask("Template Refresh for document "+label2, IProgressMonitor.UNKNOWN);
 
 					// document associated, upload the template
-					SDKProxyFactory proxyFactory=new SDKProxyFactory();
+					SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 					DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
 
 					try {
@@ -323,7 +326,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 	public String recoverFileExtension(SDKDocument document, Integer documentId){
 		//Get the parameters
-		SDKProxyFactory proxyFactory=new SDKProxyFactory();
+		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
 
 		try{
 			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		

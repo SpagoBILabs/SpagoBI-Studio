@@ -59,16 +59,16 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 	//	public class MyLabelProvider extends LabelProvider {
 	public class MyLabelProvider extends NavigatorDecoratingLabelProvider {
 		// Prepare Icons
-		ImageDescriptor datasourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATA_SOURCE);
-		ImageDescriptor dataseDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATASET);
-		ImageDescriptor analysisDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_ANALYSIS);
-		ImageDescriptor metadataDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_METADATA_MODEL);
-		ImageDescriptor privateDocumentsDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_PRIVATE_DOCUMENTS);
-		ImageDescriptor resourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_RESOURCE);
-		ImageDescriptor serverDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER);
-		ImageDescriptor serverActiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_ACTIVE);
-		ImageDescriptor serverInactiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_INACTIVE);
-		ImageDescriptor sbiProjectDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SBI_PROJECT);
+//		ImageDescriptor datasourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATA_SOURCE);
+//		ImageDescriptor dataseDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATASET);
+//		ImageDescriptor analysisDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_ANALYSIS);
+//		ImageDescriptor metadataDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_METADATA_MODEL);
+//		ImageDescriptor privateDocumentsDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_PRIVATE_DOCUMENTS);
+//		ImageDescriptor resourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_RESOURCE);
+//		ImageDescriptor serverDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER);
+//		ImageDescriptor serverActiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_ACTIVE);
+//		ImageDescriptor serverInactiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_INACTIVE);
+//		ImageDescriptor sbiProjectDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SBI_PROJECT);
 
 		/**  vector containing images*/
 		Vector<Image> images = new Vector<Image>();
@@ -95,19 +95,19 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 				String fatherName = container != null ? container.getName() : "";
 				if(container instanceof IProject){
 					if(name.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
-						imageToReturn = resourceDescriptor.createImage();
+						imageToReturn = SpagoBIStudioConstants.resourceDescriptor.createImage();
 						images.add(imageToReturn);
 					}
 					else if(name.equals(SpagoBIStudioConstants.FOLDER_ANALYSIS)){
-						imageToReturn = analysisDescriptor.createImage();
+						imageToReturn = SpagoBIStudioConstants.analysisDescriptor.createImage();
 						images.add(imageToReturn);
 					}
 					else if(name.equals(SpagoBIStudioConstants.FOLDER_METADATA_MODEL)){
-						imageToReturn = metadataDescriptor.createImage();
+						imageToReturn = SpagoBIStudioConstants.metadataDescriptor.createImage();
 						images.add(imageToReturn);
 					}
 					else if(name.equals(SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS)){
-						imageToReturn = privateDocumentsDescriptor.createImage();
+						imageToReturn = SpagoBIStudioConstants.privateDocumentsDescriptor.createImage();
 						images.add(imageToReturn);
 					}
 				}
@@ -118,20 +118,20 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 					// dataset have father metadata
 					if(name.equals(SpagoBIStudioConstants.FOLDER_DATASET)){
 						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_METADATA_MODEL)){
-							imageToReturn = dataseDescriptor.createImage();
+							imageToReturn = SpagoBIStudioConstants.dataseDescriptor.createImage();
 							images.add(imageToReturn);
 						}
 					}
 					// data Source and server have father resources
 					else if(name.equals(SpagoBIStudioConstants.FOLDER_DATA_SOURCE)){
 						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
-							imageToReturn = datasourceDescriptor.createImage();
+							imageToReturn = SpagoBIStudioConstants.datasourceDescriptor.createImage();
 							images.add(imageToReturn);
 						}
 					}					
 					else if(name.equals(SpagoBIStudioConstants.FOLDER_SERVER)){
 						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
-							imageToReturn = serverDescriptor.createImage();
+							imageToReturn = SpagoBIStudioConstants.serverDescriptor.createImage();
 							images.add(imageToReturn);
 						}
 					}					
@@ -140,7 +140,7 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 			}
 			// if it is a spagobi project folder
 			else if(object instanceof IProject){
-				imageToReturn = sbiProjectDescriptor.createImage();
+				imageToReturn = SpagoBIStudioConstants.sbiProjectDescriptor.createImage();
 				images.add(imageToReturn);
 			}
 			// if it is a file
@@ -150,8 +150,8 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 				String fatherName = (file.getParent() != null) ? file.getParent().getName() : "";
 				if(fatherName.equals(SpagoBIStudioConstants.FOLDER_SERVER) && file.getName().endsWith("."+SpagoBIStudioConstants.SERVER_EXTENSION)){
 					boolean isActive =new XmlServerGenerator().isServerActive(file);
-					if(isActive) imageToReturn = serverActiveDescriptor.createImage();
-					else imageToReturn = serverInactiveDescriptor.createImage();
+					if(isActive) imageToReturn = SpagoBIStudioConstants.serverActiveDescriptor.createImage();
+					else imageToReturn = SpagoBIStudioConstants.serverInactiveDescriptor.createImage();
 				}
 
 			}
