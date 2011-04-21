@@ -132,6 +132,26 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	 */
 
 	private void doFinish() {
+		
+		
+		// ************ BUILD THE TEMPLATE ************
+
+		// go on only if you selected a document
+		Object objSel = selection.toList().get(0);
+		org.eclipse.core.internal.resources.File fileSel = null;		
+		try{
+			fileSel=(org.eclipse.core.internal.resources.File)objSel;
+		}
+		catch (Exception e) {
+			SpagoBILogger.warningLog("No file selected",e);
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Not a file", "You must select a file to deploy");		
+			return;
+		}
+
+		URI uri=fileSel.getLocationURI();
+		projectName = fileSel.getProject().getName();
+		
 		SDKProxyFactory proxyFactory= null;
 		try{
 			proxyFactory=new SDKProxyFactory(projectName);
@@ -177,23 +197,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		Integer functionalityId=functionality.getId();
 
 
-		// ************ BUILD THE TEMPLATE ************
 
-		// go on only if you selected a document
-		Object objSel = selection.toList().get(0);
-		org.eclipse.core.internal.resources.File fileSel = null;		
-		try{
-			fileSel=(org.eclipse.core.internal.resources.File)objSel;
-		}
-		catch (Exception e) {
-			SpagoBILogger.warningLog("No file selected",e);
-			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Not a file", "You must select a file to deploy");		
-			return;
-		}
-
-		URI uri=fileSel.getLocationURI();
-		projectName = fileSel.getProject().getName();
 		File fileJava=new File(uri.getPath()); 
 		FileDataSource fileDataSource=new FileDataSource(fileJava);
 		DataHandler dataHandler=new DataHandler(fileDataSource);

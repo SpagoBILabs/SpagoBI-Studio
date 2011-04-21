@@ -63,6 +63,8 @@ import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RefreshTemplateAction implements IObjectActionDelegate {
 
@@ -79,7 +81,9 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 	// if not null means that template has changed name (used for user advertisement)
 	String newTemplateName=null;
 	AlreadyPresentException alreadyPresentException=new AlreadyPresentException();
+	private static Logger logger = LoggerFactory.getLogger(RefreshTemplateAction.class);
 
+	
 	public RefreshTemplateAction() {
 	}
 
@@ -96,7 +100,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			projectName = fileSel.getProject().getName();
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No file selected",e);		
+			logger.error("No file selected",e);		
 
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"Not a file", "You must select a file to refresh");		
@@ -110,7 +114,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			document_idString=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);			
 			document_label=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error in retrieving document Label",e);		
+			logger.error("Error in retrieving document Label",e);		
 		}
 		//final Integer documentId=Integer.valueOf(document_idString);
 
@@ -118,11 +122,13 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 		if(document_idString!=null){
 			ProgressMonitorPart monitor;
 			monitor=new ProgressMonitorPart(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), null);
-			SpagoBILogger.infoLog("Metadata found: do the template refresh, document with id "+document_idString);
+			logger.debug("Metadata found: do the template refresh, document with id "+document_idString);
 			final Integer idInteger=Integer.valueOf(document_idString);
 			final String label2=document_label;
 			final org.eclipse.core.internal.resources.File fileSel2=fileSel;
 			final NoDocumentException documentException=new NoDocumentException();
+			final NoActiveServerException noActiveServerException=new NoActiveServerException();
+
 			IRunnableWithProgress op = new IRunnableWithProgress() {			
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
 
@@ -151,27 +157,26 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 							overwriteTemplate(template, fileSel2, fileExtension);
 						}
 					}
+					
 					catch (NotAllowedOperationException e) {
-						SpagoBILogger.errorLog("Not Allowed Operation",e);		
+						logger.error("Not Allowed Operation",e);		
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error upload", "Error while uploading the template: not allowed operation");	
 						return;
 					} 
 					catch (NoActiveServerException e1) {
-						SpagoBILogger.errorLog("No active server found", e1);			
-						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-								"Error", "No active server found");	
+						noActiveServerException.setNoServer(true);
 						return;
 					}
 					catch (RemoteException e) {
-						SpagoBILogger.errorLog("Error comunicating with server",e);		
-						SpagoBILogger.errorLog("Error comunicating with server", e);			
+						logger.error("Error comunicating with server",e);		
+						logger.error("Error comunicating with server", e);			
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
 						return;
 					}
 					catch (CoreException e) {
-						SpagoBILogger.errorLog("Error in fie creation",e);		
+						logger.error("Error in fie creation",e);		
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error in file creation", "Error in file creation");	
 						return;
@@ -180,7 +185,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 					monitor.done();
 					if (monitor.isCanceled())
-						SpagoBILogger.errorLog("The long running operation was cancelled",null);		
+						logger.error("The long running operation was cancelled");		
 				}
 			};
 
@@ -189,30 +194,33 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			try {
 				dialog.run(true, true, op);
 			} catch (InvocationTargetException e1) {
-				SpagoBILogger.errorLog("Error comunicating with server",null);		
-				SpagoBILogger.errorLog("Error comunicating with server", e1);			
+				logger.error("Error comunicating with server", e1);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error", "Missing comunication with server; check server definition and if service is avalaible");	
 				dialog.close();
 				return;
 			} catch (InterruptedException e1) {
-				SpagoBILogger.errorLog("Error comunicating with server",null);		
+				logger.error("Error comunicating with server");		
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error", "Missing comunication with server; check server definition and if service is avalaible");	
 				dialog.close();
 				return;
 			} 
+			if(noActiveServerException.isNoServer()){
+				logger.error("No server is defined active");			
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+						"Error", "No server is defined active");	
+				return;
+			}				
 			// check if document has been found (could have been deleted) or if the template was already present somewhere else
 			if(documentException.isNoDocument() || template.getContent()==null){
-				SpagoBILogger.warningLog("Document no more present on server "+document_label);					
-				SpagoBILogger.errorLog("Document no more present", null);			
+				logger.warn("Document no more present on server "+document_label);					
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error upload", "Document is no more present on server. Make a new Deploy.");	
 				return;
-			}
+			}		
 			if(alreadyPresentException!=null && alreadyPresentException.isAlreadyPresent()){
-				SpagoBILogger.warningLog("Template ealready present in project workspace: "+newTemplateName);					
-				SpagoBILogger.errorLog("Template ealready present in project workspace", null);			
+				logger.warn("Template ealready present in project workspace: "+newTemplateName);					
 				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error", "File "+alreadyPresentException.getFilePath()+" already exists in your project: to download it againg you must first delete the existing one");
 				return;
@@ -224,11 +232,11 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			if(newTemplateName!=null){
 				succesfullMessage+=": template file has changed its name; new one is "+newTemplateName;
 			}
-			SpagoBILogger.infoLog(succesfullMessage);					
+			logger.debug(succesfullMessage);					
 			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Refresh succesfull", succesfullMessage);		
 		}
 		else{
-			SpagoBILogger.warningLog("No document associated ");
+			logger.warn("No document associated ");
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"No document warning", "The file selected has no document associated, to the deploy first");	
 		}
@@ -306,7 +314,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 			}
 			catch (Exception e) {
-				SpagoBILogger.errorLog("Error while setting meta data", e);		
+				logger.error("Error while setting meta data", e);		
 				return;
 			}			
 
@@ -314,7 +322,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 		} catch (IOException e1) {
 
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in writing the file");				
-			SpagoBILogger.errorLog("Error in writing the file", e1);		
+			logger.error("Error in writing the file", e1);		
 
 			return ;
 		}
@@ -336,7 +344,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			proxyFactory=new SDKProxyFactory(projectName);
 		}
 		catch (NoActiveServerException e1) {
-			SpagoBILogger.errorLog("No active server found", e1);			
+			logger.error("No active server found", e1);			
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"Error", "No active server found");	
 			return null;
@@ -347,17 +355,17 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			roles=docServiceProxy.getCorrectRolesForExecution(documentId);
 		}
 		catch (NullPointerException e) {
-			SpagoBILogger.errorLog("No comunication with server, check SpagoBi Server definition in preferences page", e);
+			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
 			return null;
 		}		
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not retrieve roles for execution", e);
+			logger.error("No comunication with SpagoBI server, could not retrieve roles for execution", e);
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Could not retrieve roles for execution");	
 			return null;
 		}			
 		if(roles==null || roles.length==0){
-			SpagoBILogger.errorLog("Could not retrieve roles for execution", null);		
+			logger.error("Could not retrieve roles for execution");		
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "No roles for execution found", "No roles for execution found");	
 			return null;			
 		}
@@ -368,12 +376,12 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			parameters=docServiceProxy.getDocumentParameters(documentId, roles[0]);
 		}
 		catch (NullPointerException e) {
-			SpagoBILogger.errorLog("No comunication with server, check SpagoBi Server definition in preferences page", e);
+			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
 			return null;
 		}		
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not get engine", e);
+			logger.error("No comunication with SpagoBI server, could not get engine", e);
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Could not retrieve document parameters for execution", "Could not retrieve roles for execution");	
 			return null;
 		}			
@@ -388,7 +396,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 			sdkEngine=engineProxy.getEngine(engineId);
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server, could not get engine", e);		
+			logger.error("No comunication with SpagoBI server, could not get engine", e);		
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", "Could not get engine the template from server");	
 			return null;
 		}		

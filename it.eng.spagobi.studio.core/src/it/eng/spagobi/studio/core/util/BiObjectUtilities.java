@@ -143,7 +143,7 @@ public class BiObjectUtilities {
 		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
 		if(proxyFactory == null){
 			logger.error("No active server is defined");
-					return null;
+			return null;
 		}
 
 		// DAtaset Infomation field
@@ -203,6 +203,9 @@ public class BiObjectUtilities {
 		if(document.getType()!=null){
 			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE, document.getType());
 		}
+
+		newFile.setPersistentProperty(SpagoBIStudioConstants.SERVER, proxyFactory.getServer().getName());
+
 
 		setFileEngineMetaData(newFile, sdkEngine);
 		setFileDataSetMetaData(newFile, sdkDataSet);
@@ -354,24 +357,6 @@ public class BiObjectUtilities {
 
 	}
 
-	//	public static IFile setFileParametersMetaDataBackup(IFile newFile, SDKDocumentParameter[] parameters) throws CoreException{
-	//		String xml="<?xml version='1.0' encoding='iso-8859-1'?>";
-	//		xml+="<PARAMETERS>";
-	//		for (int i = 0; i < parameters.length; i++) {
-	//			SDKDocumentParameter sdkDocumentParameter = parameters[i];
-	//			xml+="<PARAMETER";
-	//			xml+=" id="+sdkDocumentParameter.getId();
-	//			xml+=" label="+sdkDocumentParameter.getLabel();
-	//			xml+=" type="+sdkDocumentParameter.getType();
-	//			xml+=" urlname="+sdkDocumentParameter.getUrlName();
-	//			xml+=" typedesc="+sdkDocumentParameter.getTypeDesc();
-	//			xml+="+/>";
-	//		}
-	//
-	//		xml+="</PARAMETERS>";
-	//		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML,xml);
-	//		return newFile;
-	//
-	//	}
+
 
 }

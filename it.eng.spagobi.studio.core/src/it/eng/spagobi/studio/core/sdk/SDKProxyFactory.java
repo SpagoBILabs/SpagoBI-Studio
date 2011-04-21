@@ -20,40 +20,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.sdk;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
 import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
+import it.eng.spagobi.studio.core.bo.Server;
 import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.core.services.server.ServerHandler;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SDKProxyFactory {
 
 	private static Logger logger = LoggerFactory.getLogger(SDKProxyFactory.class);
 
 
-	SpagoBIServerConnectionDefinition connection = null;
-
+	Server server = null;
 
 	public SDKProxyFactory(String projectname) throws NoActiveServerException {
 		super();
-		connection = new SpagoBIServerConnectionDefinition(projectname);
-		if(connection == null){
+		logger.debug("IN");
+		server = new ServerHandler().getCurrentActiveServer(projectname);
+		if(server == null){
 			logger.error("active server not defined");
-			connection = SpagoBIServerConnectionDefinition.createErrorConnection();
+			throw new NoActiveServerException();
 		}
-		else{
-			logger.debug("active connection to "+connection.getServerUrl());
-		}
+		logger.debug("active server "+server.getName());
+		logger.debug("OUT");
+		
 	}
 
 
 	public DocumentsServiceProxy getDocumentsServiceProxy() {
-		DocumentsServiceProxy proxy = new DocumentsServiceProxy(connection.getUserName(), connection.getPassword());
-		String serverUrl = connection.getServerUrl();
+		DocumentsServiceProxy proxy = new DocumentsServiceProxy(server.getUser(), server.getPassword());
+		String serverUrl = server.getUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -63,8 +65,8 @@ public class SDKProxyFactory {
 	}
 
 	public EnginesServiceProxy getEnginesServiceProxy() {
-		EnginesServiceProxy proxy = new EnginesServiceProxy(connection.getUserName(), connection.getPassword());
-		String serverUrl = connection.getServerUrl();
+		EnginesServiceProxy proxy = new EnginesServiceProxy(server.getUser(), server.getPassword());
+		String serverUrl = server.getUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -74,8 +76,8 @@ public class SDKProxyFactory {
 	}
 
 	public DataSetsSDKServiceProxy getDataSetsSDKServiceProxy() {
-		DataSetsSDKServiceProxy proxy = new DataSetsSDKServiceProxy(connection.getUserName(), connection.getPassword());
-		String serverUrl = connection.getServerUrl();
+		DataSetsSDKServiceProxy proxy = new DataSetsSDKServiceProxy(server.getUser(), server.getPassword());
+		String serverUrl = server.getUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -86,8 +88,8 @@ public class SDKProxyFactory {
 
 	public DataSourcesSDKServiceProxy getDataSourcesSDKServiceProxy() {
 
-		DataSourcesSDKServiceProxy proxy = new DataSourcesSDKServiceProxy(connection.getUserName(), connection.getPassword());
-		String serverUrl = connection.getServerUrl();
+		DataSourcesSDKServiceProxy proxy = new DataSourcesSDKServiceProxy(server.getUser(), server.getPassword());
+		String serverUrl = server.getUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -97,8 +99,8 @@ public class SDKProxyFactory {
 	}
 
 	public MapsSDKServiceProxy getMapsSDKServiceProxy() {
-		MapsSDKServiceProxy proxy = new MapsSDKServiceProxy(connection.getUserName(), connection.getPassword());
-		String serverUrl = connection.getServerUrl();
+		MapsSDKServiceProxy proxy = new MapsSDKServiceProxy(server.getUser(), server.getPassword());
+		String serverUrl = server.getUrl();
 		if (serverUrl != null && !serverUrl.endsWith("/")) {
 			serverUrl += "/";
 		}
@@ -106,5 +108,22 @@ public class SDKProxyFactory {
 		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
 		return proxy;
 	}
+
+
+	public Server getServer() {
+		return server;
+	}
+
+
+	public void setServer(Server server) {
+		this.server = server;
+	}
+
+
+
+
+	
+	
+	
 
 }

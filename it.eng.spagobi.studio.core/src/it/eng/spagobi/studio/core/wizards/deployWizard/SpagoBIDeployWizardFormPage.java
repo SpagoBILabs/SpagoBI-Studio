@@ -8,8 +8,8 @@ import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
+import it.eng.spagobi.studio.core.actions.RefreshTemplateAction;
 import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.core.util.SdkSelectFolderTreeGenerator;
@@ -50,6 +50,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thre Download Wizard let the user to navigate the funcitonalities tree and select a document to download
@@ -82,7 +84,8 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 	SDKDataSource[] datasourceList;		
 	SDKFunctionality functionality=null;
 
-
+	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployWizardFormPage.class);
+	
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
@@ -100,6 +103,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
+		logger.debug("IN");
 		Shell shell = parent.getShell();
 		//shell.setSize(1300,500);
 		monitor=new ProgressMonitorPart(getShell(), null);
@@ -115,7 +119,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 			 proxyFactory=new SDKProxyFactory(projectName);
 		}
 		catch (NoActiveServerException e1) {
-			SpagoBILogger.errorLog("No active server found", e1);			
+			logger.error("No active server found", e1);			
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"Error", "No active server found");	
 			return;
@@ -138,14 +142,14 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 					String ciao= functionality.getId().toString()+" "+functionality.getName()+" label: "+functionality.getName();
 				}
 				catch (Exception e) {
-					SpagoBILogger.errorLog("No comunication with SpagoBI server",e);		
+					logger.error("No comunication with SpagoBI server",e);		
 					MessageDialog.openError(getShell(), "No comunication with server", "Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible");	
 					return;
 				}
 				monitor.done();
 				if (monitor.isCanceled())
-					SpagoBILogger.errorLog("Operation not ended",new InterruptedException("The long running operation was cancelled"));		
-				SpagoBILogger.errorLog("Operation not ended",new InterruptedException("The long running operation was cancelled"));
+					logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));		
+				logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));
 			}
 		};
 
@@ -153,12 +157,12 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		try {
 			dialog.run(true, true, op);
 		} catch (InvocationTargetException e1) {
-			SpagoBILogger.errorLog("Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible",e1);		
+			logger.error("Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible",e1);		
 			dialog.close();
 			MessageDialog.openError(getShell(), "No comunication with server", "Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible");	
 			return;
 		} catch (InterruptedException e1) {
-			SpagoBILogger.errorLog("No comunication with SpagoBI server", e1);
+			logger.error("No comunication with SpagoBI server", e1);
 			dialog.close();
 			MessageDialog.openError(getShell(), "No comunication with server", "Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible");	
 			return;
@@ -231,7 +235,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		typeLabel=BiObjectUtilities.getTypeFromExtension(fileSelected.getName());
 
 		if(typeLabel==null){
-			SpagoBILogger.errorLog("File "+fileSelected.getName()+" has unknown exstension",null);
+			logger.error("File "+fileSelected.getName()+" has unknown exstension");
 			MessageDialog.openError(getShell(), "No type", "File "+fileSelected.getName()+" has unknown exstension");
 			return;
 		}

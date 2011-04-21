@@ -9,6 +9,7 @@ import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
@@ -23,25 +24,34 @@ import org.slf4j.LoggerFactory;
 
 public class MetadataHandler {
 
-	
+
 	private static Logger logger = LoggerFactory.getLogger(MetadataHandler.class);
-	
-	
-	
+
+
+
 	/**
 	 *  refresh metadata of the given file 
 	 * @param file
 	 * @param noDocumentException: this is passed for use insieed a monitor
 	 * @throws Exception
 	 */
-	
-	public void refreshMetadata(IFile file, NoDocumentException noDocumentException) throws Exception{
+
+	public void refreshMetadata(IFile file, NoDocumentException noDocumentException, NoActiveServerException noActiveServerException) throws Exception{
 		logger.debug("IN");
 		String documentId=null;
 		String projectname = file.getProject().getName();
 		// Recover document
 		SDKDocument document=null;
-		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
+
+		SDKProxyFactory proxyFactory= null;
+		try{	
+			proxyFactory=new SDKProxyFactory(projectname);
+		}
+		catch (NoActiveServerException e) {
+			noActiveServerException.setNoServer(true);
+			return;
+		}
+
 		try{
 			documentId=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 
@@ -199,10 +209,10 @@ public class MetadataHandler {
 		}
 		logger.debug("OUT");
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }

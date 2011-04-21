@@ -30,7 +30,9 @@ import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
 import it.eng.spagobi.studio.core.bo.Server;
+import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
+import it.eng.spagobi.studio.core.exceptions.NoServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.services.server.MetadataHandler;
@@ -84,7 +86,6 @@ IWorkbenchPropertyPage {
 
 
 	private ProgressMonitorPart monitor;
-	public final NoDocumentException noDocumentException=new NoDocumentException();
 
 	Integer documentId;
 	Group docGroup = null;
@@ -288,12 +289,14 @@ IWorkbenchPropertyPage {
 					MessageDialog.openWarning(getShell(), "Warning", "No document is associated: cannot retrieve metadata");
 				}
 				else{
+					final NoDocumentException noDocumentException=new NoDocumentException();
+					final NoActiveServerException noActiveServerException=new NoActiveServerException();
 
 					IRunnableWithProgress op = new IRunnableWithProgress() {			
 						public void run(IProgressMonitor monitor) throws InvocationTargetException {
 							monitor.beginTask("Refreshing ", IProgressMonitor.UNKNOWN);
 							try {
-								new MetadataHandler().refreshMetadata((IFile)getElement(), noDocumentException);
+								new MetadataHandler().refreshMetadata((IFile)getElement(), noDocumentException, noActiveServerException);
 							} catch (Exception e) {
 								logger.error("Error in monitor retieving metadata ",e);
 								MessageDialog.openError(getShell(), "Exception", "Exception");
@@ -317,6 +320,12 @@ IWorkbenchPropertyPage {
 
 					dialog.close();
 
+					if(noActiveServerException.isNoServer()){
+						logger.error("No Server is defined active");			
+						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+								"Error refresh", "No Server is defined active");	
+						return;
+					}
 					if(noDocumentException.isNoDocument()){
 						logger.error("Document no more present");			
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 

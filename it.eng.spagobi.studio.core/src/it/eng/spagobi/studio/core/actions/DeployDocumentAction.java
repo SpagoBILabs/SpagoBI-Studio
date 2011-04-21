@@ -27,8 +27,8 @@ import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
 import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 
@@ -49,16 +49,13 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.navigator.CommonNavigator;
-import org.eclipse.ui.navigator.CommonViewer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DeployDocumentAction implements IObjectActionDelegate {
 
@@ -66,6 +63,9 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 	ISelection selection; 
 	String projectname = null;
 
+	private static Logger logger = LoggerFactory.getLogger(DeployDocumentAction.class);
+
+	
 	public DeployDocumentAction() {
 	}
 
@@ -92,7 +92,7 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 			fileSel=(org.eclipse.core.internal.resources.File)objSel;
 		}
 		catch (Exception e) {
-			SpagoBILogger.warningLog("No file selected to deploy");					
+			logger.warn("No file selected to deploy");					
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"Not a file", "You must select a file to deploy");		
 			return;
@@ -106,18 +106,20 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 			document_idString=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);			
 			document_label=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error in retrieving document Label", e);		
-			//SpagoBILogger.errorLog("Error in retrieving document Label", e);
+			logger.error("Error in retrieving document Label", e);		
+			//logger.error("Error in retrieving document Label", e);
 		}
 
 		// IF File selected has already and id of document associated do the upload wiyhout asking further informations
 		boolean newDeploy = false;
 		if(document_idString!=null){
-			SpagoBILogger.infoLog("Template already associated to document "+document_idString);	
+			logger.debug("Template already associated to document "+document_idString);	
 			final Integer idInteger=Integer.valueOf(document_idString);
 			final String label2=document_label;
 			final org.eclipse.core.internal.resources.File fileSel2=fileSel;
 			final NoDocumentException documentException=new NoDocumentException();
+			final NoActiveServerException noActiveServerException=new NoActiveServerException();
+
 			IRunnableWithProgress op = new IRunnableWithProgress() {			
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
 					monitor.beginTask("Deploying to document "+label2, IProgressMonitor.UNKNOWN);
@@ -127,24 +129,24 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 					}
 
 					try{
-					// document associated, upload the template
-					SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
-					DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
+						// document associated, upload the template
+						SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
+						DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
 
-					URI uri=fileSel2.getLocationURI();
+						URI uri=fileSel2.getLocationURI();
 
-					File fileJava=new File(uri.getPath()); 
-					FileDataSource fileDataSource=new FileDataSource(fileJava);
-					DataHandler dataHandler=new DataHandler(fileDataSource);			
-					SDKTemplate sdkTemplate=new SDKTemplate();
-					sdkTemplate.setFileName(fileSel2.getName());
-					sdkTemplate.setContent(dataHandler);
+						File fileJava=new File(uri.getPath()); 
+						FileDataSource fileDataSource=new FileDataSource(fileJava);
+						DataHandler dataHandler=new DataHandler(fileDataSource);			
+						SDKTemplate sdkTemplate=new SDKTemplate();
+						sdkTemplate.setFileName(fileSel2.getName());
+						sdkTemplate.setContent(dataHandler);
 
 						// check document still exists
 						SDKDocument doc=docServiceProxy.getDocumentById(idInteger);
 						if(doc==null){
 							documentException.setNoDocument(true);
-							SpagoBILogger.warningLog("Document no more present on server: with id "+idInteger);					
+							logger.warn("Document no more present on server: with id "+idInteger);					
 							return;
 						}
 						else{
@@ -153,20 +155,19 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 						}
 					}
 					catch (NotAllowedOperationException e) {
-						SpagoBILogger.errorLog("Not Allowed Operation", e);		
+						logger.error("Not Allowed Operation", e);		
 
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error upload", "Error while uploading the template: not allowed operation");	
 						return;
 					}
 					catch (NoActiveServerException e1) {
-						SpagoBILogger.errorLog("No active server found", e1);			
-						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-								"Error", "No active server found");	
+						// no active server found 
+						noActiveServerException.setNoServer(true);
 						return;
 					}
 					catch (RemoteException e) {
-						SpagoBILogger.errorLog("Error comunicating with server", e);		
+						logger.error("Error comunicating with server", e);		
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
 						return;
@@ -174,7 +175,7 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 
 					monitor.done();
 					if (monitor.isCanceled())
-						SpagoBILogger.errorLog("Operation not ended",new InterruptedException("The long running operation was cancelled"));
+						logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));
 				}
 			};
 
@@ -182,33 +183,38 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 			ProgressMonitorDialog dialog=new ProgressMonitorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());		
 			try {
 				dialog.run(true, true, op);
-			} catch (InvocationTargetException e1) {
-				SpagoBILogger.errorLog("Error comunicating with server", e1);			
+			} 
+			catch (InvocationTargetException e1) {
+				logger.error("Error comunicating with server", e1);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error", "Missing comunication with server; check server definition and if service is avalaible");	
 				dialog.close();
 				return;
 			} catch (InterruptedException e1) {
-				SpagoBILogger.errorLog("Error comunicating with server", e1);			
+				logger.error("Error comunicating with server", e1);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error", "Missing comunication with server; check server definition and if service is avalaible");	
 				dialog.close();
 				return;
 			} 
 			if(documentException.isNoDocument()){
-				SpagoBILogger.errorLog("Document no more present", null);			
+				logger.error("Document no more present");			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error upload", "Document is no more present on server; you can do a new deploy");	
 				newDeploy = true;
 				sbindw.setNewDeployFromOld(true);
-				//return;
 			}
-
+			if(noActiveServerException.isNoServer()){
+				logger.error("No server is defined active");			
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+						"Error", "No server is defined active");	
+				return;
+			}
 
 			dialog.close();
 			if(!newDeploy){
 				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated document "+document_label+" succesfull");		
-				SpagoBILogger.infoLog("Deployed to the associated document "+document_label+" succesfull");		
+				logger.debug("Deployed to the associated document "+document_label+" succesfull");		
 			}		
 		}
 		else{
@@ -217,7 +223,7 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 
 		if(newDeploy)
 		{
-			SpagoBILogger.infoLog("deploy a new Document: start wizard");		
+			logger.debug("deploy a new Document: start wizard");		
 			// init wizard
 			sbindw.init(PlatformUI.getWorkbench(), sel);
 			// Create the wizard dialog
