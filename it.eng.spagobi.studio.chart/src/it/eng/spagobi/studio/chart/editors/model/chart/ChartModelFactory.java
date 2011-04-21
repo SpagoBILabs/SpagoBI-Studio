@@ -23,6 +23,7 @@ package it.eng.spagobi.studio.chart.editors.model.chart;
 import it.eng.spagobi.studio.chart.editors.ChartEditorUtils;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.properties.PropertyPage;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
 import java.io.InputStream;
 
@@ -147,7 +148,7 @@ public class ChartModelFactory {
 
 			// Set the dataset if present!
 
-			String dataSetIdS=file.getPersistentProperty(PropertyPage.DATASET_ID);
+			String dataSetIdS=file.getPersistentProperty(SpagoBIStudioConstants.DATASET_ID);
 			if(dataSetIdS!=null){
 				Integer dataSetId=Integer.valueOf(dataSetIdS);
 				model.setSdkDataSetId(dataSetId);

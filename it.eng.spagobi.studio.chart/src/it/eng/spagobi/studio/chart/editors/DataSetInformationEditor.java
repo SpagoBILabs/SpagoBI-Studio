@@ -49,7 +49,7 @@ public class DataSetInformationEditor {
 	Composite sectionClientDatasetInformation=null;
 	private Table datasetTable;
 	Label noDataSet;
-	public DataSetInformationEditor(final ChartModel model, FormToolkit toolkit, final ScrolledForm form) {
+	public DataSetInformationEditor(final ChartModel model, FormToolkit toolkit, final ScrolledForm form, String projectname) {
 
 		sectionDatasetInformation= toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE);
@@ -69,7 +69,7 @@ public class DataSetInformationEditor {
 		GridLayout gridLayout=new GridLayout();
 		gridLayout.numColumns=1;
 		sectionClientDatasetInformation.setLayout(gridLayout);
-		SpagoBIServerObjects sbso = new SpagoBIServerObjects();
+		SpagoBIServerObjects sbso = new SpagoBIServerObjects(projectname);
 		noDataSet=new org.eclipse.swt.widgets.Label(sectionClientDatasetInformation, SWT.NULL);
 
 		if(model.getSdkDataSetId()!=null){

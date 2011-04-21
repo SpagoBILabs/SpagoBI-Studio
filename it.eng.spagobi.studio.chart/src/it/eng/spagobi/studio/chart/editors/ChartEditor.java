@@ -82,7 +82,7 @@ public final class ChartEditor extends EditorPart {
 	protected ChartModel model = null;
 	static public final int COLORDIALOG_WIDTH = 222;
 	static public final int COLORDIALOG_HEIGHT = 306;
-
+	String projectname = null;
 	protected ChartEditorComponents components = null;
 
 	public ChartEditor() {
@@ -137,10 +137,11 @@ public final class ChartEditor extends EditorPart {
 		SpagoBILogger.infoLog("Start Editor Initialization");		
 		FileEditorInput fei = (FileEditorInput) input;
 		IFile file = fei.getFile();
-
+		projectname = file.getProject().getName();
 		try {
 			// Create the model of the chart that will store informations
 			components=new ChartEditorComponents();
+			components.setProjectname(projectname);
 			model = ChartModelFactory.createChartModel(file, site.getShell());
 			model.setEditor(this);
 		} catch (Exception e) {
@@ -148,7 +149,7 @@ public final class ChartEditor extends EditorPart {
 			MessageDialog.openError(site.getShell(), "Error", e.getMessage());
 			return;
 		}
-		
+
 		setInput(input);
 		setSite(site);
 	}

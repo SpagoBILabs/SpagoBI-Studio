@@ -67,7 +67,7 @@ public class ChartEditorComponents {
 	Composite sectionClientInformation=null;
 	Composite sectionClientDimension=null;
 	Composite sectionClientStyle=null;
-
+String projectname = null;
 	// editors components
 	ConfigurationEditor configurationEditor=null;
 	DrillConfigurationEditor drillConfigurationEditor=null;
@@ -408,7 +408,7 @@ public class ChartEditorComponents {
 
 
 	public void createDataSetInformationSection(final ChartModel model, FormToolkit formToolkit, final ScrolledForm scrolledForm){
-		dataInformationEditor=new DataSetInformationEditor(model, formToolkit, scrolledForm);
+		dataInformationEditor=new DataSetInformationEditor(model, formToolkit, scrolledForm, projectname);
 	}
 
 
@@ -486,6 +486,20 @@ public class ChartEditorComponents {
 	public void setScatterRangeMarkerEditor(
 			ScatterRangeMarkerEditor scatterRangeMarkerEditor) {
 		this.scatterRangeMarkerEditor = scatterRangeMarkerEditor;
+	}
+
+
+
+
+	public String getProjectname() {
+		return projectname;
+	}
+
+
+
+
+	public void setProjectname(String projectname) {
+		this.projectname = projectname;
 	}
 
 
