@@ -2,6 +2,9 @@
 <?eclipse version="3.4"?>
 <plugin>
 
+
+
+
    <extension
          id="spagoBIStudioBuilder"
          name="SpagoBIStudio Project Builder"
@@ -79,6 +82,7 @@
       </page>
     </extension>
     		<!-- NEW SPAGOBI WIZARD -->
+    		
     <extension point="org.eclipse.ui.newWizards">
       <category id="SpagoBI" name="SpagoBI" />
       <wizard
@@ -93,6 +97,37 @@
    </extension>
     		<!-- CONTEXT MENU SPAGOBI-DOCUMENTS-->
    <extension point="org.eclipse.ui.popupMenus">
+   
+      <!-- LIMIT ON MODEL FOLDER-->
+   <objectContribution
+             id="it.eng.spagobi.studio.core.popupmenu.ModelMenuContribution"
+             objectClass="org.eclipse.core.internal.resources.Folder"
+             targetID="it.eng.spagobi.studio.core.views.ModelMenuNavigator"
+              nameFilter="*Metadata Model*"
+             >			
+			<!-- MENU SBI DOCUMENTS-->
+        	 <menu
+    	      	id="it.eng.spagobi.studio.core.main.menu" 
+				icon="icons/sbiproject.gif"            
+			    path="additions" 
+	            label="SpagoBI"> 
+	            <separator name="SpagoBI"/> 
+	         </menu> 
+			<!-- NEW MODEL ACTION -->
+	         <action
+	            id="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction" 
+            	label="New Meta Model"
+            	icon="icons/metadata.png"
+            	style="push"
+            	menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
+            	class="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction" /> 
+		</objectContribution>
+   
+   
+   
+   
+   
+   
    
    <!-- LIMIT ON SERVER FOLDER-->
    <objectContribution

@@ -1,12 +1,9 @@
 package it.eng.spagobi.studio.core.actions;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.wizards.downloadWizard.SpagoBIDownloadWizard;
 import it.eng.spagobi.studio.core.wizards.serverWizard.NewServerWizard;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;

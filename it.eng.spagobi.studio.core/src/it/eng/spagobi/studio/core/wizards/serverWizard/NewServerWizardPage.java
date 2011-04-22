@@ -92,7 +92,7 @@ public class NewServerWizardPage extends WizardPage {
 		});
 
 		labelName = new Label(container, SWT.NONE);
-		labelName.setText("Server Name: ");
+		labelName.setText("Url: ");
 		labelName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		textUrl = new Text(container, SWT.BORDER);

@@ -20,33 +20,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.views;
 
+import it.eng.spagobi.studio.core.actions.NewServerAction;
+import it.eng.spagobi.studio.core.bo.xmlMapping.XmlServerGenerator;
+import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.logging.Logger;
-
-import it.eng.spagobi.studio.core.bo.xmlMapping.XmlServerGenerator;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.services.server.ServerHandler;
-import it.eng.spagobi.studio.core.util.ImageDescriptorGatherer;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator {
 
 	public static final String VIEW_ID = "it.eng.spagobi.studio.core.views.ResourceNavigator";
 
+	private static Logger logger = LoggerFactory.getLogger(ResourceNavigator.class);
 
 
 
@@ -82,7 +79,7 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 		 *  Use personalized icons for SpagoBi structure project folders
 		 */
 		public Image getImage(Object object) {
-			SpagoBILogger.infoLog("IN");
+			logger.debug("IN");
 
 			Image imageToReturn = null;
 
@@ -110,20 +107,16 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 						imageToReturn = SpagoBIStudioConstants.privateDocumentsDescriptor.createImage();
 						images.add(imageToReturn);
 					}
+					else if(name.equals(SpagoBIStudioConstants.FOLDER_DATASET)){
+						imageToReturn = SpagoBIStudioConstants.dataseDescriptor.createImage();
+						images.add(imageToReturn);
+					}					
 				}
 				else{
 					// there asre some structure folders that have a father folder
 
-
-					// dataset have father metadata
-					if(name.equals(SpagoBIStudioConstants.FOLDER_DATASET)){
-						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_METADATA_MODEL)){
-							imageToReturn = SpagoBIStudioConstants.dataseDescriptor.createImage();
-							images.add(imageToReturn);
-						}
-					}
 					// data Source and server have father resources
-					else if(name.equals(SpagoBIStudioConstants.FOLDER_DATA_SOURCE)){
+				if(name.equals(SpagoBIStudioConstants.FOLDER_DATA_SOURCE)){
 						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
 							imageToReturn = SpagoBIStudioConstants.datasourceDescriptor.createImage();
 							images.add(imageToReturn);
@@ -160,7 +153,7 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 			if(imageToReturn == null){
 				imageToReturn = super.getImage(object);
 			}
-			SpagoBILogger.infoLog("OUT");
+			logger.debug("OUT");
 			return imageToReturn;
 		}
 

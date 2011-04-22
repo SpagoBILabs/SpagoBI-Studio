@@ -226,7 +226,7 @@ public class ServerEditor extends EditorPart {
 		textName.setText(name);
 
 		labelUrl = new Label(sectionClient, SWT.NULL);
-		labelUrl.setText("                                           Server Name: ");
+		labelUrl.setText("                                           Url: ");
 		labelUrl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		textUrl = new Text(sectionClient, SWT.BORDER);
