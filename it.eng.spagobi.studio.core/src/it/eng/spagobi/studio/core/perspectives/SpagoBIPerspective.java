@@ -26,6 +26,9 @@ import org.eclipse.ui.IPerspectiveFactory;
  */
 public class SpagoBIPerspective implements IPerspectiveFactory {
 
+	public static final String PERSPECTIVE_ID = "it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective"; 
+
+
 	private IPageLayout factory;
 
 	public SpagoBIPerspective() {
@@ -33,52 +36,62 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 	}
 
 	public void createInitialLayout(IPageLayout layout) {
-//		String editorArea = layout.getEditorArea();
-//		layout.setEditorAreaVisible(false);
-//		layout.setFixed(true);
-// 
-//		layout.addStandaloneView("it.eng.spagobi.studio.core.views.ResourceNavigator",  true /* show title */, IPageLayout.LEFT, 0.25f, editorArea);
-		
+		//		String editorArea = layout.getEditorArea();
+		//		layout.setEditorAreaVisible(false);
+		//		layout.setFixed(true);
+		// 
+		//		layout.addStandaloneView("it.eng.spagobi.studio.core.views.ResourceNavigator",  true /* show title */, IPageLayout.LEFT, 0.25f, editorArea);
 		this.factory = layout;
 		addViews();
-		
-		
-//		addActionSets();
-//		addNewWizardShortcuts();
-//		addPerspectiveShortcuts();
-//		addViewShortcuts();
+		addShortcuts();
+
+
+		//		addActionSets();
+		//		addNewWizardShortcuts();
+		//		addPerspectiveShortcuts();
+		//		addViewShortcuts();
 	}
 
 	private void addViews() {
-		 IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.LEFT, 0.25f, factory.getEditorArea());
-		 topLeft.addView(ResourceNavigator.VIEW_ID);
-
-		
-//		// Creates the overall folder layout. 
-//		// Note that each new Folder uses a percentage of the remaining EditorArea.
-//		
-//		IFolderLayout bottom =
-//			factory.createFolder(
-//				"bottomRight", //NON-NLS-1
-//				IPageLayout.BOTTOM,
-//				0.75f,
-//				factory.getEditorArea());
-//		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
-//		bottom.addView("org.eclipse.team.ui.GenericHistoryView"); //NON-NLS-1
-//		bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
-//
-//		IFolderLayout topLeft =
-//			factory.createFolder(
-//				"topLeft", //NON-NLS-1
-//				IPageLayout.LEFT,
-//				0.25f,
-//				factory.getEditorArea());
-//		topLeft.addView(IPageLayout.ID_RES_NAV);
-//		topLeft.addView("org.eclipse.jdt.junit.ResultView"); //NON-NLS-1
-//		
-//		factory.addFastView("org.eclipse.team.ccvs.ui.RepositoriesView",0.50f); //NON-NLS-1
-//		factory.addFastView("org.eclipse.team.sync.views.SynchronizeView", 0.50f); //NON-NLS-1
+		IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.LEFT, 0.25f, factory.getEditorArea());
+		topLeft.addView(ResourceNavigator.VIEW_ID);
 	}
+
+
+	private void addShortcuts() {
+		factory.addPerspectiveShortcut(PERSPECTIVE_ID);
+		factory.addShowViewShortcut(ResourceNavigator.VIEW_ID);
+	}
+
+
+	//IPageLayout.
+
+
+	//		// Creates the overall folder layout. 
+	//		// Note that each new Folder uses a percentage of the remaining EditorArea.
+	//		
+	//		IFolderLayout bottom =
+	//			factory.createFolder(
+	//				"bottomRight", //NON-NLS-1
+	//				IPageLayout.BOTTOM,
+	//				0.75f,
+	//				factory.getEditorArea());
+	//		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
+	//		bottom.addView("org.eclipse.team.ui.GenericHistoryView"); //NON-NLS-1
+	//		bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
+	//
+	//		IFolderLayout topLeft =
+	//			factory.createFolder(
+	//				"topLeft", //NON-NLS-1
+	//				IPageLayout.LEFT,
+	//				0.25f,
+	//				factory.getEditorArea());
+	//		topLeft.addView(IPageLayout.ID_RES_NAV);
+	//		topLeft.addView("org.eclipse.jdt.junit.ResultView"); //NON-NLS-1
+	//		
+	//		factory.addFastView("org.eclipse.team.ccvs.ui.RepositoriesView",0.50f); //NON-NLS-1
+	//		factory.addFastView("org.eclipse.team.sync.views.SynchronizeView", 0.50f); //NON-NLS-1
+}
 
 //	private void addActionSets() {
 //		factory.addActionSet("org.eclipse.debug.ui.launchActionSet"); //NON-NLS-1
@@ -119,4 +132,7 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 //		factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 //	}
 
-}
+
+
+
+

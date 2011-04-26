@@ -131,5 +131,9 @@ public class SpagoBIStudioConstants {
 
 	public static QualifiedName SERVER = new QualifiedName("server", "Server");
 	
+	// Welcome VIEW ID
+	public static final String VIEW_WELCOME_ID = "com.developer.welcome.intro";
+	
+	
 	
 }
