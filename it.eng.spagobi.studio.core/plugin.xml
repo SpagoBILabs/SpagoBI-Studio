@@ -284,12 +284,39 @@
       </config>
    </extension>
    <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="it.eng.spagobi.studio.core.startup.EarlyStudioStartup"></startup>
+   </extension>
+  
+  <!--
+   <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="it.eng.spagobi.studio.core.actionSet1"
-            label="label">
+            label="Studio Actions"
+            visible="true">
+         <menu
+               id="it.eng.spagobi.studio.core.menuActionSet"
+               label="Menu Action Studio"
+               path="additions">
+            <groupMarker
+                  name="content">
+            </groupMarker>
+            <separator
+                  name="additions">
+            </separator>
+         </menu>
+         <action
+               id="it.eng.spagobi.studio.core.action1"
+               label="Open Favo&amp;rites View”"
+               menubarPath="it.eng.spagobi.studio.core.menuActionSet/content"
+               style="push"
+               toolbarPath="Normal/additions"
+               tooltip="Open the favorites view in the current workbench page">
+         </action>
       </actionSet>
-   </extension>
+   </extension> -->
   <!-- <extension
          point="org.eclipse.ui.intro.configExtension">
       <configExtension

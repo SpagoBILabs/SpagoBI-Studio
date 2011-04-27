@@ -13,9 +13,13 @@ package it.eng.spagobi.studio.core.perspectives;
 
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
 
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.WorkbenchWindow;
 
 
 /**
@@ -42,14 +46,22 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		// 
 		//		layout.addStandaloneView("it.eng.spagobi.studio.core.views.ResourceNavigator",  true /* show title */, IPageLayout.LEFT, 0.25f, editorArea);
 		this.factory = layout;
+		System.out.println("LAYOUTTTTTT");
 		addViews();
 		addShortcuts();
+		addActions();
 
+//		IWorkbenchPage iworkbenchpage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+//		iworkbenchpage.hideActionSet("org.eclipse.debug.ui.launchActionSet");
+//		iworkbenchpage.hideActionSet("org.eclipse.debug.ui.debugActionSet");
+//
+//		iworkbenchpage.hideActionSet("org.eclipse.debug.ui.profileActionSet");
+//		WorkbenchWindow activeWorkbenchWindow = (WorkbenchWindow) PlatformUI.getWorkbench().getActiveWorkbenchWindow(); 
+//		ToolBarManager toolBarManager = activeWorkbenchWindow.getToolBarManager();
+//		activeWorkbenchWindow.setCoolBarVisible(false);
 
-		//		addActionSets();
-		//		addNewWizardShortcuts();
-		//		addPerspectiveShortcuts();
-		//		addViewShortcuts();
+		
+		
 	}
 
 	private void addViews() {
@@ -63,35 +75,46 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		factory.addShowViewShortcut(ResourceNavigator.VIEW_ID);
 	}
 
+	private void addActions() {
+		// Add "new wizards".
+		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
+		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");
+	}
 
-	//IPageLayout.
 
 
-	//		// Creates the overall folder layout. 
-	//		// Note that each new Folder uses a percentage of the remaining EditorArea.
-	//		
-	//		IFolderLayout bottom =
-	//			factory.createFolder(
-	//				"bottomRight", //NON-NLS-1
-	//				IPageLayout.BOTTOM,
-	//				0.75f,
-	//				factory.getEditorArea());
-	//		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
-	//		bottom.addView("org.eclipse.team.ui.GenericHistoryView"); //NON-NLS-1
-	//		bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
-	//
-	//		IFolderLayout topLeft =
-	//			factory.createFolder(
-	//				"topLeft", //NON-NLS-1
-	//				IPageLayout.LEFT,
-	//				0.25f,
-	//				factory.getEditorArea());
-	//		topLeft.addView(IPageLayout.ID_RES_NAV);
-	//		topLeft.addView("org.eclipse.jdt.junit.ResultView"); //NON-NLS-1
-	//		
-	//		factory.addFastView("org.eclipse.team.ccvs.ui.RepositoriesView",0.50f); //NON-NLS-1
-	//		factory.addFastView("org.eclipse.team.sync.views.SynchronizeView", 0.50f); //NON-NLS-1
+
 }
+
+
+//IPageLayout.
+
+
+//		// Creates the overall folder layout. 
+//		// Note that each new Folder uses a percentage of the remaining EditorArea.
+//		
+//		IFolderLayout bottom =
+//			factory.createFolder(
+//				"bottomRight", //NON-NLS-1
+//				IPageLayout.BOTTOM,
+//				0.75f,
+//				factory.getEditorArea());
+//		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
+//		bottom.addView("org.eclipse.team.ui.GenericHistoryView"); //NON-NLS-1
+//		bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
+//
+//		IFolderLayout topLeft =
+//			factory.createFolder(
+//				"topLeft", //NON-NLS-1
+//				IPageLayout.LEFT,
+//				0.25f,
+//				factory.getEditorArea());
+//		topLeft.addView(IPageLayout.ID_RES_NAV);
+//		topLeft.addView("org.eclipse.jdt.junit.ResultView"); //NON-NLS-1
+//		
+//		factory.addFastView("org.eclipse.team.ccvs.ui.RepositoriesView",0.50f); //NON-NLS-1
+//		factory.addFastView("org.eclipse.team.sync.views.SynchronizeView", 0.50f); //NON-NLS-1
+//}
 
 //	private void addActionSets() {
 //		factory.addActionSet("org.eclipse.debug.ui.launchActionSet"); //NON-NLS-1
