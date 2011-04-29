@@ -23,7 +23,6 @@ package it.eng.spagobi.studio.chart.editors;
 import it.eng.spagobi.studio.chart.Activator;
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
 import it.eng.spagobi.studio.chart.editors.model.chart.Parameter;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,10 +54,12 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ChartEditorUtils {
 
-
+	private static Logger logger = LoggerFactory.getLogger(ChartEditorUtils.class);
 	/** Get the chart template file path; if subtype is specified go and check in the configuration file wich is the particular template
 	 *  otherwise getDefault
 	 * 
@@ -167,7 +168,7 @@ public class ChartEditorUtils {
 	 */
 
 	static public void drawParameter(final ChartModel model, Composite section, final Parameter aParameter, FormToolkit toolkit){
-		SpagoBILogger.infoLog("Draw Parameter "+aParameter.getName());
+		logger.debug("Draw Parameter "+aParameter.getName());
 		Label parameterDescriptionLabel = new Label(section, SWT.NULL);
 		parameterDescriptionLabel.setText(aParameter.getDescription() + ":");
 		int parameterType = aParameter.getType();
@@ -380,7 +381,7 @@ public class ChartEditorUtils {
 	 */
 
 	static public void drawSpecificParameter(final ChartModel model, Composite section, final Parameter aParameter, FormToolkit toolkit, int order){
-		SpagoBILogger.infoLog("Draw Parameter "+aParameter.getName());
+		logger.debug("Draw Parameter "+aParameter.getName());
 		Label parameterDescriptionLabel = new Label(section, SWT.NULL);
 		parameterDescriptionLabel.setText(aParameter.getDescription() + ":");
 		//parameterDescriptionLabel.setLocation(5, 30*order);
@@ -606,7 +607,7 @@ public class ChartEditorUtils {
 			return true;
 		}
 		catch (Exception e) {
-			SpagoBILogger.warningLog("Not a number");
+			logger.warn("Not a number");
 		}
 		int len=a.length();
 		char c=a.charAt(len - 1);

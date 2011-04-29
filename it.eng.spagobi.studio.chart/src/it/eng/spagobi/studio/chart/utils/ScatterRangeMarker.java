@@ -20,19 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.chart.utils;
 
-import it.eng.spagobi.studio.chart.editors.ChartEditor;
-import it.eng.spagobi.studio.chart.editors.ChartEditorUtils;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import org.dom4j.Document;
-import org.dom4j.Element;
 import org.dom4j.Node;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Label;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ScatterRangeMarker {
 
@@ -46,10 +37,10 @@ public class ScatterRangeMarker {
 	XYMarker xMarker=new XYMarker();
 	XYMarker yMarker=new XYMarker();
 
-
+	private static Logger logger = LoggerFactory.getLogger(ScatterRangeMarker.class);
 
 	public void fillScatterRangeRankConfigurations(String type, Document thisDocument){
-		SpagoBILogger.infoLog("Recording and Filling te range and marker configurations");
+		logger.debug("Recording and Filling te range and marker configurations");
 
 		// Search if there is info to fill
 		Node xRangeNode=thisDocument.selectSingleNode("//"+type.toUpperCase()+"/PARAMETER[@name='x_range']");

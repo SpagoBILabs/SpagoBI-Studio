@@ -21,17 +21,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.chart.utils;
 
 import it.eng.spagobi.studio.chart.editors.ChartEditor;
-import it.eng.spagobi.studio.chart.editors.ChartEditorUtils;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.Node;
 import org.eclipse.swt.graphics.RGB;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Interval {
 
@@ -39,7 +32,7 @@ public class Interval {
 	Double min=null;
 	Double max=null;
 	String label=null;
-
+	private static Logger logger = LoggerFactory.getLogger(Interval.class);
 
 
 	public RGB getColor() {

@@ -28,24 +28,21 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NewChartAction implements IObjectActionDelegate {
+public class NewWorkbenchChartAction implements IWorkbenchWindowActionDelegate {
 
 	private IViewPart view = null;
 
 	ISelection selection;
 	
-	private static Logger logger = LoggerFactory.getLogger(NewChartAction.class);
-	
-	public NewChartAction() {
-		// TODO Auto-generated constructor stub
-	}
+	private static Logger logger = LoggerFactory.getLogger(NewWorkbenchChartAction.class);
 
 	public void init(IViewPart view) {
 		this.view = view;
@@ -84,6 +81,16 @@ public class NewChartAction implements IObjectActionDelegate {
 	}
 
 	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void init(IWorkbenchWindow window) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

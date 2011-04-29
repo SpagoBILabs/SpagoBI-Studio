@@ -25,9 +25,7 @@ import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
 import it.eng.spagobi.studio.core.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.core.bo.DataStoreMetadataField;
 import it.eng.spagobi.studio.core.bo.SpagoBIServerObjects;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -42,9 +40,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataSetInformationEditor {
 
+	private static Logger logger = LoggerFactory.getLogger(DataSetInformationEditor.class);
 	Section sectionDatasetInformation=null;
 	Composite sectionClientDatasetInformation=null;
 	private Table datasetTable;

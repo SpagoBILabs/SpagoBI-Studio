@@ -22,7 +22,6 @@ package it.eng.spagobi.studio.chart.wizards;
 
 import it.eng.spagobi.studio.chart.Activator;
 import it.eng.spagobi.studio.chart.wizards.pages.NewChartWizardPage;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -48,6 +47,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 
@@ -57,14 +58,14 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
-
+	private static Logger logger = LoggerFactory.getLogger(SpagoBINewChartWizard.class);
 
 	public boolean performFinish() {
 		// get the name of the dashboard from the form
-		SpagoBILogger.infoLog("Starting chart wizard");
+		logger.debug("Starting chart wizard");
 		String chartFileName = newChartWizardPage.getChartNameText().getText();
 		if (chartFileName == null || chartFileName.trim().equals("")) {
-			SpagoBILogger.errorLog("ChartNameEmpty", null);
+			logger.error("ChartNameEmpty");
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Chart name empty");
 			return false;
@@ -100,7 +101,7 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 			InputStream inputStream=new ByteArrayInputStream(bytes);
 			newFile.create(inputStream, true, null);
 		} catch (CoreException e1) {
-			SpagoBILogger.errorLog("Error while creating file", e1);
+			logger.error("Error while creating file", e1);
 			MessageDialog.openError(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "File Name already present in Workspace");
 			return false;			
@@ -116,12 +117,12 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 		try {
 			page.openEditor(new FileEditorInput(newFile), editordesc.getId());
 		} catch (PartInitException e) {
-			SpagoBILogger.errorLog("Error while opening editor", e);
+			logger.error("Error while opening editor", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while opening editor");
 			return false;
 		}
-		SpagoBILogger.infoLog("Open the chart wizard");
+		logger.debug("Open the chart wizard");
 		return true;
 	}
 

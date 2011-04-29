@@ -22,7 +22,6 @@ package it.eng.spagobi.studio.chart.editors;
 
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
 import it.eng.spagobi.studio.chart.utils.SeriePersonalization;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -56,6 +55,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -69,7 +70,7 @@ public class SeriesPersonalizationEditor {
 
 	Section sectionSeries=null;
 	Composite sectionClientSeries=null;
-
+	private static Logger logger = LoggerFactory.getLogger(SeriesPersonalizationEditor.class);
 
 	final Label newSerLabel;
 	final Text newSerLabelText;
@@ -378,11 +379,11 @@ public class SeriesPersonalizationEditor {
 				String nameToAdd=newSerName.getText();
 				//parsMap=model.getSeriesPersonalizationHashMap();
 				if(nameToAdd==null || nameToAdd.equalsIgnoreCase("")){
-					SpagoBILogger.warningLog("Specify a name for serie");
+					logger.warn("Specify a name for serie");
 					MessageDialog.openWarning(group.getShell(), "Warning", "Specify a name for serie");
 				}
 				else if(model.getSeriesPersonalizationHashMap().keySet().contains(nameToAdd)){
-					SpagoBILogger.warningLog("Name already present for Serie");
+					logger.warn("Name already present for Serie");
 					MessageDialog.openWarning(group.getShell(), "Warning", "Name already present");					
 				}
 				else {					

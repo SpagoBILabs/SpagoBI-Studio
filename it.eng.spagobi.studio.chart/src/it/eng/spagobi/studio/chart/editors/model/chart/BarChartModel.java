@@ -23,17 +23,18 @@ package it.eng.spagobi.studio.chart.editors.model.chart;
 import it.eng.spagobi.studio.chart.editors.ChartEditor;
 import it.eng.spagobi.studio.chart.editors.ChartEditorComponents;
 import it.eng.spagobi.studio.chart.utils.DrillConfiguration;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import org.dom4j.Document;
 import org.dom4j.Node;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BarChartModel extends LinkableChartModel {
 
-
+	private static Logger logger = LoggerFactory.getLogger(BarChartModel.class);
 
 	@Override
 	public void eraseSpecificParameters() {
@@ -48,9 +49,9 @@ public class BarChartModel extends LinkableChartModel {
 			drillConfiguration.fillDrillConfigurations(type, thisDocument);
 		}
 		// Fill the drill configuration (TODO: only if present)! is enough to check if it is Linkable
-		SpagoBILogger.infoLog("Check drill status");
+		logger.debug("Check drill status");
 		boolean isLinkable=isSubtypeLinkable(subType);
-		SpagoBILogger.infoLog("The chart is linkable? "+Boolean.valueOf(isLinkable));
+		logger.debug("The chart is linkable? "+Boolean.valueOf(isLinkable));
 		if(isLinkable){
 			drillConfiguration.fillDrillConfigurations(type, thisDocument);
 		}
@@ -61,14 +62,14 @@ public class BarChartModel extends LinkableChartModel {
 	@Override
 	public String toXML() {
 		String toReturn="";
-		SpagoBILogger.infoLog("Write XML for Model");
+		logger.debug("Write XML for Model");
 		toReturn = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
 		if(subType==null) {
-			SpagoBILogger.errorLog("Sub Type not defined",null);
+			logger.error("Sub Type not defined");
 			return "";
 		}
 
-		SpagoBILogger.infoLog("General settings");
+		logger.debug("General settings");
 
 		//intestazione
 		toReturn+="<BARCHART type=\""+this.subType+"\" name=\""+this.title+"\">\n";
@@ -77,7 +78,7 @@ public class BarChartModel extends LinkableChartModel {
 		toReturn+=super.toXML();
 
 		// Drill Configuration
-		SpagoBILogger.infoLog("Drill configurations XML");
+		logger.debug("Drill configurations XML");
 		if(drillConfiguration!=null && isSubtypeLinkable(subType)==true){
 			String drillXML=drillConfiguration.toXml();
 			toReturn+=drillXML;
@@ -85,7 +86,7 @@ public class BarChartModel extends LinkableChartModel {
 
 		toReturn+="</BARCHART>\n";
 
-		SpagoBILogger.infoLog("Final Template is\n:" + toReturn);
+		logger.debug("Final Template is\n:" + toReturn);
 		return toReturn;
 
 	}
@@ -101,7 +102,7 @@ public class BarChartModel extends LinkableChartModel {
 
 		// CREATE THE Drill CONFIGURATION PARAMETER: At the beginning set invisible
 		//components.getDrillConfigurationEditor().eraseComposite();
-		SpagoBILogger.infoLog("Drill configuration section");
+		logger.debug("Drill configuration section");
 		components.createDrillConfigurationSection(this, toolkit, form);		
 		components.getDrillConfigurationEditor().setVisible(false);
 
@@ -127,12 +128,12 @@ public class BarChartModel extends LinkableChartModel {
 		super.refreshEditor(editor, components, toolkit, form);
 		
 		boolean isLinkable=isSubtypeLinkable(subType);
-		SpagoBILogger.infoLog("Erase fields of editor");
+		logger.debug("Erase fields of editor");
 		components.getDrillConfigurationEditor().eraseComposite();
 		if(isLinkable==true){
-			SpagoBILogger.infoLog("Fill drill configurations parameters");
+			logger.debug("Fill drill configurations parameters");
 			getDrillConfiguration().fillDrillConfigurations(type, thisDocument);
-			SpagoBILogger.infoLog("re fill the fields");
+			logger.debug("re fill the fields");
 			components.getDrillConfigurationEditor().refillFieldsDrillConfiguration(drillConfiguration, null, toolkit, form);							
 			components.getDrillConfigurationEditor().setVisible(true);
 		}
@@ -163,11 +164,11 @@ public class BarChartModel extends LinkableChartModel {
 		Node drillNode = specificConfig.selectSingleNode("//"+upperCaseNameSl+"[@name='"+chartSubType+"']/DRILL");
 
 		if(drillNode==null){
-			SpagoBILogger.infoLog("No lnkable document");				
+			logger.debug("No lnkable document");				
 			return false;
 		}
 		else{
-			SpagoBILogger.infoLog("Linkable document");						
+			logger.debug("Linkable document");						
 			return true;
 		}
 	}

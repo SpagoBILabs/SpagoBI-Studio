@@ -22,7 +22,6 @@ package it.eng.spagobi.studio.chart.editors;
 
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModelFactory;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -66,6 +65,8 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -85,12 +86,16 @@ public final class ChartEditor extends EditorPart {
 	String projectname = null;
 	protected ChartEditorComponents components = null;
 
+
+
+	private static Logger logger = LoggerFactory.getLogger(ChartEditor.class);
+	
 	public ChartEditor() {
 		super();
 	}
 
 	public void doSave(IProgressMonitor monitor) {
-		SpagoBILogger.infoLog("Start Saving Chart Template File");
+		logger.debug("Start Saving Chart Template File");
 		ByteArrayInputStream bais = null;
 		try {
 			FileEditorInput fei = (FileEditorInput) getEditorInput();
@@ -108,10 +113,10 @@ public final class ChartEditor extends EditorPart {
 			model.setThisDocument(thisDocument);
 
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while Saving Chart Template File",e);
+			logger.error("Error while Saving Chart Template File",e);
 			e.printStackTrace();
 		}	catch (DocumentException e) {
-			SpagoBILogger.errorLog("Error while reloading current template",e);
+			logger.error("Error while reloading current template",e);
 			e.printStackTrace();
 		}
 		finally { 
@@ -134,7 +139,7 @@ public final class ChartEditor extends EditorPart {
 
 	public void init(IEditorSite site, IEditorInput input) {
 		this.setPartName(input.getName());
-		SpagoBILogger.infoLog("Start Editor Initialization");		
+		logger.debug("Start Editor Initialization");		
 		FileEditorInput fei = (FileEditorInput) input;
 		IFile file = fei.getFile();
 		projectname = file.getProject().getName();
@@ -145,7 +150,7 @@ public final class ChartEditor extends EditorPart {
 			model = ChartModelFactory.createChartModel(file, site.getShell());
 			model.setEditor(this);
 		} catch (Exception e) {
-			SpagoBILogger.errorLog("Error during Editor Initialization "+e.getMessage(),e);
+			logger.error("Error during Editor Initialization "+e.getMessage(),e);
 			MessageDialog.openError(site.getShell(), "Error", e.getMessage());
 			return;
 		}
@@ -163,7 +168,7 @@ public final class ChartEditor extends EditorPart {
 	}
 
 	public void createPartControl(final Composite parent) {
-		SpagoBILogger.infoLog("Creating the editor for charts");
+		logger.debug("Creating the editor for charts");
 
 		final FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		final ScrolledForm form = toolkit.createScrolledForm(parent);
@@ -176,7 +181,7 @@ public final class ChartEditor extends EditorPart {
 		form.getBody().setLayout(layout);
 
 		// ++++++++++++++  Chart common settings section ++++++++++++++ 
-		SpagoBILogger.infoLog("Creating the common informations section");
+		logger.debug("Creating the common informations section");
 		Section sectionInformation = toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE|Section.EXPANDED);
 		TableWrapData td = new TableWrapData(TableWrapData.FILL);
@@ -231,7 +236,7 @@ public final class ChartEditor extends EditorPart {
 		sectionClientInformation.pack();
 
 		// ++++++++++++++  Chart dimension settings section ++++++++++++++ 
-		SpagoBILogger.infoLog("Creating the dimension informations section");
+		logger.debug("Creating the dimension informations section");
 		Section sectionDimension = toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE|Section.EXPANDED);
 		td = new TableWrapData(TableWrapData.FILL);
@@ -302,7 +307,7 @@ public final class ChartEditor extends EditorPart {
 
 
 		// ++++++++++++++ Chart Style Settings ++++++++++++++ 
-		SpagoBILogger.infoLog("Creating style informations section");
+		logger.debug("Creating style informations section");
 		final Section sectionStyle = toolkit.createSection(form.getBody(), 
 				Section.DESCRIPTION|Section.TITLE_BAR|Section.TWISTIE);
 		td = new TableWrapData(TableWrapData.FILL);
@@ -323,7 +328,7 @@ public final class ChartEditor extends EditorPart {
 
 
 		// ++++++++++++++ Chart Conf Settings ++++++++++++++ 
-		SpagoBILogger.infoLog("Creating Common configuration informations section");
+		logger.debug("Creating Common configuration informations section");
 		components.setConfigurationEditor(new ConfigurationEditor(toolkit,form));
 		components.createConfigurationSection(model,null, toolkit, form);
 
@@ -331,13 +336,13 @@ public final class ChartEditor extends EditorPart {
 
 
 		// ******************	get subtypes COMBO	******************
-		SpagoBILogger.infoLog("Create the sub type combo: ");
+		logger.debug("Create the sub type combo: ");
 		List<String> subTypes=null;
 		try {
-			SpagoBILogger.infoLog("Get all configured sub types");
+			logger.debug("Get all configured sub types");
 			subTypes=ChartModel.getConfiguredChartSubTypes(model.getType());
 		} catch (Exception e1) {
-			SpagoBILogger.errorLog("Error while retrieving possible subtypes",e1);
+			logger.error("Error while retrieving possible subtypes",e1);
 			e1.printStackTrace();
 			return;		
 		}
@@ -351,7 +356,7 @@ public final class ChartEditor extends EditorPart {
 		combo.setToolTipText("Select the chart subtype among "+model.getType()+": the specific configuration parameters and the forms will change accordingly");
 
 		// Put default subtype on combo
-		SpagoBILogger.infoLog("Model subtype is "+subTypeLabel);
+		logger.debug("Model subtype is "+subTypeLabel);
 		int index=combo.indexOf(model.getSubType());
 		combo.select(index);
 
@@ -410,7 +415,7 @@ public final class ChartEditor extends EditorPart {
 			model.initializeEditor(this,components,toolkit,form);
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("Error while generating static form",e);		
+			logger.error("Error while generating static form",e);		
 			e.printStackTrace();
 		}
 
@@ -420,11 +425,11 @@ public final class ChartEditor extends EditorPart {
 
 
 		//*************************	CHANGE SUBTYPE: ERASE PREVIOUS SPECIFIC MODEL and CREATE NEW FORM	*********************
-		SpagoBILogger.infoLog("Add listener for subtype selection combo: erase specific settings defined in model and change form according to new subtype");
+		logger.debug("Add listener for subtype selection combo: erase specific settings defined in model and change form according to new subtype");
 		combo.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				if(model.getSubType()!=null && model.getSubType().equalsIgnoreCase(combo.getText())){
-					SpagoBILogger.warningLog("Already Selected");
+					logger.warn("Already Selected");
 				}
 				else{
 					try{
@@ -435,7 +440,7 @@ public final class ChartEditor extends EditorPart {
 
 					}
 					catch (Exception ex) {
-						SpagoBILogger.errorLog("Error while changing subtype form",ex);						
+						logger.error("Error while changing subtype form",ex);						
 						ex.printStackTrace();	
 					}
 				}

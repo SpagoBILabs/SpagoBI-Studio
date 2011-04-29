@@ -20,58 +20,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.chart.editors.model.chart;
 
-import it.eng.spagobi.studio.chart.Activator;
 import it.eng.spagobi.studio.chart.editors.ChartEditor;
 import it.eng.spagobi.studio.chart.editors.ChartEditorComponents;
 import it.eng.spagobi.studio.chart.editors.ChartEditorUtils;
-import it.eng.spagobi.studio.chart.utils.DrillConfiguration;
-import it.eng.spagobi.studio.chart.utils.DrillParameters;
 import it.eng.spagobi.studio.chart.utils.SeriePersonalization;
 import it.eng.spagobi.studio.chart.utils.Style;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.dom4j.tree.DefaultAttribute;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class ChartModel {
 
+	private static Logger logger = LoggerFactory.getLogger(ChartModel.class);
+	
 	public static final String CHART_INFO_FILE = "it/eng/spagobi/studio/chart/editors/model/chart/chartsInformation.xml";
 	public static final String BARCHART_INFO_FILE = "it/eng/spagobi/studio/chart/editors/model/chart/barChartsConfig.xml";
 
@@ -169,7 +147,7 @@ public class ChartModel {
 	 */
 
 	public ChartModel(String type_, String subType_, IFile thisFile, Document configDocument_) throws Exception {
-		SpagoBILogger.infoLog("Start model constructor");
+		logger.debug("Start model constructor");
 
 		// Initialise some fields
 		this.type=type_;
@@ -187,13 +165,13 @@ public class ChartModel {
 		String typeUpperCase=type.toUpperCase();
 		Node chart = thisDocument.selectSingleNode("//"+typeUpperCase);
 		if (chart == null) {
-			SpagoBILogger.errorLog("Error in reading the actual file root",null);
+			logger.error("Error in reading the actual file root");
 			throw new Exception("xml not valid");
 		}
 
 		title = chart.valueOf("@name");
 		if(title!=null && !title.equalsIgnoreCase("")){
-			SpagoBILogger.infoLog("Title is "+title!=null ? title : "");
+			logger.debug("Title is "+title!=null ? title : "");
 		}
 
 
@@ -229,12 +207,12 @@ public class ChartModel {
 			width = Integer.parseInt(widthStr);
 			height = Integer.parseInt(heightStr);
 		} catch (NumberFormatException nfe) {
-			SpagoBILogger.errorLog("Dimensions value not number",nfe);
+			logger.error("Dimensions value not number",nfe);
 			throw new Exception("Dimension not valid");
 		}
 		Dimension dimension = new Dimension(width, height);
 		setDimension(dimension);
-		SpagoBILogger.infoLog("Dimensions set");
+		logger.debug("Dimensions set");
 
 
 		// find the backround Color
@@ -283,7 +261,7 @@ public class ChartModel {
 			toReturn+="<COLORS background='"+ChartEditor.convertRGBToHexadecimal(backgroundColor)+"' />\n";
 		}
 
-		SpagoBILogger.infoLog("Style settings");
+		logger.debug("Style settings");
 		// Style
 		if(styleParametersEditors!=null){
 			for (Iterator iterator = styleParametersEditors.keySet().iterator(); iterator.hasNext();) {
@@ -299,7 +277,7 @@ public class ChartModel {
 
 		// Confguration parameters
 		if(confParametersEditor!=null || confSpecificParametersEditor!=null){
-			SpagoBILogger.infoLog("Commons configuration parameter");
+			logger.debug("Commons configuration parameter");
 			toReturn+="<CONF>\n";
 			for (Iterator iterator = confParametersEditor.keySet().iterator(); iterator.hasNext();) {
 				String parName = (String) iterator.next();
@@ -308,7 +286,7 @@ public class ChartModel {
 				toReturn+=parXML;
 			}
 
-			SpagoBILogger.infoLog("Specific configuration parameter");			
+			logger.debug("Specific configuration parameter");			
 			for (Iterator iterator = confSpecificParametersEditor.keySet().iterator(); iterator.hasNext();) {
 				String parName = (String) iterator.next();
 				Parameter par=confSpecificParametersEditor.get(parName);
@@ -327,7 +305,7 @@ public class ChartModel {
 		String scalesPersonalization="";
 		String orderColorPersonalization="";
 
-		SpagoBILogger.infoLog("Series personalization: labels, colors, draws");		
+		logger.debug("Series personalization: labels, colors, draws");		
 		if(seriesDrawPersonalization){
 			drawPersonalization="<SERIES_DRAW ";
 			for (Iterator iterator = seriesPersonalizationHashMap.keySet().iterator(); iterator.hasNext();) {
@@ -417,7 +395,7 @@ public class ChartModel {
 			Node chart = (Node) iterator.next();
 			String name=chart.valueOf("@name");
 			if(!name.equalsIgnoreCase("commons")){
-				SpagoBILogger.infoLog("Add possible subtype "+name);
+				logger.debug("Add possible subtype "+name);
 				toReturn.add(name);
 			}
 		}
@@ -478,11 +456,11 @@ public class ChartModel {
 
 
 	public void fillStyleParameters() throws Exception{
-		SpagoBILogger.infoLog("Filling style configurations from actual file, otherwise from template");		
+		logger.debug("Filling style configurations from actual file, otherwise from template");		
 		String upperCaseNameSl=type.toUpperCase();
 		String upperCaseNamePl=upperCaseNameSl+"S";
 
-		SpagoBILogger.infoLog("Read all styles parameters from config file and record");		
+		logger.debug("Read all styles parameters from config file and record");		
 		Node commonConfig = configDocument.selectSingleNode("//"+upperCaseNamePl+"/"+upperCaseNameSl+"[@name='commons']");
 		if (commonConfig == null ) throw new Exception("No common configuration set");
 		List allStyles = commonConfig.selectNodes("//STYLES/STYLE");
@@ -612,7 +590,7 @@ public class ChartModel {
 	 */
 
 	public void fillCommonsConfParameters() throws Exception{
-		SpagoBILogger.infoLog("Start recording commons configuration parameters");		
+		logger.debug("Start recording commons configuration parameters");		
 		// search for the root
 		String upperCaseNameSl=type.toUpperCase();
 		String upperCaseNamePl=upperCaseNameSl+"S";
@@ -692,7 +670,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a number");
+						logger.warn("Not a number");
 					}
 				}
 				else if(type==Parameter.FLOAT_TYPE){
@@ -702,7 +680,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a number");
+						logger.warn("Not a number");
 					}
 				}
 				else if(type==Parameter.STRING_TYPE || type==Parameter.COMBO_TYPE){
@@ -714,7 +692,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a Hexadecimal color rapresentation");
+						logger.warn("Not a Hexadecimal color rapresentation");
 					}				
 				}
 				else if(type==Parameter.BOOLEAN_TYPE){
@@ -723,7 +701,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a bool, set default false");
+						logger.warn("Not a bool, set default false");
 						par.setValue(new Boolean("false"));
 					}
 				}
@@ -751,7 +729,7 @@ public class ChartModel {
 
 
 	public void fillSeriesPersonalization() {
-		SpagoBILogger.infoLog("Start recording and filling series personalization");
+		logger.debug("Start recording and filling series personalization");
 
 		String upperCaseNameSl=getType().toUpperCase();
 		String upperCaseNamePl=upperCaseNameSl+"S";
@@ -904,7 +882,7 @@ public class ChartModel {
 
 
 	//	public void fillSeriesPersonalization() {
-	//		SpagoBILogger.infoLog("Start recording and filling series personalization");
+	//		logger.debug("Start recording and filling series personalization");
 	//
 	//		String upperCaseNameSl=getType().toUpperCase();
 	//		String upperCaseNamePl=upperCaseNameSl+"S";
@@ -1033,7 +1011,7 @@ public class ChartModel {
 	 */
 
 	public void fillSpecificConfParameters() throws Exception{
-		SpagoBILogger.infoLog("Record and fill specific conf parameters");
+		logger.debug("Record and fill specific conf parameters");
 		// search for the root
 		String upperCaseNameSl=getType().toUpperCase();
 		String upperCaseNamePl=upperCaseNameSl+"S";
@@ -1116,7 +1094,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a number");
+						logger.warn("Not a number");
 					}
 				}
 				else if(type==Parameter.FLOAT_TYPE){
@@ -1126,7 +1104,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a number");
+						logger.warn("Not a number");
 					}
 				}
 
@@ -1139,7 +1117,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a Hexadecimal color rapresentation");
+						logger.warn("Not a Hexadecimal color rapresentation");
 					}				
 				}
 				else if(type==Parameter.BOOLEAN_TYPE){
@@ -1148,7 +1126,7 @@ public class ChartModel {
 						par.setValue(d);
 					}
 					catch (Exception e) {
-						SpagoBILogger.warningLog("Not a bool, set default false");
+						logger.warn("Not a bool, set default false");
 						par.setValue(new Boolean("false"));
 					}
 				}
@@ -1214,11 +1192,11 @@ seriesOrderColorPersonalization = false;
 
 
 		if(seriesLabelPersonalization==true || seriesColorPersonalization==true || seriesDrawPersonalization==true || seriesScalesPersonalization==true){
-			SpagoBILogger.infoLog("Let series personalisation");
+			logger.debug("Let series personalisation");
 			return true;
 		}
 		else {
-			SpagoBILogger.infoLog("Does not let series personalization");
+			logger.debug("Does not let series personalization");
 			return false;
 		}
 
@@ -1246,19 +1224,19 @@ seriesOrderColorPersonalization = false;
 
 	public void initializeEditor(ChartEditor editor,ChartEditorComponents components,  FormToolkit toolkit, ScrolledForm form) throws Exception{
 		// Once retrieved the subtype fill specific conf parameter
-		SpagoBILogger.infoLog("Specific configuraiton parameters");
+		logger.debug("Specific configuraiton parameters");
 		components.createSpecificConfigurationSection(this,editor, toolkit,form);
 
 		// CREATE THE SERIES PERSONALIZATION PARAMETER: At the beginning set invisible
 		//components.getSeriesPersonalizationEditor().eraseComposite();
-		SpagoBILogger.infoLog("Series personalization section");
+		logger.debug("Series personalization section");
 		boolean isSerieLabel=isSeriesPersonalization(subType);
 		components.createSeriesPersonalizationSection(this,toolkit, form);		
 		components.getSeriesPersonalizationEditor().setVisible(false);
 
 		if(isSerieLabel==true){
 			components.getSeriesPersonalizationEditor().setVisible(true);
-			SpagoBILogger.infoLog("Enable only allowed series personalization");
+			logger.debug("Enable only allowed series personalization");
 			components.getSeriesPersonalizationEditor().enablePersonalizations(seriesLabelPersonalization, seriesColorPersonalization, seriesDrawPersonalization, seriesScalesPersonalization, seriesOrderColorPersonalization);
 		}
 		else{
@@ -1272,22 +1250,22 @@ seriesOrderColorPersonalization = false;
 
 	public void refreshEditor(ChartEditor editor,ChartEditorComponents components,  FormToolkit toolkit, ScrolledForm form) throws Exception{
 		//eraseSpecificParameters();
-		SpagoBILogger.infoLog("Fill again specific parameters");						
+		logger.debug("Fill again specific parameters");						
 		fillSpecificConfParameters();
-		SpagoBILogger.infoLog("Create specific configuration parameters section");
+		logger.debug("Create specific configuration parameters section");
 		components.createSpecificConfigurationSection(this, null, toolkit,form);
 		//components.createConfigurationSection(null, toolkit);
 
 		boolean isSerieLabel=isSeriesPersonalization(subType);						
-		SpagoBILogger.infoLog("Erase fields of editor");
+		logger.debug("Erase fields of editor");
 		components.getSeriesPersonalizationEditor().eraseComposite();
 		if(isSerieLabel==true){
-			SpagoBILogger.infoLog("Fill series personalization fields");
+			logger.debug("Fill series personalization fields");
 			fillSeriesPersonalization();
 			// Now I should fill again the editor (already created) with new Data
-			SpagoBILogger.infoLog("re fill the fields");
+			logger.debug("re fill the fields");
 			components.getSeriesPersonalizationEditor().refillFieldsSeriesPersonalization(this, null, toolkit, form);
-			SpagoBILogger.infoLog("Enable personalizations");
+			logger.debug("Enable personalizations");
 			components.getSeriesPersonalizationEditor().enablePersonalizations(seriesLabelPersonalization, seriesColorPersonalization, seriesDrawPersonalization,seriesScalesPersonalization, seriesOrderColorPersonalization);
 			components.getSeriesPersonalizationEditor().setVisible(true);
 		}

@@ -23,10 +23,7 @@ package it.eng.spagobi.studio.chart.editors.model.chart;
 import it.eng.spagobi.studio.chart.editors.ChartEditor;
 import it.eng.spagobi.studio.chart.editors.ChartEditorComponents;
 import it.eng.spagobi.studio.chart.editors.ChartEditorUtils;
-import it.eng.spagobi.studio.chart.utils.DrillConfiguration;
-import it.eng.spagobi.studio.chart.utils.Interval;
 import it.eng.spagobi.studio.chart.utils.ZRanges;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.util.Iterator;
 import java.util.List;
@@ -38,10 +35,12 @@ import org.dom4j.Node;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XYChartModel extends ChartModel {
 
-
+	private static Logger logger = LoggerFactory.getLogger(XYChartModel.class);
 	Vector<String> yRanges;
 
 	TreeMap<String, ZRanges> zRanges;
@@ -73,7 +72,7 @@ public class XYChartModel extends ChartModel {
 
 	public void fillXYRanges(String type, Document thisDocument){
 		// Search in present template and fill the field from presentDocument, otherwise from templateDocument
-		SpagoBILogger.infoLog("Recording and Filling ranges from file");
+		logger.debug("Recording and Filling ranges from file");
 
 		Node yRangesNode=thisDocument.selectSingleNode("//"+type.toUpperCase()+"/YRANGES");
 		if(yRangesNode!=null){
@@ -102,7 +101,7 @@ public class XYChartModel extends ChartModel {
 				String valueHigh=node.valueOf("@value_high");
 				String color=node.valueOf("@colour");			
 				if(label==null || label.equalsIgnoreCase("")){
-					SpagoBILogger.warningLog("not accepted z range without label");
+					logger.warn("not accepted z range without label");
 				}
 				else{
 					ZRanges zRange=new ZRanges();	
@@ -114,7 +113,7 @@ public class XYChartModel extends ChartModel {
 							minValD=Double.valueOf(valueLow);
 						}
 						catch (Exception e) {
-							SpagoBILogger.errorLog("Not integer format for low value in range; set default 0", e);				
+							logger.error("Not integer format for low value in range; set default 0", e);				
 							minValD=new Double(0);
 						}
 						zRange.setValueLow(minValD);
@@ -125,7 +124,7 @@ public class XYChartModel extends ChartModel {
 							maxValD=Double.valueOf(valueHigh);
 						}
 						catch (Exception e) {
-							SpagoBILogger.errorLog("Not Integer format for high parameter in interval; set default 0", e);				
+							logger.error("Not Integer format for high parameter in interval; set default 0", e);				
 							maxValD=new Double(0);
 						}
 						zRange.setValueHigh(maxValD);
@@ -172,7 +171,7 @@ public class XYChartModel extends ChartModel {
 			ScrolledForm form) throws Exception {
 		eraseSpecificParameters();
 		super.refreshEditor(editor, components, toolkit, form);
-		SpagoBILogger.infoLog("Erase fields of editor");
+		logger.debug("Erase fields of editor");
 		components.getYzRangesEditor().eraseComposite();
 		fillXYRanges(type, thisDocument);
 		components.getYzRangesEditor().refillFieldsSeriesPersonalization(this,editor, toolkit, form);							
@@ -184,14 +183,14 @@ public class XYChartModel extends ChartModel {
 	@Override
 	public String toXML() {
 		String toReturn="";
-		SpagoBILogger.infoLog("Write XML for Model");
+		logger.debug("Write XML for Model");
 		toReturn = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
 		if(subType==null) {
-			SpagoBILogger.errorLog("Sub Type not defined",null);
+			logger.error("Sub Type not defined");
 			return "";
 		}
 
-		SpagoBILogger.infoLog("General settings");
+		logger.debug("General settings");
 
 		//intestazione
 		toReturn+="<XYCHART type=\""+this.subType+"\" name=\""+this.title+"\">\n";
@@ -221,7 +220,7 @@ public class XYChartModel extends ChartModel {
 
 		toReturn+="</XYCHART>\n";
 
-		SpagoBILogger.infoLog("Final Template is\n:" + toReturn);
+		logger.debug("Final Template is\n:" + toReturn);
 		return toReturn;
 	}
 

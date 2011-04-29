@@ -23,7 +23,6 @@ package it.eng.spagobi.studio.chart.editors;
 import it.eng.spagobi.studio.chart.editors.model.chart.LinkableChartModel;
 import it.eng.spagobi.studio.chart.utils.DrillConfiguration;
 import it.eng.spagobi.studio.chart.utils.DrillParameters;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -51,6 +50,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -82,6 +83,7 @@ public class DrillConfigurationEditor {
 	public static final int VALUE=1;
 	public static final int TYPE=2;
 
+	private static Logger logger = LoggerFactory.getLogger(DrillConfigurationEditor.class);
 
 	/**
 	 * Constructor of the drillConfiguration Editor
@@ -91,11 +93,11 @@ public class DrillConfigurationEditor {
 	 */
 
 	public DrillConfigurationEditor(final LinkableChartModel model, FormToolkit toolkit, final ScrolledForm form) {
-		SpagoBILogger.infoLog("Constructor of drill configuration editor");
+		logger.debug("Constructor of drill configuration editor");
 		sectionDrill = toolkit.createSection(form.getBody(),
 				Section.DESCRIPTION | Section.TITLE_BAR | Section.TWISTIE);
 		setSectionClientDrill(toolkit.createComposite(sectionDrill));
-		SpagoBILogger.infoLog("Create the drill informations form");
+		logger.debug("Create the drill informations form");
 		TableWrapData td = new TableWrapData(TableWrapData.FILL);
 		sectionDrill.setLayoutData(td);
 		sectionDrill.addExpansionListener(new ExpansionAdapter() {
@@ -353,11 +355,11 @@ public class DrillConfigurationEditor {
 				Map<String, DrillParameters> mapDrillPars = model.getDrillConfiguration().getDrillParameters();
 				//if not already present
 				if(nameToAdd==null || nameToAdd.equalsIgnoreCase("")){
-					SpagoBILogger.warningLog("Error in inserting parameter, no name specified");
+					logger.warn("Error in inserting parameter, no name specified");
 					MessageDialog.openWarning(group.getShell(), "Warning", "Specify a parameter name");
 				}
 				else if(mapDrillPars.keySet().contains(nameToAdd)){
-					SpagoBILogger.warningLog("Error in inserting parameter, already present or with no name");
+					logger.warn("Error in inserting parameter, already present or with no name");
 					MessageDialog.openWarning(group.getShell(), "Warning", "Parameter name already present");
 				}
 				else {

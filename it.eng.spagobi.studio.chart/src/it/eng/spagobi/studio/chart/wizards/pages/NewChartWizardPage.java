@@ -20,15 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.chart.wizards.pages;
 
-import it.eng.spagobi.studio.chart.editors.ChartEditor;
 import it.eng.spagobi.studio.chart.editors.ChartEditorUtils;
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -43,25 +39,20 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NewChartWizardPage extends WizardPage {
 
@@ -69,7 +60,7 @@ public class NewChartWizardPage extends WizardPage {
 	// Map of Radio Buttons
 	final HashMap<String, Composite> composites=new HashMap<String, Composite>();
 	static String selectedType=null;
-
+	private static Logger logger = LoggerFactory.getLogger(NewChartWizardPage.class);
 
 	public NewChartWizardPage(String pageName) {
 		super(pageName);
@@ -175,10 +166,10 @@ public class NewChartWizardPage extends WizardPage {
 									image.getImageData().scaledTo((int)(originalWidth*rapportoWidth-20),(int)(originalHeight*rapportoHeight-20)));
 						
 						} catch (FileNotFoundException e1) {
-							SpagoBILogger.errorLog("could not find image for type "+t, e1);
+							logger.error("could not find image for type "+t, e1);
 						}
 						catch (Exception e2) {
-							SpagoBILogger.errorLog("Error while drawing image for type "+t, e2);
+							logger.error("Error while drawing image for type "+t, e2);
 						}
 						// insert scaledImage to Have image scalation!
 						e.gc.drawImage(image, 20, 30);

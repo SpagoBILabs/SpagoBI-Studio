@@ -4,6 +4,10 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="lib/dom4j.jar" sourcepath="it.eng.spagobi.studio.dashboardsrc.zip"/>
-	<classpathentry kind="lib" path="lib/spago-core-2.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar"/>
+	<classpathentry kind="lib" path="lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar"/>
+	<classpathentry kind="lib" path="lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar"/>
+	<classpathentry kind="lib" path="lib/org.slf4j.api_1.5.11.v20100519-1910.jar"/>
+	<classpathentry kind="lib" path="lib/sbi.utils-2.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

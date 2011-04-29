@@ -22,7 +22,6 @@ package it.eng.spagobi.studio.chart.editors;
 
 import it.eng.spagobi.studio.chart.editors.model.chart.XYChartModel;
 import it.eng.spagobi.studio.chart.utils.ZRanges;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.util.Iterator;
 
@@ -33,7 +32,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -43,7 +41,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
@@ -51,14 +48,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -69,6 +66,8 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 
 public class YZRangesEditor {
 
+	private static Logger logger = LoggerFactory.getLogger(YZRangesEditor.class);
+	
 	Section sectionYZRanges=null;
 	Composite sectionClientYZRanges=null;
 
@@ -188,11 +187,11 @@ public class YZRangesEditor {
 				xyModel.getEditor().setIsDirty(true);				
 				String newRange=newYRangeText.getText();
 				if(newRange==null || newRange.equalsIgnoreCase("") ){
-					SpagoBILogger.warningLog("Specify a name for Y Range");
+					logger.warn("Specify a name for Y Range");
 					MessageDialog.openWarning(yRangesGroup.getShell(), "Warning", "Specify a name for Y Range");
 				}
 				else if(xyModel.getYRanges().contains(newRange)){
-					SpagoBILogger.warningLog("Name already present for Y Range");
+					logger.warn("Name already present for Y Range");
 					MessageDialog.openWarning(yRangesGroup.getShell(), "Warning", "Name already present");					
 				}
 				else
@@ -316,11 +315,11 @@ public class YZRangesEditor {
 				String newRange=newZRangeText.getText();
 				if(newRange==null || newRange.equalsIgnoreCase(""))
 				{
-					SpagoBILogger.warningLog("Specify a name for Z Range");
+					logger.warn("Specify a name for Z Range");
 					MessageDialog.openWarning(yRangesGroup.getShell(), "Warning", "Specify a name for Z Range");										
 				}
 				else if (xyModel.getZRanges().keySet().contains(newRange)){
-					SpagoBILogger.warningLog("Name already present for Z Range");
+					logger.warn("Name already present for Z Range");
 					MessageDialog.openWarning(yRangesGroup.getShell(), "Warning", "Name already present");					
 				}
 				else

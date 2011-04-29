@@ -22,7 +22,6 @@ package it.eng.spagobi.studio.chart.editors;
 
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
 import it.eng.spagobi.studio.chart.editors.model.chart.Parameter;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,6 +39,10 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 /**
  * 
@@ -50,6 +53,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 
 public class ConfigurationEditor {
 
+	private static Logger logger = LoggerFactory.getLogger(ConfigurationEditor.class);
 	final Section sectionConf; 
 	Composite sectionClientConf=null;
 
@@ -80,7 +84,7 @@ public class ConfigurationEditor {
 
 	public void createConfigurationParametersForm(ChartModel model, final ChartEditor editor,FormToolkit toolkit,final ScrolledForm form) {
 
-		SpagoBILogger.infoLog("Create configuration parameters form");
+		logger.debug("Create configuration parameters form");
 
 		TableWrapData td = new TableWrapData(TableWrapData.FILL);
 
@@ -115,7 +119,7 @@ public class ConfigurationEditor {
 				// run all parameters in section
 				for (Iterator iterator = parsInSection.iterator(); iterator.hasNext();) {
 					String parName = (String) iterator.next();
-					SpagoBILogger.infoLog("Parameter "+parName);
+					logger.debug("Parameter "+parName);
 					final Parameter aParameter=model.getConfParametersEditor().get(parName);
 					ChartEditorUtils.drawParameter(model, sectionClientConf, aParameter, toolkit);					
 
@@ -140,7 +144,7 @@ public class ConfigurationEditor {
 
 
 	public void createSpecificConfigurationParametersForm(ChartModel model, final ChartEditor editor, FormToolkit toolkit) {
-		SpagoBILogger.infoLog("Create specific configuration parameters form");
+		logger.debug("Create specific configuration parameters form");
 
 
 		GridLayout gl = new GridLayout();

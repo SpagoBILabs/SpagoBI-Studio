@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.chart.utils;
 
 import it.eng.spagobi.studio.chart.editors.ChartEditorUtils;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,13 +28,15 @@ import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DrillConfiguration {
 
 	String url=null;
 	String categoryUrlName=null;
 	String seriesUrlName=null;
-
+	private static Logger logger = LoggerFactory.getLogger(DrillConfiguration.class);
 	HashMap<String, DrillParameters> drillParameters=new HashMap<String, DrillParameters>();
 
 	public String getUrl() {
@@ -101,7 +102,7 @@ public class DrillConfiguration {
 
 
 	public void fillDrillConfigurations(String type, Document thisDocument){
-		SpagoBILogger.infoLog("Recording and Filling te drill configurations");
+		logger.debug("Recording and Filling te drill configurations");
 
 		Node drill=thisDocument.selectSingleNode("//"+type.toUpperCase()+"/DRILL");
 		if(drill!=null){
@@ -110,7 +111,7 @@ public class DrillConfiguration {
 			if(document!=null)url=document;
 		}
 		if(url!=null){
-			SpagoBILogger.infoLog("Url for drill is: "+url);
+			logger.debug("Url for drill is: "+url);
 		}
 
 		Node catUrlName=thisDocument.selectSingleNode("//"+type.toUpperCase()+"/DRILL/PARAM[@name='categoryurlname']");
@@ -122,7 +123,7 @@ public class DrillConfiguration {
 		}
 
 		if(categoryUrlName!=null){
-			SpagoBILogger.infoLog("Category name label is: "+categoryUrlName );
+			logger.debug("Category name label is: "+categoryUrlName );
 		}
 
 		Node serUrlName=thisDocument.selectSingleNode("//"+type.toUpperCase()+"/DRILL/PARAM[@name='seriesurlname']");
@@ -134,9 +135,9 @@ public class DrillConfiguration {
 		}
 
 		if(seriesUrlName!=null){		
-			SpagoBILogger.infoLog("Serie name label is: "+seriesUrlName );
+			logger.debug("Serie name label is: "+seriesUrlName );
 		}
-		SpagoBILogger.infoLog("check other parameters for drill");
+		logger.debug("check other parameters for drill");
 
 		ChartEditorUtils.print("", thisDocument);
 

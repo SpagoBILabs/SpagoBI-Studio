@@ -26,7 +26,6 @@ import it.eng.spagobi.studio.chart.editors.model.chart.LinkableChartModel;
 import it.eng.spagobi.studio.chart.editors.model.chart.ScatterChartModel;
 import it.eng.spagobi.studio.chart.editors.model.chart.XYChartModel;
 import it.eng.spagobi.studio.chart.utils.Style;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -50,6 +49,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -62,7 +63,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 public class ChartEditorComponents {
 
-
+	private static Logger logger = LoggerFactory.getLogger(ChartEditorComponents.class);
 	// Sections
 	Composite sectionClientInformation=null;
 	Composite sectionClientDimension=null;
@@ -94,7 +95,7 @@ String projectname = null;
 	 */
 
 	public void createStyleParametersForm(final ChartModel model, final ChartEditor editor, final Composite section, FormToolkit toolkit){
-		SpagoBILogger.infoLog("Start Style parameters form creation");
+		logger.debug("Start Style parameters form creation");
 		GridLayout gl = new GridLayout();
 		gl.numColumns = 1;
 		section.setLayout(gl);
@@ -103,7 +104,7 @@ String projectname = null;
 
 		for (Iterator iterator = stylesTrattati.iterator(); iterator.hasNext();) {
 			String styleName = (String) iterator.next();
-			SpagoBILogger.infoLog("Style parameter "+styleName);			
+			logger.debug("Style parameter "+styleName);			
 			final Style style=model.getStyleParametersEditors().get(styleName);
 			Group group=new Group(section,SWT.NULL);
 			group.setText(style.getDescription());
