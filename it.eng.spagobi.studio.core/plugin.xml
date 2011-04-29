@@ -3,7 +3,18 @@
 <plugin>
 
 
-
+<extension point="org.eclipse.ui.activities">
+<category name="Filter GUI Category"  id="org.myorg.category.excludeFromGUI"/>
+<categoryActivityBinding activityId="org.myorg.activity.excludeFromGUI" categoryId="org.myorg.category.excludeFromGUI"/>
+<activity name = "Exclude GUI" description="Exclude GUI" id="org.myorg.activity.excludeFromGUI"/>
+<!--<activityPatternBinding activityId="org.myorg.activity.excludeFromGUI" pattern=".*/org\.eclipse\.ui\.examples\.*"/>
+<activityPatternBinding activityId="org.myorg.activity.excludeFromGUI"  pattern=".*/org.eclipse.search.menu.*"/>
+<activityPatternBinding  activityId="org.myorg.activity.excludeFromGUI" pattern=".*/org.eclipse.edit.menu.*"/>-->
+<activityPatternBinding  activityId="org.myorg.activity.excludeFromGUI" pattern=".*/it.eng.spagobi.studio.core.*"/>
+<defaultEnablement id="org.myorg.activity.excludeFromGUI"/>
+</extension> 
+  
+   
 
    <extension
          id="spagoBIStudioBuilder"
@@ -38,31 +49,63 @@
          point="org.eclipse.ui.views">
       <view
             name="SpagoBIStudio Resource Navigator"
-            category="it.eng.spagobi.studio.core"
+            category="org.myorg.category.excludeFromGUI"
             class="it.eng.spagobi.studio.core.views.ResourceNavigator"
             id="it.eng.spagobi.studio.core.views.ResourceNavigator"
             icon="icons/sbiproject.gif">
       </view>
    </extension>
-
+<!-- VIEWER -->
 	<extension
          point="org.eclipse.ui.navigator.viewer">
        <viewerActionBinding
             viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
          <includes>
-             <actionExtension pattern="org.eclipse.ui.navigator.resources.*" />
+            <actionExtension pattern="org.eclipse.ui.navigator.resources.*" /> 
+		<actionExtension pattern="it.eng.spagobi.studio.core.views.actionProvider.MyActionProvider" /> 
+             
          </includes>
+        <excludes>
+                <actionExtension pattern="org.eclipse.team.*" />
+        </excludes>  
        </viewerActionBinding>
        <viewerContentBinding 
             viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
           <includes>
-       	     <contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />		       	      
-	     	 <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/>
-             <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/>
-             <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
+       	      <contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />		       	      
+	  	   <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/>
+        <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/> 
+        <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
           </includes>
+        
        </viewerContentBinding>
    </extension>
+   
+   <!-- NAVIGATOR CONTENT -->
+      <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <actionProvider
+            class="it.eng.spagobi.studio.core.views.actionProvider.MyActionProvider"
+            id="it.eng.spagobi.studio.core.views.actionProvider.MyActionProvider"
+            overrides="org.eclipse.ui.navigator.resources.actions.EditActions" 
+            dependsOn="it.eng.spagobi.studio.core.main.menu"
+            priority="highest">
+         <enablement>
+         <!-- A hack to allways be enabled -->
+        <!-- <not>
+            <systemTest
+                  property="MyApp"
+                  value="WONT-EVER-BE-SET">
+            </systemTest>
+         </not>-->
+         </enablement>
+     </actionProvider>
+   </extension>
+   
+   
+   
+   
+   
 	<!-- PERSPECTIVE -->
    <extension point="org.eclipse.ui.perspectives">
 	   <perspective
@@ -289,39 +332,72 @@
             class="it.eng.spagobi.studio.core.startup.EarlyStudioStartup"></startup>
    </extension>
   
-  <!--
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="it.eng.spagobi.studio.core.actionSet1"
-            label="Studio Actions"
-            visible="true">
-         <menu
-               id="it.eng.spagobi.studio.core.menuActionSet"
-               label="Menu Action Studio"
-               path="additions">
-            <groupMarker
-                  name="content">
-            </groupMarker>
-            <separator
-                  name="additions">
-            </separator>
-         </menu>
-         <action
-               id="it.eng.spagobi.studio.core.action1"
-               label="Open Favo&amp;rites View”"
-               menubarPath="it.eng.spagobi.studio.core.menuActionSet/content"
-               style="push"
-               toolbarPath="Normal/additions"
-               tooltip="Open the favorites view in the current workbench page">
-         </action>
-      </actionSet>
-   </extension> -->
-  <!-- <extension
-         point="org.eclipse.ui.intro.configExtension">
-      <configExtension
-            content="ext.xml"
-            configId="com.developer.welcome.configId">
-      </configExtension>
-   </extension> -->
+  
+  
+  
+  
+  
+    <extension point="org.eclipse.ui.actionSets">
+   <actionSet
+      id="it.eng.spagobi.studio.core.DocumentActionSet"
+   label="SpagoBI Documents"
+   visible="true">
+  <action
+        class="it.eng.spagobi.studio.chart.actions.NewWorkbenchChartAction"
+        icon="icons/private.png"
+        id="it.eng.spagobi.studio.chart.actions.NewWChartAction"
+        label="Chart"
+        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        toolbarPath="Normal/additions"
+        tooltip="Tooltip for Set Action 1"> 
+      </action>
+  <menu
+        id="it.eng.spagobi.studio.birt.menu3"
+        label="MENU"
+        path="additions">
+     <groupMarker
+           name="content">
+     </groupMarker>
+     <separator
+           name="additions">
+     </separator>
+  </menu>
+   </actionSet> 
+</extension>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- PROVO A ESCLUDERE CON ACITIVITIES http://www.eclipse.org/forums/index.php?t=msg&goto=494304&
+  org.eclipse.debugSupport
+org.eclipse.javaDevelopment
+org.eclipse.birt.activity
+org.eclipse.antDevelopment
+org.eclipse.wst.jsdt.debug.ui.activity
+org.eclipse.wtp.jee.capabilities
+org.eclipse.wtp.web.capabilities
+org.eclipse.team.cvs
+org.eclipse.wtp.javascript.capabilities
+org.eclipse.team
+org.eclipse.wtp.webservices.capabilities
+org.eclipse.datatools.capabilities.activity
+org.eclipse.wtp.xml.capabilities
+ 
+  -->
+  
+
+
+
+  
+  
+  
+  
+
 </plugin>

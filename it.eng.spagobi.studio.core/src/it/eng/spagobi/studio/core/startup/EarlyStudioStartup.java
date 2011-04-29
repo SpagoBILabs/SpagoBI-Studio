@@ -129,6 +129,7 @@ public class EarlyStudioStartup implements IStartup {
 										for (IActionSetDescriptor actionSetDescriptor : perspective.getAlwaysOffActionSets()) {
 											String id = actionSetDescriptor.getId();
 											logger.debug("Id: "+id + "  - Label: "+actionSetDescriptor.getLabel());
+											
 										}
 										logger.debug("---------------------");
 										logger.debug("Always On Action Set");
@@ -156,6 +157,8 @@ public class EarlyStudioStartup implements IStartup {
 							}
 							logger.debug("OUT");
 						}
+					
+					
 					});
 				}
 				logger.debug("OUT");

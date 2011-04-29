@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.views;
 
-import it.eng.spagobi.studio.core.actions.NewServerAction;
 import it.eng.spagobi.studio.core.bo.xmlMapping.XmlServerGenerator;
 import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 
@@ -31,9 +30,15 @@ import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.slf4j.Logger;
@@ -45,7 +50,10 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 
 	private static Logger logger = LoggerFactory.getLogger(ResourceNavigator.class);
 
-
+	//	@Override
+	//	protected Object getInitialInput() {
+	//		return new CustomResourceWorkbenchRoot();
+	//	}
 
 
 	/** inner class: Personalize folders with icons
@@ -56,16 +64,16 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 	//	public class MyLabelProvider extends LabelProvider {
 	public class MyLabelProvider extends NavigatorDecoratingLabelProvider {
 		// Prepare Icons
-//		ImageDescriptor datasourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATA_SOURCE);
-//		ImageDescriptor dataseDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATASET);
-//		ImageDescriptor analysisDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_ANALYSIS);
-//		ImageDescriptor metadataDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_METADATA_MODEL);
-//		ImageDescriptor privateDocumentsDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_PRIVATE_DOCUMENTS);
-//		ImageDescriptor resourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_RESOURCE);
-//		ImageDescriptor serverDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER);
-//		ImageDescriptor serverActiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_ACTIVE);
-//		ImageDescriptor serverInactiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_INACTIVE);
-//		ImageDescriptor sbiProjectDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SBI_PROJECT);
+		//		ImageDescriptor datasourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATA_SOURCE);
+		//		ImageDescriptor dataseDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_DATASET);
+		//		ImageDescriptor analysisDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_ANALYSIS);
+		//		ImageDescriptor metadataDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_METADATA_MODEL);
+		//		ImageDescriptor privateDocumentsDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_PRIVATE_DOCUMENTS);
+		//		ImageDescriptor resourceDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_RESOURCE);
+		//		ImageDescriptor serverDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER);
+		//		ImageDescriptor serverActiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_ACTIVE);
+		//		ImageDescriptor serverInactiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_INACTIVE);
+		//		ImageDescriptor sbiProjectDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SBI_PROJECT);
 
 		/**  vector containing images*/
 		Vector<Image> images = new Vector<Image>();
@@ -116,7 +124,7 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 					// there asre some structure folders that have a father folder
 
 					// data Source and server have father resources
-				if(name.equals(SpagoBIStudioConstants.FOLDER_DATA_SOURCE)){
+					if(name.equals(SpagoBIStudioConstants.FOLDER_DATA_SOURCE)){
 						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
 							imageToReturn = SpagoBIStudioConstants.datasourceDescriptor.createImage();
 							images.add(imageToReturn);
@@ -176,6 +184,7 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 		// Override Label provider to use personalized folder
 		CommonViewer viewer = getCommonViewer();
 		viewer.setLabelProvider(new MyLabelProvider((ILabelProvider)viewer.getLabelProvider()));
+
 
 
 
