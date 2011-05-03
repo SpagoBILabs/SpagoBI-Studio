@@ -20,11 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.jasper.editors;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.preferences.PreferenceConstants;
+
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.File;
-import java.util.Date;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -35,15 +34,21 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IEditorLauncher;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class JasperEditor implements IEditorLauncher {
 
+	private static Logger logger = LoggerFactory.getLogger(JasperEditor.class);
+
+	
 	/**
 	 *  Editor for Jasper document: opens ireport editor 
 	 */
 
+	
 	public void open(IPath fileToEditIPath) {
-
+logger.debug("in");
 		try{
 			// Catch the file to call path
 			File fileT=fileToEditIPath.toFile();
@@ -53,14 +58,14 @@ public final class JasperEditor implements IEditorLauncher {
 			// Launch I report, get from preferences the IReport Path
 			IPreferenceStore store = it.eng.spagobi.studio.jasper.Activator.getDefault().getPreferenceStore();
 
-			String iReportPathString = store.getString(PreferenceConstants.IREPORT_EXEC_FILE);
+			String iReportPathString = store.getString(SpagoBIStudioConstants.IREPORT_EXEC_FILE);
 
 			if(iReportPathString==null || iReportPathString.equalsIgnoreCase("")){
 				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Warning", "You must define IReport path in preferences");
 			}
 			else{
-				SpagoBILogger.infoLog("iReport path is "+iReportPathString);
+				logger.debug("iReport path is "+iReportPathString);
 				// get the directory Path
 				Path iReportPath=new Path(iReportPathString);
 				File iReportExec=iReportPath.toFile();
@@ -69,9 +74,9 @@ public final class JasperEditor implements IEditorLauncher {
 				//				String temp=iReportDirectory.getPath()+"/"+newD.toString()+".txt";
 				//				new File(temp);
 				String command=iReportPath+" \""+fileToEditPath+"\"";
-				SpagoBILogger.infoLog("Command to launch: "+command+" --- in iReport Directory: "+iReportDirectory);
+				logger.debug("Command to launch: "+command+" --- in iReport Directory: "+iReportDirectory);
 				Runtime rt = Runtime.getRuntime();
-				SpagoBILogger.infoLog("start execution");
+				logger.debug("start execution");
 
 				Process proc  = rt.exec(command, null, iReportDirectory);		
 				//proc.waitFor();
@@ -79,9 +84,9 @@ public final class JasperEditor implements IEditorLauncher {
 				//int returnValue=proc.waitFor();
 //				int returnValue=0;
 //				
-//				SpagoBILogger.infoLog("Return value is "+returnValue);
+//				logger.debug("Return value is "+returnValue);
 //				if(returnValue!=0){
-//					SpagoBILogger.infoLog("Error during iReport Execution");
+//					logger.debug("Error during iReport Execution");
 //					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 //							"Error", "Generic error after closing iReport: code "+Integer.valueOf(returnValue).toString());			
 //				}
@@ -92,7 +97,7 @@ public final class JasperEditor implements IEditorLauncher {
 				fileToEditIFile.refreshLocal(IResource.DEPTH_INFINITE, null);
 				boolean isSync2=fileToEditDirectory.isSynchronized(2);				
 				fileToEditDirectory.refreshLocal(IResource.DEPTH_INFINITE, null);
-				SpagoBILogger.infoLog("Refreshed, exit jasper editor");
+				logger.debug("Refreshed, exit jasper editor");
 			}
 		}
 		catch(Exception e)
@@ -100,6 +105,7 @@ public final class JasperEditor implements IEditorLauncher {
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"Error", "Could not start iReport; check you selected the right execution file in preferences");			
 		}
+		logger.debug("OUT");
 
 	}
 

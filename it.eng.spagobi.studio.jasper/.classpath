@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry combineaccessrules="false" kind="src" path="/it.eng.spagobi.studio.core"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/dom4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/dom4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.slf4j.api_1.5.11.v20100519-1910.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/it.eng.spagobi.studio.utils"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

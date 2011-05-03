@@ -24,16 +24,17 @@ package it.eng.spagobi.studio.jasper.wizards;
 
 import it.eng.spagobi.studio.jasper.Activator;
 import it.eng.spagobi.studio.jasper.wizards.pages.NewJasperReportWizardPage;
+import it.eng.spagobi.studio.utils.util.IOUtilities;
+import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -42,9 +43,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -53,15 +58,18 @@ public class SpagoBINewJasperReportWizard extends Wizard implements INewWizard {
 
 	// dashboard creation page
 	private NewJasperReportWizardPage newJasperWizardPage;
+	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
-
+	private static Logger logger = LoggerFactory.getLogger(SpagoBINewJasperReportWizard.class);
+	private boolean calledFromMenu = false;
 	public static final String JASPER_INFO_FILE = "it/eng/spagobi/studio/jasper/resources/new_template.jrxml";
 
 
 	public boolean performFinish() {
+		logger.debug("IN");
 		// get the name of the dashboard from the form
 		String jasperFileName = newJasperWizardPage.getJasperNameText().getText();
 		if (jasperFileName == null || jasperFileName.trim().equals("")) {
@@ -71,10 +79,24 @@ public class SpagoBINewJasperReportWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
-		// get the folder selected:  
-		Object objSel = selection.toList().get(0);
-		// FolderSel is the folder in wich to insert the new template
-		Folder folderSel=(Folder)objSel;
+		// get the folder selected, if from context menu is from navigator tree, else is from project tree
+		Folder folderSel = null;
+
+		if(calledFromMenu){
+			Tree tree =workbenchProjectTreePage.getTree();
+			TreeItem[] item = tree.getSelection();
+			TreeItem selected = item[0];
+			IFolder folder= workbenchProjectTreePage.getItemFolderMap().get(selected.getText());
+			folderSel = (Folder)folder;
+		}
+		else {
+			// get the folder selected:  
+			Object objSel = selection.toList().get(0);
+			// FolderSel is the folder in wich to insert the new template
+			folderSel=(Folder)objSel;
+
+		}
+		logger.debug("Save in "+folderSel.getName());
 
 		// get the project
 		String projectName = folderSel.getProject().getName();
@@ -92,7 +114,7 @@ public class SpagoBINewJasperReportWizard extends Wizard implements INewWizard {
 		try {
 			is = res.openStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			flushFromInputStreamToOutputStream(is, baos, true);
+			IOUtilities.flushFromInputStreamToOutputStream(is, baos, true);
 			byte[] resbytes = baos.toByteArray();
 			bais = new ByteArrayInputStream(resbytes);
 		} catch (Exception e) {
@@ -132,6 +154,7 @@ public class SpagoBINewJasperReportWizard extends Wizard implements INewWizard {
 		//			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 		//					"Error", "Error while opening editor");
 		//		}
+		logger.debug("OUT");
 		return true;
 	}
 
@@ -143,37 +166,30 @@ public class SpagoBINewJasperReportWizard extends Wizard implements INewWizard {
 
 
 	public void addPages() {
+		logger.debug("IN");
 		super.addPages();
 		newJasperWizardPage = new NewJasperReportWizardPage("New Jasper Report");
 		addPage(newJasperWizardPage);
-	}
+		
 
-
-	public static void flushFromInputStreamToOutputStream(InputStream is, OutputStream os, 
-			boolean closeStreams) throws Exception  {
-		try{	
-			int c = 0;
-			byte[] b = new byte[1024];
-			while ((c = is.read(b)) != -1) {
-				if (c == 1024)
-					os.write(b);
-				else
-					os.write(b, 0, c);
-			}
-			os.flush();
-		} catch (IOException ioe) {
-			throw ioe;
-		} finally {
-			if (closeStreams) {
-				try {
-					if (os != null) os.close();
-					if (is != null) is.close();
-				} catch (IOException e) {
-					throw e;
-				}
-
-			}
+		if(calledFromMenu == true){
+			logger.debug("wizard has been called by workbench menu, page for folder selection must be added");
+			workbenchProjectTreePage = new WorkbenchProjectTreePage("Page Name", selection);
+			addPage(workbenchProjectTreePage);
 		}
+		logger.debug("OUT");
+		
 	}
+
+	public boolean isCalledFromMenu() {
+		return calledFromMenu;
+	}
+
+	public void setCalledFromMenu(boolean calledFromMenu) {
+		this.calledFromMenu = calledFromMenu;
+	}
+
+
+
 
 }

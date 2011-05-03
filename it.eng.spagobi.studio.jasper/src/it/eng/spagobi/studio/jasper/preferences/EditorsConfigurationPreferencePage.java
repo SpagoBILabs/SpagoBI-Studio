@@ -20,10 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.jasper.preferences;
 
-import it.eng.spagobi.studio.core.preferences.PreferenceConstants;
 import it.eng.spagobi.studio.jasper.Activator;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
-import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -66,7 +65,7 @@ public class EditorsConfigurationPreferencePage
 //		iReportInstallDir = new StringFieldEditor(PreferenceConstants.IREPORT_INSTALLATION_DIR, "IReport Installation Dir:", getFieldEditorParent());
 //		addField(iReportInstallDir);
 	
-		iReportExecFile = new FileFieldEditor(PreferenceConstants.IREPORT_EXEC_FILE, "IReport execution File:", getFieldEditorParent());
+		iReportExecFile = new FileFieldEditor(SpagoBIStudioConstants.IREPORT_EXEC_FILE, "IReport execution File:", getFieldEditorParent());
 		addField(iReportExecFile);
 	}
 
