@@ -377,17 +377,8 @@
         menubarPath="it.eng.spagobi.studio.birt.menu3/content"
         toolbarPath="Normal/additions"
         tooltip="Document Composition"> 
-      </action>
-                    <action
-        class="it.eng.spagobi.studio.geo.actions.NewWorkbenchGEOAction"
-        icon="icons/objecticon_GEO.png"
-        id="it.eng.spagobi.studio.geo.actions.NewWorkbenchGEOAction"
-        label="Geo"
-        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
-        toolbarPath="Normal/additions"
-        tooltip="Geo"> 
-      </action>          
-                      <action
+      </action>   
+             <action
         class="it.eng.spagobi.studio.jasper.actions.NewWorkbenchJasperAction"
         icon="icons/objecticon_REPORT.png"
         id="it.eng.spagobi.studio.jasper.actions.NewWorkbenchJasperAction"
@@ -396,9 +387,18 @@
         toolbarPath="Normal/additions"
         tooltip="Jasper"> 
       </action>      
+                   <action
+        class="it.eng.spagobi.studio.geo.actions.NewWorkbenchGEOAction"
+        icon="icons/objecticon_MAP.png"
+        id="it.eng.spagobi.studio.geo.actions.NewWorkbenchGEOAction"
+        label="Geo"
+        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        toolbarPath="Normal/additions"
+        tooltip="Geo"> 
+      </action>  
   <menu
         id="it.eng.spagobi.studio.birt.menu3"
-        label="MENU"
+        label="SpagoBI Documents"
         path="additions">
      <groupMarker
            name="content">
