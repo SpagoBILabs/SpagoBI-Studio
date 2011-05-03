@@ -26,7 +26,6 @@ import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
@@ -98,6 +97,7 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 			folderSel=(Folder)objSel;
 
 		}
+		logger.debug("Save in "+folderSel.getName());
 
 
 		// get the project
@@ -155,7 +155,7 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 
 	public void addPages() {
 		logger.debug("IN");
-		//super.addPages();
+		super.addPages();
 		newChartWizardPage = new NewChartWizardPage(workbench, "New Dashboard");
 		addPage(newChartWizardPage);
 
