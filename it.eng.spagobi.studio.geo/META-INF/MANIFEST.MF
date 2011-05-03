@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  it.eng.spagobi.studio.utils;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Bundle-ClassPath: lib/axis-1.4.jar,
+Bundle-ClassPath: .,
+ lib/axis-1.4.jar,
  lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
  lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar,
  lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
