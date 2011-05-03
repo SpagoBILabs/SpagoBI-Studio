@@ -22,9 +22,10 @@ package it.eng.spagobi.studio.chart.editors;
 
 
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
-import it.eng.spagobi.studio.core.bo.DataStoreMetadata;
-import it.eng.spagobi.studio.core.bo.DataStoreMetadataField;
-import it.eng.spagobi.studio.core.bo.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -70,10 +71,17 @@ public class DataSetInformationEditor {
 		GridLayout gridLayout=new GridLayout();
 		gridLayout.numColumns=1;
 		sectionClientDatasetInformation.setLayout(gridLayout);
-		SpagoBIServerObjects sbso = new SpagoBIServerObjects(projectname);
+
+		SpagoBIServerObjects sbso = null;
+		try{
+			sbso =new SpagoBIServerObjects(projectname);
+		}
+		catch (NoActiveServerException e) {
+			logger.error("No Active server defined");
+		}
 		noDataSet=new org.eclipse.swt.widgets.Label(sectionClientDatasetInformation, SWT.NULL);
 
-		if(model.getSdkDataSetId()!=null){
+		if(sbso != null && model.getSdkDataSetId()!=null){
 			DataStoreMetadata dataStoreMetadata= null;
 			try {
 				dataStoreMetadata=sbso.getDataStoreMetadata(model.getSdkDataSetId());
@@ -97,14 +105,14 @@ public class DataSetInformationEditor {
 							" - a dataset is associated to the document (you can associate during first deploy or directly via SpagoBI Server) \n" +
 							" - communication with SpagoBIServer is avalaible \n" +
 							" - document metadata are refreshed and referring to the right dataset (right click on resource => SpagoBI => Properties => Refresh metadata) \n" +
-							" - the dataset on Server is rightly configured (in order to obtain its metadata you should have succesfully tested it at least once on server)");
+					" - the dataset on Server is rightly configured (in order to obtain its metadata you should have succesfully tested it at least once on server)");
 				}
 			} catch (Exception e) {
 				//MessageDialog.openError(sectionDatasetInformation.getShell(), "Error", "Could not retrieve metadata for dataset with ID "+model.getSdkDataSetId());
 				noDataSet.setText("Could not retrieve dataset informations, check that: \n" +
 						" - communication with SpagoBIServer is avalaible \n" +
 						" - document metadata are refreshed and referring to the right dataset (right click on resource => SpagoBI => Properties => Refresh metadata) \n" +
-						" - the dataset on Server is rightly configured (in order to obtain its metadata you should have succesfully tested it at least once on server)");
+				" - the dataset on Server is rightly configured (in order to obtain its metadata you should have succesfully tested it at least once on server)");
 			}
 
 		}

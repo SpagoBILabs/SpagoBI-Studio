@@ -22,9 +22,8 @@ package it.eng.spagobi.studio.chart.actions;
 
 import it.eng.spagobi.studio.chart.wizards.SpagoBINewChartWizard;
 
-import org.eclipse.core.internal.resources.Folder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -41,7 +40,7 @@ public class NewWorkbenchChartAction implements IWorkbenchWindowActionDelegate {
 	private IViewPart view = null;
 
 	ISelection selection;
-	
+
 	private static Logger logger = LoggerFactory.getLogger(NewWorkbenchChartAction.class);
 
 	public void init(IViewPart view) {
@@ -49,31 +48,21 @@ public class NewWorkbenchChartAction implements IWorkbenchWindowActionDelegate {
 	}
 
 	public void run(IAction action) {
+		logger.debug("IN");
 		SpagoBINewChartWizard sbindw = new SpagoBINewChartWizard();
-//		CommonViewer commViewer=((CommonNavigator) view).getCommonViewer();
-//		IStructuredSelection sel=(IStructuredSelection)commViewer.getSelection();
-		IStructuredSelection sel=(IStructuredSelection)selection;
+		sbindw.setCalledFromMenu(true);
 		
-		Object objSel = sel.toList().get(0);
-		Folder folderSel = null;		
-		try{
-			// FolderSel is the folder in wich to insert the new template
-			folderSel=(Folder)objSel;
+		IStructuredSelection sel=(IStructuredSelection)selection;
 
-			sbindw.init(PlatformUI.getWorkbench(), sel);
-			// Create the wizard dialog
-			WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbindw);
-			// Open the wizard dialog
-			dialog.open();
-
-		}
-		catch (Exception e) {
-			logger.error("no selected folder", e);			
-			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "You must select a folder in wich to insert the chart");		
-		}
+		// from menu has no selection
+		sbindw.init(PlatformUI.getWorkbench(), sel);
+		// Create the wizard dialog
+		WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbindw);
+		// Open the wizard dialog
+		dialog.open();
 
 
+		logger.debug("OUT");
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
@@ -85,12 +74,12 @@ public class NewWorkbenchChartAction implements IWorkbenchWindowActionDelegate {
 
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void init(IWorkbenchWindow window) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 

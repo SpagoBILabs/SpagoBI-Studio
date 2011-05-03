@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,24 +62,27 @@ public class NewChartWizardPage extends WizardPage {
 	final HashMap<String, Composite> composites=new HashMap<String, Composite>();
 	static String selectedType=null;
 	private static Logger logger = LoggerFactory.getLogger(NewChartWizardPage.class);
-
-	public NewChartWizardPage(String pageName) {
+	private IWorkbench workbench;
+	
+	public NewChartWizardPage( IWorkbench _workbench, String pageName) {
 		super(pageName);
 		setTitle("New Chart ...");
+		workbench = _workbench;
 	}
 
 	public void createControl(Composite parent) {
 
-		Shell shell = parent.getShell();
 
 		try{
 			//Type 
 			final List chartTypes = ChartModel.getConfiguredChartTypes();
+			Composite all=new Composite(parent, SWT.NONE);
+			
+			Shell shell = all.getShell();
 			if (chartTypes == null || chartTypes.size() == 0) {
 				MessageDialog.openInformation(shell, "Error", "No Charts configured, see the ChartsInformation.xml file");
 			}
 			setPageComplete(false);
-			Composite all=new Composite(parent, SWT.NONE);
 			all.setLayout(new RowLayout(SWT.VERTICAL));
 
 			Group nameComposite=  new org.eclipse.swt.widgets.Group(all, SWT.BORDER);
@@ -100,7 +104,7 @@ public class NewChartWizardPage extends WizardPage {
 			chartNameText = new Text(nameComposite, SWT.BORDER);
 			chartNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));		
 
-			
+
 			//Name Field
 			Label setType=new Label(nameComposite, SWT.NONE);
 			setType.setText("Type:");				
@@ -133,7 +137,7 @@ public class NewChartWizardPage extends WizardPage {
 				}
 			});
 
-			
+
 			// Group down
 			final Group belowComposite=new Group(all,SWT.BORDER);		
 			belowComposite.setLayoutData(new RowData(500,300));
@@ -154,17 +158,17 @@ public class NewChartWizardPage extends WizardPage {
 							String imagePath=ChartEditorUtils.getChartImagePath(t.toUpperCase());
 							InputStream is=ChartEditorUtils.getInputStreamFromResource(imagePath);
 							image = new Image(compImage.getDisplay(), is);
-					
+
 							final int originalWidth = image.getBounds().width;
 							final int originalHeight = image.getBounds().height; 				
 							int containerHeight=compImage.getBounds().height;
 							int containerWidth=compImage.getBounds().width;
 							double rapportoHeight=(double)containerHeight / (double)originalHeight;
 							double rapportoWidth=(double)containerWidth / (double)originalWidth;
-							
+
 							scaledImage = new Image(compImage.getDisplay(),
 									image.getImageData().scaledTo((int)(originalWidth*rapportoWidth-20),(int)(originalHeight*rapportoHeight-20)));
-						
+
 						} catch (FileNotFoundException e1) {
 							logger.error("could not find image for type "+t, e1);
 						}
@@ -201,7 +205,7 @@ public class NewChartWizardPage extends WizardPage {
 
 
 
-			setControl(nameComposite);
+			setControl(all);
 
 		}
 		catch (Exception e) {
@@ -220,7 +224,7 @@ public class NewChartWizardPage extends WizardPage {
 	}
 
 
-	
+
 
 
 	public boolean isPageComplete() {
@@ -235,10 +239,10 @@ public class NewChartWizardPage extends WizardPage {
 
 	static void doSelection(Button button) {
 		if (button.getSelection()){
-//			System.out.println("do work for selection "+button);
+			//			System.out.println("do work for selection "+button);
 			selectedType=(String)button.getData();
 		} else {
-//			System.out.println("do work for deselection "+button);
+			//			System.out.println("do work for deselection "+button);
 		}
 	}
 

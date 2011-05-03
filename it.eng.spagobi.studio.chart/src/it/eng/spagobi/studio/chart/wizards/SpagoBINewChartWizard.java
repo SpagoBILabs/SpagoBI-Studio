@@ -22,12 +22,15 @@ package it.eng.spagobi.studio.chart.wizards;
 
 import it.eng.spagobi.studio.chart.Activator;
 import it.eng.spagobi.studio.chart.wizards.pages.NewChartWizardPage;
+import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -37,6 +40,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.INewWizard;
@@ -54,15 +59,18 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 
 	// chart creation page
 	private NewChartWizardPage newChartWizardPage;
+	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
 	private static Logger logger = LoggerFactory.getLogger(SpagoBINewChartWizard.class);
 
+	private boolean calledFromMenu = false;
+
 	public boolean performFinish() {
 		// get the name of the dashboard from the form
-		logger.debug("Starting chart wizard");
+		logger.debug("IN");
 		String chartFileName = newChartWizardPage.getChartNameText().getText();
 		if (chartFileName == null || chartFileName.trim().equals("")) {
 			logger.error("ChartNameEmpty");
@@ -73,11 +81,24 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 		// Get the selected Type
 		String typeSelected=newChartWizardPage.getSelectedType();		
 
-		// get the folder selected:  
-		Object objSel = selection.toList().get(0);
-		Folder folderSel = null;		
-		// FolderSel is the folder in wich to insert the new template
-		folderSel=(Folder)objSel;
+		// get the folder selected, if from context menu is from navigator tree, else is from project tree
+		Folder folderSel = null;
+
+		if(calledFromMenu){
+			Tree tree =workbenchProjectTreePage.getTree();
+			TreeItem[] item = tree.getSelection();
+			TreeItem selected = item[0];
+			IFolder folder= workbenchProjectTreePage.getItemFolderMap().get(selected.getText());
+			folderSel = (Folder)folder;
+		}
+		else {
+			// get the folder selected:  
+			Object objSel = selection.toList().get(0);
+			// FolderSel is the folder in wich to insert the new template
+			folderSel=(Folder)objSel;
+
+		}
+
 
 		// get the project
 		String projectName = folderSel.getProject().getName();
@@ -122,7 +143,7 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 					"Error", "Error while opening editor");
 			return false;
 		}
-		logger.debug("Open the chart wizard");
+		logger.debug("OUT");
 		return true;
 	}
 
@@ -133,9 +154,31 @@ public class SpagoBINewChartWizard extends Wizard implements INewWizard {
 	}
 
 	public void addPages() {
-		super.addPages();
-		newChartWizardPage = new NewChartWizardPage("New Dashboard");
+		logger.debug("IN");
+		//super.addPages();
+		newChartWizardPage = new NewChartWizardPage(workbench, "New Dashboard");
 		addPage(newChartWizardPage);
+
+		if(calledFromMenu == true){
+			logger.debug("wizard has been called by workbench menu, page for folder selection must be added");
+			workbenchProjectTreePage = new WorkbenchProjectTreePage("Page Name", selection);
+			addPage(workbenchProjectTreePage);
+		}
+
+
+		logger.debug("OUT");
+
 	}
+
+	public boolean isCalledFromMenu() {
+		return calledFromMenu;
+	}
+
+	public void setCalledFromMenu(boolean calledFromMenu) {
+		this.calledFromMenu = calledFromMenu;
+	}
+
+
+
 
 }

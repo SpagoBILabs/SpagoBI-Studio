@@ -8,6 +8,8 @@
 	<classpathentry kind="lib" path="lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar"/>
 	<classpathentry kind="lib" path="lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar"/>
 	<classpathentry kind="lib" path="lib/org.slf4j.api_1.5.11.v20100519-1910.jar"/>
-	<classpathentry kind="lib" path="lib/sbi.utils-2.3.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/it.eng.spagobi.studio.utils"/>
+	<classpathentry kind="lib" path="lib/sbiutils.jar"/>
+	<classpathentry kind="lib" path="lib/axis-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
