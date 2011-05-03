@@ -18,7 +18,9 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
  **/
-package it.eng.spagobi.studio.core.bo.xmlMapping;
+package it.eng.spagobi.studio.utils.bo.xmlMapping;
+
+import it.eng.spagobi.studio.utils.bo.Server;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,9 +29,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import it.eng.spagobi.studio.core.bo.Server;
-import it.eng.spagobi.studio.core.editors.ServerEditor;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
