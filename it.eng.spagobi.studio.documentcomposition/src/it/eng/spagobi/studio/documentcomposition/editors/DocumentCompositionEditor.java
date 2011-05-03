@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.documentcomposition.editors;
 
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentComposition;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ModelBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
@@ -61,6 +60,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** this is the editor of a file that terminates with .doccomp
  * 
@@ -76,6 +77,7 @@ public class DocumentCompositionEditor extends EditorPart {
 	Designer designer;
 	private XmlTemplateGenerator generator = new XmlTemplateGenerator();
 	protected boolean isDirty = false;
+	private static Logger logger = LoggerFactory.getLogger(DocumentCompositionEditor.class);
 
 	
 	/**
@@ -84,6 +86,7 @@ public class DocumentCompositionEditor extends EditorPart {
 
 	@Override
 	public void dispose() {
+		logger.debug("IN");
 		super.dispose();
 
 		// construct navigationVie
@@ -109,11 +112,12 @@ public class DocumentCompositionEditor extends EditorPart {
 			videoView = (VideoSizeView)videoView;
 			getSite().getPage().hideView(videoView);
 		}
+		logger.debug("OUT");
+
 	}
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-		SpagoBILogger.infoLog("Start Saving Document Composition Template File");
+		logger.debug("IN");
 		ByteArrayInputStream bais = null;
 
 		// Before Saving recalculate all containers style because they could have changed with video size
@@ -127,15 +131,12 @@ public class DocumentCompositionEditor extends EditorPart {
 			FileEditorInput fei = (FileEditorInput) getEditorInput();
 			IFile file = fei.getFile();
 			String newContent =  generator.transformToXml(documentComposition);
-//			System.out.println("******** SAVING ***************");
-//			System.out.println(newContent);
 			byte[] bytes = newContent.getBytes();
 			bais = new ByteArrayInputStream(bytes);
 			file.setContents(bais, IFile.FORCE, null);
 
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while Saving Document Composition Template File",e);
-			e.printStackTrace();
+			logger.error("Error while Saving Document Composition Template File",e);
 		}	
 		finally { 
 			if (bais != null)
@@ -147,6 +148,7 @@ public class DocumentCompositionEditor extends EditorPart {
 				}
 		}
 		setIsDirty(false);
+		logger.debug("OUT");
 
 	}
 	public void setIsDirty(boolean isDirty) {
@@ -167,7 +169,7 @@ public class DocumentCompositionEditor extends EditorPart {
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
 	throws PartInitException {
-		SpagoBILogger.infoLog(DocumentCompositionEditor.class.toString()+": init function");
+		logger.debug("IN");
 
 		//verifica se esiste già un documento aperto
 		try{
@@ -178,7 +180,7 @@ public class DocumentCompositionEditor extends EditorPart {
 			setSite(site);
 			IEditorPart currentEditor = DocCompUtilities.getEditorReference(DocCompUtilities.DOCUMENT_COMPOSITION_EDITOR_ID);
 			if(currentEditor != null && currentEditor instanceof DocumentCompositionEditor){
-				SpagoBILogger.warningLog("Editor is already opened!!!");
+				logger.warn("Editor is already opened!!!");
 //				System.out.println("Editor is already opened!!!");
 				MessageDialog.openError(site.getShell(), "ERROR", "Operation denied. Another editor is opened.");
 				IWorkbenchPage iworkbenchpage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -203,14 +205,14 @@ public class DocumentCompositionEditor extends EditorPart {
 				
 			} catch (CoreException e) {
 				e.printStackTrace();
-				SpagoBILogger.errorLog(DocumentCompositionEditor.class.toString()+": Error in reading template", e);
+				logger.error(DocumentCompositionEditor.class.toString()+": Error in reading template", e);
 				throw(new PartInitException("Error in reading template"));
 			}
 		}catch(Exception e){
-			SpagoBILogger.warningLog("Error occurred:"+e.getMessage());
+			logger.warn("Error occurred:"+e.getMessage());
 		}
 
-		SpagoBILogger.infoLog("END "+DocumentCompositionEditor.class.toString()+": init function");
+		logger.debug("OUT");
 	}
 
 
@@ -224,7 +226,7 @@ public class DocumentCompositionEditor extends EditorPart {
 	@Override
 	public void createPartControl(Composite _parent) {
 
-		SpagoBILogger.infoLog(DocumentCompositionEditor.class.toString()+": Create Part Control function");
+		logger.debug("IN");
 
 		//inserisce le viste
 		try {
@@ -302,13 +304,13 @@ public class DocumentCompositionEditor extends EditorPart {
 		// Now initialize Editor with DocumentComposition retrieved
 		initializeEditor(new ModelBO().getModel());
 
-		SpagoBILogger.infoLog("END "+DocumentCompositionEditor.class.toString()+": create Part Control function");
+		logger.debug("OUT");
 
 	}
 
 
 	public void initializeEditor(DocumentComposition documentComposition){
-		SpagoBILogger.infoLog("START: "+DocumentCompositionEditor.class.toString()+" initialize Editor");	
+		logger.debug("IN");
 		// clean the properties View
 		IWorkbenchWindow a=PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		// Document properties
@@ -321,11 +323,11 @@ public class DocumentCompositionEditor extends EditorPart {
 				view.cleanSizeAndProperties();
 			}
 			else{
-				SpagoBILogger.warningLog("view Document Propertiess closed");
+				logger.warn("view Document Propertiess closed");
 			}
 		}
 		catch (Exception e) {
-			SpagoBILogger.warningLog("Window not active, could not empty the property view");	
+			logger.warn("Window not active, could not empty the property view");	
 		}
 
 		try{
@@ -335,12 +337,12 @@ public class DocumentCompositionEditor extends EditorPart {
 				view.cleanParameters();
 			}
 			else{
-				SpagoBILogger.warningLog("view Document Parameters closed");
+				logger.warn("view Document Parameters closed");
 			}
 
 		}
 		catch (Exception e) {
-			SpagoBILogger.warningLog("Window not active, could not empty the property view");	
+			logger.warn("Window not active, could not empty the property view");	
 		}
 
 		try{
@@ -350,16 +352,17 @@ public class DocumentCompositionEditor extends EditorPart {
 				view.cleanParameters();
 			}
 			else{
-				SpagoBILogger.warningLog("view Navigation not present");
+				logger.warn("view Navigation not present");
 			}
 
 		}
 		catch (Exception e) {
-			SpagoBILogger.warningLog("Window not active, could not empty the property view");	
+			logger.warn("Window not active, could not empty the property view");	
 		}
 		// Initialize Designer
 		designer.initializeDesigner(documentComposition);
-		SpagoBILogger.infoLog("END: initialize Editor");	
+		logger.debug("OUT");
+
 	}
 
 

@@ -20,12 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.util;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.documentcomposition.Activator;
-import it.eng.spagobi.studio.documentcomposition.editors.DocumentCompositionEditor;
+import it.eng.spagobi.studio.documentcomposition.editors.DocContainer;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Document;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentComposition;
-import it.eng.spagobi.studio.documentcomposition.views.DocumentPropertiesView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,9 +39,12 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.EditorReference;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DocCompUtilities {
 
+	private static Logger logger = LoggerFactory.getLogger(DocCompUtilities.class);
 
 	/** Get input stream from a resource
 	 * 
@@ -62,7 +63,7 @@ public class DocCompUtilities {
 
 	public static InputStream getInputStreamFromResource(String resourcePath) throws IOException {
 		Bundle b = org.eclipse.core.runtime.Platform.getBundle(it.eng.spagobi.studio.documentcomposition.Activator.PLUGIN_ID);
-		SpagoBILogger.infoLog(b.getLocation()+" -  "+b.getSymbolicName());
+		logger.debug(b.getLocation()+" -  "+b.getSymbolicName());
 		URL res = b.getResource(resourcePath);
 		InputStream is = res.openStream();
 		return is;

@@ -20,16 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.views;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.documentcomposition.Activator;
 import it.eng.spagobi.studio.documentcomposition.editors.DocumentCompositionEditor;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Document;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentComposition;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentsConfiguration;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameter;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameters;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Refresh;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.RefreshDocLinked;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ModelBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ParameterBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
@@ -66,12 +61,15 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DocumentParametersView extends ViewPart {
 
 	private DocumentComposition documentComp;
 	Composite client;
 	Table table;
+	private static Logger logger = LoggerFactory.getLogger(DocumentParametersView.class);
 
 	public static final int ID=0;
 	public static final int LABEL=1;
@@ -95,7 +93,7 @@ public class DocumentParametersView extends ViewPart {
 
 
 	public void createPartControl(Composite parent) {
-
+logger.debug("IN");
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		// Lets make a layout for the first section of the screen
 		GridLayout layout = new GridLayout();
@@ -200,7 +198,7 @@ public class DocumentParametersView extends ViewPart {
 
 							// get parameter ID from template 
 							if(parameterUrl == null) {
-								SpagoBILogger.errorLog("parameter url not found", null);
+								logger.error("parameter url not found");
 								return;
 							}
 
@@ -229,7 +227,7 @@ public class DocumentParametersView extends ViewPart {
 					}
 
 					catch (Exception ex) {
-						SpagoBILogger.errorLog("Error in treating parameter", ex);
+						logger.error("Error in treating parameter", ex);
 					}
 				}
 				else // This is selection Mode
@@ -266,7 +264,7 @@ public class DocumentParametersView extends ViewPart {
 								if(editorPart!=null) ((DocumentCompositionEditor)editorPart).setIsDirty(true);				
 							}
 							catch (Exception e) {
-								SpagoBILogger.warningLog("error in modifying default value");
+								logger.warn("error in modifying default value");
 							}
 
 						}
@@ -288,9 +286,12 @@ public class DocumentParametersView extends ViewPart {
 		section.setClient(client);
 		viewSelectedProperties();
 		setVisible(false);
+		logger.debug("OUT");
+
 	}
 
 	public void reloadParametersProperties(MetadataDocument metadataDocument){
+		logger.debug("IN");
 		table.removeAll();
 		if(metadataDocument!=null){		
 			DocumentComposition docComposition=Activator.getDefault().getDocumentComposition();
@@ -312,7 +313,7 @@ public class DocumentParametersView extends ViewPart {
 			}
 			catch (Exception e) {
 				// exception proof cause next to release!
-				SpagoBILogger.errorLog("Error in recovering default value", null);
+				logger.error("Error in recovering default value");
 			}
 
 			Vector<MetadataParameter> parameters=metadataDocument.getMetadataParameters();
@@ -347,6 +348,8 @@ public class DocumentParametersView extends ViewPart {
 		client.layout();
 		client.redraw();
 		setVisible(true);
+		logger.debug("OUT");
+
 	}
 
 

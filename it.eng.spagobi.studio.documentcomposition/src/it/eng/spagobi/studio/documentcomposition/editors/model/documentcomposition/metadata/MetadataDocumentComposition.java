@@ -20,19 +20,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.documentcomposition.actions.NewWorkbenchDocumentCompositionAction;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MetadataDocumentComposition {
 
 	boolean madeWithStudio=false;
 	String madeWithStudioDate;
+	private static Logger logger = LoggerFactory.getLogger(MetadataDocumentComposition.class);
 
 	public MetadataDocumentComposition(IFile newFile) {
 		madeWithStudio=calculateIfMadeWithStudio(newFile);
@@ -77,7 +80,7 @@ public class MetadataDocumentComposition {
 		try {
 			date=newFile.getPersistentProperty(SpagoBIStudioConstants.MADE_WITH_STUDIO);
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Could not retrieve metadata", e);			
+			logger.error("Could not retrieve metadata", e);			
 			e.printStackTrace();
 		}
 		if(date==null)madeWithStudio=false;

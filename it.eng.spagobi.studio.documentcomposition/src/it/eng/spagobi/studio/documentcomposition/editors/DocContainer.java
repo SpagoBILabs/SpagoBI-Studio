@@ -20,8 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.editors;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.documentcomposition.actions.NewWorkbenchDocumentCompositionAction;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Style;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ModelBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
@@ -29,7 +28,7 @@ import it.eng.spagobi.studio.documentcomposition.editors.model.documentcompositi
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentParametersView;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentPropertiesView;
-import it.eng.spagobi.studio.documentcomposition.views.NavigationView;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Iterator;
 
@@ -59,6 +58,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** DocContainer class represents a square added in a designer, identified by a idCOntainer,
  *  contains a documentContained
@@ -74,7 +75,9 @@ public class DocContainer {
 	DocumentContained documentContained;
 
 	String title="";
+	private static Logger logger = LoggerFactory.getLogger(DocContainer.class);
 
+	
 	public static final int DEFAULT_WIDTH=200;
 	public static final int DEFAULT_HEIGHT=200;
 	public static final int MIN_MARGIN_BOUNDS=0;
@@ -97,6 +100,7 @@ public class DocContainer {
 
 	public DocContainer(Designer _designer,Composite mainComposite, int x, int y, int tempWidth, int tempHeight) {
 		super();
+		logger.debug("IN");
 		designer=_designer;
 		// Set incremental Id
 		idContainer=Integer.valueOf(designer.createID());
@@ -104,8 +108,7 @@ public class DocContainer {
 			documentContained=new DocumentContained(mainComposite, SWT.NONE, designer);
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("Error in creating the group", e);
-			e.printStackTrace();
+			logger.error("Error in creating the group", e);
 			return;	
 		}
 		title="NUMBER "+(idContainer.toString());
@@ -129,6 +132,7 @@ public class DocContainer {
 		documentContained.getGroup().redraw();
 		documentContained.getGroup().getParent().redraw();
 		documentContained.getGroup().getParent().layout();
+		logger.debug("OUT");
 
 	}
 
@@ -140,6 +144,8 @@ public class DocContainer {
 	 */
 
 	public void addContainerMouseControls(final Composite mainComposite, final Composite composite){
+		logger.debug("IN");
+
 		final Point[] offset = new Point[1];
 		Listener listener = new Listener() {
 			public void handleEvent(Event event) {
@@ -334,6 +340,7 @@ public class DocContainer {
 		composite.addListener(SWT.MouseDown, listener);
 		composite.addListener(SWT.MouseUp, listener);
 		composite.addListener(SWT.MouseMove, listener);
+		logger.debug("OUT");
 	}
 
 
@@ -347,6 +354,7 @@ public class DocContainer {
 	 */
 
 	public void addContextMenu(final Composite mainComposite, final Composite composite){
+		logger.debug("IN");
 		composite.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				Menu menu = new Menu(mainComposite.getShell(), SWT.POP_UP);
@@ -449,7 +457,7 @@ public class DocContainer {
 			}
 		});
 
-
+		logger.debug("OUT");
 
 	}
 
@@ -478,6 +486,8 @@ public class DocContainer {
 	 */
 
 	protected void addDragAndDropDocument(final Composite composite){
+		logger.debug("IN");
+
 		// Allow data to be copied or moved to the drop target
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_DEFAULT;
 		DropTarget target = new DropTarget(composite, operations);
@@ -586,6 +596,7 @@ public class DocContainer {
 				composite.getParent().layout();
 			}
 		});
+		logger.debug("OUT");
 
 	}
 
@@ -604,6 +615,7 @@ public class DocContainer {
 	 * @param saving: if isSaving is true than decrease width by one percentage point to avoid swapping in HTML
 	 */
 	public Style calculateTemplateStyle(boolean isSaving){
+		logger.debug("IN");
 		Style style=new Style();	
 		//		String toAdd="float:left;margin:0px;";
 		String toAdd="position:absolute;margin:0px;";
@@ -663,6 +675,7 @@ public class DocContainer {
 
 
 		style.setStyle(toAdd);
+		logger.debug("OUT");
 		return style;
 	}
 
@@ -731,6 +744,7 @@ public class DocContainer {
 	 */
 
 	public void reloadDocumentPropertiesView(String id){
+		logger.debug("IN");
 		IWorkbenchWindow a=PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		try{
 			IViewPart object=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PROPERTIES_VIEW_ID);
@@ -747,9 +761,10 @@ public class DocContainer {
 			}
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("Reload Document Properties", e);
+			logger.error("Reload Document Properties", e);
 			e.printStackTrace();
 		}
+		logger.debug("OUT");
 
 	}
 

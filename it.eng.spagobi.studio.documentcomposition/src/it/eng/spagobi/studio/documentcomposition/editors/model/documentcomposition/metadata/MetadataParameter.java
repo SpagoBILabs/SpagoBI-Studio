@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
+import it.eng.spagobi.studio.utils.bo.DocumentParameter;
 
 public class MetadataParameter {
 
@@ -64,7 +64,7 @@ public class MetadataParameter {
 		this.urlName = urlName;
 	}
 
-	public MetadataParameter(SDKDocumentParameter docPar) {
+	public MetadataParameter(DocumentParameter docPar) {
 		super();
 		this.id = docPar.getId();
 		this.label = docPar.getLabel();

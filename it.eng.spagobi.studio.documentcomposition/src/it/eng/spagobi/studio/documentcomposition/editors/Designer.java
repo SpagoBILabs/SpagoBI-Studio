@@ -21,26 +21,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.documentcomposition.editors;
 
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
-import it.eng.spagobi.studio.core.util.FileFinder;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Document;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentComposition;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.DocumentsConfiguration;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Parameter;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.Style;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.bo.ModelBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocumentComposition;
-import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataParameter;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataStyle;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentParametersView;
 import it.eng.spagobi.studio.documentcomposition.views.DocumentPropertiesView;
 import it.eng.spagobi.studio.documentcomposition.views.NavigationView;
+import it.eng.spagobi.studio.utils.util.FileFinder;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
@@ -50,7 +43,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -58,7 +50,6 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -69,12 +60,15 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Designer {
 
 	private static long idCounter = 0;
 
 	DocumentCompositionEditor editor=null;
+	private static Logger logger = LoggerFactory.getLogger(Designer.class);
 	
 	public static synchronized String createID()
 	{
@@ -113,7 +107,7 @@ public class Designer {
 	 */
 
 	public Integer addNewDocContainer(Composite mainComposite, int x, int y, int _width, int _height, boolean isNew){
-		SpagoBILogger.infoLog(Designer.class.toString()+": add New Container function");
+		logger.debug("IN");
 
 		// shell check if overlaids or exceeds
 		int tempWidth=_width;
@@ -135,13 +129,13 @@ public class Designer {
 		if(doesExceed==true){
 			MessageDialog.openWarning(mainComposite.getShell(), 
 					"Warning", "Container you want to insert exceeds shell!");
-			SpagoBILogger.warningLog(Designer.class.toString()+": add New Container function: Container exceed shell limits");
+			logger.warn(Designer.class.toString()+": add New Container function: Container exceed shell limits");
 			return null;
 		}
 		if(doesIntersect==true){
 			MessageDialog.openWarning(mainComposite.getShell(), 
 					"Warning", "Container you want to insert intersects other composites!");
-			SpagoBILogger.warningLog(Designer.class.toString()+": add New Container function: Container you want to insert intersects other composites");
+			logger.warn(Designer.class.toString()+": add New Container function: Container you want to insert intersects other composites");
 			return null;
 		}
 
@@ -152,7 +146,7 @@ public class Designer {
 		mainComposite.update();
 		mainComposite.redraw();
 		mainComposite.setFocus();
-		SpagoBILogger.infoLog("END "+Designer.class.toString()+": add New Container function");
+		logger.debug("OUT");
 		return group.getIdContainer();
 	}
 
@@ -169,7 +163,8 @@ public class Designer {
 	 */
 
 	public void addDocContainerFromTemplate(Composite mainComposite, int x, int y, int _width, int _height, MetadataDocument metadataDocument, Document document){
-		SpagoBILogger.infoLog(Designer.class.toString()+": add Doc Container from template");
+		logger.debug("IN");
+
 		Integer id=addNewDocContainer(mainComposite, x, y, _width, _height, false);
 		if(id==null) return;
 		else{
@@ -182,12 +177,14 @@ public class Designer {
 			}
 			docContainer.getDocumentContained().viewDocumentMetadata(metadataDocument);
 		}
-		SpagoBILogger.infoLog("END: "+Designer.class.toString()+": add Doc Container from template");
+		logger.debug("OUT");
+
 
 	}
 
 	public Designer(Composite composite, DocumentCompositionEditor _editor) {
 		super();
+		logger.debug("IN");
 		FormLayout layout=new FormLayout();
 		//composite.setLayout(layout);
 		mainComposite=composite;
@@ -196,6 +193,8 @@ public class Designer {
 		containers=new HashMap<Integer, DocContainer>();
 		addShellMouseControls(mainComposite);
 		this.editor=_editor;
+		logger.debug("OUT");
+
 	}
 
 
@@ -259,7 +258,7 @@ public class Designer {
 	 */
 
 	public void addShellMouseControls(final Composite shell){
-		SpagoBILogger.infoLog(Designer.class.toString()+": Add Shell mouse control");		
+	logger.debug("IN");
 		final Point[] offset = new Point[1];
 		Listener listener = new Listener() {
 			public void handleEvent(Event event) {
@@ -396,7 +395,7 @@ public class Designer {
 		mainComposite.addListener(SWT.MouseUp, listener);
 		mainComposite.addListener(SWT.MouseMove, listener);
 
-		SpagoBILogger.infoLog("END "+Designer.class.toString()+": Add Shell mouse control");		
+		logger.debug("OUT");
 	}
 
 
@@ -406,7 +405,7 @@ public class Designer {
 	 */
 
 	public void addContextMenu(final Composite composite){
-		SpagoBILogger.infoLog(Designer.class.toString()+": Add context menu function");		
+		logger.debug("IN");
 		composite.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				Menu menu = new Menu(composite.getShell(), SWT.POP_UP);
@@ -432,7 +431,7 @@ public class Designer {
 			}
 		});
 
-		SpagoBILogger.infoLog("END "+Designer.class.toString()+": Add context menu function");		
+		logger.debug("OUT");
 
 	}
 
@@ -502,7 +501,7 @@ public class Designer {
 	 */
 
 	public void initializeDesigner(DocumentComposition documentComposition){
-		SpagoBILogger.infoLog(Designer.class.toString()+": Initialize designer function");
+		logger.debug("IN");
 		if(documentComposition == null || 
 				documentComposition.getDocumentsConfiguration()==null 
 				|| (documentComposition.getDocumentsConfiguration()!= null && documentComposition.getDocumentsConfiguration().getDocuments()==null) 
@@ -523,8 +522,8 @@ public class Designer {
 			catch (Exception e) {
 				MessageDialog.openError(mainComposite.getShell(), 
 						"Error", "Error in retrieving positioning metadata for the document with label "+sbiObjectLabel);
-				SpagoBILogger.errorLog("END "+Designer.class.toString()+": Initialize designer function: " +
-						"Error in retrieving positioning metadata for the file with name "+sbiObjectLabel,null);				
+				logger.error("END "+Designer.class.toString()+": Initialize designer function: " +
+						"Error in retrieving positioning metadata for the file with name "+sbiObjectLabel);				
 				new ModelBO().deleteDocumentFromModel(document);
 				continue;
 			}
@@ -572,8 +571,8 @@ public class Designer {
 					else{
 						MessageDialog.openError(mainComposite.getShell(), 
 								"Error", "Could not find file "+localFileName+", download idt again!");
-						SpagoBILogger.errorLog("END "+Designer.class.toString()+": Initialize designer function: " +
-								"Could not find file "+localFileName+", download idt again!",null);
+						logger.error("END "+Designer.class.toString()+": Initialize designer function: " +
+								"Could not find file "+localFileName+", download idt again!");
 						// delete from model!!!!
 						new ModelBO().deleteDocumentFromModel(document);
 					}
@@ -583,7 +582,7 @@ public class Designer {
 				// Error in retrieving the document, download idt again
 				MessageDialog.openError(mainComposite.getShell(), 
 						"Error", "The file with name "+localFileName+" was not found, download the document with label "+sbiObjectLabel+" or check that in tempate you have the right file name defined");
-				SpagoBILogger.errorLog("END Initialize designer function: Error in retrieving metadata the file with name "+localFileName+", download idt again!",e);
+				logger.error("END Initialize designer function: Error in retrieving metadata the file with name "+localFileName+", download idt again!",e);
 
 			}
 		}
@@ -591,7 +590,7 @@ public class Designer {
 		// reloading navigation view
 		reloadNavigationView();
 		
-		SpagoBILogger.infoLog("END "+Designer.class.toString()+": Initialize designer function");
+		logger.debug("OUT");
 
 	}
 
@@ -643,11 +642,11 @@ public class Designer {
 				view.reloadNavigations();
 			}
 			else{
-				SpagoBILogger.warningLog("view Document navigation closed");
+				logger.warn("view Document navigation closed");
 			}
 
 		}catch (Exception e) {
-			SpagoBILogger.errorLog("Error reloading navigation view", e);
+			logger.error("Error reloading navigation view", e);
 			e.printStackTrace();
 		}
 	}

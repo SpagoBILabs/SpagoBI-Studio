@@ -19,11 +19,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
  **/
 package it.eng.spagobi.studio.documentcomposition.wizards;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.documentcomposition.Activator;
 import it.eng.spagobi.studio.documentcomposition.wizards.pages.NewDocumentCompositionWizardPage;
+import it.eng.spagobi.studio.utils.util.IOUtilities;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +35,7 @@ import java.util.Date;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -43,9 +44,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -54,28 +59,48 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 
 	// dashboard creation page
 	private NewDocumentCompositionWizardPage newDocumentCompositionWizardPage;
+	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
+	private boolean calledFromMenu = false;
+
+
+	private static Logger logger = LoggerFactory.getLogger(SpagoBIDocumentCompositionWizard.class);
 
 	public static final String DOCUMENT_COMPOSITION_INFO_FILE = "it/eng/spagobi/studio/documentcomposition/resources/new_template.doccomp";
 
 
 	public boolean performFinish() {
+		logger.debug("IN");
 		// get the name of the dashboard from the form
 		String docCompFileName = newDocumentCompositionWizardPage.getDocCompNameText().getText();
 		if (docCompFileName == null || docCompFileName.trim().equals("")) {
-			//SpagoBILogger.errorLog("JasperNameEmpty", null);
+			//logger.error("JasperNameEmpty", null);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Document Composition name empty");
 			return false;
 		}
 
-		// get the folder selected:  
-		Object objSel = selection.toList().get(0);
-		// FolderSel is the folder in wich to insert the new template
-		Folder folderSel=(Folder)objSel;
+		// get the folder selected, if from context menu is from navigator tree, else is from project tree
+		Folder folderSel = null;
+
+		if(calledFromMenu){
+			Tree tree =workbenchProjectTreePage.getTree();
+			TreeItem[] item = tree.getSelection();
+			TreeItem selected = item[0];
+			IFolder folder= workbenchProjectTreePage.getItemFolderMap().get(selected.getText());
+			folderSel = (Folder)folder;
+		}
+		else {
+			// get the folder selected:  
+			Object objSel = selection.toList().get(0);
+			// FolderSel is the folder in wich to insert the new template
+			folderSel=(Folder)objSel;
+
+		}
+		logger.debug("Save in "+folderSel.getName());
 
 		// get the project
 		String projectName = folderSel.getProject().getName();
@@ -93,18 +118,18 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 		try {
 			is = res.openStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			flushFromInputStreamToOutputStream(is, baos, true);
+			IOUtilities.flushFromInputStreamToOutputStream(is, baos, true);
 			byte[] resbytes = baos.toByteArray();
 			bais = new ByteArrayInputStream(resbytes);
 		} catch (Exception e) {
-			//SpagoBILogger.errorLog("Error while creating file", e);
+			//logger.error("Error while creating file", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while creating file");
 		} finally {
 			try {
 				if(is!=null) is.close();
 			} catch (Exception e) {
-				SpagoBILogger.errorLog("Error while closing stream", e);
+				logger.error("Error while closing stream", e);
 			}
 		}
 		// generate the file	       
@@ -114,7 +139,7 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 		try {
 			newFile.create(bais, true, null);
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while creating file", e);
+			logger.error("Error while creating file", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while creating file; name alreay present");
 		}
@@ -128,7 +153,7 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 		//		try {
 		//			page.openEditor(new FileEditorInput(newFile), editordesc.getId());
 		//		} catch (PartInitException e) {
-		//			SpagoBILogger.errorLog("Error while opening editor", e);
+		//			logger.error("Error while opening editor", e);
 		//			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 		//					"Error", "Error while opening editor");
 		//		}
@@ -136,9 +161,9 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 		try {
 			newFile.setPersistentProperty(SpagoBIStudioConstants.MADE_WITH_STUDIO, (new Date()).toString());
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while setting made with studio meatdata", e);
+			logger.error("Error while setting made with studio meatdata", e);
 		}
-		
+		logger.debug("OUT");
 		return true;
 	}
 
@@ -150,37 +175,27 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 
 
 	public void addPages() {
+		logger.debug("IN");
 		super.addPages();
 		newDocumentCompositionWizardPage = new NewDocumentCompositionWizardPage("New Document Composed");
 		addPage(newDocumentCompositionWizardPage);
-	}
-
-
-	public static void flushFromInputStreamToOutputStream(InputStream is, OutputStream os, 
-			boolean closeStreams) throws Exception  {
-		try{	
-			int c = 0;
-			byte[] b = new byte[1024];
-			while ((c = is.read(b)) != -1) {
-				if (c == 1024)
-					os.write(b);
-				else
-					os.write(b, 0, c);
-			}
-			os.flush();
-		} catch (IOException ioe) {
-			throw ioe;
-		} finally {
-			if (closeStreams) {
-				try {
-					if (os != null) os.close();
-					if (is != null) is.close();
-				} catch (IOException e) {
-					throw e;
-				}
-
-			}
+		if(calledFromMenu == true){
+			logger.debug("wizard has been called by workbench menu, page for folder selection must be added");
+			workbenchProjectTreePage = new WorkbenchProjectTreePage("Page Name", selection);
+			addPage(workbenchProjectTreePage);
 		}
+		logger.debug("OUT");
 	}
+
+	public boolean isCalledFromMenu() {
+		return calledFromMenu;
+	}
+
+	public void setCalledFromMenu(boolean calledFromMenu) {
+		this.calledFromMenu = calledFromMenu;
+	}
+
+
+
 
 }

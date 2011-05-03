@@ -22,12 +22,10 @@ package it.eng.spagobi.studio.documentcomposition.editors;
 
 
 import it.eng.spagobi.commons.constants.SpagoBIConstants;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.InputStream;
 
@@ -38,10 +36,11 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DocumentContained {
 
@@ -53,6 +52,7 @@ public class DocumentContained {
 	Image natureImage=null;
 	String imagePath=null;
 	Designer designer;
+	private static Logger logger = LoggerFactory.getLogger(DocumentContained.class);
 
 	public static final String IMG_JASPER_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.PNG";
 	public static final String IMG_BIRT_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.PNG";
@@ -72,7 +72,7 @@ public class DocumentContained {
 	public static final String TYPE_REPORT=SpagoBIConstants.REPORT_TYPE_CODE;
 	public static final String TYPE_DOSSIER="DOSSIER";
 	public static final String TYPE_OLAP="OLAP";
-	public static final String TYPE_DATA_MINING="DATA_MINING";
+	public static final String TYPE_DATA_MINING = "DATA_MINING";
 	public static final String TYPE_DASH=SpagoBIConstants.DASH_TYPE_CODE;
 	public static final String TYPE_DATAMART="DATAMART";
 	public static final String TYPE_MAP="MAP";
@@ -95,17 +95,20 @@ public class DocumentContained {
 	 * @param composite
 	 */
 	public boolean recoverDocumentMetadata(Integer idContainer,IFile file){
+		logger.debug("IN");
 		try{
 			int i=0;
 			String id=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 			if(metadataDocument!=null){
 				MessageDialog.openWarning(group.getShell(), 
 						"Warning", "Container has already Document in!");
+				logger.debug("OUT false");
 				return false;
 			}
 			else if(id==null){
 				MessageDialog.openWarning(group.getShell(), 
 						"Warning", "Chosen file has no SpagoBI document metadata");
+				logger.debug("OUT false");
 				return false;
 			}
 			else{			
@@ -121,6 +124,7 @@ public class DocumentContained {
 					if(contained){
 						MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning", "Document already present, cannot insert more times the same document!");
 						metadataDocument=null;
+						logger.debug("OUT false");
 						return false;
 					}
 				}
@@ -128,14 +132,16 @@ public class DocumentContained {
 				metadataDocument.setIdMetadataDocument(idContainer+"_"+metadataDocument.getLabel());
 				metadataDocument.setLocalFileName(localFileName);
 				(new MetadataBO()).getMetadataDocumentComposition().addMetadataDocument(metadataDocument);
+				logger.debug("OUT");
 				return viewDocumentMetadata(metadataDocument);
 			}
 		}
 		catch (Exception e) {	
 			e.printStackTrace();
-			SpagoBILogger.errorLog("Exception while retrieving metadata",e);
+			logger.error("Exception while retrieving metadata",e);
 			return false;
 		}
+
 
 	}
 
@@ -145,6 +151,7 @@ public class DocumentContained {
 	 * @param composite
 	 */
 	public boolean viewDocumentMetadata(MetadataDocument metadataDocument){
+		logger.debug("IN");
 
 		// get the image Path
 
@@ -198,11 +205,15 @@ public class DocumentContained {
 			//			Label nameLabelName=new Label(group,SWT.NULL);
 			//			nameLabelName.setText("Name: "+metadataDocument.getName() != null ? metadataDocument.getName() : "" );			
 		}
+		logger.debug("OUT");
+
 		return true;
 
 	}
 
 	public void drawImage(){
+		logger.debug("IN");
+
 		InputStream is = null;
 		InputStream isW = null;
 		try{
@@ -212,7 +223,7 @@ public class DocumentContained {
 			whiteImage = new Image(group.getDisplay(), isW);
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("COuld not find image "+imagePath, e);
+			logger.error("COuld not find image "+imagePath, e);
 			return;
 			// TODO: handle exception
 		}
@@ -229,15 +240,15 @@ public class DocumentContained {
 			final String imagePathFinal=imagePath;
 			is=DocCompUtilities.getInputStreamFromResource(imagePathFinal);
 			if(is != null){
-				SpagoBILogger.warningLog("immagine trovata");
+				logger.warn("immagine trovata");
 			}
 			else{
-				SpagoBILogger.warningLog("immagine NON trovata");					
+				logger.warn("immagine NON trovata");					
 			}
 			image = new Image(group.getDisplay(), is);
 		}
 		catch (Exception e) {
-			SpagoBILogger.errorLog("COuld not find image "+imagePath, e);
+			logger.error("COuld not find image "+imagePath, e);
 			return;
 			// TODO: handle exception
 		}
@@ -252,7 +263,7 @@ public class DocumentContained {
 
 
 		if(image==null){
-			SpagoBILogger.errorLog("COuld not find image "+imagePath, null);
+			logger.error("COuld not find image "+imagePath);
 			return;
 		}
 		final int originalWidth = image.getBounds().width;
@@ -293,7 +304,10 @@ public class DocumentContained {
 				//				image.dispose();
 			}
 		});
+		
 		group.redraw();
+		logger.debug("OUT");
+
 	}
 
 

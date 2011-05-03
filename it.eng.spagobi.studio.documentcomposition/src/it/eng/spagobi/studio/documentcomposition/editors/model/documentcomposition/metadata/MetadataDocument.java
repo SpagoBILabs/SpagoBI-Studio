@@ -20,9 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
-import it.eng.spagobi.studio.core.util.SDKDocumentParameters;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.bo.DocumentParameter;
+import it.eng.spagobi.studio.utils.bo.DocumentParameters;
+import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Iterator;
 import java.util.List;
@@ -123,11 +124,11 @@ public class MetadataDocument {
 		this.metadataParameters = metadataParameters;
 	}
 
-	public void buildMetadataParameters(SDKDocumentParameters parametersMetadata) {
-		List<SDKDocumentParameter> list=parametersMetadata.getContent();
+	public void buildMetadataParameters(DocumentParameters parametersMetadata) {
+		List<DocumentParameter> list=parametersMetadata.getContent();
 		Vector<MetadataParameter> vector=new Vector<MetadataParameter>();
 		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-			SDKDocumentParameter metadataParameter = (SDKDocumentParameter) iterator.next();
+			DocumentParameter metadataParameter = (DocumentParameter) iterator.next();
 			MetadataParameter metaPar=new MetadataParameter(metadataParameter);
 			vector.add(metaPar);
 		}
@@ -193,18 +194,21 @@ public class MetadataDocument {
 
 		if(xmlParameters!=null && !xmlParameters.equalsIgnoreCase(""))
 		{
-			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("grfthscv", "_");
-			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
-			xstream.alias("SDK_DOCUMENT_PARAMETERS", SDKDocumentParameters.class);
-			xstream.alias("PARAMETER", SDKDocumentParameter.class);
-			xstream.useAttributeFor(SDKDocumentParameter.class, "id");
-			xstream.useAttributeFor(SDKDocumentParameter.class, "label");
-			xstream.useAttributeFor(SDKDocumentParameter.class, "type");
-			xstream.useAttributeFor(SDKDocumentParameter.class, "urlName");
-			xstream.omitField(SDKDocumentParameter.class, "values");		
-			xstream.omitField(SDKDocumentParameter.class, "constraints");
-			xstream.omitField(SDKDocumentParameter.class, "__hashCodeCalc");
-			SDKDocumentParameters parametersMetaDataObject= (SDKDocumentParameters)xstream.fromXML(xmlParameters);
+//			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("grfthscv", "_");
+//			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+//			xstream.alias("SDK_DOCUMENT_PARAMETERS", SDKDocumentParameters.class);
+//			xstream.alias("PARAMETER", SDKDocumentParameter.class);
+//			xstream.useAttributeFor(SDKDocumentParameter.class, "id");
+//			xstream.useAttributeFor(SDKDocumentParameter.class, "label");
+//			xstream.useAttributeFor(SDKDocumentParameter.class, "type");
+//			xstream.useAttributeFor(SDKDocumentParameter.class, "urlName");
+//			xstream.omitField(SDKDocumentParameter.class, "values");		
+//			xstream.omitField(SDKDocumentParameter.class, "constraints");
+//			xstream.omitField(SDKDocumentParameter.class, "__hashCodeCalc");
+//			SDKDocumentParameters parametersMetaDataObject= (DocumentParameters)xstream.fromXML(xmlParameters);
+
+			DocumentParameters parametersMetaDataObject = XmlParametersMapping.getDocumentParametersFromXML(xmlParameters);
+			
 			buildMetadataParameters(parametersMetaDataObject);
 		}
 
