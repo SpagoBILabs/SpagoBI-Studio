@@ -1,18 +1,17 @@
 package it.eng.spagobi.studio.core.wizards.downloadWizard;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.SdkFunctionalityTreeGenerator;
-import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
+import it.eng.spagobi.studio.utils.bo.Functionality;
+import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,7 +48,7 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 	private IStructuredSelection selection;
 	private Tree tree;
 	private ProgressMonitorPart monitor;
-	private SDKFunctionality functionality;
+	private Functionality functionality;
 	String projectName = null;
 
 
@@ -78,7 +77,8 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 		container.setLayout(layout);
 		SDKProxyFactory proxyFactory = null;
 		try{
-			proxyFactory=new SDKProxyFactory(projectName);
+			Server server = new ServerHandler().getCurrentActiveServer(projectName);
+			proxyFactory=new SDKProxyFactory(server);
 		}
 		catch (NoActiveServerException e1) {
 			SpagoBILogger.errorLog("No active server found", e1);			
@@ -87,15 +87,14 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 			return;
 		}
 
-		DocumentsServiceProxy docServiceProxy=null;
-
 
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Download documents tree", IProgressMonitor.UNKNOWN);
 				SDKProxyFactory proxyFactory = null;
 				try {
-					proxyFactory=new SDKProxyFactory(projectName);
+					Server server = new ServerHandler().getCurrentActiveServer(projectName);
+					proxyFactory=new SDKProxyFactory(server);
 				}
 				catch (NoActiveServerException e1) {
 					SpagoBILogger.errorLog("No active server found", e1);			
@@ -104,12 +103,12 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 					return;
 				}
 
-				DocumentsServiceProxy docServiceProxy=null;
 
 				try{
 
-					docServiceProxy=proxyFactory.getDocumentsServiceProxy();
-					functionality=docServiceProxy.getDocumentsAsTree(null);			
+					SpagoBIServerObjects spagoBIServerObjects = new SpagoBIServerObjects(projectName);
+
+					functionality=spagoBIServerObjects.getDocumentsAsTree(null);			
 
 				}
 				catch (Exception e) {

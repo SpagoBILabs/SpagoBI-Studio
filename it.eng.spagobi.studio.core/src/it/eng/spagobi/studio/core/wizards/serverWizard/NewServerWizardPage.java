@@ -1,9 +1,10 @@
 package it.eng.spagobi.studio.core.wizards.serverWizard;
 
 import it.eng.spagobi.studio.core.actions.NewServerAction;
-import it.eng.spagobi.studio.core.bo.Server;
-import it.eng.spagobi.studio.core.services.server.ServerHandler;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.core.util.ImageConstants;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.bo.Server;
 
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -22,8 +23,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * Thre Download Wizard let the user to navigate the funcitonalities tree and select a document to download
@@ -64,7 +63,7 @@ public class NewServerWizardPage extends WizardPage {
 		super("wizardPage");
 		setTitle("New Server Wizard");
 		setDescription("This wizard lets you define a new server");
-		setImageDescriptor(SpagoBIStudioConstants.serverBigDescriptor);
+		setImageDescriptor(ImageConstants.serverBigDescriptor);
 		this.selection = selection;
 	}
 

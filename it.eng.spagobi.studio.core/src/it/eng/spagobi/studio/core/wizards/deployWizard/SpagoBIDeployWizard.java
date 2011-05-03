@@ -1,13 +1,16 @@
 package it.eng.spagobi.studio.core.wizards.deployWizard;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
-import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
+import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.Functionality;
+import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.bo.Template;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.utils.services.ServerObjectsComparator;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import java.io.File;
 import java.net.URI;
@@ -47,7 +50,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	boolean criptable;
 	boolean visible;
 	int refreshSeconds;
-	SDKFunctionality functionality;
+	Functionality functionality;
 
 	// boolean tells if file was already previously deployed (delete old metadata).
 	boolean newDeployFromOld = false;
@@ -116,7 +119,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		else{	
 			TreeItem selectedItem=selectedItems[0];
 			Object docObject=selectedItem.getData();
-			functionality=(SDKFunctionality)docObject;
+			functionality = ServerObjectsComparator.getFunctionality(docObject);
 			doFinish(); 
 
 		}
@@ -132,8 +135,8 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 	 */
 
 	private void doFinish() {
-		
-		
+
+
 		// ************ BUILD THE TEMPLATE ************
 
 		// go on only if you selected a document
@@ -151,10 +154,10 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 
 		URI uri=fileSel.getLocationURI();
 		projectName = fileSel.getProject().getName();
-		
-		SDKProxyFactory proxyFactory= null;
+
+		SpagoBIServerObjects proxyServerObjects = null;
 		try{
-			proxyFactory=new SDKProxyFactory(projectName);
+			proxyServerObjects = new SpagoBIServerObjects(projectName);
 		}
 		catch (NoActiveServerException e1) {
 			SpagoBILogger.errorLog("No active server found", e1);			
@@ -164,7 +167,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		}
 
 		// ********** CREATE THE NEW DOCUMENT ************
-		SDKDocument newDocument=new SDKDocument();
+		Document newDocument = new Document();
 		newDocument.setLabel(label);
 		newDocument.setName(name);
 		newDocument.setDescription(description);
@@ -202,13 +205,12 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		FileDataSource fileDataSource=new FileDataSource(fileJava);
 		DataHandler dataHandler=new DataHandler(fileDataSource);
 
-		SDKTemplate sdkTemplate=new SDKTemplate();
-		sdkTemplate.setFileName(fileSel.getName());
-		sdkTemplate.setContent(dataHandler);
+		Template template=new Template();
+		template.setFileName(fileSel.getName());
+		template.setContent(dataHandler);
 
 		try {
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
-			Integer returnCode=docServiceProxy.saveNewDocument(newDocument, sdkTemplate, functionalityId);
+			Integer returnCode=proxyServerObjects.saveNewDocument(newDocument, template, functionalityId);
 			if(returnCode==null){
 				SpagoBILogger.errorLog("Error during document deploy: Check that label is not already present", null);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 

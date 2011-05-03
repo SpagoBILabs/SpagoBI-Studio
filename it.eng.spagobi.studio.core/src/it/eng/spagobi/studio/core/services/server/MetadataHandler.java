@@ -1,20 +1,17 @@
 package it.eng.spagobi.studio.core.services.server;
 
-import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
-import it.eng.spagobi.sdk.datasources.bo.SDKDataSource;
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
-import it.eng.spagobi.sdk.engines.bo.SDKEngine;
-import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.bo.DataSource;
+import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.DocumentParameter;
+import it.eng.spagobi.studio.utils.bo.Engine;
+import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Date;
 
@@ -41,11 +38,11 @@ public class MetadataHandler {
 		String documentId=null;
 		String projectname = file.getProject().getName();
 		// Recover document
-		SDKDocument document=null;
+		Document document=null;
 
-		SDKProxyFactory proxyFactory= null;
+		SpagoBIServerObjects proxyServerObjects = null;
 		try{	
-			proxyFactory=new SDKProxyFactory(projectname);
+			proxyServerObjects = new SpagoBIServerObjects(projectname);
 		}
 		catch (NoActiveServerException e) {
 			noActiveServerException.setNoServer(true);
@@ -56,8 +53,7 @@ public class MetadataHandler {
 			documentId=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 
 
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
-			document=docServiceProxy.getDocumentById(Integer.valueOf(documentId));
+			document=proxyServerObjects.getDocumentById(Integer.valueOf(documentId));
 		}
 		catch (Exception e) {
 			logger.error("Could not recover document Id",e);		
@@ -72,11 +68,10 @@ public class MetadataHandler {
 		// Recover DataSource
 
 		Integer dataSourceId=document.getDataSourceId();
-		SDKDataSource dataSource=null;
+		DataSource dataSource=null;
 		if(dataSourceId!=null){
 			try{
-				DataSourcesSDKServiceProxy dataSourceServiceProxy=proxyFactory.getDataSourcesSDKServiceProxy();
-				dataSource=dataSourceServiceProxy.getDataSource(Integer.valueOf(dataSourceId));
+				dataSource=proxyServerObjects.getDataSource(Integer.valueOf(dataSourceId));
 			}
 			catch (Exception e) {
 				SpagoBILogger.warningLog("Could not recover data source",e);		
@@ -87,12 +82,11 @@ public class MetadataHandler {
 		// Recover DataSet
 
 		Integer dataSetId=document.getDataSetId();
-		SDKDataSet dataSet=null;
+		Dataset dataSet=null;
 		if(dataSetId!=null){
 			try{
 
-				DataSetsSDKServiceProxy dataSetServiceProxy=proxyFactory.getDataSetsSDKServiceProxy();
-				dataSet=dataSetServiceProxy.getDataSet(Integer.valueOf(dataSetId));
+				dataSet=proxyServerObjects.getDataSet(Integer.valueOf(dataSetId));
 			}
 			catch (Exception e) {
 				SpagoBILogger.warningLog("Could not recover data set",e);		
@@ -103,11 +97,10 @@ public class MetadataHandler {
 		// Recover Engine
 
 		Integer engineId=document.getEngineId();
-		SDKEngine engine=null;
+		Engine engine=null;
 		if(engineId!=null){
 			try{
-				EnginesServiceProxy engineServiceProxy=proxyFactory.getEnginesServiceProxy();
-				engine=engineServiceProxy.getEngine(Integer.valueOf(engineId));
+				engine=proxyServerObjects.getEngine(Integer.valueOf(engineId));
 			}
 			catch (Exception e) {
 				SpagoBILogger.warningLog("Could not recover engine",e);		
@@ -116,8 +109,7 @@ public class MetadataHandler {
 
 		String[] roles=null;
 		try{
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			roles=docServiceProxy.getCorrectRolesForExecution(document.getId());
+			roles=proxyServerObjects.getCorrectRolesForExecution(document.getId());
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not retrieve roles for execution", e);
@@ -127,10 +119,9 @@ public class MetadataHandler {
 		}
 
 
-		SDKDocumentParameter[] parameters=null;
+		DocumentParameter[] parameters=null;
 		try{
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			parameters=docServiceProxy.getDocumentParameters(document.getId(), roles[0]);
+			parameters=proxyServerObjects.getDocumentParameters(document.getId(), roles[0]);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not retrieve document parameters", e);
@@ -192,7 +183,7 @@ public class MetadataHandler {
 		}
 
 		try{
-			BiObjectUtilities.setFileParametersMetaData(file, parameters);
+			XmlParametersMapping.setFileParametersMetaData(file, parameters);
 		}
 		catch (Exception e) {
 			logger.error("Error in retrieving parameters metadata", e);

@@ -20,17 +20,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.actions;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
-import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
-import it.eng.spagobi.studio.core.util.BiObjectUtilities;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
+import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.Template;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
+import it.eng.spagobi.studio.utils.exceptions.NotAllowedOperationException;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -65,7 +62,7 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 
 	private static Logger logger = LoggerFactory.getLogger(DeployDocumentAction.class);
 
-	
+
 	public DeployDocumentAction() {
 	}
 
@@ -130,20 +127,21 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 
 					try{
 						// document associated, upload the template
-						SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
-						DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
+
+						SpagoBIServerObjects spagoBIServerObjects = new SpagoBIServerObjects(projectname);
+
 
 						URI uri=fileSel2.getLocationURI();
 
 						File fileJava=new File(uri.getPath()); 
 						FileDataSource fileDataSource=new FileDataSource(fileJava);
 						DataHandler dataHandler=new DataHandler(fileDataSource);			
-						SDKTemplate sdkTemplate=new SDKTemplate();
-						sdkTemplate.setFileName(fileSel2.getName());
-						sdkTemplate.setContent(dataHandler);
+						Template template=new Template();
+						template.setFileName(fileSel2.getName());
+						template.setContent(dataHandler);
 
 						// check document still exists
-						SDKDocument doc=docServiceProxy.getDocumentById(idInteger);
+						Document doc=spagoBIServerObjects.getDocumentById(idInteger);
 						if(doc==null){
 							documentException.setNoDocument(true);
 							logger.warn("Document no more present on server: with id "+idInteger);					
@@ -151,16 +149,10 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 						}
 						else{
 							documentException.setNoDocument(false);
-							docServiceProxy.uploadTemplate(idInteger, sdkTemplate);
+							spagoBIServerObjects.uploadTemplate(idInteger, template);
 						}
 					}
-					catch (NotAllowedOperationException e) {
-						logger.error("Not Allowed Operation", e);		
 
-						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-								"Error upload", "Error while uploading the template: not allowed operation");	
-						return;
-					}
 					catch (NoActiveServerException e1) {
 						// no active server found 
 						noActiveServerException.setNoServer(true);

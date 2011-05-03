@@ -20,29 +20,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.properties;
 
-import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
-import it.eng.spagobi.sdk.datasources.bo.SDKDataSource;
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
-import it.eng.spagobi.sdk.engines.bo.SDKEngine;
-import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
-import it.eng.spagobi.studio.core.bo.Server;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
-import it.eng.spagobi.studio.core.exceptions.NoServerException;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.services.server.MetadataHandler;
-import it.eng.spagobi.studio.core.services.server.ServerHandler;
-import it.eng.spagobi.studio.core.util.BiObjectUtilities;
-import it.eng.spagobi.studio.core.util.SDKDocumentParameters;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.core.util.ImageConstants;
+import it.eng.spagobi.studio.utils.bo.DocumentParameter;
+import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -74,10 +62,6 @@ import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
 
 public class PropertyPage extends org.eclipse.ui.dialogs.PropertyPage implements
 IWorkbenchPropertyPage {
@@ -135,11 +119,11 @@ IWorkbenchPropertyPage {
 	protected Control createContents(Composite parent) {
 		setTitle("SpagoBI Metadata");
 		setDescription("SpagoBI Metadata");
-		setImageDescriptor(SpagoBIStudioConstants.metadataDescriptor);
-		
-	
-		
-		
+		setImageDescriptor(ImageConstants.metadataDescriptor);
+
+
+
+
 		// hide default buttons
 		this.noDefaultAndApplyButton();
 		monitor=new ProgressMonitorPart(getShell(), null);
@@ -423,26 +407,31 @@ IWorkbenchPropertyPage {
 
 		String xmlParameters = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML);
 		if(datasetDescription==null) datasetDescription="EMPTY";		
-		
-		List<SDKDocumentParameter> list=null;
+
+		List<DocumentParameter> list=null;
+		//		if(xmlParameters!=null && !xmlParameters.equalsIgnoreCase(""))
+		//		{
+		//			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("grfthscv", "_");
+		//			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+		//			xstream.alias("SDK_DOCUMENT_PARAMETERS", SDKDocumentParameters.class);
+		//			xstream.alias("PARAMETER", SDKDocumentParameter.class);
+		//			xstream.useAttributeFor(SDKDocumentParameter.class, "id");
+		//			xstream.useAttributeFor(SDKDocumentParameter.class, "label");
+		//			xstream.useAttributeFor(SDKDocumentParameter.class, "type");
+		//			xstream.useAttributeFor(SDKDocumentParameter.class, "urlName");
+		//			xstream.omitField(SDKDocumentParameter.class, "values");		
+		//			xstream.omitField(SDKDocumentParameter.class, "constraints");
+		//			xstream.omitField(SDKDocumentParameter.class, "__hashCodeCalc");
+		//			SDKDocumentParameters parametersMetaDataObject= (SDKDocumentParameters)xstream.fromXML(xmlParameters);
+		//			list=parametersMetaDataObject.getContent();
+		//
+		//		}
+
 		if(xmlParameters!=null && !xmlParameters.equalsIgnoreCase(""))
 		{
-			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("grfthscv", "_");
-			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
-			xstream.alias("SDK_DOCUMENT_PARAMETERS", SDKDocumentParameters.class);
-			xstream.alias("PARAMETER", SDKDocumentParameter.class);
-			xstream.useAttributeFor(SDKDocumentParameter.class, "id");
-			xstream.useAttributeFor(SDKDocumentParameter.class, "label");
-			xstream.useAttributeFor(SDKDocumentParameter.class, "type");
-			xstream.useAttributeFor(SDKDocumentParameter.class, "urlName");
-			xstream.omitField(SDKDocumentParameter.class, "values");		
-			xstream.omitField(SDKDocumentParameter.class, "constraints");
-			xstream.omitField(SDKDocumentParameter.class, "__hashCodeCalc");
-			SDKDocumentParameters parametersMetaDataObject= (SDKDocumentParameters)xstream.fromXML(xmlParameters);
-			list=parametersMetaDataObject.getContent();
 
+			list = XmlParametersMapping.getParametersFromXML(xmlParameters);
 		}
-
 
 		String date=file.getPersistentProperty(SpagoBIStudioConstants.LAST_REFRESH_DATE);
 		lastRefreshDateLabel.setText(date!=null ? date : "");
@@ -468,7 +457,7 @@ IWorkbenchPropertyPage {
 		parametersTable.removeAll();
 		if(list!=null){
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-				SDKDocumentParameter documentParameter = (SDKDocumentParameter) iterator.next();
+				DocumentParameter documentParameter = (DocumentParameter) iterator.next();
 				TableItem item = new TableItem (parametersTable, SWT.NONE);
 				item.setText(0, documentParameter.getLabel()!=null ? documentParameter.getLabel() : "");
 				item.setText(1, documentParameter.getUrlName()!=null ? documentParameter.getUrlName() : "");
@@ -513,7 +502,7 @@ IWorkbenchPropertyPage {
 		}
 	}
 
-	
+
 	public boolean performOk() {
 		return super.performOk();
 	}

@@ -20,14 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.preferences;
 
-import it.eng.spagobi.sdk.proxy.TestConnectionServiceProxy;
 import it.eng.spagobi.studio.core.Activator;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.ProxyDataRetriever;
 
-import org.apache.axis.AxisFault;
-import org.apache.ws.security.WSSecurityException;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
@@ -98,41 +92,41 @@ public class SpagoBIPreferencePage
 		testButton.setLayoutData(data);
 		testButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				testConnection();
+//				testConnection();
 			};
 		});
 	}
 	
-	private void testConnection() {
-        TestConnectionServiceProxy proxy = new TestConnectionServiceProxy(userName.getStringValue(), userPassword.getStringValue());
-        proxy.setEndpoint(serverUrl.getStringValue() + "/sdk/TestConnectionService");
-    	// set proxy configurations!
-        String value=serverUrl.getStringValue();
-		new ProxyDataRetriever().initProxyData(proxy,value);        
-        
-        try {
-    		// testing connection
-    		boolean result = proxy.connect();
-    		if (result) {
-    			MessageDialog.openInformation(this.getShell(), "", "Connection test successful!");
-    		} else {
-    			MessageDialog.openError(this.getShell(), "", "Could not connect to SpagoBI Server!");
-    		}
-//    		setErrorMessage(null);
-//    		setValid(true);
-    	} catch (AxisFault e) {
-    		if (e.getFaultString().startsWith("WSDoAllReceiver")) {
-        		MessageDialog.openError(this.getShell(), "", "Authentication failed!");
-    		} else {
-        		MessageDialog.openError(this.getShell(), "", "Could not connect to SpagoBI Server!");
-        		SpagoBILogger.errorLog("Could not connect to SpagoBI Server!", e);
-    		}
-    	} catch (Exception e) {
-    		MessageDialog.openError(this.getShell(), "", "Could not connect to SpagoBI Server!");
-    		SpagoBILogger.errorLog("Could not connect to SpagoBI Server!", e);
-//    		setErrorMessage("Could not connect to SpagoBI Server!");
-//    		setValid(false);
-    	}
-	}
+//	private void testConnection() {
+//        TestConnectionServiceProxy proxy = new TestConnectionServiceProxy(userName.getStringValue(), userPassword.getStringValue());
+//        proxy.setEndpoint(serverUrl.getStringValue() + "/sdk/TestConnectionService");
+//    	// set proxy configurations!
+//        String value=serverUrl.getStringValue();
+//		new ProxyDataRetriever().initProxyData(proxy,value);        
+//        
+//        try {
+//    		// testing connection
+//    		boolean result = proxy.connect();
+//    		if (result) {
+//    			MessageDialog.openInformation(this.getShell(), "", "Connection test successful!");
+//    		} else {
+//    			MessageDialog.openError(this.getShell(), "", "Could not connect to SpagoBI Server!");
+//    		}
+////    		setErrorMessage(null);
+////    		setValid(true);
+//    	} catch (AxisFault e) {
+//    		if (e.getFaultString().startsWith("WSDoAllReceiver")) {
+//        		MessageDialog.openError(this.getShell(), "", "Authentication failed!");
+//    		} else {
+//        		MessageDialog.openError(this.getShell(), "", "Could not connect to SpagoBI Server!");
+//        		SpagoBILogger.errorLog("Could not connect to SpagoBI Server!", e);
+//    		}
+//    	} catch (Exception e) {
+//    		MessageDialog.openError(this.getShell(), "", "Could not connect to SpagoBI Server!");
+//    		SpagoBILogger.errorLog("Could not connect to SpagoBI Server!", e);
+////    		setErrorMessage("Could not connect to SpagoBI Server!");
+////    		setValid(false);
+//    	}
+//	}
 	
 }

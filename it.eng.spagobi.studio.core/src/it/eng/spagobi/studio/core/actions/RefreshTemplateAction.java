@@ -20,22 +20,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.actions;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
-import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
-import it.eng.spagobi.sdk.engines.bo.SDKEngine;
-import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
-import it.eng.spagobi.studio.core.exceptions.AlreadyPresentException;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.core.exceptions.NoDocumentException;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.core.util.FileFinder;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
+import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.DocumentParameter;
+import it.eng.spagobi.studio.utils.bo.Engine;
+import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.bo.Template;
+import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
+import it.eng.spagobi.studio.utils.exceptions.AlreadyPresentException;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
+import it.eng.spagobi.studio.utils.exceptions.NotAllowedOperationException;
+import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,22 +69,22 @@ import org.slf4j.LoggerFactory;
 
 public class RefreshTemplateAction implements IObjectActionDelegate {
 
-	private final SDKTemplate template= new SDKTemplate();
+	private final Template template= new Template();
 
-	SDKDocument document=null;
+	Document document=null;
 	ISelection selection;
 	String projectName = null;
 
 	// fields to retrieve only once
 	String[] roles=null;
-	SDKDocumentParameter[] parameters=null;
-	SDKEngine sdkEngine=null;
+	DocumentParameter[] parameters=null;
+	Engine engine=null;
 	// if not null means that template has changed name (used for user advertisement)
 	String newTemplateName=null;
 	AlreadyPresentException alreadyPresentException=new AlreadyPresentException();
 	private static Logger logger = LoggerFactory.getLogger(RefreshTemplateAction.class);
 
-	
+
 	public RefreshTemplateAction() {
 	}
 
@@ -135,35 +136,33 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 					monitor.beginTask("Template Refresh for document "+label2, IProgressMonitor.UNKNOWN);
 
 					// document associated, upload the template
-
+					SpagoBIServerObjects spagoBIServerObjects = null;
 					try{
-						SDKProxyFactory proxyFactory=new SDKProxyFactory(projectName);
-						DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy();
+						spagoBIServerObjects = new SpagoBIServerObjects(projectName);
 
 						// check document still exists
-						document=docServiceProxy.getDocumentById(idInteger);
+						document=spagoBIServerObjects.getDocumentById(idInteger);
 						if(document==null){
 							documentException.setNoDocument(true);
 							return;
 						}
 						else{
 							documentException.setNoDocument(false);
-							SDKTemplate sdkTemplate=docServiceProxy.downloadTemplate(idInteger);
-							template.setContent(sdkTemplate.getContent());
-							template.setFileName(sdkTemplate.getFileName());
-
+							Template mytemplate  = spagoBIServerObjects.downloadTemplate(idInteger);
+							template.setContent(mytemplate.getContent());
+							template.setFileName(mytemplate.getFileName());
 							// get documents metadata
 							String fileExtension=recoverFileExtension(document,idInteger);						
 							overwriteTemplate(template, fileSel2, fileExtension);
 						}
 					}
-					
-					catch (NotAllowedOperationException e) {
-						logger.error("Not Allowed Operation",e);		
-						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-								"Error upload", "Error while uploading the template: not allowed operation");	
-						return;
-					} 
+
+//					catch (NotAllowedOperationException e) {
+//						logger.error("Not Allowed Operation",e);		
+//						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+//								"Error upload", "Error while uploading the template: not allowed operation");	
+//						return;
+//					} 
 					catch (NoActiveServerException e1) {
 						noActiveServerException.setNoServer(true);
 						return;
@@ -244,7 +243,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 
 
-	public void overwriteTemplate(SDKTemplate template, org.eclipse.core.internal.resources.File fileSel, String extension) throws CoreException{
+	public void overwriteTemplate(Template template, org.eclipse.core.internal.resources.File fileSel, String extension) throws CoreException{
 		// get template URL to overwrite
 		try {
 			URI uri=fileSel.getLocationURI();
@@ -308,7 +307,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 				//Set ParametersFile Metadata	
 				if(parameters.length>0){
-					newFile=BiObjectUtilities.setFileParametersMetaData(newFile,parameters);
+					newFile=XmlParametersMapping.setFileParametersMetaData(newFile,parameters);
 				}
 				newFile=BiObjectUtilities.setFileLastRefreshDateMetaData(newFile);
 
@@ -337,11 +336,12 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 	 * @return
 	 */
 
-	public String recoverFileExtension(SDKDocument document, Integer documentId){
+	public String recoverFileExtension(Document document, Integer documentId){
 		//Get the parameters
 		SDKProxyFactory proxyFactory = null;
+		SpagoBIServerObjects proxyServerObjects = null;
 		try{
-			proxyFactory=new SDKProxyFactory(projectName);
+			proxyServerObjects = new SpagoBIServerObjects(projectName);
 		}
 		catch (NoActiveServerException e1) {
 			logger.error("No active server found", e1);			
@@ -351,8 +351,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 		}		
 
 		try{
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			roles=docServiceProxy.getCorrectRolesForExecution(documentId);
+			roles=proxyServerObjects.getCorrectRolesForExecution(documentId);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
@@ -372,8 +371,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 
 		try{
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			parameters=docServiceProxy.getDocumentParameters(documentId, roles[0]);
+			parameters=proxyServerObjects.getDocumentParameters(documentId, roles[0]);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
@@ -389,11 +387,10 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 		// get the extension
 		Integer engineId=document.getEngineId();
-		EnginesServiceProxy engineProxy=proxyFactory.getEnginesServiceProxy();
 
-		SDKEngine sdkEngine=null;
+		Engine engine=null;
 		try{
-			sdkEngine=engineProxy.getEngine(engineId);
+			engine=proxyServerObjects.getEngine(engineId);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not get engine", e);		
@@ -402,7 +399,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 		}		
 
 		String type=document.getType();
-		String engineName=sdkEngine!=null?sdkEngine.getLabel(): null;
+		String engineName=engine!=null?engine.getLabel(): null;
 		String extension=BiObjectUtilities.getFileExtension(type, engineName);
 		return extension;
 	}

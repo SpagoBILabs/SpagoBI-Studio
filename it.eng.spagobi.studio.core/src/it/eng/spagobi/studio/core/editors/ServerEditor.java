@@ -20,11 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.editors;
 
-import it.eng.spagobi.studio.core.bo.Server;
-import it.eng.spagobi.studio.core.bo.xmlMapping.XmlServerGenerator;
-import it.eng.spagobi.studio.core.services.server.ServerHandler;
 import it.eng.spagobi.studio.core.util.SWTComponentUtilities;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlServerGenerator;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

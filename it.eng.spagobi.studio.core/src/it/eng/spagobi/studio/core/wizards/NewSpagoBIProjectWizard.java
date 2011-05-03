@@ -1,12 +1,10 @@
 package it.eng.spagobi.studio.core.wizards;
 
 import it.eng.spagobi.studio.core.builder.SpagoBIStudioNature;
-import it.eng.spagobi.studio.core.util.ImageDescriptorGatherer;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -21,7 +19,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -29,7 +26,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 public class NewSpagoBIProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
 

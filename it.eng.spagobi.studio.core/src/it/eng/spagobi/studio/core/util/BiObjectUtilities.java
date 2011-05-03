@@ -21,28 +21,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.core.util;
 
 import it.eng.spagobi.commons.constants.SpagoBIConstants;
-import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
-import it.eng.spagobi.sdk.datasources.bo.SDKDataSource;
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
-import it.eng.spagobi.sdk.engines.bo.SDKEngine;
-import it.eng.spagobi.sdk.maps.bo.SDKMap;
-import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
-import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
-import it.eng.spagobi.studio.core.services.server.MetadataHandler;
+import it.eng.spagobi.studio.utils.bo.DataSource;
+import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.Engine;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,25 +125,25 @@ public class BiObjectUtilities {
 	 * @throws CoreException
 	 */
 
-	public static IFile setFileMetaData(IFile newFile, SDKDocument document, boolean newDeployFromOld) throws CoreException, NoActiveServerException{
+	public static IFile setFileMetaData(IFile newFile, Document document, boolean newDeployFromOld) throws CoreException, NoActiveServerException{
 
 		if(newDeployFromOld){
 			erasePersistentProperties(newFile);
 		}
 
 		String projectname = newFile.getProject().getName();
-		SDKProxyFactory proxyFactory=new SDKProxyFactory(projectname);
-		if(proxyFactory == null){
+		SpagoBIServerObjects proBiServerObjects = new SpagoBIServerObjects(projectname);
+		
+		if(proBiServerObjects == null){
 			logger.error("No active server is defined");
 			return null;
 		}
 
 		// DAtaset Infomation field
-		SDKDataSet sdkDataSet=null;
+		Dataset dataSet=null;
 		if(document.getDataSetId()!=null){
 			try{
-				DataSetsSDKServiceProxy dataSetServiceProxy=proxyFactory.getDataSetsSDKServiceProxy();
-				sdkDataSet=dataSetServiceProxy.getDataSet(document.getDataSetId());
+				dataSet=proBiServerObjects.getDataSet(document.getDataSetId());
 			}
 			catch (Exception e) {
 				SpagoBILogger.errorLog("No comunication with SpagoBI server, could not retrieve dataset informations", e);
@@ -159,11 +151,10 @@ public class BiObjectUtilities {
 		}
 
 		// DAtasource Infomation field
-		SDKDataSource sdkDataSource=null;
+		DataSource dataSource=null;
 		if(document.getDataSourceId()!=null){
 			try{
-				DataSourcesSDKServiceProxy dataSourcesServiceProxy=proxyFactory.getDataSourcesSDKServiceProxy();
-				sdkDataSource=dataSourcesServiceProxy.getDataSource(document.getDataSourceId());
+				dataSource=proBiServerObjects.getDataSource(document.getDataSourceId());
 			}
 			catch (Exception e) {
 				e.printStackTrace(); 
@@ -174,11 +165,10 @@ public class BiObjectUtilities {
 		// get the extension
 		Integer engineId=document.getEngineId();
 
-		EnginesServiceProxy engineProxy=proxyFactory.getEnginesServiceProxy();
 
-		SDKEngine sdkEngine=null;
+		Engine engine=null;
 		try{
-			sdkEngine=engineProxy.getEngine(engineId);
+			engine=proBiServerObjects.getEngine(engineId);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -204,17 +194,17 @@ public class BiObjectUtilities {
 			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE, document.getType());
 		}
 
-		newFile.setPersistentProperty(SpagoBIStudioConstants.SERVER, proxyFactory.getServer().getName());
+		newFile.setPersistentProperty(SpagoBIStudioConstants.SERVER, proBiServerObjects.getServerName());
 
 
-		setFileEngineMetaData(newFile, sdkEngine);
-		setFileDataSetMetaData(newFile, sdkDataSet);
-		setFileDataSourceMetaData(newFile, sdkDataSource);
+		setFileEngineMetaData(newFile, engine);
+		setFileDataSetMetaData(newFile, dataSet);
+		setFileDataSourceMetaData(newFile, dataSource);
 
 		return newFile;
 	}
 
-	public static IFile setFileEngineMetaData(IFile newFile, SDKEngine engine) throws CoreException{
+	public static IFile setFileEngineMetaData(IFile newFile, Engine engine) throws CoreException{
 		if(engine!=null){
 			if(engine.getId()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.ENGINE_ID, engine.getId().toString());			
@@ -232,7 +222,7 @@ public class BiObjectUtilities {
 		return newFile;
 	}
 
-	public static IFile setFileDataSetMetaData(IFile newFile, SDKDataSet dataset) throws CoreException{
+	public static IFile setFileDataSetMetaData(IFile newFile, Dataset dataset) throws CoreException{
 		if(dataset!=null){
 			if(dataset.getId()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_ID, dataset.getId().toString());			
@@ -250,7 +240,7 @@ public class BiObjectUtilities {
 		return newFile;
 	}
 
-	public static IFile setFileDataSourceMetaData(IFile newFile, SDKDataSource datasource) throws CoreException{
+	public static IFile setFileDataSourceMetaData(IFile newFile, DataSource datasource) throws CoreException{
 		if(datasource!=null){
 			if(datasource.getId()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_ID, datasource.getId().toString());			
@@ -294,29 +284,7 @@ public class BiObjectUtilities {
 	}	
 
 
-	public static IFile setFileParametersMetaData(IFile newFile, SDKDocumentParameter[] parameters) throws CoreException{
-		String xml="";
-		ArrayList<SDKDocumentParameter> list=new ArrayList<SDKDocumentParameter>();
-		for (int i = 0; i < parameters.length; i++) {
-			list.add(parameters[i]);
-		}
 
-		XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("_", "_");
-		XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
-		SDKDocumentParameters pars=new SDKDocumentParameters(list);
-		xstream.alias("SDK_DOCUMENT_PARAMETERS", SDKDocumentParameters.class);
-		xstream.alias("PARAMETER", SDKDocumentParameter.class);
-		xstream.useAttributeFor(SDKDocumentParameter.class, "id");
-		xstream.useAttributeFor(SDKDocumentParameter.class, "label");
-		xstream.useAttributeFor(SDKDocumentParameter.class, "type");
-		xstream.useAttributeFor(SDKDocumentParameter.class, "urlName");
-		xstream.omitField(SDKDocumentParameter.class, "values");		
-		xstream.omitField(SDKDocumentParameter.class, "constraints");
-		xstream.omitField(SDKDocumentParameter.class, "__hashCodeCalc");
-		xml = xstream.toXML(pars);		
-		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML,xml);
-		return newFile;
-	}
 
 
 	public static String getFileExtension(String type, String engine){

@@ -1,19 +1,16 @@
 package it.eng.spagobi.studio.core.wizards.deployWizard;
 
-import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
-import it.eng.spagobi.sdk.datasources.bo.SDKDataSource;
-import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
-import it.eng.spagobi.sdk.engines.bo.SDKEngine;
-import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
-import it.eng.spagobi.studio.core.actions.RefreshTemplateAction;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.core.util.SdkSelectFolderTreeGenerator;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.bo.DataSource;
+import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.Engine;
+import it.eng.spagobi.studio.utils.bo.Functionality;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.utils.services.ServerObjectsComparator;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -79,10 +76,10 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 	private ProgressMonitorPart monitor;
 	// Filter By type
-	SDKEngine[] enginesList;
-	SDKDataSet[] datasetList;		
-	SDKDataSource[] datasourceList;		
-	SDKFunctionality functionality=null;
+	Engine[] enginesList;
+	Dataset[] datasetList;		
+	DataSource[] datasourceList;		
+	Functionality functionality=null;
 
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployWizardFormPage.class);
 	
@@ -113,10 +110,14 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		File fileSelected=(File)objSel;
 		projectName = fileSelected.getProject().getName();
 
+		final SpagoBIServerObjects proxyObjects;
 		// first of all get info from server		
 		SDKProxyFactory proxyFactory= null;
 		try{
-			 proxyFactory=new SDKProxyFactory(projectName);
+			proxyObjects = new SpagoBIServerObjects(projectName);
+
+//			Server server = new ServerHandler().getCurrentActiveServer(projectName);
+//			 proxyFactory=new SDKProxyFactory(server);
 		}
 		catch (NoActiveServerException e1) {
 			logger.error("No active server found", e1);			
@@ -125,20 +126,29 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 			return;
 		}
 
-		final EnginesServiceProxy engineService=proxyFactory.getEnginesServiceProxy();
-		final DataSetsSDKServiceProxy datasetService=proxyFactory.getDataSetsSDKServiceProxy();
-		final DocumentsServiceProxy docService=proxyFactory.getDocumentsServiceProxy();
-		final DataSourcesSDKServiceProxy datasourceService=proxyFactory.getDataSourcesSDKServiceProxy();
+		
+//		final EnginesServiceProxy engineService=proxyFactory.getEnginesServiceProxy();
+//		final DataSetsSDKServiceProxy datasetService=proxyFactory.getDataSetsSDKServiceProxy();
+//		final DocumentsServiceProxy docService=proxyFactory.getDocumentsServiceProxy();
+//		final DataSourcesSDKServiceProxy datasourceService=proxyFactory.getDataSourcesSDKServiceProxy();
 
+		
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Deploy a new Document: ", IProgressMonitor.UNKNOWN);
 
 				try{
-					enginesList=engineService.getEngines();
-					datasetList=datasetService.getDataSets();
-					datasourceList=datasourceService.getDataSources();
-					functionality=docService.getDocumentsAsTree(null);			
+
+					enginesList=proxyObjects.getEnginesList();
+					datasetList=proxyObjects.getDataSetList();
+					datasourceList=proxyObjects.getDataSourceList();
+					functionality=proxyObjects.getDocumentsAsTree(null);			
+					
+					
+//					enginesList=engineService.getEngines();
+//					datasetList=datasetService.getDataSets();
+//					datasourceList=datasourceService.getDataSources();
+//					functionality=docService.getDocumentsAsTree(null);			
 					String ciao= functionality.getId().toString()+" "+functionality.getName()+" label: "+functionality.getName();
 				}
 				catch (Exception e) {
@@ -250,7 +260,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		engineLabelIdMap=new HashMap<String, Integer>();
 
 
-		for (SDKEngine engine : enginesList) {
+		for (Engine engine : enginesList) {
 			if(engine.getDocumentType().equalsIgnoreCase(typeLabel)){		
 				engineCombo.add(engine.getLabel());
 				engineLabelIdMap.put(engine.getLabel(), engine.getId());					
@@ -265,7 +275,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		// sort the items
 		String[] datasetLabels = new String[datasetList.length];
 		for (int i = 0; i < datasetLabels.length; i++) {
-			SDKDataSet dataSet =datasetList[i];
+			Dataset dataSet =datasetList[i];
 			datasetLabels[i] = dataSet.getLabel();
 			dataSetLabelIdMap.put(dataSet.getLabel(), dataSet.getId());
 		}
@@ -286,7 +296,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		dataSourceLabelIdMap=new HashMap<String, Integer>();
 		String[] datasourceLabels = new String[datasourceList.length];
 		for (int i = 0; i < datasourceLabels.length; i++) {
-			SDKDataSource dataSource =datasourceList[i];
+			DataSource dataSource =datasourceList[i];
 			datasourceLabels[i] = dataSource.getLabel();
 			dataSourceLabelIdMap.put(dataSource.getLabel(), dataSource.getId());
 		}
@@ -308,17 +318,17 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 				String comboText = engineCombo.getText();
 				boolean found=false;
 				Integer id=engineLabelIdMap.get(comboText);
-				SDKEngine sdkEngine=null;
+				Engine engine=null;
 				for (int i = 0; i < enginesList.length; i++) {
-					SDKEngine temp=enginesList[i];
+					Engine temp=enginesList[i];
 					if(temp.getId().equals(id)){
-						sdkEngine=temp;
+						engine=temp;
 						found=true;
 					}
 				}
-				if(sdkEngine!=null){
-					boolean useDataset=sdkEngine.getUseDataSet()!=null ? sdkEngine.getUseDataSet() : false;
-					boolean useDatasource=sdkEngine.getUseDataSource()!=null ? sdkEngine.getUseDataSource() : false;
+				if(engine!=null){
+					boolean useDataset=engine.getUseDataSet()!=null ? engine.getUseDataSet() : false;
+					boolean useDatasource=engine.getUseDataSource()!=null ? engine.getUseDataSource() : false;
 					dataSetCombo.setEnabled(useDataset);
 					dataSourceCombo.setEnabled(useDatasource);
 
@@ -452,7 +462,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 			if(treeItems!=null && treeItems.length==1){
 				TreeItem treeItem=treeItems[0];
 				Object data=treeItem.getData();
-				if(data!=null && data instanceof SDKFunctionality){
+				if(data!=null && ServerObjectsComparator.isObjectSDKFunctionality(data)){
 					isComplete=true;
 				}
 			}

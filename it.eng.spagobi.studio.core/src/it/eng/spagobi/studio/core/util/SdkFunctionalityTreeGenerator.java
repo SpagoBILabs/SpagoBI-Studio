@@ -20,8 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.util;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
+import it.eng.spagobi.studio.utils.Activator;
+import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.Functionality;
+import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
 
 import java.util.HashMap;
 
@@ -43,10 +45,10 @@ public class SdkFunctionalityTreeGenerator {
 	HashMap<String, ImageDescriptor> imageDescriptors=null;
 
 
-	public Tree generateTree(Composite parent,SDKFunctionality func){
+	public Tree generateTree(Composite parent,Functionality func){
 		container=parent;
-		folderDescriptor=ImageDescriptorGatherer.getImageDesc("folder.gif");
-		treeBaseDescriptor=ImageDescriptorGatherer.getImageDesc("treebase.gif");
+		folderDescriptor=ImageDescriptorGatherer.getImageDesc("folder.gif", Activator.PLUGIN_ID);
+		treeBaseDescriptor=ImageDescriptorGatherer.getImageDesc("treebase.gif", Activator.PLUGIN_ID);
 		initializeField();
 
 
@@ -62,13 +64,13 @@ public class SdkFunctionalityTreeGenerator {
 
 	// Private recursive method that adds documents in tree
 	// builds the tree with TreeItem named parent as root
-	private void createItemsList(TreeItem parent,SDKFunctionality func){
+	private void createItemsList(TreeItem parent,Functionality func){
 
-		SDKFunctionality[] sdkFuncArray=func.getContainedFunctionalities();
+		Functionality[] sdkFuncArray=func.getContainedFunctionalities();
 
 
 		if(sdkFuncArray!=null){
-			for (SDKFunctionality functionality : sdkFuncArray) {
+			for (Functionality functionality : sdkFuncArray) {
 				TreeItem currItem=new TreeItem(parent,SWT.SINGLE);
 				currItem.setText(functionality.getName());
 				currItem.setData(functionality);
@@ -76,9 +78,9 @@ public class SdkFunctionalityTreeGenerator {
 				currItem.setImage(folderDescriptor.createImage());
 				createItemsList(currItem, functionality);
 
-				SDKDocument[] sdkDocuments=functionality.getContainedDocuments(); 
+				Document[] sdkDocuments=functionality.getContainedDocuments(); 
 				if(sdkDocuments!=null){
-					for (SDKDocument document : sdkDocuments) {
+					for (Document document : sdkDocuments) {
 						createDocumentsList(currItem, document);
 					}
 				}
@@ -88,7 +90,7 @@ public class SdkFunctionalityTreeGenerator {
 
 	}
 
-	private void createDocumentsList(TreeItem parent,SDKDocument doc){
+	private void createDocumentsList(TreeItem parent,Document doc){
 		TreeItem currDoc=new TreeItem(parent,SWT.CHECK);
 		currDoc.setText(doc.getName());
 		currDoc.setData(doc);
@@ -102,17 +104,17 @@ public class SdkFunctionalityTreeGenerator {
 
 	private void initializeField(){
 		imageDescriptors=new HashMap<String, ImageDescriptor>();		
-		ImageDescriptor reportDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_REPORT.png");
-		ImageDescriptor olapDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_OLAP.png");
-		ImageDescriptor dashDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DASH.png");
-		ImageDescriptor geoDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_MAP.png");
-		ImageDescriptor officeDocumentDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_OFFICE_DOC.png");
-		ImageDescriptor etlDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_ETL.png");
-		ImageDescriptor qbeDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DATAMART.png");
-		ImageDescriptor dossierDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DOSSIER.png");
-		ImageDescriptor compositeDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_COMPOSITE_DOCUMENT.png");
-		ImageDescriptor kpiDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_KPI.png");
-		ImageDescriptor dataMiningDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DATA_MINING.png");
+		ImageDescriptor reportDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_REPORT.png", Activator.PLUGIN_ID);
+		ImageDescriptor olapDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_OLAP.png", Activator.PLUGIN_ID);
+		ImageDescriptor dashDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DASH.png", Activator.PLUGIN_ID);
+		ImageDescriptor geoDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_MAP.png", Activator.PLUGIN_ID);
+		ImageDescriptor officeDocumentDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_OFFICE_DOC.png", Activator.PLUGIN_ID);
+		ImageDescriptor etlDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_ETL.png", Activator.PLUGIN_ID);
+		ImageDescriptor qbeDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DATAMART.png", Activator.PLUGIN_ID);
+		ImageDescriptor dossierDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DOSSIER.png", Activator.PLUGIN_ID);
+		ImageDescriptor compositeDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_COMPOSITE_DOCUMENT.png", Activator.PLUGIN_ID);
+		ImageDescriptor kpiDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_KPI.png", Activator.PLUGIN_ID);
+		ImageDescriptor dataMiningDescriptor=ImageDescriptorGatherer.getImageDesc("objecticon_DATA_MINING.png", Activator.PLUGIN_ID);
 
 		imageDescriptors.put("REPORT", reportDescriptor);
 		imageDescriptors.put("OLAP", olapDescriptor);

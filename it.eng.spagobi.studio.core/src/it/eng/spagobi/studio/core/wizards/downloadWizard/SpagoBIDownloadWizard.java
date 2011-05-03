@@ -1,18 +1,21 @@
 package it.eng.spagobi.studio.core.wizards.downloadWizard;
 
 import it.eng.spagobi.commons.constants.SpagoBIConstants;
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
-import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
-import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
-import it.eng.spagobi.sdk.engines.bo.SDKEngine;
-import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
-import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
-import it.eng.spagobi.studio.core.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.core.util.FileFinder;
+import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.DocumentParameter;
+import it.eng.spagobi.studio.utils.bo.Engine;
+import it.eng.spagobi.studio.utils.bo.Functionality;
+import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.bo.Template;
+import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
+import it.eng.spagobi.studio.utils.services.ServerObjectsComparator;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -26,10 +29,8 @@ import java.util.Vector;
 
 import javax.activation.DataHandler;
 
-import org.dom4j.Document;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
-import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -84,7 +85,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	 * @param document
 	 */
 
-	public boolean downloadDocument(SDKDocument document){
+	public boolean downloadDocument(Document document){
 		logger.debug("IN");
 		// if it is a document composed download also contained documents
 		if(document.getType().equalsIgnoreCase(SpagoBIConstants.DOCUMENT_COMPOSITE_TYPE) ){
@@ -104,18 +105,18 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	 * @return
 	 */
 
-	public boolean downloadDocumentsFromFunctionality(SDKFunctionality functionality){
+	public boolean downloadDocumentsFromFunctionality(Functionality functionality){
 		logger.debug("IN");
-		SDKDocument[] documents = functionality.getContainedDocuments();
+		Document[] documents = functionality.getContainedDocuments();
 		// Download contained Documents
 		for (int i = 0; i < documents.length; i++) {
-			SDKDocument document = documents[i];	
+			Document document = documents[i];	
 			downloadDocument(document);
 		}
-		SDKFunctionality[] funcitonalities = functionality.getContainedFunctionalities();
+		Functionality[] funcitonalities = functionality.getContainedFunctionalities();
 		// Download contained subfolders
 		for (int i = 0; i < funcitonalities.length; i++) {
-			SDKFunctionality funct = funcitonalities[i];	
+			Functionality funct = funcitonalities[i];	
 			downloadDocumentsFromFunctionality(funct);
 		}		
 		logger.debug("OUT");
@@ -139,13 +140,13 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 				TreeItem selectedItem=selectedItems[i];
 				Object docObject=selectedItem.getData();	
 				// check if it is a folder or a document
-				if(docObject instanceof SDKDocument){
-					SDKDocument document=(SDKDocument)docObject;
+				if(ServerObjectsComparator.isObjectSDKDocument(docObject)){
+					Document document= ServerObjectsComparator.getDocument(docObject);
 					downloadDocument(document);
 				}
-				else if(docObject instanceof SDKFunctionality){
+				else if(ServerObjectsComparator.isObjectSDKFunctionality(docObject)){
 					// cycle on all document contained (also subfolders?)
-					SDKFunctionality functionality=(SDKFunctionality)docObject;
+					Functionality functionality = ServerObjectsComparator.getFunctionality(docObject);
 					downloadDocumentsFromFunctionality(functionality);
 				}
 
@@ -173,14 +174,14 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	}
 
 
-	public boolean downloadContainedTemplate(SDKDocument document){
+	public boolean downloadContainedTemplate(Document document){
 		logger.debug("IN");
 		boolean toReturn=true;
 		Integer id=document.getId();
-		SDKTemplate template=null;
-		SDKProxyFactory proxyFactory = null;
+		Template template=null;
+		SpagoBIServerObjects proxyServerObjects = null;
 		try{
-		proxyFactory  = new SDKProxyFactory(projectName);
+			proxyServerObjects  = new SpagoBIServerObjects(projectName);
 		}
 		catch (NoActiveServerException e1) {
 			SpagoBILogger.errorLog("No active server found", e1);			
@@ -188,12 +189,10 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 					"Error", "No active server found");	
 			return false;
 		}
-		
-		DocumentsServiceProxy docServiceProxy=null;
+
 		int numDocs=0;
 		try{
-			docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			template=docServiceProxy.downloadTemplate(id);
+			template=proxyServerObjects.downloadTemplate(id);
 		}	
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
@@ -221,7 +220,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			// put all the labels in an array, so if there is a problem in parsing does not download anything
 			boolean correctParsing=true;
 			SAXReader reader = new SAXReader();
-			Document thisDocument = null;
+			org.dom4j.Document thisDocument = null;
 			List<String> labels=new ArrayList<String>();
 			try{
 				thisDocument=reader.read(is);
@@ -249,7 +248,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 
 			for (int i = 0; i < labels.size(); i++) {
-				SDKDocument docToDownload=docServiceProxy.getDocumentByLabel(labels.get(i));
+				Document docToDownload=proxyServerObjects.getDocumentByLabel(labels.get(i));
 				if(docToDownload!=null){
 					toReturn = downloadTemplate(docToDownload);
 					if(toReturn==true){
@@ -273,17 +272,17 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 		return toReturn;
 	}
 
-	public boolean downloadTemplate(SDKDocument document){
+	public boolean downloadTemplate(it.eng.spagobi.studio.utils.bo.Document document){
 		logger.debug("IN");
 		InputStream is=null;
 		//try{
 		Integer id=document.getId();
-		SDKTemplate template=null;
+		Template template=null;
 		SDKProxyFactory proxyFactory = null;
+		SpagoBIServerObjects spagoBIServerObjects = null;
 		try{
-			proxyFactory=new SDKProxyFactory(projectName);
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			template=docServiceProxy.downloadTemplate(id);
+			spagoBIServerObjects = new SpagoBIServerObjects(projectName);
+			template = spagoBIServerObjects.downloadTemplate(id);
 		}
 		catch (NoActiveServerException e1) {
 			SpagoBILogger.errorLog("No active server found", e1);			
@@ -306,15 +305,14 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			logger.error("Template download is null for documentId "+id+" and label "+document.getLabel());
 			return false;
 		}
-		
+
 		// Recover information field like dataSource, dataSet, engine names!
 
 
 		//Get the parameters
 		String[] roles;
 		try{
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			roles=docServiceProxy.getCorrectRolesForExecution(id);
+			roles=spagoBIServerObjects.getCorrectRolesForExecution(id);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
@@ -334,10 +332,9 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 		//SDKDocumentParameter[] parameters=null;
 
-		SDKDocumentParameter[] parameters=null;
+		DocumentParameter[] parameters=null;
 		try{
-			DocumentsServiceProxy docServiceProxy=proxyFactory.getDocumentsServiceProxy(); 		
-			parameters=docServiceProxy.getDocumentParameters(id, roles[0]);
+			parameters=spagoBIServerObjects.getDocumentParameters(id, roles[0]);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
@@ -355,11 +352,10 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 		// get the extension
 		Integer engineId=document.getEngineId();
-		EnginesServiceProxy engineProxy=proxyFactory.getEnginesServiceProxy();
 
-		SDKEngine sdkEngine=null;
+		Engine sdkEngine=null;
 		try{
-			sdkEngine=engineProxy.getEngine(engineId);
+			sdkEngine=spagoBIServerObjects.getEngine(engineId);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not get engine", e);
@@ -451,7 +447,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 			//Set ParametersFile Metadata	
 			if(parameters.length>0){
 				try{
-					newFile=BiObjectUtilities.setFileParametersMetaData(newFile,parameters);
+					newFile=XmlParametersMapping.setFileParametersMetaData(newFile,parameters);
 
 				}
 				catch (Exception e) {
@@ -499,7 +495,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 	public void init(IWorkbench _workbench, IStructuredSelection _selection) {
 		this.selection = _selection;
 		this.workbench=_workbench;
-		
+
 		Object objSel = selection.toList().get(0);
 		Folder fileSelected=(Folder)objSel;
 		projectName = fileSelected.getProject().getName();

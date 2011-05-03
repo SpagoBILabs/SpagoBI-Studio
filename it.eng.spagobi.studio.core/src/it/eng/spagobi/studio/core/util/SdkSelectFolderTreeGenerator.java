@@ -20,8 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.core.util;
 
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
+import it.eng.spagobi.studio.utils.Activator;
+import it.eng.spagobi.studio.utils.bo.Functionality;
+import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
 
 import java.util.HashMap;
 
@@ -43,11 +44,10 @@ public class SdkSelectFolderTreeGenerator {
 	HashMap<String, ImageDescriptor> imageDescriptors=null;
 
 
-	public Tree generateTree(Composite parent,SDKFunctionality func){
+	public Tree generateTree(Composite parent,Functionality func){
 		container=parent;
-		folderDescriptor=ImageDescriptorGatherer.getImageDesc("folder.gif");
-		treeBaseDescriptor=ImageDescriptorGatherer.getImageDesc("treebase.gif");
-
+		folderDescriptor=ImageDescriptorGatherer.getImageDesc("folder.gif", Activator.PLUGIN_ID);
+		treeBaseDescriptor=ImageDescriptorGatherer.getImageDesc("treebase.gif", Activator.PLUGIN_ID);
 
 		tree = new Tree(parent, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL
 				| SWT.H_SCROLL);
@@ -61,13 +61,13 @@ public class SdkSelectFolderTreeGenerator {
 
 	// Private recursive method that adds documents in tree
 	// builds the tree with TreeItem named parent as root
-	private void createItemsList(TreeItem parent,SDKFunctionality func){
+	private void createItemsList(TreeItem parent, Functionality func){
 
-		SDKFunctionality[] sdkFuncArray=func.getContainedFunctionalities();
+		Functionality[] funcArray=func.getContainedFunctionalities();
 
 
-		if(sdkFuncArray!=null){
-			for (SDKFunctionality functionality : sdkFuncArray) {
+		if(funcArray!=null){
+			for (Functionality functionality : funcArray) {
 				TreeItem currItem=new TreeItem(parent,SWT.CHECK);
 				currItem.setText(functionality.getName());
 				currItem.setData(functionality);
