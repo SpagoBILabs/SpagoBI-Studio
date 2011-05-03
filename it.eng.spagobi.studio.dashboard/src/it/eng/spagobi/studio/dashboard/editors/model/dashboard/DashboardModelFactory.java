@@ -1,6 +1,6 @@
 package it.eng.spagobi.studio.dashboard.editors.model.dashboard;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
+import it.eng.spagobi.studio.dashboard.editors.DashboardEditor;
 import it.eng.spagobi.studio.dashboard.editors.model.dashboard.DashboardModel.Dimension;
 
 import java.io.InputStream;
@@ -10,9 +10,14 @@ import org.dom4j.Document;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.eclipse.core.resources.IFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DashboardModelFactory {
 
+	private static Logger logger = LoggerFactory.getLogger(DashboardEditor.class);
+
+	
 	public static DashboardModel createDashboardModel(IFile file) throws Exception  {
 		DashboardModel model = new DashboardModel();
 		InputStream templateIs = null;
@@ -187,7 +192,7 @@ public class DashboardModelFactory {
 			List confParametersList = templateDocument.selectNodes("//DASHBOARD/CONF/PARAMETER");
 				if (confParametersList == null || confParametersList.size() == 0) {
 					// TODO manage exception
-					SpagoBILogger.warningLog("missing configuration parameters");
+					logger.warn("missing configuration parameters");
 					//throw new Exception("missing configuration parameters");
 				}
 				configuration = new Configuration(movie, configurationDocument);

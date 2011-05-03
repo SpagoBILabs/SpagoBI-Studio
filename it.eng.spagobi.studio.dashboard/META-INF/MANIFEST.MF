@@ -13,9 +13,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms;bundle-version="3.3.103",
  org.eclipse.gef;bundle-version="3.4.1",
  org.eclipse.ui.navigator;bundle-version="3.3.102",
- it.eng.spagobi.studio.core;bundle-version="2.5.0"
+ it.eng.spagobi.studio.utils;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: lib/dom4j.jar,
  lib/hsqldb1_8_0_2.jar,
- .
+ .,
+ lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
+ lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar,
+ lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
+ lib/org.slf4j.api_1.5.11.v20100519-1910.jar
+Export-Package: it.eng.spagobi.studio.dashboard.actions

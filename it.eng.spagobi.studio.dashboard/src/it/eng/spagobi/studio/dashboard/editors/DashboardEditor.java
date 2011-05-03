@@ -23,7 +23,6 @@ package it.eng.spagobi.studio.dashboard.editors;
 import it.eng.spagobi.studio.dashboard.editors.model.dashboard.DashboardModel;
 import it.eng.spagobi.studio.dashboard.editors.model.dashboard.DashboardModelFactory;
 import it.eng.spagobi.studio.dashboard.editors.model.dashboard.Parameter;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,12 +34,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -55,6 +51,8 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DashboardEditor extends EditorPart {
 
@@ -62,7 +60,9 @@ public class DashboardEditor extends EditorPart {
 	protected DashboardModel model = null;
 	static public final int COLORDIALOG_WIDTH = 222;
 	static public final int COLORDIALOG_HEIGHT = 306;
+	private static Logger logger = LoggerFactory.getLogger(DashboardEditor.class);
 
+	
 	public void doSave(IProgressMonitor monitor) {
 		ByteArrayInputStream bais = null;
 		try {
@@ -117,15 +117,15 @@ public class DashboardEditor extends EditorPart {
 	public void createPartControl(Composite parent) {
 		// if model type == null type is not supported
 		if(model.getType() == null){
-			SpagoBILogger.errorLog("type not supported", null);
+			logger.error("type not supported");
 			MessageDialog.openError(parent.getShell(), "Error", "movie type "+model.getMovie()+" is not supported by SpagoBIStudio 2.5");
 			return;
 		}
-		SpagoBILogger.infoLog("Creating the editor for dashboard");
+		logger.debug("Creating the editor for dashboard");
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		final ScrolledForm form = toolkit.createScrolledForm(parent);
 		TableWrapLayout layout = new TableWrapLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 1;
 		layout.horizontalSpacing = 20;
 		layout.verticalSpacing = 10;
 		layout.topMargin = 20;

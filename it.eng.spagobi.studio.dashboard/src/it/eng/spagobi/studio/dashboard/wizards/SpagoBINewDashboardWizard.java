@@ -20,11 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.dashboard.wizards;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.dashboard.Activator;
 import it.eng.spagobi.studio.dashboard.editors.model.dashboard.DashboardModel;
 import it.eng.spagobi.studio.dashboard.utils.GeneralUtils;
 import it.eng.spagobi.studio.dashboard.wizards.pages.NewDashboardWizardPage;
+import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,6 +33,7 @@ import java.net.URL;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -42,6 +43,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.INewWizard;
@@ -52,48 +55,64 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
 
 	// dashboard creation page
 	private NewDashboardWizardPage newDashboardWizardPage;
+	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
 
+	private boolean calledFromMenu = false;
+
+	
+	private static Logger logger = LoggerFactory.getLogger(SpagoBINewDashboardWizard.class);
+
 	
 	
 	public boolean performFinish() {
 		// get the name of the dashboard from the form
-		SpagoBILogger.infoLog("Starting dashboard wizard");
+		logger.debug("IN");
 		String dashboardFileName = newDashboardWizardPage.getDashboardNameText().getText();
 		if (dashboardFileName == null || dashboardFileName.trim().equals("")) {
-			SpagoBILogger.errorLog("DashboardNameEmpty", null);
+			logger.error("DashboardNameEmpty");
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Dashboard name empty");
 			return false;
 		}
 		String dashboardType = newDashboardWizardPage.getDashboardTypeCombo().getText();
 		if (dashboardType == null || dashboardType.trim().equals("")) {
-			SpagoBILogger.errorLog("Dashboard Type Not Set", null);
+			logger.error("Dashboard Type Not Set" );
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Dashboard type not set");
 			return false;
 		}
 
 		// get the folder selected:  
-		Object objSel = selection.toList().get(0);
 		Folder folderSel = null;		
-		try{
+
+		if(calledFromMenu){
+			Tree tree =workbenchProjectTreePage.getTree();
+			TreeItem[] item = tree.getSelection();
+			TreeItem selected = item[0];
+			IFolder folder= workbenchProjectTreePage.getItemFolderMap().get(selected.getText());
+			folderSel = (Folder)folder;
+		}
+		else {
+			// get the folder selected:  
+			Object objSel = selection.toList().get(0);
 			// FolderSel is the folder in wich to insert the new template
 			folderSel=(Folder)objSel;
+
 		}
-		catch (Exception e) {
-			SpagoBILogger.errorLog("no selected folder", e);			
-			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
-					"Error", "You must select a folder in wich to insert the dashboard");		
-		}
+		
+		logger.debug("Save in "+folderSel.getName());
+		
 		// get the project
 		String projectName = folderSel.getProject().getName();
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -107,12 +126,12 @@ public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
 		try {
 			dashboardTemplatePath = DashboardModel.getDashboardTemplatePath(dashboardType);
 		} catch (Exception e) {
-			SpagoBILogger.errorLog("Error", e);			
+			logger.error("Error", e);			
 			MessageDialog.openInformation(getShell(), "Error", e.getMessage());
 			return true;
 		}
 		if (dashboardTemplatePath == null || dashboardTemplatePath.trim().equals("")) {
-			SpagoBILogger.errorLog("Missing template path for dashboard " + dashboardType, null);
+			logger.error("Missing template path for dashboard " + dashboardType);
 			MessageDialog.openInformation(getShell(), 
 					"Error", "Missing template path for dashboard " + dashboardType);
 			return true;
@@ -126,15 +145,15 @@ public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
 			byte[] resbytes = baos.toByteArray();
 			bais = new ByteArrayInputStream(resbytes);
 		} catch (Exception e) {
-			SpagoBILogger.errorLog("Error while creating file", e);
+			logger.error("Error while creating file", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while creating file");
 		} finally {
 			try {
 				if(is!=null) is.close();
 			} catch (Exception e) {
-				SpagoBILogger.errorLog("Error while closing stream", e);
-				SpagoBILogger.errorLog("Error while creating file", e);
+				logger.error("Error while closing stream", e);
+				logger.error("Error while creating file", e);
 			}
 		}
 		// generate the file	       
@@ -144,7 +163,7 @@ public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
 		try {
 			newFile.create(bais, true, null);
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while creating file", e);
+			logger.error("Error while creating file", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while creating file; name alreay present");
 		}
@@ -158,11 +177,11 @@ public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
 		try {
 			page.openEditor(new FileEditorInput(newFile), editordesc.getId());
 		} catch (PartInitException e) {
-			SpagoBILogger.errorLog("Error while opening editor", e);
+			logger.error("Error while opening editor", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while opening editor");
 		}
-		SpagoBILogger.infoLog("Open the dashboard wizard");
+		logger.debug("Open the dashboard wizard");
 		return true;
 	}
 
@@ -173,9 +192,25 @@ public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
 	}
 
 	public void addPages() {
+		logger.debug("IN");
 		super.addPages();
 		newDashboardWizardPage = new NewDashboardWizardPage("New Dashboard");
 		addPage(newDashboardWizardPage);
+		
+		if(calledFromMenu == true){
+			logger.debug("wizard has been called by workbench menu, page for folder selection must be added");
+			workbenchProjectTreePage = new WorkbenchProjectTreePage("Page Name", selection);
+			addPage(workbenchProjectTreePage);
+		}
+		logger.debug("OUT");
+	}
+
+	public boolean isCalledFromMenu() {
+		return calledFromMenu;
+	}
+
+	public void setCalledFromMenu(boolean calledFromMenu) {
+		this.calledFromMenu = calledFromMenu;
 	}
 
 }
