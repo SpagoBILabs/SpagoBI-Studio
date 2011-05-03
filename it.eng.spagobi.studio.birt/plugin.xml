@@ -34,4 +34,27 @@
             <!-- menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" -->
       </objectContribution>
    </extension>
+   
+   
+   
+   
+<!--      <extension point="org.eclipse.ui.actionSets">
+   <actionSet
+      id="it.eng.spagobi.studio.core.DocumentActionSet"
+   label="SpagoBI Documents"
+   visible="true">
+<action
+              id="it.eng.spagobi.studio.birt.actions.NewBirtAction" 
+            label="Birt"
+            icon="icons/objecticon_REPORT.png" 
+            style="push"
+            class="it.eng.spagobi.studio.birt.actions.NewBirtAction"
+   		   toolbarPath="Normal/additions" />   
+
+   </actionSet> 
+</extension>
+      -->
+   
+   
+   
 </plugin>

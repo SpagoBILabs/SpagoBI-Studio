@@ -22,6 +22,7 @@ package it.eng.spagobi.studio.birt.wizards;
 
 import it.eng.spagobi.studio.birt.Activator;
 import it.eng.spagobi.studio.birt.wizards.pages.NewBirtReportWizardPage;
+import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,7 +31,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
+import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -40,16 +43,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
-import org.eclipse.core.internal.resources.Folder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -58,12 +58,16 @@ public class SpagoBINewBirtReportWizard extends Wizard implements INewWizard {
 
 	// dashboard creation page
 	private NewBirtReportWizardPage newBirtWizardPage;
+	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
 
+	private boolean calledFromMenu = false;
+
 	public static final String BIRT_INFO_FILE = "it/eng/spagobi/studio/birt/resources/new_template.rptdesign";
+	private static Logger logger = LoggerFactory.getLogger(SpagoBINewBirtReportWizard.class);
 
 
 	public boolean performFinish() {
@@ -76,10 +80,27 @@ public class SpagoBINewBirtReportWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
-		// get the folder selected:  
-		Object objSel = selection.toList().get(0);
 		// FolderSel is the folder in wich to insert the new template
-		Folder folderSel=(Folder)objSel;
+		Folder folderSel= null;
+
+		if(calledFromMenu){
+			Tree tree =workbenchProjectTreePage.getTree();
+			TreeItem[] item = tree.getSelection();
+			TreeItem selected = item[0];
+			IFolder folder= workbenchProjectTreePage.getItemFolderMap().get(selected.getText());
+			folderSel = (Folder)folder;
+		}
+		else {
+
+			// get the folder selected:  
+			Object objSel = selection.toList().get(0);
+			// FolderSel is the folder in wich to insert the new template
+			folderSel=(Folder)objSel;
+
+		}
+
+
+		logger.debug("Save in "+folderSel.getName());
 
 		// get the project
 		String projectName = folderSel.getProject().getName();
@@ -108,8 +129,8 @@ public class SpagoBINewBirtReportWizard extends Wizard implements INewWizard {
 			try {
 				if(is!=null) is.close();
 			} catch (Exception e) {
-//				SpagoBILogger.errorLog("Error while closing stream", e);
-//				SpagoBILogger.errorLog("Error while creating file", e);
+				//				SpagoBILogger.errorLog("Error while closing stream", e);
+				//				SpagoBILogger.errorLog("Error while creating file", e);
 			}
 		}
 		// generate the file	       
@@ -119,7 +140,7 @@ public class SpagoBINewBirtReportWizard extends Wizard implements INewWizard {
 		try {
 			newFile.create(bais, true, null);
 		} catch (CoreException e) {
-//			SpagoBILogger.errorLog("Error while creating file", e);
+			//			SpagoBILogger.errorLog("Error while creating file", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while creating file; name alreay present");
 		}
@@ -148,11 +169,30 @@ public class SpagoBINewBirtReportWizard extends Wizard implements INewWizard {
 
 
 	public void addPages() {
+		logger.debug("IN");
 		super.addPages();
 		newBirtWizardPage = new NewBirtReportWizardPage("New Birt Report");
 		addPage(newBirtWizardPage);
+
+		if(calledFromMenu == true){
+			logger.debug("wizard has been called by workbench menu, page for folder selection must be added");
+			workbenchProjectTreePage = new WorkbenchProjectTreePage("Page Name", selection);
+			addPage(workbenchProjectTreePage);
+		}
+		logger.debug("OUT");
+
 	}
 
+	
+	
+
+	public boolean isCalledFromMenu() {
+		return calledFromMenu;
+	}
+
+	public void setCalledFromMenu(boolean calledFromMenu) {
+		this.calledFromMenu = calledFromMenu;
+	}
 
 	public static void flushFromInputStreamToOutputStream(InputStream is, OutputStream os, 
 			boolean closeStreams) throws Exception  {
