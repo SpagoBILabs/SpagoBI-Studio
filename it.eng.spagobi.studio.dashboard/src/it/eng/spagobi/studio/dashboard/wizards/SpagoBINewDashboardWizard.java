@@ -24,6 +24,7 @@ import it.eng.spagobi.studio.dashboard.Activator;
 import it.eng.spagobi.studio.dashboard.editors.model.dashboard.DashboardModel;
 import it.eng.spagobi.studio.dashboard.utils.GeneralUtils;
 import it.eng.spagobi.studio.dashboard.wizards.pages.NewDashboardWizardPage;
+import it.eng.spagobi.studio.utils.util.IOUtilities;
 import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
@@ -141,7 +142,7 @@ public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
 		try {
 			is = res.openStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			GeneralUtils.flushFromInputStreamToOutputStream(is, baos, true);
+			IOUtilities.flushFromInputStreamToOutputStream(is, baos, true);
 			byte[] resbytes = baos.toByteArray();
 			bais = new ByteArrayInputStream(resbytes);
 		} catch (Exception e) {
