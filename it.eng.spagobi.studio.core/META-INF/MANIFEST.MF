@@ -42,4 +42,9 @@ Bundle-ClassPath: .,
  lib/xstream-1.3.1.jar,
  lib/sbiutils.jar
 Export-Package: it.eng.spagobi.commons.constants
-Import-Package: it.eng.spagobi.studio.chart.actions
+Import-Package: it.eng.spagobi.studio.birt.actions,
+ it.eng.spagobi.studio.chart.actions,
+ it.eng.spagobi.studio.dashboard.actions,
+ it.eng.spagobi.studio.documentcomposition.actions,
+ it.eng.spagobi.studio.geo.actions,
+ it.eng.spagobi.studio.jasper.actions

@@ -243,7 +243,7 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 		if(tree!=null){
 			TreeItem[] treeItems=tree.getSelection();
 			if(treeItems!=null && treeItems.length>=1){
-
+				isComplete = true;
 			}			
 		}
 

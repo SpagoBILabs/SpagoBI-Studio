@@ -4,13 +4,10 @@ import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Functionality;
-import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.ServerObjectsComparator;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
-import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import java.io.File;
 import java.net.URI;
@@ -119,7 +116,7 @@ public class SpagoBIDeployWizard extends Wizard implements INewWizard {
 		else{	
 			TreeItem selectedItem=selectedItems[0];
 			Object docObject=selectedItem.getData();
-			functionality = ServerObjectsComparator.getFunctionality(docObject);
+			functionality = (Functionality)docObject;
 			doFinish(); 
 
 		}

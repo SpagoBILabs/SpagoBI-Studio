@@ -344,13 +344,58 @@
    visible="true">
   <action
         class="it.eng.spagobi.studio.chart.actions.NewWorkbenchChartAction"
-        icon="icons/private.png"
-        id="it.eng.spagobi.studio.chart.actions.NewWChartAction"
+        icon="icons/objecticon_CHART.png"
+        id="it.eng.spagobi.studio.chart.actions.NewWorkbenchChartAction"
         label="Chart"
         menubarPath="it.eng.spagobi.studio.birt.menu3/content"
         toolbarPath="Normal/additions"
-        tooltip="Tooltip for Set Action 1"> 
+        tooltip="Chart"> 
       </action>
+  <action
+        class="it.eng.spagobi.studio.birt.actions.NewWorkbenchBirtAction"
+        icon="icons/objecticon_REPORT.png"
+        id="it.eng.spagobi.studio.birt.actions.NewWorkbenchBirtAction"
+        label="Birt"
+        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        toolbarPath="Normal/additions"
+        tooltip="Birt"> 
+      </action>      
+        <action
+        class="it.eng.spagobi.studio.dashboard.actions.NewWorkbenchDashboardAction"
+        icon="icons/objecticon_DASH.png"
+        id="it.eng.spagobi.studio.dashboard.actions.NewWorkbenchDashboardAction"
+        label="Birt"
+        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        toolbarPath="Normal/additions"
+        tooltip="Dashboard"> 
+      </action>
+              <action
+        class="it.eng.spagobi.studio.documentcomposition.actions.NewWorkbenchDocumentCompositionAction"
+        icon="icons/objecticon_COMPOSITE_DOCUMENT.png"
+        id="it.eng.spagobi.studio.documentcomposition.actions.NewWorkbenchDocumentCompositionAction"
+        label="Document Composition"
+        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        toolbarPath="Normal/additions"
+        tooltip="Document Composition"> 
+      </action>
+                    <action
+        class="it.eng.spagobi.studio.geo.actions.NewWorkbenchGEOAction"
+        icon="icons/objecticon_GEO.png"
+        id="it.eng.spagobi.studio.geo.actions.NewWorkbenchGEOAction"
+        label="Geo"
+        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        toolbarPath="Normal/additions"
+        tooltip="Geo"> 
+      </action>          
+                      <action
+        class="it.eng.spagobi.studio.jasper.actions.NewWorkbenchJasperAction"
+        icon="icons/objecticon_REPORT.png"
+        id="it.eng.spagobi.studio.jasper.actions.NewWorkbenchJasperAction"
+        label="Jasper"
+        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        toolbarPath="Normal/additions"
+        tooltip="Jasper"> 
+      </action>      
   <menu
         id="it.eng.spagobi.studio.birt.menu3"
         label="MENU"

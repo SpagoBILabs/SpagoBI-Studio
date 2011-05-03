@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.core.preferences;
 
 import it.eng.spagobi.studio.core.Activator;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -69,11 +70,11 @@ public class SpagoBIPreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		serverUrl = new StringFieldEditor(PreferenceConstants.SPAGOBI_SERVER_URL, "SpagoBI Server url:", getFieldEditorParent());
+		serverUrl = new StringFieldEditor(SpagoBIStudioConstants.SPAGOBI_SERVER_URL, "SpagoBI Server url:", getFieldEditorParent());
 		addField(serverUrl);
-		userName = new StringFieldEditor(PreferenceConstants.SPABOGI_USER_NAME, "User name:", getFieldEditorParent());
+		userName = new StringFieldEditor(SpagoBIStudioConstants.SPABOGI_USER_NAME, "User name:", getFieldEditorParent());
 		addField(userName);
-		userPassword = new StringFieldEditor(PreferenceConstants.SPABOGI_USER_PASSWORD, "Password:", getFieldEditorParent());
+		userPassword = new StringFieldEditor(SpagoBIStudioConstants.SPABOGI_USER_PASSWORD, "Password:", getFieldEditorParent());
 		userPassword.getTextControl(getFieldEditorParent()).setEchoChar('*');
 		addField(userPassword);
 	}

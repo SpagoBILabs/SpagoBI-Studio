@@ -30,17 +30,12 @@ import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
 
 public class BiObjectUtilities {
 

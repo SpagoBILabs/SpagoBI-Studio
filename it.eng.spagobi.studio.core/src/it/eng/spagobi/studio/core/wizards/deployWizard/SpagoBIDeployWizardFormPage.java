@@ -462,7 +462,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 			if(treeItems!=null && treeItems.length==1){
 				TreeItem treeItem=treeItems[0];
 				Object data=treeItem.getData();
-				if(data!=null && ServerObjectsComparator.isObjectSDKFunctionality(data)){
+				if(data!=null && data instanceof Functionality){
 					isComplete=true;
 				}
 			}

@@ -3,7 +3,6 @@ package it.eng.spagobi.studio.core.wizards.downloadWizard;
 import it.eng.spagobi.commons.constants.SpagoBIConstants;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.util.BiObjectUtilities;
-import it.eng.spagobi.studio.core.util.FileFinder;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.DocumentParameter;
 import it.eng.spagobi.studio.utils.bo.Engine;
@@ -140,14 +139,17 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 				TreeItem selectedItem=selectedItems[i];
 				Object docObject=selectedItem.getData();	
 				// check if it is a folder or a document
-				if(ServerObjectsComparator.isObjectSDKDocument(docObject)){
-					Document document= ServerObjectsComparator.getDocument(docObject);
+				if(docObject instanceof Document){
+					Document document= (Document)docObject;
 					downloadDocument(document);
 				}
-				else if(ServerObjectsComparator.isObjectSDKFunctionality(docObject)){
+				else if(docObject instanceof Functionality){
 					// cycle on all document contained (also subfolders?)
-					Functionality functionality = ServerObjectsComparator.getFunctionality(docObject);
+					Functionality functionality = (Functionality)docObject;
 					downloadDocumentsFromFunctionality(functionality);
+				}
+				else{
+					logger.warn("Could not save documetns,not a right folder was selected");
 				}
 
 			}
@@ -408,7 +410,7 @@ public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
 
 		IPath projectFolder=project.getLocation();
 		// Check there is not another existing file with the same name inside project directory workspace!!!
-		boolean alreadyFound=FileFinder.fileExistsInSubtree(fileName, projectFolder.toString());
+		boolean alreadyFound=it.eng.spagobi.studio.utils.util.FileFinder.fileExistsInSubtree(fileName, projectFolder.toString());
 
 		if(alreadyFound){
 
