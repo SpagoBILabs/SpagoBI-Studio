@@ -1,20 +1,6 @@
 package it.eng.spagobi.studio.geo.editors;
 
-import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
 import it.eng.spagobi.sdk.exceptions.MissingParameterValue;
-import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
-import it.eng.spagobi.studio.core.bo.DataSource;
-import it.eng.spagobi.studio.core.bo.DataStoreMetadata;
-import it.eng.spagobi.studio.core.bo.DataStoreMetadataField;
-import it.eng.spagobi.studio.core.bo.Dataset;
-import it.eng.spagobi.studio.core.bo.GeoFeature;
-import it.eng.spagobi.studio.core.bo.GeoMap;
-import it.eng.spagobi.studio.core.bo.SpagoBIServerObjects;
-import it.eng.spagobi.studio.core.exceptions.NoServerException;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.properties.PropertyPage;
-import it.eng.spagobi.studio.core.sdk.SDKProxyFactory;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.editors.model.bo.ColumnBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;
@@ -34,9 +20,20 @@ import it.eng.spagobi.studio.geo.editors.model.geo.Metadata;
 import it.eng.spagobi.studio.geo.util.DeepCopy;
 import it.eng.spagobi.studio.geo.util.DesignerUtils;
 import it.eng.spagobi.studio.geo.util.XmlTemplateGenerator;
+import it.eng.spagobi.studio.utils.bo.DataSource;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
+import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.GeoFeature;
+import it.eng.spagobi.studio.utils.bo.GeoMap;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.exceptions.NoServerException;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -90,8 +87,12 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GEOEditor extends EditorPart {
+
+	private static Logger logger = LoggerFactory.getLogger(GEOEditor.class);
 
 	protected boolean isDirty = false;
 	final ImageDescriptor measureIcon = AbstractUIPlugin
@@ -120,7 +121,7 @@ public class GEOEditor extends EditorPart {
 	private Vector<TableEditor> datasetTableEditors = new Vector<TableEditor>();
 	private Vector<TableEditor> mapTableEditors = new Vector<TableEditor>();
 	private MeasuresDesigner measuresDesigner;
-String projectname = null;
+	String projectname = null;
 	private static final int DATASET_NAME = 0;
 	private static final int DATASET_CLASS = 1;
 	private static final int DATASET_SELECT = 2;
@@ -148,7 +149,7 @@ String projectname = null;
 
 			} catch (CoreException e) {
 				e.printStackTrace();
-				SpagoBILogger.errorLog(GEOEditor.class.toString()
+				logger.error(GEOEditor.class.toString()
 						+ ": Error in reading template", e);
 				throw (new PartInitException("Error in reading template"));
 			}
@@ -160,53 +161,124 @@ String projectname = null;
 			tempDsMetadataInfos = new HashMap<String, DataStoreMetadata>();
 			tempMapMetadataInfos = new HashMap<String, GeoFeature[]>();
 		} catch (Exception e) {
-			SpagoBILogger.warningLog("Error occurred:" + e.getMessage());
+			logger.warn("Error occurred:" + e.getMessage());
 		}
 	}
 
 	public void initializeEditor(GEODocument geoDocument) {
-		SpagoBILogger.infoLog("START: " + GEOEditor.class.toString()
+		logger.debug("START: " + GEOEditor.class.toString()
 				+ " initialize Editor");
 		// clean the properties View
 		IWorkbenchWindow a = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		// Document properties
 		IWorkbenchPage aa = a.getActivePage();
 
-		SDKDataSet[] sdkDataSets = null;
-		try {
-			SDKProxyFactory proxyFactory = new SDKProxyFactory(projectname);
-			DataSetsSDKServiceProxy dataSetsServiceProxy = proxyFactory
-			.getDataSetsSDKServiceProxy();
-			sdkDataSets = dataSetsServiceProxy.getDataSets();
-			int i = 0;
-		} catch (Exception e) {
-			SpagoBILogger
-			.errorLog(
-					"No comunication with SpagoBI server, could not retrieve dataset informations",
-					e);
-		}
+		Dataset[] dataSets = null;
 
-		SpagoBIServerObjects sbso = new SpagoBIServerObjects(projectname);
+
+
+
+
 		Vector<Dataset> datasetVector;
-		try {
-			datasetVector = sbso.getAllDatasets();
+
+		SpagoBIServerObjects proxyServerObjects = null;
+		try{
+			proxyServerObjects = new SpagoBIServerObjects(projectName);
+			dataSets = proxyServerObjects.getDataSetList();
+
+
+			datasetVector = proxyServerObjects.getAllDatasets();
 
 			for (Iterator iterator = datasetVector.iterator(); iterator
 			.hasNext();) {
 				Dataset dataset = (Dataset) iterator.next();
 				datasetInfos.put(dataset.getLabel(), dataset);
 			}
-			Vector<GeoMap> mapVector = sbso.getAllGeoMaps();
+			Vector<GeoMap> mapVector = proxyServerObjects.getAllGeoMaps();
 			for (Iterator iterator = mapVector.iterator(); iterator.hasNext();) {
 				GeoMap geoMap = (GeoMap) iterator.next();
 				mapInfos.put(geoMap.getName(), geoMap);
+
 			}
-		} catch (NoServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		catch (NoServerException e1) {
+			logger.error("Not working server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "Not working server found");	
+			return;
+		}
+		catch (NoActiveServerException e1) {
+			logger.error("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return;
+		}
+		catch (RemoteException e1) {
+			logger.error("Error in retrieving the dataset and maps list", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "Error in retrieving the dataset and maps list");	
+			return;
 		}
 
-		SpagoBILogger.infoLog("END: " + GEOEditor.class.toString()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//		SpagoBIServerObjects proxyServerObjects = null;
+		//		try{
+		//			proxyServerObjects = new SpagoBIServerObjects(projectName);
+		//		
+		//		}
+		//		catch (NoActiveServerException e1) {
+		//			logger.error("No active server found", e1);			
+		//			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+		//					"Error", "No active server found");	
+		//			return;
+		//		}
+		//		
+		//		try {
+		//			SDKProxyFactory proxyFactory = new SDKProxyFactory(projectname);
+		//			DataSetsSDKServiceProxy dataSetsServiceProxy = proxyFactory
+		//			.getDataSetsSDKServiceProxy();
+		//			sdkDataSets = dataSetsServiceProxy.getDataSets();
+		//			int i = 0;
+		//		} catch (Exception e) {
+		//			logger.error(
+		//					"No comunication with SpagoBI server, could not retrieve dataset informations",
+		//					e);
+		//		}
+		//		SpagoBIServerObjects sbso = new SpagoBIServerObjects(projectname);
+		//		Vector<Dataset> datasetVector;
+		//		try {
+		//			datasetVector = sbso.getAllDatasets();
+		//
+		//			for (Iterator iterator = datasetVector.iterator(); iterator
+		//			.hasNext();) {
+		//				Dataset dataset = (Dataset) iterator.next();
+		//				datasetInfos.put(dataset.getLabel(), dataset);
+		//			}
+		//			Vector<GeoMap> mapVector = sbso.getAllGeoMaps();
+		//			for (Iterator iterator = mapVector.iterator(); iterator.hasNext();) {
+		//				GeoMap geoMap = (GeoMap) iterator.next();
+		//				mapInfos.put(geoMap.getName(), geoMap);
+		//			}
+		//		} catch (NoServerException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+
+		logger.debug("END: " + GEOEditor.class.toString()
 				+ " initialize Editor");
 	}
 
@@ -361,7 +433,7 @@ String projectname = null;
 		section.pack();
 		sectionClient.pack();
 
-		SpagoBILogger.infoLog("END " + GEOEditor.class.toString()
+		logger.debug("END " + GEOEditor.class.toString()
 				+ ": create Part Control function");
 
 	}
@@ -434,7 +506,7 @@ String projectname = null;
 					datasource.setUrl(sdkdataSource.getUrlConnection());
 					datasource.setUser(sdkdataSource.getName());
 				} catch (NoServerException e3) {
-					SpagoBILogger.errorLog(e3.getMessage(), e3);
+					logger.error(e3.getMessage(), e3);
 				}
 			}*/
 		}
@@ -447,6 +519,15 @@ String projectname = null;
 				datasetTable.removeAll();
 				datasetTable.setItemCount(0);
 				datasetTable.pack();
+
+				SpagoBIServerObjects sbso= null;
+
+				try{
+					sbso =new SpagoBIServerObjects(projectname);
+				}catch (NoActiveServerException e1) {
+					logger.error("No active server found",e1);
+					return;
+				}
 
 				if (datasetTableEditors != null) {
 					for (int i = 0; i < datasetTableEditors.size(); i++) {
@@ -469,7 +550,8 @@ String projectname = null;
 							.setNewDataset(geoDocument, dataset.getJdbcQuery());*/
 					Integer datasourceId = dataset.getJdbcDataSourceId();
 
-					SpagoBIServerObjects sbso=new SpagoBIServerObjects(projectname);
+
+
 					DataSource sdkdataSource;
 					try {
 						sdkdataSource = sbso.getDataSourceById(datasourceId);
@@ -482,26 +564,23 @@ String projectname = null;
 						datasource.setUrl(sdkdataSource.getUrlConnection());
 						datasource.setUser(sdkdataSource.getName());*/
 					} catch (NoServerException e3) {
-						SpagoBILogger.errorLog(e3.getMessage(), e3);
+						logger.error(e3.getMessage(), e3);
 					}
 
 					try {
-						dataStoreMetadata = new SpagoBIServerObjects(projectname)
-						.getDataStoreMetadata(dataset.getId());
+						sbso.getDataStoreMetadata(dataset.getId());
 						if (dataStoreMetadata != null) {
 							tempDsMetadataInfos.put(datasetLabel,
 									dataStoreMetadata);
 						} else {
-							SpagoBILogger
-							.warningLog("Dataset returned no metadata");
+							logger.warn("Dataset returned no metadata");
 							MessageDialog.openWarning(sectionClient.getShell(),
 									"Warning", "Dataset with label = "
 									+ datasetLabel
 									+ " returned no metadata");
 						}
 					} catch (MissingParameterValue e2) {
-						SpagoBILogger
-						.errorLog(
+						logger.error(
 								"Could not execute dataset with label = "
 								+ datasetLabel
 								+ " due to parameters lack: execute dataset test in server to retrieve metadata",
@@ -514,7 +593,7 @@ String projectname = null;
 								+ datasetLabel
 								+ " due to parameters lack: execute dataset test in server to retrieve metadata");
 					} catch (NoServerException e1) {
-						SpagoBILogger.errorLog(
+						logger.error(
 								"Error No comunciation with server retrieving dataset with label = "
 								+ datasetLabel + " metadata", e1);
 						MessageDialog.openError(sectionClient.getShell(),
@@ -578,7 +657,7 @@ String projectname = null;
 		}
 		Arrays.sort(maps);
 		mapCombo.setItems(maps);
-		
+
 
 		// get the selection one! Index are changed so check out for name
 		boolean found = false;
@@ -602,6 +681,15 @@ String projectname = null;
 				mapTable.setItemCount(0);
 				mapTable.pack();
 
+				SpagoBIServerObjects sbso= null;
+
+				try{
+					sbso =new SpagoBIServerObjects(projectname);
+				}catch (NoActiveServerException e1) {
+					logger.error("No active server found",e1);
+					return;
+				}
+				
 				if (mapTableEditors != null) {
 					for (int i = 0; i < mapTableEditors.size(); i++) {
 						TableEditor editor = mapTableEditors.elementAt(i);
@@ -623,13 +711,13 @@ String projectname = null;
 				} else {
 					GeoMap geoMap = mapInfos.get(mapLabel);
 					try {
-						geoFeatures = new SpagoBIServerObjects(projectname)
+						geoFeatures = sbso
 						.getFeaturesByMapId(geoMap.getMapId());
 						if (geoFeatures != null) {
 							tempMapMetadataInfos.put(mapLabel, geoFeatures);
 						} else {
-							SpagoBILogger
-							.warningLog("No features returned from map with label "
+							logger
+							.warn("No features returned from map with label "
 									+ mapLabel);
 							MessageDialog.openWarning(sectionClient.getShell(),
 									"Warning",
@@ -637,7 +725,7 @@ String projectname = null;
 									+ mapLabel);
 						}
 					} catch (NoServerException e1) {
-						SpagoBILogger.errorLog(
+						logger.error(
 								"Could not get features associated to map with label = "
 								+ mapLabel, e1);
 						MessageDialog.openError(sectionClient.getShell(),
@@ -906,23 +994,32 @@ String projectname = null;
 	}
 	private void selectFeature(Composite sectionClient, Layers layers) {
 		try {
+			SpagoBIServerObjects sbso= null;
+
+			try{
+				sbso =new SpagoBIServerObjects(projectname);
+			}catch (NoActiveServerException e1) {
+				logger.error("No active server found",e1);
+				return;
+			}
+			
 			selectedMap = layers.getMapName();
 			GeoMap geoMap = mapInfos.get(selectedMap);
-			GeoFeature[] geoFeatures = new SpagoBIServerObjects(projectname)
+
+			GeoFeature[] geoFeatures = sbso
 			.getFeaturesByMapId(geoMap.getMapId());
 			if (geoFeatures != null) {
 				tempMapMetadataInfos.put(selectedMap, geoFeatures);
 				fillMapTable(geoFeatures, sectionClient, false);
 			} else {
-				SpagoBILogger
-				.warningLog("No features returned from map with label "
+				logger.warn("No features returned from map with label "
 						+ selectedMap);
 				MessageDialog.openWarning(sectionClient.getShell(), "Warning",
 						"No features returned from map with label "
 						+ selectedMap);
 			}
 		} catch (NoServerException e1) {
-			SpagoBILogger.errorLog(
+			logger.error(
 					"Could not get features associated to map with label = "
 					+ selectedMap, e1);
 			MessageDialog.openError(sectionClient.getShell(), "Error",
@@ -934,22 +1031,32 @@ String projectname = null;
 	private void selectDataset(Composite sectionClient, Metadata metadata) {
 
 		try {
+			SpagoBIServerObjects sbso= null;
+
+			try{
+				sbso =new SpagoBIServerObjects(projectname);
+			}catch (NoActiveServerException e1) {
+				logger.error("No active server found",e1);
+				return;
+			}
+			
 			selectedDataset = metadata.getDataset();
 			Dataset dataset = datasetInfos.get(metadata.getDataset());
-			DataStoreMetadata dataStoreMetadata = new SpagoBIServerObjects(projectname)
+			
+			DataStoreMetadata dataStoreMetadata = sbso
 			.getDataStoreMetadata(dataset.getId());
 			if (dataStoreMetadata != null) {
 				tempDsMetadataInfos.put(metadata.getDataset(),
 						dataStoreMetadata);
 				fillDatasetTable(dataStoreMetadata, false);
 			} else {
-				SpagoBILogger.warningLog("Dataset returned no metadata");
+				logger.warn("Dataset returned no metadata");
 				MessageDialog.openWarning(sectionClient.getShell(), "Warning",
 						"Dataset with label = " + metadata.getDataset()
 						+ " returned no metadata");
 			}
 		} catch (MissingParameterValue e2) {
-			SpagoBILogger.errorLog("Could not execute dataset with label = "
+			logger.error("Could not execute dataset with label = "
 					+ metadata.getDataset()
 					+ " due to parameter lack: execute dataset test in server to retrieve metadata", e2);
 			MessageDialog.openError(sectionClient.getShell(), "Error",
@@ -957,7 +1064,7 @@ String projectname = null;
 					+ metadata.getDataset()
 					+ " due to parameter lack: execute dataset test in server to retrieve metadata");
 		} catch (NoServerException e1) {
-			SpagoBILogger.errorLog(
+			logger.error(
 					"Error No comunciation with server retrieving dataset with label = "
 					+ metadata.getDataset() + " metadata", e1);
 			MessageDialog.openError(sectionClient.getShell(), "Error",
@@ -1295,7 +1402,7 @@ String projectname = null;
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		// TODO Auto-generated method stub
-		SpagoBILogger.infoLog("Start Saving GEO Template File");
+		logger.debug("Start Saving GEO Template File");
 		ByteArrayInputStream bais = null;
 
 		try {
@@ -1315,7 +1422,7 @@ String projectname = null;
 			file.setContents(bais, IFile.FORCE, null);
 
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while Saving GEO Template File", e);
+			logger.error("Error while Saving GEO Template File", e);
 			e.printStackTrace();
 		} finally {
 			if (bais != null)
@@ -1343,7 +1450,7 @@ String projectname = null;
 		this.selectedDataset = selectedDataset;
 	}
 
-	public HashMap<String, DataStoreMetadata> getTempDsMetadataInfos() {
+	public HashMap<String, it.eng.spagobi.studio.utils.bo.DataStoreMetadata> getTempDsMetadataInfos() {
 		return tempDsMetadataInfos;
 	}
 
@@ -1352,7 +1459,7 @@ String projectname = null;
 		this.tempDsMetadataInfos = tempDsMetadataInfos;
 	}
 
-	public HashMap<String, GeoFeature[]> getTempMapMetadataInfos() {
+	public HashMap<String, it.eng.spagobi.studio.utils.bo.GeoFeature[]> getTempMapMetadataInfos() {
 		return tempMapMetadataInfos;
 	}
 
@@ -1400,6 +1507,6 @@ String projectname = null;
 		this.projectName = projectName;
 	}
 
-	
+
 
 }

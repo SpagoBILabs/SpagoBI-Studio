@@ -20,10 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.geo.wizards;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.core.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.wizards.pages.NewGEOWizardPage;
+import it.eng.spagobi.studio.utils.util.IOUtilities;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +36,7 @@ import java.util.Date;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -45,22 +47,30 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 	
 	private NewGEOWizardPage newGEOWizardPage;
+	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
+	private static Logger logger = LoggerFactory.getLogger(SpagoBIGEOWizard.class);
+	private boolean calledFromMenu = false;
+	
 	
 	public static final String GEO_INFO_FILE = "it/eng/spagobi/studio/geo/resources/new_template.sbigeo";
 	@Override
 	public boolean performFinish() {
-		
+		logger.debug("IN");
 		String geoFileName = newGEOWizardPage.getGeoNameText().getText();
 		if (geoFileName == null || geoFileName.trim().equals("")) {
 
@@ -68,10 +78,24 @@ public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 					"Error", "GEO Document name empty");
 			return false;
 		}
-		// get the folder selected:  
-		Object objSel = selection.toList().get(0);
-		// FolderSel is the folder in wich to insert the new template
-		Folder folderSel=(Folder)objSel;
+		// get the folder selected, if from context menu is from navigator tree, else is from project tree
+		Folder folderSel = null;
+
+		if(calledFromMenu){
+			Tree tree =workbenchProjectTreePage.getTree();
+			TreeItem[] item = tree.getSelection();
+			TreeItem selected = item[0];
+			IFolder folder= workbenchProjectTreePage.getItemFolderMap().get(selected.getText());
+			folderSel = (Folder)folder;
+		}
+		else {
+			// get the folder selected:  
+			Object objSel = selection.toList().get(0);
+			// FolderSel is the folder in wich to insert the new template
+			folderSel=(Folder)objSel;
+
+		}
+		logger.debug("Save in "+folderSel.getName());
 
 		// get the project
 		String projectName = folderSel.getProject().getName();
@@ -88,7 +112,7 @@ public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 		try {
 			is = res.openStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			flushFromInputStreamToOutputStream(is, baos, true);
+			IOUtilities.flushFromInputStreamToOutputStream(is, baos, true);
 			byte[] resbytes = baos.toByteArray();
 			bais = new ByteArrayInputStream(resbytes);
 		} catch (Exception e) {
@@ -99,7 +123,7 @@ public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 			try {
 				if(is!=null) is.close();
 			} catch (Exception e) {
-				SpagoBILogger.errorLog("Error while closing stream", e);
+				logger.error("Error while closing stream", e);
 			}
 		}
 		// generate the file	       
@@ -109,7 +133,7 @@ public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 		try {
 			newFile.create(bais, true, null);
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while creating file", e);
+			logger.error("Error while creating file", e);
 			MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error while creating file; name alreay present");
 		}
@@ -118,16 +142,24 @@ public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 		try {
 			newFile.setPersistentProperty(SpagoBIStudioConstants.MADE_WITH_STUDIO, (new Date()).toString());
 		} catch (CoreException e) {
-			SpagoBILogger.errorLog("Error while setting made with studio metadata", e);
+			logger.error("Error while setting made with studio metadata", e);
 		}
-		
+		logger.debug("OUT");
 		return true;
 	}
 
 	public void addPages() {
+		logger.debug("IN");
 		super.addPages();
 		newGEOWizardPage = new NewGEOWizardPage("New GEO Document");
 		addPage(newGEOWizardPage);
+
+		if(calledFromMenu == true){
+			logger.debug("wizard has been called by workbench menu, page for folder selection must be added");
+			workbenchProjectTreePage = new WorkbenchProjectTreePage("Page Name", selection);
+			addPage(workbenchProjectTreePage);
+		}
+		logger.debug("OUT");
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -152,31 +184,14 @@ public class SpagoBIGEOWizard extends Wizard implements INewWizard{
 			new Status(IStatus.ERROR, "it.eng.spagobi.studio.core", IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
-	
-	public static void flushFromInputStreamToOutputStream(InputStream is, OutputStream os, 
-			boolean closeStreams) throws Exception  {
-		try{	
-			int c = 0;
-			byte[] b = new byte[1024];
-			while ((c = is.read(b)) != -1) {
-				if (c == 1024)
-					os.write(b);
-				else
-					os.write(b, 0, c);
-			}
-			os.flush();
-		} catch (IOException ioe) {
-			throw ioe;
-		} finally {
-			if (closeStreams) {
-				try {
-					if (os != null) os.close();
-					if (is != null) is.close();
-				} catch (IOException e) {
-					throw e;
-				}
 
-			}
-		}
+	public boolean isCalledFromMenu() {
+		return calledFromMenu;
 	}
+
+	public void setCalledFromMenu(boolean calledFromMenu) {
+		this.calledFromMenu = calledFromMenu;
+	}
+	
+
 }

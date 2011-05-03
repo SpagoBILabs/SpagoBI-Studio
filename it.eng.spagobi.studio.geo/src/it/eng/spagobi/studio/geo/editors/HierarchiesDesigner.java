@@ -21,17 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.geo.editors;
 
 
-import java.util.Iterator;
-import java.util.Vector;
-
 import it.eng.spagobi.sdk.exceptions.MissingParameterValue;
-import it.eng.spagobi.studio.core.bo.DataStoreMetadata;
-import it.eng.spagobi.studio.core.bo.DataStoreMetadataField;
-import it.eng.spagobi.studio.core.bo.Dataset;
-import it.eng.spagobi.studio.core.bo.GeoFeature;
-import it.eng.spagobi.studio.core.bo.SpagoBIServerObjects;
-import it.eng.spagobi.studio.core.exceptions.NoServerException;
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.geo.editors.model.bo.DatamartProviderBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.LevelBO;
@@ -40,6 +30,16 @@ import it.eng.spagobi.studio.geo.editors.model.geo.Hierarchies;
 import it.eng.spagobi.studio.geo.editors.model.geo.Hierarchy;
 import it.eng.spagobi.studio.geo.editors.model.geo.Level;
 import it.eng.spagobi.studio.geo.editors.model.geo.Link;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
+import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.GeoFeature;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.exceptions.NoServerException;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -64,11 +64,12 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.WorkbenchPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HierarchiesDesigner {
+
+	private static Logger logger = LoggerFactory.getLogger(HierarchiesDesigner.class);
 
 
 	private GEOEditor editor=null;
@@ -632,6 +633,8 @@ public class HierarchiesDesigner {
 	private Combo drawColumnIdCombo(final Shell dialog){
 		final Combo textColumn = new Combo(dialog, SWT.SINGLE | SWT.READ_ONLY);
 
+
+		
 		String datasetLabel=editor.getSelectedDataset();
 		if(datasetLabel == null){
 
@@ -644,25 +647,36 @@ public class HierarchiesDesigner {
 		}
 		else{
 			Dataset dataset = editor.getDatasetInfos().get(datasetLabel);
+			
+			SpagoBIServerObjects sbso= null;
+
 			try{
+				sbso =new SpagoBIServerObjects(editor.getProjectName());
+			}catch (NoActiveServerException e1) {
+				logger.error("No active server found",e1);
+				return null;
+			}
+			
+			try{
+				
 				if(dataset.getId() != null){
-					dataStoreMetadata=new SpagoBIServerObjects(editor.getProjectName()).getDataStoreMetadata(dataset.getId());
+					dataStoreMetadata=sbso.getDataStoreMetadata(dataset.getId());
 				}
 
 				if(dataStoreMetadata!=null){
 					//editor.getTempDsMetadataInfos().put(datasetLabel, dataStoreMetadata);
 				}
 				else{
-					SpagoBILogger.warningLog("Dataset returned no metadata");
+					logger.warn("Dataset returned no metadata");
 					MessageDialog.openWarning(mainComposite.getShell(), "Warning", "Dataset with label = "+datasetLabel+" returned no metadata");			
 				}
 			}
 			catch (MissingParameterValue e2) {
-				SpagoBILogger.errorLog("Could not execute dataset with label = "+datasetLabel+" metadata: execute dataset test in server to retrieve metadata", e2);
+				logger.error("Could not execute dataset with label = "+datasetLabel+" metadata: execute dataset test in server to retrieve metadata", e2);
 				MessageDialog.openError(mainComposite.getShell(), "Error", "Could not execute dataset with label = "+datasetLabel+" metadata: probably missing parameter");
 			}
 			catch (NoServerException e1) {
-				SpagoBILogger.errorLog("Error No comunciation with server retrieving dataset with label = "+datasetLabel+" metadata", e1);
+				logger.error("Error No comunciation with server retrieving dataset with label = "+datasetLabel+" metadata", e1);
 				MessageDialog.openError(mainComposite.getShell(), "Error", "No comunciation with server retrieving dataset with label = "+datasetLabel+" metadata");
 			}
 		}
@@ -682,15 +696,24 @@ public class HierarchiesDesigner {
 
 		GeoFeature[] geoFeatures=null;
 
+		SpagoBIServerObjects sbso= null;
+
 		try{
-			geoFeatures=new SpagoBIServerObjects(editor.getProjectName()).getAllFeatures();
+			sbso =new SpagoBIServerObjects(editor.getProjectName());
+		}catch (NoActiveServerException e1) {
+			logger.error("No active server found",e1);
+			return null;
+		}
+		
+		try{
+			geoFeatures=sbso.getAllFeatures();
 			if(geoFeatures==null){
-				SpagoBILogger.warningLog("No features returned");
+				logger.warn("No features returned");
 				MessageDialog.openWarning(mainComposite.getShell(), "Warning", "No features returned");			
 			}
 		}
 		catch (NoServerException e1) {
-			SpagoBILogger.errorLog("Could not get features", e1);
+			logger.error("Could not get features", e1);
 			MessageDialog.openError(mainComposite.getShell(), "Error", "Could not get features");
 		}
 
