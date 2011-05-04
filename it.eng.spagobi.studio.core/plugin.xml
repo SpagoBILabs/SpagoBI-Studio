@@ -299,6 +299,7 @@
       </product>
    </extension>
    -->
+   <!--
    <extension
          point="org.eclipse.ui.intro">
       <intro
@@ -331,7 +332,7 @@
       <startup
             class="it.eng.spagobi.studio.core.startup.EarlyStudioStartup"></startup>
    </extension>
-  
+  -->
   
   
   

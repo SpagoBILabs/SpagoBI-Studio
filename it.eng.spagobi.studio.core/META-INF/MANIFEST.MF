@@ -41,7 +41,8 @@ Bundle-ClassPath: .,
  lib/xpp3_min-1.1.4c.jar,
  lib/xstream-1.3.1.jar,
  lib/sbiutils.jar
-Export-Package: it.eng.spagobi.commons.constants
+Export-Package: it.eng.spagobi.commons.constants,
+ it.eng.spagobi.studio.core.perspectives
 Import-Package: it.eng.spagobi.studio.birt.actions,
  it.eng.spagobi.studio.chart.actions,
  it.eng.spagobi.studio.dashboard.actions,
