@@ -17,4 +17,5 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.4.2",
  org.eclipse.ui;bundle-version="3.4.2",
  org.eclipse.core.runtime;bundle-version="3.4.0",
  it.eng.spagobi.studio.utils;bundle-version="1.0.0"
-Export-Package: it.eng.spagobi.studio.jasper.actions
+Export-Package: it.eng.spagobi.studio.jasper.actions,
+ it.eng.spagobi.studio.jasper.services
