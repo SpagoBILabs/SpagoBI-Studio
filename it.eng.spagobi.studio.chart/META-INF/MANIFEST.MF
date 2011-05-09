@@ -25,4 +25,5 @@ Bundle-ClassPath: lib/dom4j.jar,
  lib/org.slf4j.api_1.5.11.v20100519-1910.jar,
  lib/sbiutils.jar,
  lib/axis-1.4.jar
-Export-Package: it.eng.spagobi.studio.chart.actions
+Export-Package: it.eng.spagobi.studio.chart.actions,
+ it.eng.spagobi.studio.chart.services
