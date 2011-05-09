@@ -34,6 +34,7 @@ String serverName = null;
 	public ProxyHandler(String projectName) throws NoActiveServerException {
 		super();
 		Server server = new ServerHandler().getCurrentActiveServer(projectName);
+		if(server == null) throw new NoActiveServerException();
 		serverName = server.getName();
 		proxyFactory=new SDKProxyFactory(server);
 	}
