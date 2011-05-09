@@ -77,7 +77,7 @@ public class NewServerWizardPage extends WizardPage {
 		container.setLayout(new GridLayout(2,true));
 
 		labelName = new Label(container, SWT.NONE);
-		labelName.setText("Tempalte file name: ");
+		labelName.setText("Server name: ");
 		labelName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		textName = new Text(container, SWT.BORDER);

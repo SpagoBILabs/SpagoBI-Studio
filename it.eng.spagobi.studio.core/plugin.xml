@@ -341,16 +341,24 @@
     <extension point="org.eclipse.ui.actionSets">
    <actionSet
       id="it.eng.spagobi.studio.core.DocumentActionSet"
-   label="SpagoBI Documents"
+   label="SpagoBI"
    visible="true"
            style="pulldown">
+      <action
+            class="it.eng.spagobi.studio.core.actions.NewSpagoBIProjectAction"
+            icon="icons/sbiproject.gif"
+            id="it.eng.spagobi.studio.core.actions.NewSpagoBIProjectAction"
+            label="New SpagoBIProject"
+            style="push"
+            toolbarPath="Normal/additions"
+            tooltip="New SpagoBI Project">
+      </action>
 
  <action
         class="it.eng.spagobi.studio.core.actions.DocumentsWizardMenuAction"
         icon="icons/analysis.png"
-        id="it.eng.spagobi.studio.chart.actions.DocumentsMenuAction"
+        id="it.eng.spagobi.studio.core.actions.ZDocumentsMenuAction"
         label="Documents Menu"
-        menubarPath="it.eng.spagobi.studio.core.menuW/content"
         style="pulldown"
         toolbarPath="Normal/additions"
         tooltip="Documents wizard"> 
@@ -412,7 +420,7 @@
         menubarPath="it.eng.spagobi.studio.core.menuW/content"
         toolbarPath="Normal/additions"
         tooltip="Geo"> 
-      </action>  
+      </action>  	
 -->
 
   <menu

@@ -12,6 +12,7 @@
 package it.eng.spagobi.studio.core.perspectives;
 
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
+import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IFolderLayout;
@@ -73,6 +74,7 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 	private void addShortcuts() {
 		factory.addPerspectiveShortcut(PERSPECTIVE_ID);
 		factory.addShowViewShortcut(ResourceNavigator.VIEW_ID);
+		factory.addNewWizardShortcut(NewSpagoBIProjectWizard.SPAGOBI_PROJECT_WIZARD_ID);
 	}
 
 	private void addActions() {

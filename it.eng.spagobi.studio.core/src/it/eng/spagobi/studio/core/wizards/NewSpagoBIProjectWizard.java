@@ -32,6 +32,7 @@ public class NewSpagoBIProjectWizard extends Wizard implements INewWizard, IExec
 	private WizardNewProjectCreationPage creationPage;
 	private IConfigurationElement configElement = null;
 
+	public static String SPAGOBI_PROJECT_WIZARD_ID = "it.eng.spagobi.studio.core.wizards.newSpagoBIProjectWizard";
 
 	
 	
