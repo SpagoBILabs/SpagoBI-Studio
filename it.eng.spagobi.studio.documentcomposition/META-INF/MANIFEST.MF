@@ -26,4 +26,5 @@ Bundle-ClassPath: lib/xpp3_min-1.1.4c.jar,
  lib/dom4j.jar,
  lib/org.slf4j.api_1.5.11.v20100519-1910.jar,
  lib/sbiutils.jar
-Export-Package: it.eng.spagobi.studio.documentcomposition.actions
+Export-Package: it.eng.spagobi.studio.documentcomposition.actions,
+ it.eng.spagobi.studio.documentcomposition.services
