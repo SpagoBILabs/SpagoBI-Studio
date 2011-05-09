@@ -342,13 +342,29 @@
    <actionSet
       id="it.eng.spagobi.studio.core.DocumentActionSet"
    label="SpagoBI Documents"
-   visible="true">
+   visible="true"
+           style="pulldown">
+
+ <action
+        class="it.eng.spagobi.studio.core.actions.DocumentsWizardMenuAction"
+        icon="icons/analysis.png"
+        id="it.eng.spagobi.studio.chart.actions.DocumentsMenuAction"
+        label="Documents Menu"
+        menubarPath="it.eng.spagobi.studio.core.menuW/content"
+        style="pulldown"
+        toolbarPath="Normal/additions"
+        tooltip="Documents wizard"> 
+      </action>
+
+
+<!--
   <action
         class="it.eng.spagobi.studio.chart.actions.NewWorkbenchChartAction"
         icon="icons/objecticon_CHART.png"
         id="it.eng.spagobi.studio.chart.actions.NewWorkbenchChartAction"
         label="Chart"
-        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        menubarPath="it.eng.spagobi.studio.core.menuW/content"
+        pulldown="true"
         toolbarPath="Normal/additions"
         tooltip="Chart"> 
       </action>
@@ -357,7 +373,7 @@
         icon="icons/objecticon_REPORT.png"
         id="it.eng.spagobi.studio.birt.actions.NewWorkbenchBirtAction"
         label="Birt"
-        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        menubarPath="it.eng.spagobi.studio.core.menuW/content"
         toolbarPath="Normal/additions"
         tooltip="Birt"> 
       </action>      
@@ -366,7 +382,7 @@
         icon="icons/objecticon_DASH.png"
         id="it.eng.spagobi.studio.dashboard.actions.NewWorkbenchDashboardAction"
         label="Birt"
-        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        menubarPath="it.eng.spagobi.studio.core.menuW/content"
         toolbarPath="Normal/additions"
         tooltip="Dashboard"> 
       </action>
@@ -375,7 +391,7 @@
         icon="icons/objecticon_COMPOSITE_DOCUMENT.png"
         id="it.eng.spagobi.studio.documentcomposition.actions.NewWorkbenchDocumentCompositionAction"
         label="Document Composition"
-        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        menubarPath="it.eng.spagobi.studio.core.menuW/content"
         toolbarPath="Normal/additions"
         tooltip="Document Composition"> 
       </action>   
@@ -384,7 +400,7 @@
         icon="icons/objecticon_REPORT.png"
         id="it.eng.spagobi.studio.jasper.actions.NewWorkbenchJasperAction"
         label="Jasper"
-        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        menubarPath="it.eng.spagobi.studio.core.menuW/content"
         toolbarPath="Normal/additions"
         tooltip="Jasper"> 
       </action>      
@@ -393,12 +409,14 @@
         icon="icons/objecticon_MAP.png"
         id="it.eng.spagobi.studio.geo.actions.NewWorkbenchGEOAction"
         label="Geo"
-        menubarPath="it.eng.spagobi.studio.birt.menu3/content"
+        menubarPath="it.eng.spagobi.studio.core.menuW/content"
         toolbarPath="Normal/additions"
         tooltip="Geo"> 
       </action>  
+-->
+
   <menu
-        id="it.eng.spagobi.studio.birt.menu3"
+        id="it.eng.spagobi.studio.core.menuW"
         label="SpagoBI Documents"
         path="additions">
      <groupMarker
@@ -412,7 +430,15 @@
 </extension>
   
   
-  
+  <!--ActionContributionItem class style = "pulldown"
+  http://dev.eclipse.org/newslists/news.eclipse.platform.swt/msg20495.html
+ 
+ or org.eclipse.ui.IWorkbenchWindowPulldownDelegate to call
+ 
+ qui l'implementazione http://eclipse.dzone.com/articles/perspectives-and-views-toolbar
+ 
+ http://www.java2s.com/Code/Java/SWT-JFace-Eclipse/TestToolBar.htm
+  -->
   
   
   

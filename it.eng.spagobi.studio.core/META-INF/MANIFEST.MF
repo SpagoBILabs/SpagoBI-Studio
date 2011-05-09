@@ -44,8 +44,14 @@ Bundle-ClassPath: .,
 Export-Package: it.eng.spagobi.commons.constants,
  it.eng.spagobi.studio.core.perspectives
 Import-Package: it.eng.spagobi.studio.birt.actions,
+ it.eng.spagobi.studio.birt.services,
  it.eng.spagobi.studio.chart.actions,
+ it.eng.spagobi.studio.chart.services,
  it.eng.spagobi.studio.dashboard.actions,
+ it.eng.spagobi.studio.dashboard.services,
  it.eng.spagobi.studio.documentcomposition.actions,
+ it.eng.spagobi.studio.documentcomposition.services,
  it.eng.spagobi.studio.geo.actions,
- it.eng.spagobi.studio.jasper.actions
+ it.eng.spagobi.studio.geo.services,
+ it.eng.spagobi.studio.jasper.actions,
+ it.eng.spagobi.studio.jasper.services
