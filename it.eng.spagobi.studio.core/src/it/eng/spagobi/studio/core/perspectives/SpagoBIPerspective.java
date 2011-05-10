@@ -83,8 +83,6 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		IFolderLayout bottomRight = factory.createFolder("bottomRight", IPageLayout.BOTTOM, 0.85f, factory.getEditorArea());
 		bottomRight.addView(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
 		factory.addShowViewShortcut(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
-
-		
 		
 		
 	}
