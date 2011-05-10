@@ -122,8 +122,8 @@ public class NewSpagoBIProjectWizard extends Wizard implements INewWizard, IExec
 			IFolder serverFolder = resourceFolder.getFolder(SpagoBIStudioConstants.FOLDER_SERVER);
 			serverFolder.create(false, true, monitor);
 
-			IFolder datasourceFolder = resourceFolder.getFolder(SpagoBIStudioConstants.FOLDER_DATA_SOURCE);
-			datasourceFolder.create(false, true, monitor);
+//			IFolder datasourceFolder = resourceFolder.getFolder(SpagoBIStudioConstants.FOLDER_DATA_SOURCE);
+//			datasourceFolder.create(false, true, monitor);
 
 			IFolder metadataFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_METADATA_MODEL);
 			metadataFolder.create(false, true, monitor);

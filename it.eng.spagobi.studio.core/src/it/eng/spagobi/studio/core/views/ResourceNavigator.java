@@ -121,13 +121,14 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 					// there asre some structure folders that have a father folder
 
 					// data Source and server have father resources
-					if(name.equals(SpagoBIStudioConstants.FOLDER_DATA_SOURCE)){
-						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
-							imageToReturn = ImageConstants.datasourceDescriptor.createImage();
-							images.add(imageToReturn);
-						}
-					}					
-					else if(name.equals(SpagoBIStudioConstants.FOLDER_SERVER)){
+					//					if(name.equals(SpagoBIStudioConstants.FOLDER_DATA_SOURCE)){
+					//						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
+					//							imageToReturn = ImageConstants.datasourceDescriptor.createImage();
+					//							images.add(imageToReturn);
+					//						}
+					//					}					
+					//					else 
+					if(name.equals(SpagoBIStudioConstants.FOLDER_SERVER)){
 						if(fatherName.equals(SpagoBIStudioConstants.FOLDER_RESOURCE)){
 							imageToReturn = ImageConstants.serverDescriptor.createImage();
 							images.add(imageToReturn);
@@ -182,8 +183,8 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 		CommonViewer viewer = getCommonViewer();
 		viewer.setLabelProvider(new MyLabelProvider((ILabelProvider)viewer.getLabelProvider()));
 
-//		//WizardActionGroup
-//getCommonViewer().getNavigatorContentService()
+		//		//WizardActionGroup
+		//getCommonViewer().getNavigatorContentService()
 
 
 	}

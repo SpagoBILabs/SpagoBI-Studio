@@ -309,7 +309,7 @@
 <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="it.eng.spagobi.studio.core.properties.PropertyPage"
+            class="it.eng.spagobi.studio.core.properties.SpagoBIPropertyPage"
             icon="icons/metadata.png"            
             id="it.eng.spagobi.studio.core.propertyPage"
             name="SpagoBI"

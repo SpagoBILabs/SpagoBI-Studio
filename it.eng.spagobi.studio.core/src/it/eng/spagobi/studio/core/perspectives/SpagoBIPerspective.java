@@ -13,6 +13,7 @@ package it.eng.spagobi.studio.core.perspectives;
 
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IFolderLayout;
@@ -47,7 +48,7 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		// 
 		//		layout.addStandaloneView("it.eng.spagobi.studio.core.views.ResourceNavigator",  true /* show title */, IPageLayout.LEFT, 0.25f, editorArea);
 		this.factory = layout;
-		System.out.println("LAYOUTTTTTT");
+
 		addViews();
 		addShortcuts();
 		addActions();
@@ -65,9 +66,27 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		
 	}
 
+	/**
+	 *  SpaoBI Perspectve View are:
+	 *  - spagobi resource navigator
+	 *  - project explorer
+	 *  - data source view
+	 */
+	
 	private void addViews() {
-		IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.LEFT, 0.25f, factory.getEditorArea());
+		IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.LEFT, 0.20f, factory.getEditorArea());
+		// Add the SpagoBI Resource Navigator
 		topLeft.addView(ResourceNavigator.VIEW_ID);
+		// add the resource viewer
+		topLeft.addView(IPageLayout.ID_PROJECT_EXPLORER);
+
+		IFolderLayout bottomRight = factory.createFolder("bottomRight", IPageLayout.BOTTOM, 0.85f, factory.getEditorArea());
+		bottomRight.addView(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
+		factory.addShowViewShortcut(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
+
+		
+		
+		
 	}
 
 

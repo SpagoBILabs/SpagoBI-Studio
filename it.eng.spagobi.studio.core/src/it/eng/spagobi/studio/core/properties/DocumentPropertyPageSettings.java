@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -63,11 +64,11 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PropertyPage extends org.eclipse.ui.dialogs.PropertyPage implements
-IWorkbenchPropertyPage {
+public class DocumentPropertyPageSettings implements IPropertyPageSettings {
 
-	private static Logger logger = LoggerFactory.getLogger(PropertyPage.class);
+	private static Logger logger = LoggerFactory.getLogger(DocumentPropertyPageSettings.class);
 
+	IFile fileSel = null;
 
 	private ProgressMonitorPart monitor;
 
@@ -108,30 +109,32 @@ IWorkbenchPropertyPage {
 	Table parametersTable=null;
 
 
-	Composite container=null;
+	Composite container = null;
 
-	public PropertyPage() {
-		super();
+	public String getDescription() {
+		return "Document properties";
 	}
 
 
-	@Override
-	protected Control createContents(Composite parent) {
-		setTitle("SpagoBI Metadata");
-		setDescription("SpagoBI Metadata");
-		setImageDescriptor(ImageConstants.metadataDescriptor);
+
+
+	public DocumentPropertyPageSettings(IFile filSel) {
+		super();
+		this.fileSel = filSel;
+	}
 
 
 
 
-		// hide default buttons
-		this.noDefaultAndApplyButton();
-		monitor=new ProgressMonitorPart(getShell(), null);
+	public Control createContents(final Composite _container) {
+		logger.debug("IN");
+		container = _container;
+		
+		monitor=new ProgressMonitorPart(container.getShell(), null);
 
-		IFile file = (IFile) this.getElement();
 		String documentIdS=null;
 		try {
-			documentIdS=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
+			documentIdS=fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 		} catch (CoreException e2) {
 			logger.error("Error in retrieving Id", e2);
 		}
@@ -141,19 +144,7 @@ IWorkbenchPropertyPage {
 			documentId=null;
 
 
-		container = new Composite(parent, SWT.NULL);
-		RowLayout rowLayout = new RowLayout();
-		rowLayout.wrap = false;
-		rowLayout.pack = true;
-		rowLayout.justify = false;
-		rowLayout.type = SWT.VERTICAL;
-		rowLayout.marginLeft = 5;
-		rowLayout.marginTop = 5;
-		rowLayout.marginRight = 5;
-		rowLayout.marginBottom = 5;
-		rowLayout.spacing = 0;
-		rowLayout.fill = true;
-		container.setLayout(rowLayout);
+
 
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
@@ -270,7 +261,7 @@ IWorkbenchPropertyPage {
 
 				if(documentId==null){
 					logger.error("Cannot retrieve metadata cause no document is associated");
-					MessageDialog.openWarning(getShell(), "Warning", "No document is associated: cannot retrieve metadata");
+					MessageDialog.openWarning(container.getShell(), "Warning", "No document is associated: cannot retrieve metadata");
 				}
 				else{
 					final NoDocumentException noDocumentException=new NoDocumentException();
@@ -280,25 +271,25 @@ IWorkbenchPropertyPage {
 						public void run(IProgressMonitor monitor) throws InvocationTargetException {
 							monitor.beginTask("Refreshing ", IProgressMonitor.UNKNOWN);
 							try {
-								new MetadataHandler().refreshMetadata((IFile)getElement(), noDocumentException, noActiveServerException);
+								new MetadataHandler().refreshMetadata(fileSel, noDocumentException, noActiveServerException);
 							} catch (Exception e) {
 								logger.error("Error in monitor retieving metadata ",e);
-								MessageDialog.openError(getShell(), "Exception", "Exception");
+								MessageDialog.openError(container.getShell(), "Exception", "Exception");
 							}
 						}			
 					};
-					ProgressMonitorDialog dialog=new ProgressMonitorDialog(getShell());		
+					ProgressMonitorDialog dialog=new ProgressMonitorDialog(container.getShell());		
 					try {
 						dialog.run(true, true, op);
 					} catch (InvocationTargetException e1) {
 						logger.error("No comunication with SpagoBI server: could not refresh metadata", e1);
 						dialog.close();
-						MessageDialog.openError(getShell(), "Error", "No comunication with server: Could not refresh metadata");	
+						MessageDialog.openError(container.getShell(), "Error", "No comunication with server: Could not refresh metadata");	
 						return;
 					} catch (InterruptedException e1) {
 						logger.error("No comunication with SpagoBI server: could not refresh metadata", e1);
 						dialog.close();
-						MessageDialog.openError(getShell(), "Error", "No comunication with server: Could not refresh metadata");	
+						MessageDialog.openError(container.getShell(), "Error", "No comunication with server: Could not refresh metadata");	
 						return;	
 					}	
 
@@ -339,12 +330,12 @@ IWorkbenchPropertyPage {
 		return container;
 	}
 
-	public void fillValues() throws CoreException{
-		IFile file = (IFile) this.getElement();
+	public String fillValues() throws CoreException{
+
 
 		// get active server name, there could be more than one, in that case take the first one and advise user
 		String activeName = "NONE";
-		Vector<Server> names = new ServerHandler().getCurrentActiveServers(file.getProject().getName());
+		Vector<Server> names = new ServerHandler().getCurrentActiveServers(fileSel.getProject().getName());
 		if(names.size() == 0){
 			logger.debug("Noa ctive server was found");
 			activeName = "NONE";
@@ -359,53 +350,52 @@ IWorkbenchPropertyPage {
 		}
 		activeServerLabel.setText(activeName);
 
-		String serverName = file.getPersistentProperty(SpagoBIStudioConstants.SERVER);
+		String serverName = fileSel.getPersistentProperty(SpagoBIStudioConstants.SERVER);
 		if(serverName==null) serverName="NONE";
 		prevServerLabel.setText(serverName);
 
-		String documentId = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
+		String documentId = fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 		if(documentId==null) documentId="EMPTY";
-		String documentLabel = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
+		String documentLabel = fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
 		if(documentLabel==null) documentLabel="None";
-		setTitle("Document Label: "+documentLabel);
 
-		String documentName = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_NAME);
+		String documentName = fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_NAME);
 		if(documentName==null) documentName="EMPTY";
-		String documentDescription = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_DESCRIPTION);
+		String documentDescription = fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_DESCRIPTION);
 		if(documentDescription==null) documentDescription="EMPTY";
-		String documentType = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE);
+		String documentType = fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE);
 		if(documentType==null) documentType="EMPTY";
-		String documentState = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_STATE);
+		String documentState = fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_STATE);
 		if(documentState==null) documentState="EMPTY";
 
-		String engineId = file.getPersistentProperty(SpagoBIStudioConstants.ENGINE_ID);
+		String engineId = fileSel.getPersistentProperty(SpagoBIStudioConstants.ENGINE_ID);
 		if(engineId==null) engineId="EMPTY";
-		String engineLabel = file.getPersistentProperty(SpagoBIStudioConstants.ENGINE_LABEL);
+		String engineLabel = fileSel.getPersistentProperty(SpagoBIStudioConstants.ENGINE_LABEL);
 		if(engineLabel==null) engineLabel="EMPTY";
-		String engineName = file.getPersistentProperty(SpagoBIStudioConstants.ENGINE_NAME);
+		String engineName = fileSel.getPersistentProperty(SpagoBIStudioConstants.ENGINE_NAME);
 		if(engineName==null) engineName="EMPTY";
-		String engineDescription = file.getPersistentProperty(SpagoBIStudioConstants.ENGINE_DESCRIPTION);
+		String engineDescription = fileSel.getPersistentProperty(SpagoBIStudioConstants.ENGINE_DESCRIPTION);
 		if(engineDescription==null) engineDescription="EMPTY";
 
-		String datasourceId = file.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_ID);
+		String datasourceId = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_ID);
 		if(datasourceId==null) datasourceId="EMPTY";
-		String datasourceLabel = file.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_LABEL);
+		String datasourceLabel = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_LABEL);
 		if(datasourceLabel==null) datasourceLabel="EMPTY";
-		String datasourceName = file.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_NAME);
+		String datasourceName = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_NAME);
 		if(datasourceName==null) datasourceName="EMPTY";
-		String datasourceDescription = file.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_DESCRIPTION);
+		String datasourceDescription = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATA_SOURCE_DESCRIPTION);
 		if(datasourceDescription==null) datasourceDescription="EMPTY";
 
-		String datasetId = file.getPersistentProperty(SpagoBIStudioConstants.DATASET_ID);
+		String datasetId = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_ID);
 		if(datasetId==null) datasetId="EMPTY";
-		String datasetLabel = file.getPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL);
+		String datasetLabel = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL);
 		if(datasetLabel==null) datasetLabel="EMPTY";
-		String datasetName = file.getPersistentProperty(SpagoBIStudioConstants.DATASET_NAME);
+		String datasetName = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_NAME);
 		if(datasetName==null) datasetName="EMPTY";
-		String datasetDescription = file.getPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION);
+		String datasetDescription = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION);
 		if(datasetDescription==null) datasetDescription="EMPTY";
 
-		String xmlParameters = file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML);
+		String xmlParameters = fileSel.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML);
 		if(datasetDescription==null) datasetDescription="EMPTY";		
 
 		List<DocumentParameter> list=null;
@@ -433,7 +423,7 @@ IWorkbenchPropertyPage {
 			list = XmlParametersMapping.getParametersFromXML(xmlParameters);
 		}
 
-		String date=file.getPersistentProperty(SpagoBIStudioConstants.LAST_REFRESH_DATE);
+		String date=fileSel.getPersistentProperty(SpagoBIStudioConstants.LAST_REFRESH_DATE);
 		lastRefreshDateLabel.setText(date!=null ? date : "");
 
 		documentIdValue.setText(documentId);
@@ -476,7 +466,7 @@ IWorkbenchPropertyPage {
 		container.layout();
 		container.redraw();
 
-
+		return documentLabel;
 
 
 	}
@@ -490,9 +480,8 @@ IWorkbenchPropertyPage {
 	}
 
 	protected String getProperty(QualifiedName qn) {
-		IFile file = (IFile) this.getElement();
-		try {
-			String value = file.getPersistentProperty(qn);
+		try{
+			String value = fileSel.getPersistentProperty(qn);
 			if (value == null)
 				return "EMPTY";
 			return value;
@@ -503,8 +492,6 @@ IWorkbenchPropertyPage {
 	}
 
 
-	public boolean performOk() {
-		return super.performOk();
-	}
+
 
 }

@@ -2,8 +2,9 @@ package it.eng.spagobi.studio.core.views.actionProvider;
 
 
 
-import it.eng.spagobi.meta.editor.multi.wizards.NewModelWizardFileCreationPage;
 import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
+import it.eng.spagobi.meta.editor.popup.actions.CreateJPAMappingProjectExplorerAction;
+import it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerAction;
 import it.eng.spagobi.studio.birt.wizards.SpagoBINewBirtReportWizard;
 import it.eng.spagobi.studio.chart.wizards.SpagoBINewChartWizard;
 import it.eng.spagobi.studio.core.Activator;
@@ -20,9 +21,6 @@ import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
 import it.eng.spagobi.studio.utils.util.ResourceNavigatorHandler;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
-import org.eclipse.core.internal.resources.File;
-import org.eclipse.core.internal.resources.Folder;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
@@ -30,7 +28,6 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
@@ -92,6 +89,12 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			logger.debug("Folder Model");
 
 			setModelWizard(menu);			
+		}
+		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)){ // if it is a fie of analysis hierarchy
+			logger.debug("File under model hierarchy");
+
+			setQueryWizard(menu);	
+			setJpaNavigator(menu);
 		}
 
 
@@ -293,6 +296,41 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		});
 		downACI.getAction().setText("Download");
 		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", downACI);
+	}
+	
+	
+	public void setQueryWizard(IMenuManager menu){
+		menu.add(new Separator());
+
+		//BIRT
+		ActionContributionItem queryACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			CreateQueryProjectExplorerAction action = new CreateQueryProjectExplorerAction();
+			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
+			action.run(this);
+
+		}
+		});
+		queryACI.getAction().setText("New Query");
+		//queryACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", queryACI);
+	}
+	
+	public void setJpaNavigator(IMenuManager menu){
+		menu.add(new Separator());
+
+		//BIRT
+		ActionContributionItem downACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			CreateJPAMappingProjectExplorerAction action = new CreateJPAMappingProjectExplorerAction();
+			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
+			action.run(this);
+			
+		}
+		});
+		downACI.getAction().setText("Jpa Mapping");
+		//downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
 

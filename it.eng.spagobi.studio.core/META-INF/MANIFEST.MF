@@ -52,6 +52,7 @@ Export-Package: it.eng.spagobi.commons.constants,
    it.eng.spagobi.studio.utils.exceptions",
  it.eng.spagobi.studio.core.perspectives;uses:="org.eclipse.ui"
 Import-Package: it.eng.spagobi.meta.editor.multi.wizards,
+ it.eng.spagobi.meta.editor.popup.actions,
  it.eng.spagobi.studio.birt.actions,
  it.eng.spagobi.studio.birt.services,
  it.eng.spagobi.studio.birt.wizards,
