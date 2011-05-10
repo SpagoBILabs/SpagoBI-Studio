@@ -23,6 +23,7 @@ import it.eng.spagobi.studio.documentcomposition.Activator;
 import it.eng.spagobi.studio.documentcomposition.wizards.pages.NewDocumentCompositionWizardPage;
 import it.eng.spagobi.studio.utils.util.IOUtilities;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
@@ -55,15 +56,12 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWizard {
+public class SpagoBIDocumentCompositionWizard extends AbstractSpagoBIDocumentWizard {
 
 	// dashboard creation page
 	private NewDocumentCompositionWizardPage newDocumentCompositionWizardPage;
 	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
-	protected IStructuredSelection selection;
-	// the workbench instance
-	protected IWorkbench workbench;
 	private boolean calledFromMenu = false;
 
 
@@ -168,7 +166,7 @@ public class SpagoBIDocumentCompositionWizard extends Wizard implements INewWiza
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("New Jasper template creation");
+		setWindowTitle("New Dcument Composition template creation");
 		this.workbench = workbench;
 		this.selection = selection;
 	}
