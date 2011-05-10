@@ -15,6 +15,7 @@ import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.ServerObjectsComparator;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
 import it.eng.spagobi.studio.utils.services.server.ServerHandler;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -48,10 +49,8 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpagoBIDownloadWizard extends Wizard implements INewWizard {
+public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 	private SpagoBIDownloadWizardPage page;
-	private IStructuredSelection selection;
-	protected IWorkbench workbench;
 	String projectName = null;
 
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIDownloadWizard.class);

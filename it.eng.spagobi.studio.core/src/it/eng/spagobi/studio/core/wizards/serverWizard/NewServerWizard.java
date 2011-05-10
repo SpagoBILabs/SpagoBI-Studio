@@ -3,6 +3,7 @@ package it.eng.spagobi.studio.core.wizards.serverWizard;
 import it.eng.spagobi.studio.core.actions.NewServerAction;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlServerGenerator;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.bo.Server;
 
 import java.io.ByteArrayInputStream;
@@ -25,7 +26,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NewServerWizard extends Wizard implements INewWizard {
+public class NewServerWizard extends AbstractSpagoBIDocumentWizard {
 	private NewServerWizardPage page;
 	private IStructuredSelection selection;
 	protected IWorkbench workbench;

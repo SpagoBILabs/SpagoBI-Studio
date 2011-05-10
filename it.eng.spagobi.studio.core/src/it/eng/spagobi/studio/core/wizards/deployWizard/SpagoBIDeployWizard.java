@@ -8,6 +8,7 @@ import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.ServerObjectsComparator;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
 import java.io.File;
 import java.net.URI;
@@ -27,11 +28,9 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpagoBIDeployWizard extends Wizard implements INewWizard {
+public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 	private SpagoBIDeployWizardFormPage formPage;
 
-	private IStructuredSelection selection;
-	protected IWorkbench workbench;
 	String projectName = null;
 
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployWizard.class);

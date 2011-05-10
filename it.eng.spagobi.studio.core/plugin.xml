@@ -58,17 +58,59 @@
 <!-- VIEWER -->
 	<extension
          point="org.eclipse.ui.navigator.viewer">
-       <viewerActionBinding
+         <viewer
+             viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator"
+             >
+             <popupMenu
+                allowsPlatformContributions="false"
+                id="org.eclipse.ui.navigator.resourceContent#PopupMenu">  
+             <insertionPoint name="group.new"/>
+             <insertionPoint
+                   name="group.open"
+                   separator="true"/>
+             <insertionPoint name="group.openWith"/>             
+			<insertionPoint
+                   name="group.edit"
+                   separator="true"/>
+
+<!--
+"group.new"             separator="true"
+"group.goto"            
+"group.open"            separator="true"
+"group.openWith"
+"group.show"            separator="true"
+"group.edit"            separator="true"
+"group.reorganize"
+"group.port"
+"group.generate"        separator="true"
+"group.search"          separator="true"
+"group.build"           separator="true"
+"additions"             separator="true" 
+"group.properties"      separator="true"
+                   -->
+             <insertionPoint
+                   name="additions"
+                   separator="true"/>              
+             <insertionPoint
+                   name="group.properties"
+                   separator="true"/>
+          </popupMenu>
+     	</viewer>
+             
+
+
+ <viewerActionBinding
             viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
          <includes>
-            <actionExtension pattern="org.eclipse.ui.navigator.resources.*" /> 
-		<actionExtension pattern="it.eng.spagobi.studio.core.views.actionProvider.MyActionProvider" /> 
+            <actionExtension pattern="org.eclipse.ui.navigator.resources.*" />  
+            <actionExtension pattern="org.eclipse.ui.navigator.*" />  
+		<actionExtension pattern="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider" /> 
              
          </includes>
         <excludes>
                 <actionExtension pattern="org.eclipse.team.*" />
         </excludes>  
-       </viewerActionBinding>
+       </viewerActionBinding> 
        <viewerContentBinding 
             viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
           <includes>
@@ -79,14 +121,20 @@
           </includes>
         
        </viewerContentBinding>
+
+       
    </extension>
+  
+
+   
+   
    
    <!-- NAVIGATOR CONTENT -->
       <extension
          point="org.eclipse.ui.navigator.navigatorContent">
       <actionProvider
-            class="it.eng.spagobi.studio.core.views.actionProvider.MyActionProvider"
-            id="it.eng.spagobi.studio.core.views.actionProvider.MyActionProvider"
+            class="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider"
+            id="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider"
             overrides="org.eclipse.ui.navigator.resources.actions.EditActions" 
             dependsOn="it.eng.spagobi.studio.core.main.menu"
             priority="highest">
@@ -138,17 +186,30 @@
             project="true" 
             finalPerspective="it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective" />
    </extension>
-    		<!-- CONTEXT MENU SPAGOBI-DOCUMENTS-->
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+     		<!--  CONTEXT MENU SPAGOBI-DOCUMENTS-->
+   
+
    <extension point="org.eclipse.ui.popupMenus">
    
-      <!-- LIMIT ON MODEL FOLDER-->
    <objectContribution
              id="it.eng.spagobi.studio.core.popupmenu.ModelMenuContribution"
              objectClass="org.eclipse.core.internal.resources.Folder"
              targetID="it.eng.spagobi.studio.core.views.ModelMenuNavigator"
               nameFilter="*Metadata Model*"
              >			
-			<!-- MENU SBI DOCUMENTS-->
         	 <menu
     	      	id="it.eng.spagobi.studio.core.main.menu" 
 				icon="icons/sbiproject.gif"            
@@ -156,7 +217,6 @@
 	            label="SpagoBI"> 
 	            <separator name="SpagoBI"/> 
 	         </menu> 
-			<!-- NEW MODEL ACTION -->
 	         <action
 	            id="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction" 
             	label="New Meta Model"
@@ -166,20 +226,13 @@
             	class="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction" /> 
 		</objectContribution>
    
-   
-   
-   
-   
-   
-   
-   <!-- LIMIT ON SERVER FOLDER-->
+    
    <objectContribution
              id="it.eng.spagobi.studio.core.popupmenu.ResourceNavigatorContribution"
              objectClass="org.eclipse.core.internal.resources.Folder"
              targetID="it.eng.spagobi.studio.core.views.ResourceNavigator"
               nameFilter="*Server*"
              >			
-			<!-- MENU SBI DOCUMENTS-->
         	 <menu
     	      	id="it.eng.spagobi.studio.core.main.menu" 
 				icon="icons/sbiproject.gif"            
@@ -187,7 +240,6 @@
 	            label="SpagoBI"> 
 	            <separator name="SpagoBI"/> 
 	         </menu> 
-			<!-- NEW SERVER ACTION -->
 	         <action
 	            id="it.eng.spagobi.studio.core.actions.NewServerAction" 
             	label="New server"
@@ -197,14 +249,12 @@
             	class="it.eng.spagobi.studio.core.actions.NewServerAction" /> 
 		</objectContribution>
 			
-		<!-- LIMIT ON FILE-->
 		<objectContribution
              id="it.eng.spagobi.studio.core.popupmenu.ResourceNavigatorContribution"
              objectClass="org.eclipse.core.internal.resources.File"
              targetID="it.eng.spagobi.studio.core.views.ResourceNavigator">
 			<filter name="path" value="*Sbi Analysis*"/>
 			
-			<!-- MENU SBI DOCUMENTS-->
         	 <menu
     	      	id="it.eng.spagobi.studio.core.main.menu" 
 				icon="icons/sbiproject.gif"            
@@ -212,14 +262,12 @@
 	            label="SpagoBI"> 
 	            <separator name="SpagoBI"/> 
 	         </menu> 
-			<!-- DEPLOY ACTION-->
 	         <action
 	            id="it.eng.spagobi.studio.core.actions.DeployDocumentAction" 
             	label="Deploy document into server"
             	style="push"
             	menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
             	class="it.eng.spagobi.studio.core.actions.DeployDocumentAction" /> 
-			<!-- REFRESH ACTION-->
          	<action
             	id="it.eng.spagobi.studio.core.actions.RefreshTemplateAction" 
             	label="Refresh document template"
@@ -228,7 +276,6 @@
             	class="it.eng.spagobi.studio.core.actions.RefreshTemplateAction" /> 
 		</objectContribution>
 		
-		<!-- LIMIT ON FOLDER-->
 		<objectContribution
              id="it.eng.spagobi.studio.core.popupmenu.ResourceNavigatorContribution2"
              objectClass="org.eclipse.core.internal.resources.Folder"
@@ -241,7 +288,6 @@
             label="SpagoBI Documents"> 
             <separator name="SpagoBI"/> 
          </menu> 
-       <!-- DOWNLOAD ACTION-->
          <action
             id="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" 
             label="Download document from server"
@@ -250,6 +296,15 @@
             class="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" />
 	</objectContribution>
 </extension>
+
+
+    		<!--  eND CONTEXT MENU SPAGOBI-DOCUMENTS-->
+
+
+
+
+
+
 <!--       PROPERTY PAGE -->
 <extension
          point="org.eclipse.ui.propertyPages">

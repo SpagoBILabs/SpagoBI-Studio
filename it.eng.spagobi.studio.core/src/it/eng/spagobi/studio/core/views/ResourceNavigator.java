@@ -182,7 +182,8 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 		CommonViewer viewer = getCommonViewer();
 		viewer.setLabelProvider(new MyLabelProvider((ILabelProvider)viewer.getLabelProvider()));
 
-
+//		//WizardActionGroup
+//getCommonViewer().getNavigatorContentService()
 
 
 	}
