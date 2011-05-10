@@ -18,4 +18,5 @@ Bundle-ClassPath: lib/dom4j.jar,
  lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
  lib/org.slf4j.api_1.5.11.v20100519-1910.jar
 Export-Package: it.eng.spagobi.studio.birt.actions,
- it.eng.spagobi.studio.birt.services
+ it.eng.spagobi.studio.birt.services,
+ it.eng.spagobi.studio.birt.wizards

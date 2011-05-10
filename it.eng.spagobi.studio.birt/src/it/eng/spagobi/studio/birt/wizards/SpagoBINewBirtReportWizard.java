@@ -22,6 +22,7 @@ package it.eng.spagobi.studio.birt.wizards;
 
 import it.eng.spagobi.studio.birt.Activator;
 import it.eng.spagobi.studio.birt.wizards.pages.NewBirtReportWizardPage;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
@@ -54,15 +55,11 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class SpagoBINewBirtReportWizard extends Wizard implements INewWizard {
+public class SpagoBINewBirtReportWizard extends AbstractSpagoBIDocumentWizard {
 
 	// dashboard creation page
 	private NewBirtReportWizardPage newBirtWizardPage;
 	private WorkbenchProjectTreePage workbenchProjectTreePage;
-	// workbench selection when the wizard was started
-	protected IStructuredSelection selection;
-	// the workbench instance
-	protected IWorkbench workbench;
 
 	private boolean calledFromMenu = false;
 
