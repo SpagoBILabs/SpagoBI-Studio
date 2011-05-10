@@ -36,6 +36,7 @@ public class SpagoBIStudioConstants {
 	public final static String GEO_ENGINE_EXTENSION="sbigeo";
 
 	public final static String SERVER_EXTENSION="sbiserver";
+	public final static String MODEL_EXTENSION="sbimodel";
 
 	
 	
@@ -149,5 +150,11 @@ public class SpagoBIStudioConstants {
 	public static final String ICON_WIZARD_SERVER = "server_active.png";
 	public static final String ICON_WIZARD_MODEL = "metadata.png";
 	
+	
+	
+	// View ID
+	public static final String PROJECT_EXPLORER_VIEW_ID = "org.eclipse.ui.navigator.ProjectExplorer";
+	public static final String DATA_SOURCE_EXPLORER_VIEW_ID = "org.eclipse.datatools.connectivity.DataSourceExplorerNavigator";
+
 	
 }
