@@ -27,5 +27,6 @@ Bundle-ClassPath: .,
  lib/xpp3_min-1.1.4c.jar,
  lib/xstream-1.3.1.jar
 Export-Package: it.eng.spagobi.studio.geo.actions,
- it.eng.spagobi.studio.geo.services
+ it.eng.spagobi.studio.geo.services,
+ it.eng.spagobi.studio.geo.wizards
 

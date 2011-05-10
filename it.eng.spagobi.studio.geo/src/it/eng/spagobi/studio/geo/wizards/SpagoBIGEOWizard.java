@@ -24,6 +24,7 @@ import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.wizards.pages.NewGEOWizardPage;
 import it.eng.spagobi.studio.utils.util.IOUtilities;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
@@ -55,14 +56,11 @@ import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpagoBIGEOWizard extends Wizard implements INewWizard{
+public class SpagoBIGEOWizard extends AbstractSpagoBIDocumentWizard {
 	
 	private NewGEOWizardPage newGEOWizardPage;
 	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
-	protected IStructuredSelection selection;
-	// the workbench instance
-	protected IWorkbench workbench;
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIGEOWizard.class);
 	private boolean calledFromMenu = false;
 	
