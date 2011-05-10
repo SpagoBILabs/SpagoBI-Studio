@@ -132,4 +132,22 @@ public class SpagoBIStudioConstants {
 	
 	public static final String IREPORT_EXEC_FILE = "iReportExecFile";
 	
+	
+	
+	
+	
+	// Wizard Icons
+	public static final String ICON_WIZARD_BIRT = "objecticon_JASPER.png";
+	public static final String ICON_WIZARD_JASPER = "objecticon_JASPER.png";
+	public static final String ICON_WIZARD_CHART = "objecticon_DASH.png";
+	public static final String ICON_WIZARD_DASHBOARD = "objecticon_DASH.png";
+	public static final String ICON_WIZARD_DOC_COMP = "objecticon_COMPOSITE_DOCUMENT.png";
+	public static final String ICON_WIZARD_GEO = "objecticon_MAP.png";
+	public static final String ICON_WIZARD_DOWNLOAD = "download.JPG";
+	public static final String ICON_WIZARD_DEPLOY = "deploy.JPG";
+	public static final String ICON_WIZARD_REFRESH = "refresh.JPG";
+	public static final String ICON_WIZARD_SERVER = "server_active.png";
+	public static final String ICON_WIZARD_MODEL = "metadata.png";
+	
+	
 }

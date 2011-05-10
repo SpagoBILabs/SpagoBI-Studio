@@ -30,6 +30,7 @@ public class ImageDescriptorGatherer {
 	public static ImageDescriptor getImageDesc(String imageName, String pluginId) {
 		String imagePath = "icons" + File.separator + imageName;
 		ImageDescriptor imagePathDesc = AbstractUIPlugin.imageDescriptorFromPlugin(pluginId, imagePath);
+		
 		return imagePathDesc;
 	}
 	

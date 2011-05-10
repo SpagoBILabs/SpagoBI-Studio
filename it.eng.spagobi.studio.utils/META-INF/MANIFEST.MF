@@ -47,4 +47,5 @@ Export-Package: it.eng.spagobi.studio.utils,
  it.eng.spagobi.studio.utils.services,
  it.eng.spagobi.studio.utils.services.server,
  it.eng.spagobi.studio.utils.util,
+ it.eng.spagobi.studio.utils.wizard,
  it.eng.spagobi.studio.utils.wizard.wizardPage
