@@ -17,6 +17,7 @@ import it.eng.spagobi.studio.documentcomposition.wizards.SpagoBIDocumentComposit
 import it.eng.spagobi.studio.geo.wizards.SpagoBIGEOWizard;
 import it.eng.spagobi.studio.jasper.wizards.SpagoBINewJasperReportWizard;
 import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
+import it.eng.spagobi.studio.utils.util.ResourceNavigatorHandler;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import org.eclipse.core.internal.resources.File;
@@ -49,11 +50,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 	public ActionContext currentContext = null;
 
-	// to define state of selected menu object
-	public static final String FOLDER_ANALYSIS = "folder_analysisWizard";
-	public static final String FILE_ANALYSIS = "file_analysisWizard";
-	public static final String FOLDER_SERVER = "ServerWizard";
-	public static final String FOLDER_MODEL = "ModelWizard";
 
 	private static Logger logger = LoggerFactory.getLogger(ResourceNavigatorActionProvider.class);
 
@@ -72,27 +68,27 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 		Object objSel = sel.toList().get(0);
 
-		String currentState = getStateOfSelectedObject(objSel);
+		String currentState = ResourceNavigatorHandler.getStateOfSelectedObject(objSel);
 
 		// if it is a folder of analysis hierarchy
-		if(currentState.equalsIgnoreCase(FOLDER_ANALYSIS)){
+		if(currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_ANALYSIS_HIER)){
 			logger.debug("Folder Analysis");
 
 			setDownloadWizard(menu);
 			setNewDocumentWizard(menu);			
 		}
-		else if (currentState.equalsIgnoreCase(FILE_ANALYSIS)){ // if it is a fie of analysis hierarchy
+		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_ANALYSIS_HIER)){ // if it is a fie of analysis hierarchy
 			logger.debug("File ANalysis");		
 
 			setDeployWizard(menu);			
 			setRefreshWizard(menu);			
 		}
-		else if (currentState.equalsIgnoreCase(FOLDER_SERVER)){ // if it is a fie of analysis hierarchy
+		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_SERVER_HIER)){ // if it is a fie of analysis hierarchy
 			logger.debug("Folder Server");
 
 			setServerWizard(menu);			
 		}
-		else if (currentState.equalsIgnoreCase(FOLDER_MODEL)){ // if it is a fie of analysis hierarchy
+		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_MODEL_HIER)){ // if it is a fie of analysis hierarchy
 			logger.debug("Folder Model");
 
 			setModelWizard(menu);			
@@ -121,21 +117,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		currentContext = _context;
 	}
 
-
-
-	/** draw document menu if is under analysis folder
-	 * 
-	 * @param objSel
-	 * @return
-	 */
-
-	public boolean isNewDocumentWizard(Object objSel){
-
-		boolean toReturn = false;
-		if(objSel instanceof Folder && isInHierarchy(SpagoBIStudioConstants.FOLDER_ANALYSIS, (Folder)objSel))
-			toReturn = true;
-		return toReturn;
-	}
 
 	/**
 	 *  // draw document actions
@@ -299,36 +280,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 
 
-
-
-
-	public String getStateOfSelectedObject(Object objSel){
-		String toReturn = null;		
-		if(objSel instanceof Folder && isInHierarchy(SpagoBIStudioConstants.FOLDER_ANALYSIS, (Folder)objSel))
-			toReturn = ResourceNavigatorActionProvider.FOLDER_ANALYSIS;
-		else
-			if(objSel instanceof IFile && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_ANALYSIS, (File)objSel))
-				toReturn = ResourceNavigatorActionProvider.FILE_ANALYSIS;
-			else
-				if(objSel instanceof Folder && isInHierarchy(SpagoBIStudioConstants.FOLDER_SERVER, (Folder)objSel))
-					toReturn = ResourceNavigatorActionProvider.FOLDER_SERVER;
-				else
-					if(objSel instanceof Folder && isInHierarchy(SpagoBIStudioConstants.FOLDER_METADATA_MODEL, (Folder)objSel))
-						toReturn = ResourceNavigatorActionProvider.FOLDER_MODEL;
-
-
-		return toReturn;
-	}
-
-
-
-
-
-
-
-
-
-
 	public void setDownloadWizard(IMenuManager menu){
 
 		menu.add(new Separator());
@@ -353,37 +304,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 
 
-	/** search if current folder has a parent folder naming like tosearch
-	 * 
-	 * @param toSearch
-	 * @param folder
-	 * @return
-	 */
-
-	public boolean isInHierarchy(String toSearch, Folder folder){
-		if(folder.getName().equals(toSearch)){
-			return true;
-		}
-		else{
-			//
-			if(folder.getParent() == null || !(folder.getParent() instanceof Folder)){
-				return false;
-			}
-			else{
-				return isInHierarchy(toSearch, (Folder)folder.getParent());
-			}
-		}
-
-	}
-
-	public boolean isFileInHierarchy(String toSearch, File  file ){
-		if(file.getParent() != null 
-				|| 
-				!(file.getParent() instanceof Folder)){
-			return isInHierarchy(toSearch, (Folder)file.getParent() );
-		}
-		return false;
-	}
 
 
 

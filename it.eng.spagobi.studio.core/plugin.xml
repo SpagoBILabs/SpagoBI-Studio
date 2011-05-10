@@ -201,7 +201,7 @@
    
      		<!--  CONTEXT MENU SPAGOBI-DOCUMENTS-->
    
-
+<!--
    <extension point="org.eclipse.ui.popupMenus">
    
    <objectContribution
@@ -296,7 +296,7 @@
             class="it.eng.spagobi.studio.core.actions.DownloadDocumentAction" />
 	</objectContribution>
 </extension>
-
+-->
 
     		<!--  eND CONTEXT MENU SPAGOBI-DOCUMENTS-->
 
