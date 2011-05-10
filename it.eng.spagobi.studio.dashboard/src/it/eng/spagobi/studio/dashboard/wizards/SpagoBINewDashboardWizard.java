@@ -25,6 +25,7 @@ import it.eng.spagobi.studio.dashboard.editors.model.dashboard.DashboardModel;
 import it.eng.spagobi.studio.dashboard.utils.GeneralUtils;
 import it.eng.spagobi.studio.dashboard.wizards.pages.NewDashboardWizardPage;
 import it.eng.spagobi.studio.utils.util.IOUtilities;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
@@ -59,15 +60,12 @@ import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpagoBINewDashboardWizard extends Wizard implements INewWizard {
+public class SpagoBINewDashboardWizard extends AbstractSpagoBIDocumentWizard {
 
 	// dashboard creation page
 	private NewDashboardWizardPage newDashboardWizardPage;
 	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
-	protected IStructuredSelection selection;
-	// the workbench instance
-	protected IWorkbench workbench;
 
 	private boolean calledFromMenu = false;
 
