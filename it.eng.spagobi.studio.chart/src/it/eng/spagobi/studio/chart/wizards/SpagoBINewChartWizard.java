@@ -22,6 +22,7 @@ package it.eng.spagobi.studio.chart.wizards;
 
 import it.eng.spagobi.studio.chart.Activator;
 import it.eng.spagobi.studio.chart.wizards.pages.NewChartWizardPage;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
@@ -54,15 +55,12 @@ import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpagoBINewChartWizard extends Wizard implements INewWizard {
+public class SpagoBINewChartWizard extends AbstractSpagoBIDocumentWizard {
 
 	// chart creation page
 	private NewChartWizardPage newChartWizardPage;
 	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
-	protected IStructuredSelection selection;
-	// the workbench instance
-	protected IWorkbench workbench;
 	private static Logger logger = LoggerFactory.getLogger(SpagoBINewChartWizard.class);
 
 	private boolean calledFromMenu = false;
