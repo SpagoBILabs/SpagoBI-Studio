@@ -1,6 +1,5 @@
 package it.eng.spagobi.studio.core.actions;
 
-import it.eng.spagobi.studio.birt.actions.NewWorkbenchBirtAction;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 
 import org.eclipse.jface.action.IAction;

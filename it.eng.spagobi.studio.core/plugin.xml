@@ -412,13 +412,32 @@
  <action
         class="it.eng.spagobi.studio.core.actions.DocumentsWizardMenuAction"
         icon="icons/analysis.png"
-        id="it.eng.spagobi.studio.core.actions.ZDocumentsMenuAction"
+        id="it.eng.spagobi.studio.core.actions.DocumentsMenuAction"
         label="Documents Menu"
         style="pulldown"
         toolbarPath="Normal/additions"
         tooltip="Documents wizard"> 
       </action>
 
+      <action
+            class="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction"
+            icon="icons/metadata.png"
+            id="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction"
+            label="New SpagoBIModel"
+            style="push"
+            toolbarPath="Normal/additions"
+            tooltip="New SpagoBI Model">
+      </action>
+      
+            <action
+            class="it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerWorkbenchAction"
+            icon="icons/dataset.png"
+            id="it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerWorkbenchAction"
+            label="New Query"
+            style="push"
+            toolbarPath="Normal/additions"
+            tooltip="New Query">
+      </action>
 
 <!--
   <action
