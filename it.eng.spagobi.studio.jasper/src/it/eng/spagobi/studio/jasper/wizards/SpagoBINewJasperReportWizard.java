@@ -25,6 +25,7 @@ package it.eng.spagobi.studio.jasper.wizards;
 import it.eng.spagobi.studio.jasper.Activator;
 import it.eng.spagobi.studio.jasper.wizards.pages.NewJasperReportWizardPage;
 import it.eng.spagobi.studio.utils.util.IOUtilities;
+import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.wizard.wizardPage.WorkbenchProjectTreePage;
 
 import java.io.ByteArrayInputStream;
@@ -54,15 +55,13 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class SpagoBINewJasperReportWizard extends Wizard implements INewWizard {
+public class SpagoBINewJasperReportWizard extends AbstractSpagoBIDocumentWizard  {
 
 	// dashboard creation page
 	private NewJasperReportWizardPage newJasperWizardPage;
 	private WorkbenchProjectTreePage workbenchProjectTreePage;
 	// workbench selection when the wizard was started
-	protected IStructuredSelection selection;
 	// the workbench instance
-	protected IWorkbench workbench;
 	private static Logger logger = LoggerFactory.getLogger(SpagoBINewJasperReportWizard.class);
 	private boolean calledFromMenu = false;
 	public static final String JASPER_INFO_FILE = "it/eng/spagobi/studio/jasper/resources/new_template.jrxml";
@@ -158,11 +157,7 @@ public class SpagoBINewJasperReportWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("New Jasper template creation");
-		this.workbench = workbench;
-		this.selection = selection;
-	}
+
 
 
 	public void addPages() {
