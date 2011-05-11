@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.core.properties;
 
 import it.eng.spagobi.studio.core.services.server.MetadataHandler;
-import it.eng.spagobi.studio.core.util.ImageConstants;
 import it.eng.spagobi.studio.utils.bo.DocumentParameter;
 import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
@@ -35,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,7 +46,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -59,7 +56,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,7 +137,7 @@ public class DocumentPropertyPageSettings implements IPropertyPageSettings {
 		if(documentIdS!=null)
 			documentId=Integer.valueOf(documentIdS);
 		else
-			documentId=null;
+			documentId=null;	
 
 
 

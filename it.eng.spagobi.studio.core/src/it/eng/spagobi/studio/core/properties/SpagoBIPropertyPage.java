@@ -68,6 +68,9 @@ IWorkbenchPropertyPage {
 			pageSettings = new ServerPropertyPageSettings(file);
 		else if(contextSelection.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER))
 			pageSettings = new ModelPropertyPageSettings(file);
+		else if(contextSelection.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER))
+			pageSettings = new MetaQueryPropertyPageSettings(file);
+		
 		else return null;
 
 

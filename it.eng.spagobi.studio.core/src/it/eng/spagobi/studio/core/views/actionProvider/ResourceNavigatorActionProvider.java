@@ -308,6 +308,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		{	public void run() {
 			CreateQueryProjectExplorerAction action = new CreateQueryProjectExplorerAction();
 			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
+			action.setSelection((IStructuredSelection)currentContext.getSelection());
 			action.run(this);
 
 		}

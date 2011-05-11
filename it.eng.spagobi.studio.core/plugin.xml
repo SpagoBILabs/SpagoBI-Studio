@@ -428,16 +428,7 @@
             toolbarPath="Normal/additions"
             tooltip="New SpagoBI Model">
       </action>
-      
-            <action
-            class="it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerWorkbenchAction"
-            icon="icons/dataset.png"
-            id="it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerWorkbenchAction"
-            label="New Query"
-            style="push"
-            toolbarPath="Normal/additions"
-            tooltip="New Query">
-      </action>
+
 
 <!--
   <action
