@@ -320,6 +320,20 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	
 	public void setJpaNavigator(IMenuManager menu){
 		menu.add(new Separator());
+		ActionContributionItem downACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			CreateJPAMappingProjectExplorerAction action = new CreateJPAMappingProjectExplorerAction();
+			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
+			action.run(this);
+		}
+		});
+		downACI.getAction().setText("Jpa Mapping");
+		//downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", downACI);
+	}
+	
+	public void setDeployDatasetWizard(IMenuManager menu){
+		menu.add(new Separator());
 
 		//BIRT
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
