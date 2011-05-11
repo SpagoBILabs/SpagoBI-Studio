@@ -37,6 +37,7 @@ public class SpagoBIStudioConstants {
 
 	public final static String SERVER_EXTENSION="sbiserver";
 	public final static String MODEL_EXTENSION="sbimodel";
+	public final static String MODEL_QUERY_EXTENSION="metaquery";
 
 	
 	
@@ -119,6 +120,9 @@ public class SpagoBIStudioConstants {
 	public static QualifiedName MADE_WITH_STUDIO = new QualifiedName("made_with_studio", "Created With SpagoBi Studio");
 
 	public static QualifiedName SERVER = new QualifiedName("server", "Server");
+	
+	public static QualifiedName MODEL_NAME = new QualifiedName("it.eng.spagobi.meta.editor.modelId", "modelId");
+	public static QualifiedName MODEL_FILE_NAME = new QualifiedName("it.eng.spagobi.meta.editor.modelFileName", "modelFileName");
 	
 	
 	
