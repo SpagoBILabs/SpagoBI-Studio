@@ -3,6 +3,8 @@ package it.eng.spagobi.studio.core.views.actionProvider;
 
 
 import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
+import it.eng.spagobi.meta.editor.multi.wizards.deployDatasetWizard.DeployDatasetService;
+import it.eng.spagobi.meta.editor.multi.wizards.deployDatasetWizard.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.meta.editor.popup.actions.CreateJPAMappingProjectExplorerAction;
 import it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerAction;
 import it.eng.spagobi.studio.birt.wizards.SpagoBINewBirtReportWizard;
@@ -92,10 +94,14 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		}
 		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)){ // if it is a fie of analysis hierarchy
 			logger.debug("File under model hierarchy");
-
 			setQueryWizard(menu);	
 			setJpaNavigator(menu);
 		}
+		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
+			logger.debug("File under model hierarchy");
+			setDeployDatasetWizard(menu);	
+		}
+
 
 
 		IContributionItem[] contributionItems = menu.getItems()	;
@@ -202,7 +208,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 
 	public void setDeployWizard(IMenuManager menu){
-		//BIRT
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			logger.debug("New Deploy");
@@ -210,9 +215,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			DeployTemplateService dts = new DeployTemplateService(currentContext.getSelection(), sbindw); 
 
 			boolean isAutomatic = dts.doAutomaticDeploy();
-//			if(!isAutomatic){
-//				sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "Deploy document");
-//			}
+			//			if(!isAutomatic){
+			//				sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "Deploy document");
+			//			}
 		}
 		});
 		downACI.getAction().setText("Deploy");
@@ -298,8 +303,8 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
-	
-	
+
+
 	public void setQueryWizard(IMenuManager menu){
 		menu.add(new Separator());
 
@@ -317,7 +322,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		//queryACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", queryACI);
 	}
-	
+
 	public void setJpaNavigator(IMenuManager menu){
 		menu.add(new Separator());
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
@@ -331,21 +336,23 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		//downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
-	
-	public void setDeployDatasetWizard(IMenuManager menu){
-		menu.add(new Separator());
 
+	public void setDeployDatasetWizard(IMenuManager menu){
 		//BIRT
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
 		{	public void run() {
-			CreateJPAMappingProjectExplorerAction action = new CreateJPAMappingProjectExplorerAction();
-			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
-			action.run(this);
-			
+			logger.debug("New Deploy Dataset");
+			SpagoBIDeployDatasetWizard sbindw = new SpagoBIDeployDatasetWizard();	
+			DeployDatasetService dts = new DeployDatasetService(currentContext.getSelection(), sbindw); 
+
+			boolean isAutomatic = dts.doAutomaticDeploy();
+//			if(!isAutomatic){
+//				sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "Deploy dataset");
+//			}
 		}
 		});
-		downACI.getAction().setText("Jpa Mapping");
-		//downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+		downACI.getAction().setText("Deploy Dataset");
+		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DEPLOY, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
 
