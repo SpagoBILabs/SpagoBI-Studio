@@ -153,6 +153,16 @@ public class SpagoBIServerObjects {
 		}
 		return toReturn;
 	}
+	
+	public Integer saveDataSet(Dataset newDataset) throws RemoteException{
+		Integer returnCode = null;
+		SDKDataSet sdkDataSet = ServerObjectsComparator.createSDKDataSet(newDataset);
+		if(proxyHandler.getDocumentsServiceProxy() != null)
+			returnCode = proxyHandler.getDataSetsSDKServiceProxy().saveDataset(sdkDataSet);
+		return returnCode;
+	}
+	
+	
 
 	public DataSource[] getDataSourceList() throws RemoteException{
 		DataSource[] toReturn = null;

@@ -37,7 +37,7 @@ public class SpagoBIStudioConstants {
 
 	public final static String SERVER_EXTENSION="sbiserver";
 	public final static String MODEL_EXTENSION="sbimodel";
-	public final static String MODEL_QUERY_EXTENSION="metaquery";
+	public final static String META_QUERY_EXTENSION="metaquery";
 
 	
 	
@@ -159,6 +159,8 @@ public class SpagoBIStudioConstants {
 	// View ID
 	public static final String PROJECT_EXPLORER_VIEW_ID = "org.eclipse.ui.navigator.ProjectExplorer";
 	public static final String DATA_SOURCE_EXPLORER_VIEW_ID = "org.eclipse.datatools.connectivity.DataSourceExplorerNavigator";
+	
+	public static final String DS_QBE = "SbiQbeDataSet";
 
 	
 }

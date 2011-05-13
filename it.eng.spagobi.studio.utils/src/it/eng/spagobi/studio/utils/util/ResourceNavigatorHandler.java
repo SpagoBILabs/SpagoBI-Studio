@@ -48,6 +48,10 @@ public class ResourceNavigatorHandler {
 						if(objSel instanceof IFile && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_METADATA_MODEL, (File)objSel) 
 								&& ((File)objSel).getName().endsWith(SpagoBIStudioConstants.MODEL_EXTENSION))
 							toReturn = ResourceNavigatorHandler.FILE_MODEL_HIER;
+						else
+							if(objSel instanceof IFile && ((File)objSel).getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) 
+									&& isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, ((File)objSel)))
+								toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
 
 
 		return toReturn;
@@ -70,7 +74,7 @@ public class ResourceNavigatorHandler {
 				if(file.getName().endsWith(SpagoBIStudioConstants.MODEL_EXTENSION) && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_METADATA_MODEL, file))
 					toReturn = ResourceNavigatorHandler.FILE_MODEL_HIER;
 				else
-					if(file.getName().endsWith(SpagoBIStudioConstants.MODEL_QUERY_EXTENSION) && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, file))
+					if(file.getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, file))
 						toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
 		return toReturn;
 	}

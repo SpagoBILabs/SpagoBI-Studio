@@ -45,6 +45,12 @@ public class Dataset {
 
 	private Boolean numberingRows;
 
+	private String transformer;
+	
+	private String jsonQuery;
+
+	
+
 	//private it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter[] parameters;
 
 	private String pivotColumnName;
@@ -431,4 +437,26 @@ public class Dataset {
 		return webServiceOperation;
 	}
 
+
+	public String getTransformer() {
+		return transformer;
+	}
+
+
+	public void setTransformer(String transformer) {
+		this.transformer = transformer;
+	}
+
+
+	public String getJsonQuery() {
+		return jsonQuery;
+	}
+
+
+	public void setJsonQuery(String jsonQuery) {
+		this.jsonQuery = jsonQuery;
+	}
+
+	
+	
 }
