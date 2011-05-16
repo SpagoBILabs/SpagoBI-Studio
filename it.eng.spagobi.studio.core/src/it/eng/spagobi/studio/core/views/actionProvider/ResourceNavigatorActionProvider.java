@@ -3,8 +3,6 @@ package it.eng.spagobi.studio.core.views.actionProvider;
 
 
 import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
-import it.eng.spagobi.meta.editor.multi.wizards.deployDatasetWizard.DeployDatasetService;
-import it.eng.spagobi.meta.editor.multi.wizards.deployDatasetWizard.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.meta.editor.popup.actions.CreateJPAMappingProjectExplorerAction;
 import it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerAction;
 import it.eng.spagobi.studio.birt.wizards.SpagoBINewBirtReportWizard;
@@ -12,6 +10,8 @@ import it.eng.spagobi.studio.chart.wizards.SpagoBINewChartWizard;
 import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
+import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
+import it.eng.spagobi.studio.core.wizards.deployDatasetWizard.DeployDatasetService;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 import it.eng.spagobi.studio.core.wizards.downloadWizard.SpagoBIDownloadWizard;
 import it.eng.spagobi.studio.core.wizards.serverWizard.NewServerWizard;
@@ -345,7 +345,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			SpagoBIDeployDatasetWizard sbindw = new SpagoBIDeployDatasetWizard();	
 			DeployDatasetService dts = new DeployDatasetService(currentContext.getSelection(), sbindw); 
 
-			boolean isAutomatic = dts.doAutomaticDeploy();
+			dts.tryAutomaticDeploy();
 //			if(!isAutomatic){
 //				sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "Deploy dataset");
 //			}

@@ -36,11 +36,15 @@ public class MetaQueryPropertyPageSettings implements IPropertyPageSettings {
 		logger.debug("IN");
 		container = contents;
 
-		String modelName = "none"; 
-		String modelFileName = "none"; 
+		String datasetId;
+		String datasetLabel;
+		String modelName;
+		String modelFileName;
 		try{
 			logger.debug("file "+fileSel.getName());
-			Map map = fileSel.getPersistentProperties();
+			datasetId=fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_ID);
+			datasetLabel= fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL);
+			
 			modelName=fileSel.getPersistentProperty(SpagoBIStudioConstants.MODEL_NAME);
 			modelFileName= fileSel.getPersistentProperty(SpagoBIStudioConstants.MODEL_FILE_NAME);
 		}
@@ -48,6 +52,10 @@ public class MetaQueryPropertyPageSettings implements IPropertyPageSettings {
 			logger.error("error in recovering metadata", e);	
 			return null;
 		}
+		modelName = (modelName != null) ? modelName : "none"; 
+		modelFileName = (modelFileName != null) ? modelFileName : "none"; 
+		
+		
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.horizontalSpacing = 10;
@@ -61,8 +69,15 @@ public class MetaQueryPropertyPageSettings implements IPropertyPageSettings {
 		Composite docContainer = new Composite(docGroup, SWT.NULL);
 		docContainer.setLayout(layout);
 
+		new Label(docContainer, SWT.NULL).setText("Dataset Id: ");
+		new Label(docContainer, SWT.NULL).setText(datasetId != null ? datasetId : "");
+
+		new Label(docContainer, SWT.NULL).setText("Dataset Label: ");
+		new Label(docContainer, SWT.NULL).setText(datasetLabel != null ? datasetLabel : "");
+		
 		new Label(docContainer, SWT.NULL).setText("Model's business name: ");
 		new Label(docContainer, SWT.NULL).setText(modelName);
+
 		new Label(docContainer, SWT.NULL).setText("Model file name: ");
 		new Label(docContainer, SWT.NULL).setText(modelFileName);
 
