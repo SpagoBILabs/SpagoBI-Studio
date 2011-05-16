@@ -25,7 +25,7 @@ import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -72,9 +72,9 @@ public class DataSetInformationEditor {
 		gridLayout.numColumns=1;
 		sectionClientDatasetInformation.setLayout(gridLayout);
 
-		SpagoBIServerObjects sbso = null;
+		SpagoBIServerObjectsFactory sbso = null;
 		try{
-			sbso =new SpagoBIServerObjects(projectname);
+			sbso =new SpagoBIServerObjectsFactory(projectname);
 		}
 		catch (NoActiveServerException e) {
 			logger.error("No Active server defined");
@@ -84,7 +84,7 @@ public class DataSetInformationEditor {
 		if(sbso != null && model.getSdkDataSetId()!=null){
 			DataStoreMetadata dataStoreMetadata= null;
 			try {
-				dataStoreMetadata=sbso.getDataStoreMetadata(model.getSdkDataSetId());
+				dataStoreMetadata=sbso.getServerDatasets().getDataStoreMetadata(model.getSdkDataSetId());
 				//				SDKProxyFactory proxyFactory = new SDKProxyFactory();
 				//				DataSetsSDKServiceProxy datasetSDKServiceProxy = proxyFactory.getDataSetsSDKServiceProxy();
 				//				SDKDataSet sdkDataSet = datasetSDKServiceProxy.getDataSet(model.getSdkDataSetId());
