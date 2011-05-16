@@ -7,7 +7,7 @@ import it.eng.spagobi.studio.utils.bo.Engine;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
@@ -109,11 +109,11 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		File fileSelected=(File)objSel;
 		projectName = fileSelected.getProject().getName();
 
-		final SpagoBIServerObjects proxyObjects;
+		final SpagoBIServerObjectsFactory proxyObjects;
 		// first of all get info from server		
 		SDKProxyFactory proxyFactory= null;
 		try{
-			proxyObjects = new SpagoBIServerObjects(projectName);
+			proxyObjects = new SpagoBIServerObjectsFactory(projectName);
 
 //			Server server = new ServerHandler().getCurrentActiveServer(projectName);
 //			 proxyFactory=new SDKProxyFactory(server);
@@ -138,10 +138,10 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 				try{
 
-					enginesList=proxyObjects.getEnginesList();
-					datasetList=proxyObjects.getDataSetList();
-					datasourceList=proxyObjects.getDataSourceList();
-					functionality=proxyObjects.getDocumentsAsTree(null);			
+					enginesList=proxyObjects.getServerEngines().getEnginesList();
+					datasetList=proxyObjects.getServerDatasets().getDataSetList();
+					datasourceList=proxyObjects.getServerDataSources().getDataSourceList();
+					functionality=proxyObjects.getServerDocuments().getDocumentsAsTree(null);			
 					
 					
 //					enginesList=engineService.getEngines();

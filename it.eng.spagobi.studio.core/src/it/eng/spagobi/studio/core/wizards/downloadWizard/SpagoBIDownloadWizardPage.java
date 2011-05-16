@@ -6,7 +6,7 @@ import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import java.lang.reflect.InvocationTargetException;
@@ -106,9 +106,9 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 
 				try{
 
-					SpagoBIServerObjects spagoBIServerObjects = new SpagoBIServerObjects(projectName);
+					SpagoBIServerObjectsFactory spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectName);
 
-					functionality=spagoBIServerObjects.getDocumentsAsTree(null);			
+					functionality=spagoBIServerObjects.getServerDocuments().getDocumentsAsTree(null);			
 
 				}
 				catch (Exception e) {

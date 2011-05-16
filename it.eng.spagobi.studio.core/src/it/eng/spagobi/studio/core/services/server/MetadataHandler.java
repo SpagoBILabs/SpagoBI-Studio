@@ -9,7 +9,7 @@ import it.eng.spagobi.studio.utils.bo.Engine;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
@@ -40,9 +40,9 @@ public class MetadataHandler {
 		// Recover document
 		Document document=null;
 
-		SpagoBIServerObjects proxyServerObjects = null;
+		SpagoBIServerObjectsFactory proxyServerObjects = null;
 		try{	
-			proxyServerObjects = new SpagoBIServerObjects(projectname);
+			proxyServerObjects = new SpagoBIServerObjectsFactory(projectname);
 		}
 		catch (NoActiveServerException e) {
 			noActiveServerException.setNoServer(true);
@@ -53,7 +53,7 @@ public class MetadataHandler {
 			documentId=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 
 
-			document=proxyServerObjects.getDocumentById(Integer.valueOf(documentId));
+			document=proxyServerObjects.getServerDocuments().getDocumentById(Integer.valueOf(documentId));
 		}
 		catch (Exception e) {
 			logger.error("Could not recover document Id",e);		
@@ -71,7 +71,7 @@ public class MetadataHandler {
 		DataSource dataSource=null;
 		if(dataSourceId!=null){
 			try{
-				dataSource=proxyServerObjects.getDataSource(Integer.valueOf(dataSourceId));
+				dataSource=proxyServerObjects.getServerDataSources().getDataSource(Integer.valueOf(dataSourceId));
 			}
 			catch (Exception e) {
 				SpagoBILogger.warningLog("Could not recover data source",e);		
@@ -86,7 +86,7 @@ public class MetadataHandler {
 		if(dataSetId!=null){
 			try{
 
-				dataSet=proxyServerObjects.getDataSet(Integer.valueOf(dataSetId));
+				dataSet=proxyServerObjects.getServerDatasets().getDataSet(Integer.valueOf(dataSetId));
 			}
 			catch (Exception e) {
 				SpagoBILogger.warningLog("Could not recover data set",e);		
@@ -100,7 +100,7 @@ public class MetadataHandler {
 		Engine engine=null;
 		if(engineId!=null){
 			try{
-				engine=proxyServerObjects.getEngine(Integer.valueOf(engineId));
+				engine=proxyServerObjects.getServerEngines().getEngine(Integer.valueOf(engineId));
 			}
 			catch (Exception e) {
 				SpagoBILogger.warningLog("Could not recover engine",e);		
@@ -109,7 +109,7 @@ public class MetadataHandler {
 
 		String[] roles=null;
 		try{
-			roles=proxyServerObjects.getCorrectRolesForExecution(document.getId());
+			roles=proxyServerObjects.getServerDocuments().getCorrectRolesForExecution(document.getId());
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not retrieve roles for execution", e);
@@ -121,7 +121,7 @@ public class MetadataHandler {
 
 		DocumentParameter[] parameters=null;
 		try{
-			parameters=proxyServerObjects.getDocumentParameters(document.getId(), roles[0]);
+			parameters=proxyServerObjects.getServerDocuments().getDocumentParameters(document.getId(), roles[0]);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not retrieve document parameters", e);

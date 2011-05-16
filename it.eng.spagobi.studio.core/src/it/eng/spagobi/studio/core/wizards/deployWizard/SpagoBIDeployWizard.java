@@ -5,7 +5,7 @@ import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
@@ -148,9 +148,9 @@ public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 		URI uri=fileSel.getLocationURI();
 		projectName = fileSel.getProject().getName();
 
-		SpagoBIServerObjects proxyServerObjects = null;
+		SpagoBIServerObjectsFactory proxyServerObjects = null;
 		try{
-			proxyServerObjects = new SpagoBIServerObjects(projectName);
+			proxyServerObjects = new SpagoBIServerObjectsFactory(projectName);
 		}
 		catch (NoActiveServerException e1) {
 			SpagoBILogger.errorLog("No active server found", e1);			
@@ -203,7 +203,7 @@ public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 		template.setContent(dataHandler);
 
 		try {
-			Integer returnCode=proxyServerObjects.saveNewDocument(newDocument, template, functionalityId);
+			Integer returnCode=proxyServerObjects.getServerDocuments().saveNewDocument(newDocument, template, functionalityId);
 			if(returnCode==null){
 				SpagoBILogger.errorLog("Error during document deploy: Check that label is not already present", null);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 

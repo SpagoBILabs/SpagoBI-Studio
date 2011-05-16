@@ -10,7 +10,7 @@ import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
@@ -175,9 +175,9 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		boolean toReturn=true;
 		Integer id=document.getId();
 		Template template=null;
-		SpagoBIServerObjects proxyServerObjects = null;
+		SpagoBIServerObjectsFactory proxyServerObjects = null;
 		try{
-			proxyServerObjects  = new SpagoBIServerObjects(projectName);
+			proxyServerObjects  = new SpagoBIServerObjectsFactory(projectName);
 		}
 		catch (NoActiveServerException e1) {
 			SpagoBILogger.errorLog("No active server found", e1);			
@@ -188,7 +188,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 
 		int numDocs=0;
 		try{
-			template=proxyServerObjects.downloadTemplate(id);
+			template=proxyServerObjects.getServerDocuments().downloadTemplate(id);
 		}	
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
@@ -244,7 +244,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 
 
 			for (int i = 0; i < labels.size(); i++) {
-				Document docToDownload=proxyServerObjects.getDocumentByLabel(labels.get(i));
+				Document docToDownload=proxyServerObjects.getServerDocuments().getDocumentByLabel(labels.get(i));
 				if(docToDownload!=null){
 					toReturn = downloadTemplate(docToDownload);
 					if(toReturn==true){
@@ -275,10 +275,10 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		Integer id=document.getId();
 		Template template=null;
 		SDKProxyFactory proxyFactory = null;
-		SpagoBIServerObjects spagoBIServerObjects = null;
+		SpagoBIServerObjectsFactory spagoBIServerObjects = null;
 		try{
-			spagoBIServerObjects = new SpagoBIServerObjects(projectName);
-			template = spagoBIServerObjects.downloadTemplate(id);
+			spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectName);
+			template = spagoBIServerObjects.getServerDocuments().downloadTemplate(id);
 		}
 		catch (NoActiveServerException e1) {
 			SpagoBILogger.errorLog("No active server found", e1);			
@@ -308,7 +308,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		//Get the parameters
 		String[] roles;
 		try{
-			roles=spagoBIServerObjects.getCorrectRolesForExecution(id);
+			roles=spagoBIServerObjects.getServerDocuments().getCorrectRolesForExecution(id);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
@@ -330,7 +330,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 
 		DocumentParameter[] parameters=null;
 		try{
-			parameters=spagoBIServerObjects.getDocumentParameters(id, roles[0]);
+			parameters=spagoBIServerObjects.getServerDocuments().getDocumentParameters(id, roles[0]);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
@@ -351,7 +351,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 
 		Engine sdkEngine=null;
 		try{
-			sdkEngine=spagoBIServerObjects.getEngine(engineId);
+			sdkEngine=spagoBIServerObjects.getServerEngines().getEngine(engineId);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not get engine", e);

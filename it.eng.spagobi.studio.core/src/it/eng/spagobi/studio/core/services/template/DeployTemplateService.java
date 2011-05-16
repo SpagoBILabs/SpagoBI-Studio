@@ -14,7 +14,7 @@ import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import org.eclipse.core.resources.IFile;
@@ -89,7 +89,7 @@ public class DeployTemplateService {
 					try{
 						// document associated, upload the template
 
-						SpagoBIServerObjects spagoBIServerObjects = new SpagoBIServerObjects(projectname);
+						SpagoBIServerObjectsFactory spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectname);
 
 
 						URI uri=fileSel2.getLocationURI();
@@ -102,7 +102,7 @@ public class DeployTemplateService {
 						template.setContent(dataHandler);
 
 						// check document still exists
-						Document doc=spagoBIServerObjects.getDocumentById(idInteger);
+						Document doc=spagoBIServerObjects.getServerDocuments().getDocumentById(idInteger);
 						if(doc==null){
 							documentException.setNoDocument(true);
 							logger.warn("Document no more present on server: with id "+idInteger);					
@@ -110,7 +110,7 @@ public class DeployTemplateService {
 						}
 						else{
 							documentException.setNoDocument(false);
-							spagoBIServerObjects.uploadTemplate(idInteger, template);
+							spagoBIServerObjects.getServerDocuments().uploadTemplate(idInteger, template);
 						}
 					}
 

@@ -30,7 +30,7 @@ import it.eng.spagobi.studio.utils.exceptions.AlreadyPresentException;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.util.FileFinder;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
@@ -138,19 +138,19 @@ public class RefreshTemplateService {
 					monitor.beginTask("Template Refresh for document "+label2, IProgressMonitor.UNKNOWN);
 
 					// document associated, upload the template
-					SpagoBIServerObjects spagoBIServerObjects = null;
+					SpagoBIServerObjectsFactory spagoBIServerObjects = null;
 					try{
-						spagoBIServerObjects = new SpagoBIServerObjects(projectName);
+						spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectName);
 
 						// check document still exists
-						document=spagoBIServerObjects.getDocumentById(idInteger);
+						document=spagoBIServerObjects.getServerDocuments().getDocumentById(idInteger);
 						if(document==null){
 							documentException.setNoDocument(true);
 							return;
 						}
 						else{
 							documentException.setNoDocument(false);
-							Template mytemplate  = spagoBIServerObjects.downloadTemplate(idInteger);
+							Template mytemplate  = spagoBIServerObjects.getServerDocuments().downloadTemplate(idInteger);
 							template.setContent(mytemplate.getContent());
 							template.setFileName(mytemplate.getFileName());
 							// get documents metadata
@@ -341,9 +341,9 @@ public class RefreshTemplateService {
 	public String recoverFileExtension(Document document, Integer documentId){
 		//Get the parameters
 		SDKProxyFactory proxyFactory = null;
-		SpagoBIServerObjects proxyServerObjects = null;
+		SpagoBIServerObjectsFactory proxyServerObjects = null;
 		try{
-			proxyServerObjects = new SpagoBIServerObjects(projectName);
+			proxyServerObjects = new SpagoBIServerObjectsFactory(projectName);
 		}
 		catch (NoActiveServerException e1) {
 			logger.error("No active server found", e1);			
@@ -353,7 +353,7 @@ public class RefreshTemplateService {
 		}		
 
 		try{
-			roles=proxyServerObjects.getCorrectRolesForExecution(documentId);
+			roles=proxyServerObjects.getServerDocuments().getCorrectRolesForExecution(documentId);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
@@ -373,7 +373,7 @@ public class RefreshTemplateService {
 
 
 		try{
-			parameters=proxyServerObjects.getDocumentParameters(documentId, roles[0]);
+			parameters=proxyServerObjects.getServerDocuments().getDocumentParameters(documentId, roles[0]);
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page", e);
@@ -392,7 +392,7 @@ public class RefreshTemplateService {
 
 		Engine engine=null;
 		try{
-			engine=proxyServerObjects.getEngine(engineId);
+			engine=proxyServerObjects.getServerEngines().getEngine(engineId);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not get engine", e);		

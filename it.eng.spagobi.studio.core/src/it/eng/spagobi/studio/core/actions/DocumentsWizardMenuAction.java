@@ -3,6 +3,7 @@ package it.eng.spagobi.studio.core.actions;
 import it.eng.spagobi.studio.birt.services.WizardLauncher;
 import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -52,7 +53,7 @@ public class DocumentsWizardMenuAction implements IWorkbenchWindowPulldownDelega
 		Action actionHome =
 			new Action(
 					"&Home",
-					ImageDescriptor.createFromFile(null, "icons/metadata.png")) {
+					ImageDescriptor.createFromFile(null, "metadata.png")) {
 			public void run() {
 				System.out.println("HOME");
 			}
@@ -82,7 +83,7 @@ public class DocumentsWizardMenuAction implements IWorkbenchWindowPulldownDelega
 				}
 			});
 			birtACI.getAction().setText("Birt");
-			birtACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc("icons/metadata.png", Activator.PLUGIN_ID));
+			birtACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_BIRT, Activator.PLUGIN_ID));
 			birtACI.fill(menu, -1);
 
 			// Chart
@@ -92,7 +93,7 @@ public class DocumentsWizardMenuAction implements IWorkbenchWindowPulldownDelega
 				}
 			});
 			chartACI.getAction().setText("Chart");
-			chartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc("icons/metadata.png", Activator.PLUGIN_ID));
+			chartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
 			chartACI.fill(menu, -1);
 
 			// Document Composition
@@ -102,7 +103,7 @@ public class DocumentsWizardMenuAction implements IWorkbenchWindowPulldownDelega
 				}
 			});
 			docCompACI.getAction().setText("Document Composition");
-			docCompACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc("icons/metadata.png", Activator.PLUGIN_ID));
+			docCompACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOC_COMP, Activator.PLUGIN_ID));
 			docCompACI.fill(menu, -1);
 
 			// Jasper 
@@ -112,7 +113,7 @@ public class DocumentsWizardMenuAction implements IWorkbenchWindowPulldownDelega
 				}
 			});
 			jasperACI.getAction().setText("Jasper report");
-			jasperACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc("icons/metadata.png", Activator.PLUGIN_ID));
+			jasperACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_JASPER, Activator.PLUGIN_ID));
 			jasperACI.fill(menu, -1);
 
 			// Geo
@@ -122,7 +123,7 @@ public class DocumentsWizardMenuAction implements IWorkbenchWindowPulldownDelega
 				}
 			});
 			geoACI.getAction().setText("Geo");
-			geoACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc("icons/metadata.png", Activator.PLUGIN_ID));
+			geoACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_GEO, Activator.PLUGIN_ID));
 			geoACI.fill(menu, -1);
 
 			// Dashboard
@@ -132,7 +133,7 @@ public class DocumentsWizardMenuAction implements IWorkbenchWindowPulldownDelega
 				}
 			});
 			dashACI.getAction().setText("Dashboard");
-			dashACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc("icons/metadata.png", Activator.PLUGIN_ID));
+			dashACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DASHBOARD, Activator.PLUGIN_ID));
 			dashACI.fill(menu, -1);
 
 			
