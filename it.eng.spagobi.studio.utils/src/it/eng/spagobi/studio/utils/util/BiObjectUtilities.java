@@ -27,7 +27,7 @@ import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Engine;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 
 import java.util.Date;
 
@@ -126,7 +126,7 @@ public class BiObjectUtilities {
 		}
 
 		String projectname = newFile.getProject().getName();
-		SpagoBIServerObjects proBiServerObjects = new SpagoBIServerObjects(projectname);
+		SpagoBIServerObjectsFactory proBiServerObjects = new SpagoBIServerObjectsFactory(projectname);
 		
 		if(proBiServerObjects == null){
 			logger.error("No active server is defined");
@@ -137,7 +137,7 @@ public class BiObjectUtilities {
 		Dataset dataSet=null;
 		if(document.getDataSetId()!=null){
 			try{
-				dataSet=proBiServerObjects.getDataSet(document.getDataSetId());
+				dataSet=proBiServerObjects.getServerDatasets().getDataSet(document.getDataSetId());
 			}
 			catch (Exception e) {
 				logger.error("No comunication with SpagoBI server, could not retrieve dataset informations", e);
@@ -148,7 +148,7 @@ public class BiObjectUtilities {
 		DataSource dataSource=null;
 		if(document.getDataSourceId()!=null){
 			try{
-				dataSource=proBiServerObjects.getDataSource(document.getDataSourceId());
+				dataSource=proBiServerObjects.getServerDataSources().getDataSource(document.getDataSourceId());
 			}
 			catch (Exception e) {
 				e.printStackTrace(); 
@@ -162,7 +162,7 @@ public class BiObjectUtilities {
 
 		Engine engine=null;
 		try{
-			engine=proBiServerObjects.getEngine(engineId);
+			engine=proBiServerObjects.getServerEngines().getEngine(engineId);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not get engine", e);

@@ -1,18 +1,10 @@
 package it.eng.spagobi.studio.utils.services;
 
-import java.rmi.RemoteException;
-
-import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
-import it.eng.spagobi.sdk.datasources.bo.SDKDataSource;
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
-import it.eng.spagobi.sdk.engines.bo.SDKEngine;
-import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
-import it.eng.spagobi.sdk.proxy.AbstractSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
+import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.TestConnectionServiceProxy;
 import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
@@ -26,9 +18,10 @@ public class ProxyHandler {
 	DataSetsSDKServiceProxy dataSetsSDKServiceProxy = null;
 	DataSourcesSDKServiceProxy dataSourcesSDKServiceProxy = null;
 	DocumentsServiceProxy documentsServiceProxy = null;
-TestConnectionServiceProxy testConnectionServiceProxy = null;
+	MapsSDKServiceProxy mapsServiceProxy = null;
+	TestConnectionServiceProxy testConnectionServiceProxy = null;
 
-String serverName = null;
+	String serverName = null;
 
 
 	public ProxyHandler(String projectName) throws NoActiveServerException {
@@ -48,6 +41,12 @@ String serverName = null;
 					proxyFactory.getEnginesServiceProxy();
 	}
 
+
+	public MapsSDKServiceProxy getMapsServiceProxy() {
+		return (mapsServiceProxy != null) ? 
+				mapsServiceProxy : 
+					proxyFactory.getMapsSDKServiceProxy();
+	}
 
 
 

@@ -9,38 +9,9 @@ import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.bo.Template;
 
-public class ServerObjectsComparator {
+public class ServerObjectsTranslator {
 
 
-
-	//	static public boolean isObjectSDKDocument(Object ob){
-	//		if(ob instanceof SDKDocument)
-	//			return true;
-	//		else return false;	
-	//
-	//	}
-	//
-	//	static public boolean isObjectSDKFunctionality(Object ob){
-	//		if(ob instanceof SDKFunctionality)
-	//			return true;
-	//		else return false;	
-	//	}
-	//
-	//	static public Functionality getFunctionality(Object ob){
-	//		Functionality toRet = null;
-	//		if(isObjectSDKFunctionality(ob)){
-	//			toRet = new Functionality((SDKFunctionality)ob);
-	//		}
-	//		return toRet;
-	//	}
-	//
-	//	static public Document getDocument(Object ob){
-	//		Document toRet = null;
-	//		if(isObjectSDKDocument(ob)){
-	//			toRet = new Document((SDKDocument)ob);
-	//		}
-	//		return toRet;
-	//	}
 
 	static public SDKDocument createSDKDocument(Document doc){
 		SDKDocument sdkDocument = new SDKDocument();
