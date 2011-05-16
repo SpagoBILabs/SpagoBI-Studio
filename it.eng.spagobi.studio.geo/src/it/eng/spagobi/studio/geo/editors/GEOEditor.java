@@ -28,7 +28,7 @@ import it.eng.spagobi.studio.utils.bo.GeoFeature;
 import it.eng.spagobi.studio.utils.bo.GeoMap;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoServerException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.ByteArrayInputStream;
@@ -181,20 +181,20 @@ public class GEOEditor extends EditorPart {
 
 		Vector<Dataset> datasetVector;
 
-		SpagoBIServerObjects proxyServerObjects = null;
+		SpagoBIServerObjectsFactory proxyServerObjects = null;
 		try{
-			proxyServerObjects = new SpagoBIServerObjects(projectName);
-			dataSets = proxyServerObjects.getDataSetList();
+			proxyServerObjects = new SpagoBIServerObjectsFactory(projectName);
+			dataSets = proxyServerObjects.getServerDatasets().getDataSetList();
 
 
-			datasetVector = proxyServerObjects.getAllDatasets();
+			datasetVector = proxyServerObjects.getServerDatasets().getAllDatasets();
 
 			for (Iterator iterator = datasetVector.iterator(); iterator
 			.hasNext();) {
 				Dataset dataset = (Dataset) iterator.next();
 				datasetInfos.put(dataset.getLabel(), dataset);
 			}
-			Vector<GeoMap> mapVector = proxyServerObjects.getAllGeoMaps();
+			Vector<GeoMap> mapVector = proxyServerObjects.getServerMaps().getAllGeoMaps();
 			for (Iterator iterator = mapVector.iterator(); iterator.hasNext();) {
 				GeoMap geoMap = (GeoMap) iterator.next();
 				mapInfos.put(geoMap.getName(), geoMap);
@@ -520,10 +520,10 @@ public class GEOEditor extends EditorPart {
 				datasetTable.setItemCount(0);
 				datasetTable.pack();
 
-				SpagoBIServerObjects sbso= null;
+				SpagoBIServerObjectsFactory sbso= null;
 
 				try{
-					sbso =new SpagoBIServerObjects(projectname);
+					sbso =new SpagoBIServerObjectsFactory(projectname);
 				}catch (NoActiveServerException e1) {
 					logger.error("No active server found",e1);
 					return;
@@ -554,7 +554,7 @@ public class GEOEditor extends EditorPart {
 
 					DataSource sdkdataSource;
 					try {
-						sdkdataSource = sbso.getDataSourceById(datasourceId);
+						sdkdataSource = sbso.getServerDataSources().getDataSourceById(datasourceId);
 						sdkdataSource.getUrlConnection();
 
 						/*						Datasource datasource = DatasourceBO.setNewDatasource(geoDocument);
@@ -568,7 +568,7 @@ public class GEOEditor extends EditorPart {
 					}
 
 					try {
-						sbso.getDataStoreMetadata(dataset.getId());
+						sbso.getServerDatasets().getDataStoreMetadata(dataset.getId());
 						if (dataStoreMetadata != null) {
 							tempDsMetadataInfos.put(datasetLabel,
 									dataStoreMetadata);
@@ -681,10 +681,10 @@ public class GEOEditor extends EditorPart {
 				mapTable.setItemCount(0);
 				mapTable.pack();
 
-				SpagoBIServerObjects sbso= null;
+				SpagoBIServerObjectsFactory sbso= null;
 
 				try{
-					sbso =new SpagoBIServerObjects(projectname);
+					sbso =new SpagoBIServerObjectsFactory(projectname);
 				}catch (NoActiveServerException e1) {
 					logger.error("No active server found",e1);
 					return;
@@ -711,7 +711,7 @@ public class GEOEditor extends EditorPart {
 				} else {
 					GeoMap geoMap = mapInfos.get(mapLabel);
 					try {
-						geoFeatures = sbso
+						geoFeatures = sbso.getServerMaps()
 						.getFeaturesByMapId(geoMap.getMapId());
 						if (geoFeatures != null) {
 							tempMapMetadataInfos.put(mapLabel, geoFeatures);
@@ -994,10 +994,10 @@ public class GEOEditor extends EditorPart {
 	}
 	private void selectFeature(Composite sectionClient, Layers layers) {
 		try {
-			SpagoBIServerObjects sbso= null;
+			SpagoBIServerObjectsFactory sbso= null;
 
 			try{
-				sbso =new SpagoBIServerObjects(projectname);
+				sbso =new SpagoBIServerObjectsFactory(projectname);
 			}catch (NoActiveServerException e1) {
 				logger.error("No active server found",e1);
 				return;
@@ -1006,8 +1006,7 @@ public class GEOEditor extends EditorPart {
 			selectedMap = layers.getMapName();
 			GeoMap geoMap = mapInfos.get(selectedMap);
 
-			GeoFeature[] geoFeatures = sbso
-			.getFeaturesByMapId(geoMap.getMapId());
+			GeoFeature[] geoFeatures = sbso.getServerMaps().getFeaturesByMapId(geoMap.getMapId());
 			if (geoFeatures != null) {
 				tempMapMetadataInfos.put(selectedMap, geoFeatures);
 				fillMapTable(geoFeatures, sectionClient, false);
@@ -1031,10 +1030,10 @@ public class GEOEditor extends EditorPart {
 	private void selectDataset(Composite sectionClient, Metadata metadata) {
 
 		try {
-			SpagoBIServerObjects sbso= null;
+			SpagoBIServerObjectsFactory sbso= null;
 
 			try{
-				sbso =new SpagoBIServerObjects(projectname);
+				sbso =new SpagoBIServerObjectsFactory(projectname);
 			}catch (NoActiveServerException e1) {
 				logger.error("No active server found",e1);
 				return;
@@ -1043,7 +1042,7 @@ public class GEOEditor extends EditorPart {
 			selectedDataset = metadata.getDataset();
 			Dataset dataset = datasetInfos.get(metadata.getDataset());
 			
-			DataStoreMetadata dataStoreMetadata = sbso
+			DataStoreMetadata dataStoreMetadata = sbso.getServerDatasets()
 			.getDataStoreMetadata(dataset.getId());
 			if (dataStoreMetadata != null) {
 				tempDsMetadataInfos.put(metadata.getDataset(),

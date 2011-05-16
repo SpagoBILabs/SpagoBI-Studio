@@ -36,7 +36,7 @@ import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.GeoFeature;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoServerException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjects;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -648,10 +648,10 @@ public class HierarchiesDesigner {
 		else{
 			Dataset dataset = editor.getDatasetInfos().get(datasetLabel);
 			
-			SpagoBIServerObjects sbso= null;
+			SpagoBIServerObjectsFactory sbso= null;
 
 			try{
-				sbso =new SpagoBIServerObjects(editor.getProjectName());
+				sbso =new SpagoBIServerObjectsFactory(editor.getProjectName());
 			}catch (NoActiveServerException e1) {
 				logger.error("No active server found",e1);
 				return null;
@@ -660,7 +660,7 @@ public class HierarchiesDesigner {
 			try{
 				
 				if(dataset.getId() != null){
-					dataStoreMetadata=sbso.getDataStoreMetadata(dataset.getId());
+					dataStoreMetadata=sbso.getServerDatasets().getDataStoreMetadata(dataset.getId());
 				}
 
 				if(dataStoreMetadata!=null){
@@ -696,17 +696,17 @@ public class HierarchiesDesigner {
 
 		GeoFeature[] geoFeatures=null;
 
-		SpagoBIServerObjects sbso= null;
+		SpagoBIServerObjectsFactory sbso= null;
 
 		try{
-			sbso =new SpagoBIServerObjects(editor.getProjectName());
+			sbso =new SpagoBIServerObjectsFactory(editor.getProjectName());
 		}catch (NoActiveServerException e1) {
 			logger.error("No active server found",e1);
 			return null;
 		}
 		
 		try{
-			geoFeatures=sbso.getAllFeatures();
+			geoFeatures=sbso.getServerMaps().getAllFeatures();
 			if(geoFeatures==null){
 				logger.warn("No features returned");
 				MessageDialog.openWarning(mainComposite.getShell(), "Warning", "No features returned");			
