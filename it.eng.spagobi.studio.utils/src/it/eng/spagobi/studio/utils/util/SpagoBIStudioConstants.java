@@ -63,7 +63,7 @@ public class SpagoBIStudioConstants {
 	public static final String FOLDER_RESOURCE= "Resources";
 	public static final String FOLDER_SERVER = "Server";
 	public static final String FOLDER_DATA_SOURCE = "Data Source";
-	public static final String FOLDER_METADATA_MODEL = "Metadata Model";
+	public static final String FOLDER_METADATA_MODEL = "Metadata_Model";
 	public static final String FOLDER_DATASET = "DataSet";
 	public static final String FOLDER_ANALYSIS = "Sbi Analysis";	
 	public static final String FOLDER_PRIVATE_DOCUMENTS = "Private Documents";
