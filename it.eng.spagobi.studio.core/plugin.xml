@@ -208,7 +208,7 @@
              id="it.eng.spagobi.studio.core.popupmenu.ModelMenuContribution"
              objectClass="org.eclipse.core.internal.resources.Folder"
              targetID="it.eng.spagobi.studio.core.views.ModelMenuNavigator"
-              nameFilter="*Metadata Model*"
+              nameFilter="*Metadata_Model*"
              >			
         	 <menu
     	      	id="it.eng.spagobi.studio.core.main.menu" 
