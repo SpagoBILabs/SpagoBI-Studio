@@ -31,7 +31,7 @@ public class ServerObjectsTranslator {
 		SDKTemplate sdkTemplate = new SDKTemplate();
 		sdkTemplate.setContent(temp.getContent());
 		sdkTemplate.setFileName(temp.getFileName());
-
+		sdkTemplate.setFolderName(temp.getFolderName());
 		return sdkTemplate;
 	}
 

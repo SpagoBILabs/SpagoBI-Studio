@@ -39,6 +39,13 @@ public class ServerDocuments {
 
 		return;
 	}
+	
+	public void uploadDatamartTemplate(Template template) throws RemoteException{
+		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
+		if(proxyHandler.getDocumentsServiceProxy() != null)
+			proxyHandler.getDocumentsServiceProxy().uploadDatamartTemplate(sdkTemplate);
+		return;
+	}
 
 
 	public Functionality getDocumentsAsTree(String str) throws RemoteException{

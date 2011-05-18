@@ -8,6 +8,8 @@ public class Template {
 
 	private String fileName;
 
+    private String folderName;
+	
 	public Template() {
 	}
 
@@ -25,11 +27,19 @@ public class Template {
 		this.content = content;
 	}
 
+	public java.lang.String getFolderName() {
+		return folderName;
+	}
+
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
+	}
+
 	public java.lang.String getFileName() {
 		return fileName;
 	}
 
-	public void setFileName(java.lang.String fileName) {
+	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 
