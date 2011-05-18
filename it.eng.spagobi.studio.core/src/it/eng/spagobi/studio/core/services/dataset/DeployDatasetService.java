@@ -1,4 +1,4 @@
-package it.eng.spagobi.studio.core.wizards.deployDatasetWizard;
+package it.eng.spagobi.studio.core.services.dataset;
 
 
 import it.eng.spagobi.studio.core.util.JSONReader;

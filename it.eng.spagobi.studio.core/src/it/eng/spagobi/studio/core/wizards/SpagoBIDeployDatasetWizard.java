@@ -1,7 +1,7 @@
 package it.eng.spagobi.studio.core.wizards;
 
 
-import it.eng.spagobi.studio.core.wizards.deployDatasetWizard.DeployDatasetService;
+import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
 import it.eng.spagobi.studio.core.wizards.deployDatasetWizard.SpagoBIDeployDatasetWizardFormPage;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.Template;

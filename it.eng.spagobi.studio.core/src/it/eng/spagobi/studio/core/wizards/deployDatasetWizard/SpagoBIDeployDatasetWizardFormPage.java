@@ -2,7 +2,7 @@ package it.eng.spagobi.studio.core.wizards.deployDatasetWizard;
 
 
 
-import it.eng.spagobi.studio.core.util.JSONReader;
+import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
 import it.eng.spagobi.studio.utils.bo.DataSource;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;

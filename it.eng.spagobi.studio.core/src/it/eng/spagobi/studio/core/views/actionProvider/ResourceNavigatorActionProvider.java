@@ -8,10 +8,11 @@ import it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerAction
 import it.eng.spagobi.studio.birt.wizards.SpagoBINewBirtReportWizard;
 import it.eng.spagobi.studio.chart.wizards.SpagoBINewChartWizard;
 import it.eng.spagobi.studio.core.Activator;
+import it.eng.spagobi.studio.core.services.datamartTemplate.UploadDatamartTemplateService;
+import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
-import it.eng.spagobi.studio.core.wizards.deployDatasetWizard.DeployDatasetService;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 import it.eng.spagobi.studio.core.wizards.downloadWizard.SpagoBIDownloadWizard;
 import it.eng.spagobi.studio.core.wizards.serverWizard.NewServerWizard;
@@ -96,6 +97,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			logger.debug("File under model hierarchy");
 			setQueryWizard(menu);	
 			setJpaNavigator(menu);
+			setUploadDatamartTemplateWizard(menu);
 		}
 		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
 			logger.debug("File under model hierarchy");
@@ -356,7 +358,19 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		menu.appendToGroup("group.new", downACI);
 	}
 
-
+	public void setUploadDatamartTemplateWizard(IMenuManager menu){
+		//BIRT
+		ActionContributionItem downACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("New Upload datamart");
+			UploadDatamartTemplateService dts = new UploadDatamartTemplateService(currentContext.getSelection()); 
+			dts.datamartUpload();
+		}
+		});
+		downACI.getAction().setText("Upload Datamart");
+		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DEPLOY, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", downACI);
+	}
 
 
 
