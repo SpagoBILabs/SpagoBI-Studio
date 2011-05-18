@@ -121,7 +121,6 @@ public class GEOEditor extends EditorPart {
 	private Vector<TableEditor> datasetTableEditors = new Vector<TableEditor>();
 	private Vector<TableEditor> mapTableEditors = new Vector<TableEditor>();
 	private MeasuresDesigner measuresDesigner;
-	String projectname = null;
 	private static final int DATASET_NAME = 0;
 	private static final int DATASET_CLASS = 1;
 	private static final int DATASET_SELECT = 2;
@@ -141,7 +140,7 @@ public class GEOEditor extends EditorPart {
 			QualifiedName ciao = SpagoBIStudioConstants.MADE_WITH_STUDIO;
 			FileEditorInput fei = (FileEditorInput) input;
 			IFile file = fei.getFile();
-			projectname = file.getProject().getName();
+			projectName = file.getProject().getName();
 			ModelBO bo = new ModelBO();
 			try {
 				geoDocument = bo.createModel(file);
@@ -248,7 +247,7 @@ public class GEOEditor extends EditorPart {
 		//		}
 		//		
 		//		try {
-		//			SDKProxyFactory proxyFactory = new SDKProxyFactory(projectname);
+		//			SDKProxyFactory proxyFactory = new SDKProxyFactory(projectName);
 		//			DataSetsSDKServiceProxy dataSetsServiceProxy = proxyFactory
 		//			.getDataSetsSDKServiceProxy();
 		//			sdkDataSets = dataSetsServiceProxy.getDataSets();
@@ -258,7 +257,7 @@ public class GEOEditor extends EditorPart {
 		//					"No comunication with SpagoBI server, could not retrieve dataset informations",
 		//					e);
 		//		}
-		//		SpagoBIServerObjects sbso = new SpagoBIServerObjects(projectname);
+		//		SpagoBIServerObjects sbso = new SpagoBIServerObjects(projectName);
 		//		Vector<Dataset> datasetVector;
 		//		try {
 		//			datasetVector = sbso.getAllDatasets();
@@ -523,7 +522,7 @@ public class GEOEditor extends EditorPart {
 				SpagoBIServerObjectsFactory sbso= null;
 
 				try{
-					sbso =new SpagoBIServerObjectsFactory(projectname);
+					sbso =new SpagoBIServerObjectsFactory(projectName);
 				}catch (NoActiveServerException e1) {
 					logger.error("No active server found",e1);
 					return;
@@ -568,7 +567,7 @@ public class GEOEditor extends EditorPart {
 					}
 
 					try {
-						sbso.getServerDatasets().getDataStoreMetadata(dataset.getId());
+						dataStoreMetadata = sbso.getServerDatasets().getDataStoreMetadata(dataset.getId());
 						if (dataStoreMetadata != null) {
 							tempDsMetadataInfos.put(datasetLabel,
 									dataStoreMetadata);
@@ -684,7 +683,7 @@ public class GEOEditor extends EditorPart {
 				SpagoBIServerObjectsFactory sbso= null;
 
 				try{
-					sbso =new SpagoBIServerObjectsFactory(projectname);
+					sbso =new SpagoBIServerObjectsFactory(projectName);
 				}catch (NoActiveServerException e1) {
 					logger.error("No active server found",e1);
 					return;
@@ -997,7 +996,7 @@ public class GEOEditor extends EditorPart {
 			SpagoBIServerObjectsFactory sbso= null;
 
 			try{
-				sbso =new SpagoBIServerObjectsFactory(projectname);
+				sbso =new SpagoBIServerObjectsFactory(projectName);
 			}catch (NoActiveServerException e1) {
 				logger.error("No active server found",e1);
 				return;
@@ -1033,7 +1032,7 @@ public class GEOEditor extends EditorPart {
 			SpagoBIServerObjectsFactory sbso= null;
 
 			try{
-				sbso =new SpagoBIServerObjectsFactory(projectname);
+				sbso =new SpagoBIServerObjectsFactory(projectName);
 			}catch (NoActiveServerException e1) {
 				logger.error("No active server found",e1);
 				return;
