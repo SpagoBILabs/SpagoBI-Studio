@@ -25,16 +25,21 @@ import it.eng.spagobi.studio.utils.util.ResourceNavigatorHandler;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManagerOverrides;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionContext;
+import org.eclipse.ui.internal.WorkbenchPlugin;
+import org.eclipse.ui.internal.registry.ActionSetRegistry;
+import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.slf4j.Logger;
@@ -59,6 +64,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	 */
 
 
+
 	public void fillContextMenu(IMenuManager menu) { 
 
 		super.fillContextMenu(menu);
@@ -70,6 +76,8 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 		String currentState = ResourceNavigatorHandler.getStateOfSelectedObject(objSel);
 
+		currentState = currentState != null ? currentState : "";
+		
 		// if it is a folder of analysis hierarchy
 		if(currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_ANALYSIS_HIER)){
 			logger.debug("Folder Analysis");
@@ -348,9 +356,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			DeployDatasetService dts = new DeployDatasetService(currentContext.getSelection(), sbindw); 
 
 			dts.tryAutomaticDeploy();
-//			if(!isAutomatic){
-//				sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "Deploy dataset");
-//			}
+			//			if(!isAutomatic){
+			//				sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "Deploy dataset");
+			//			}
 		}
 		});
 		downACI.getAction().setText("Deploy Dataset");
