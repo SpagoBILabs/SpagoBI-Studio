@@ -35,6 +35,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -123,9 +124,6 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		projectName = fileSelected.getProject().getName();
 
 
-
-
-
 		// Build the page
 
 		FillLayout fl2=new FillLayout();
@@ -150,10 +148,10 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		Label a = new Label(left, SWT.NONE);
 		a.setText("Label:");
 		a.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-						
+
 		labelText = new Text(left, SWT.BORDER);
 		labelText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		labelText.setTextLimit(SpagoBIStudioConstants.BIOBJECT_LABEL_LIMIT);
+		labelText.setTextLimit(SpagoBIStudioConstants.DATASET_LABEL_LIMIT);
 		labelText.addListener(SWT.KeyUp, new Listener() {
 			public void handleEvent(Event event) {
 				//check if page is complete
@@ -171,10 +169,10 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		a = new Label(left, SWT.NONE);
 		a.setText("Name:");				
 		a.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		nameText = new Text(left, SWT.BORDER);
 		nameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		nameText.setTextLimit(SpagoBIStudioConstants.BIOBJECT_NAME_LIMIT);
+		nameText.setTextLimit(SpagoBIStudioConstants.DATASET_NAME_LIMIT);
 		nameText.addListener(SWT.KeyUp, new Listener() {
 			public void handleEvent(Event event) {
 				//check if page is complete
@@ -192,7 +190,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		new Label(left, SWT.NONE).setText("Description:");				
 		descriptionText = new Text(left, SWT.BORDER);
 		descriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		descriptionText.setTextLimit(SpagoBIStudioConstants.BIOBJECT_DESCRIPTION_LIMIT);
+		descriptionText.setTextLimit(SpagoBIStudioConstants.DATASET_DESCR_LIMIT);
 
 		// Type
 		new Label(left, SWT.NONE).setText("Type: ");				
@@ -203,40 +201,54 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		new Label(left, SWT.NONE).setText("Datasource: ");
 		dataSourceCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
 		dataSourceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		// transformer checkbox
 		new Label(left, SWT.NONE).setText("Transformer: ");
 		transformerCheck = new Button(left, SWT.CHECK);
 
 		// pivot group
-		columnPivotLabel = new Label(left, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;		
+		pivotGroup = new Group(left, SWT.NULL);
+		pivotGroup.setText("Pivot");
+		pivotGroup.setLayoutData(gridData);
+		pivotGroup.setLayout(new FillLayout());
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		layout.horizontalSpacing = 10;
+		Composite pivotContainer = new Composite(pivotGroup, SWT.NULL);
+		pivotContainer.setLayout(layout);
+		columnPivotLabel = new Label(pivotContainer, SWT.NONE);
 		columnPivotLabel.setText("Column: ");	
-		columnPivotLabel.setEnabled(false);
-		columnPivotText= new Text(left, SWT.BORDER);
+		columnPivotLabel.setEnabled(true);
+		columnPivotText= new Text(pivotContainer, SWT.BORDER);
 		columnPivotText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		columnPivotText.setEnabled(false);
-		rowPivotLabel = new Label(left, SWT.NONE);
+		columnPivotText.setEnabled(true);
+		rowPivotLabel = new Label(pivotContainer, SWT.NONE);
 		rowPivotLabel.setText("Row: ");	
-		rowPivotLabel.setEnabled(false);
-		rowPivotText= new Text(left, SWT.BORDER);
+		rowPivotLabel.setEnabled(true);
+		rowPivotText= new Text(pivotContainer, SWT.BORDER);
 		rowPivotText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		rowPivotText.setEnabled(false);
-		valuePivotLabel = new Label(left, SWT.NONE);
+		rowPivotText.setEnabled(true);
+		valuePivotLabel = new Label(pivotContainer, SWT.NONE);
 		valuePivotLabel.setText("Value: ");	
-		valuePivotLabel.setEnabled(false);		
-		valuePivotText= new Text(left, SWT.BORDER);
+		valuePivotLabel.setEnabled(true);		
+		valuePivotText= new Text(pivotContainer, SWT.BORDER);
 		valuePivotText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		valuePivotText.setEnabled(false);
-		numberedColumnsPivotLabel = new Label(left, SWT.NONE);
+		valuePivotText.setEnabled(true);
+		numberedColumnsPivotLabel = new Label(pivotContainer, SWT.NONE);
 		numberedColumnsPivotLabel.setText("Value: ");	
-		numberedColumnsPivotLabel.setEnabled(false);
-		numberedColumnsPivotCheck = new Button(left, SWT.CHECK);
-		numberedColumnsPivotCheck.setEnabled(false);		
+		numberedColumnsPivotLabel.setEnabled(true);
+		numberedColumnsPivotCheck = new Button(pivotContainer, SWT.CHECK);
+		numberedColumnsPivotCheck.setEnabled(true);		
+
+
+
 
 		// enable / disable pivot group
 		transformerCheck.addListener(SWT.SELECTED, new Listener () {
 			public void handleEvent (Event event) {
-				boolean selected = transformerCheck.getSelection();
+				final boolean selected = transformerCheck.getSelection();
 				columnPivotLabel.setEnabled(selected);
 				columnPivotText.setEnabled(selected);
 				rowPivotLabel.setEnabled(selected);
@@ -246,8 +258,13 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 				numberedColumnsPivotLabel.setEnabled(selected);
 				numberedColumnsPivotCheck.setEnabled(selected);
 				numberedColumnsPivotCheck.redraw();
-				left.redraw();
-				parent.redraw();
+
+				//setControl(left);
+				//				lab.update();
+				//				lab.redraw();
+				//				left.update();
+				//				Display.getCurrent().update();
+
 			}
 		});
 
@@ -466,7 +483,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		this.numberedColumnsPivotLabel = numberedColumnsPivotLabel;
 	}
 
-	
+
 
 	public Text getColumnPivotText() {
 		return columnPivotText;
@@ -559,8 +576,8 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 
 
 
-	
-	
+
+
 
 
 }

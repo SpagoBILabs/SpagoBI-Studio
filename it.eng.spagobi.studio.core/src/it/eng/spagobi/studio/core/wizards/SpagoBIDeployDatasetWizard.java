@@ -85,14 +85,6 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		Dataset newDataset = createSelectedDataset();
 
 
-		File fileJava=new File(uri.getPath()); 
-		FileDataSource fileDataSource=new FileDataSource(fileJava);
-		DataHandler dataHandler=new DataHandler(fileDataSource);
-
-		Template template=new Template();
-		template.setFileName(fileSel.getName());
-		template.setContent(dataHandler);
-
 		try {
 			Integer returnCode=proxyServerObjects.getServerDatasets().saveDataSet(newDataset);
 			if(returnCode==null){
@@ -131,10 +123,12 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 
 
 		logger.info("Dataset has been deployed");		
-		MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Document has been deployed");		
+		MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Dataset has been deployed");		
 
 		logger.debug("OUT");
 
+
+		
 		return true;
 	}
 
@@ -205,9 +199,6 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 	public void init(IWorkbench _workbench, IStructuredSelection _selection) {
 		this.selection = _selection;
 		this.workbench=_workbench;
-
-		Object objSel = selection.toList().get(0);
-		IFile file = (IFile)objSel;
 
 
 	}
