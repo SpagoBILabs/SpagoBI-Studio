@@ -134,6 +134,7 @@ public class GEOEditor extends EditorPart {
 	private GEODocument geoDocument;
 
 	public void init(IEditorSite site, IEditorInput input) {
+		logger.debug("IN");
 		try {
 			this.setPartName(input.getName());
 
@@ -162,20 +163,18 @@ public class GEOEditor extends EditorPart {
 		} catch (Exception e) {
 			logger.warn("Error occurred:" + e.getMessage());
 		}
+		logger.debug("OUT");
+
 	}
 
 	public void initializeEditor(GEODocument geoDocument) {
-		logger.debug("START: " + GEOEditor.class.toString()
-				+ " initialize Editor");
+		logger.debug("IN");
 		// clean the properties View
 		IWorkbenchWindow a = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		// Document properties
 		IWorkbenchPage aa = a.getActivePage();
 
 		Dataset[] dataSets = null;
-
-
-
 
 
 		Vector<Dataset> datasetVector;
@@ -277,12 +276,13 @@ public class GEOEditor extends EditorPart {
 		//			e.printStackTrace();
 		//		}
 
-		logger.debug("END: " + GEOEditor.class.toString()
-				+ " initialize Editor");
+		logger.debug("OUT");
+
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
+		logger.debug("IN");
 
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		final ScrolledForm form = toolkit.createScrolledForm(parent);
@@ -432,13 +432,13 @@ public class GEOEditor extends EditorPart {
 		section.pack();
 		sectionClient.pack();
 
-		logger.debug("END " + GEOEditor.class.toString()
-				+ ": create Part Control function");
+		logger.debug("OUT");
 
 	}
 
 	private void createDatasetCombo(final Composite sectionClient,
 			final Group datasetGroup, final ScrolledForm form) {
+		logger.debug("IN");
 
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 1;
@@ -624,8 +624,11 @@ public class GEOEditor extends EditorPart {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
+		logger.debug("OUT");
+
 	}
 	private void createMapCombo(final Composite sectionClient, final Group mapGroup, final ScrolledForm form) {
+		logger.debug("IN");
 
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 1;
@@ -756,10 +759,12 @@ public class GEOEditor extends EditorPart {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
+		logger.debug("OUT");
 
 	}
 	private void createDatasetTable(final Composite sectionClient,
 			Group datasetGroup) {
+		logger.debug("IN");
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
@@ -846,9 +851,11 @@ public class GEOEditor extends EditorPart {
 			}
 		});
 		datasetTable.redraw();
+		logger.debug("OUT");
 
 	}
 	private void createGeoIdHierarchiesShell(Composite sectionClient, final Column column){
+		logger.debug("IN");
 		final Shell dialog = new Shell (sectionClient.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		dialog.setText("Granularity Level");
 		FormLayout formLayout = new FormLayout ();
@@ -950,6 +957,8 @@ public class GEOEditor extends EditorPart {
 		dialog.setDefaultButton (ok);
 		dialog.pack ();
 		dialog.open ();
+		logger.debug("OUT");
+
 	}
 
 	private Combo createHierachiesCombo(Composite dialog){
@@ -1074,6 +1083,7 @@ public class GEOEditor extends EditorPart {
 
 
 	private void createMapTable(Composite sectionClient, Group mapGroup) {
+		logger.debug("IN");
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
@@ -1130,11 +1140,14 @@ public class GEOEditor extends EditorPart {
 			}
 		});
 		mapTable.redraw();
+		logger.debug("OUT");
 
 	}
 
 	private void fillMapTable(GeoFeature[] geoFeatures,
 			Composite sectionClient, boolean replace) {
+		logger.debug("IN");
+
 		if (replace) {
 			LayersBO.setNewLayers(geoDocument, selectedMap);
 		}
@@ -1234,11 +1247,14 @@ public class GEOEditor extends EditorPart {
 		}
 		mapTable.pack();
 		mapTable.redraw();
+		logger.debug("OUT");
+
 	}
 
 	private void fillDatasetTable(DataStoreMetadata dataStoreMetadata,
 			boolean replace) {
 		// if dataset changed than new Metadata
+		logger.debug("IN");
 		if (replace) {
 			MetadataBO.setNewMetadata(geoDocument, selectedDataset);
 		}
@@ -1372,6 +1388,8 @@ public class GEOEditor extends EditorPart {
 			datasetTable.redraw();
 
 		}
+		logger.debug("OUT");
+
 	}
 
 	@Override
@@ -1400,7 +1418,7 @@ public class GEOEditor extends EditorPart {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		// TODO Auto-generated method stub
-		logger.debug("Start Saving GEO Template File");
+		logger.debug("IN");
 		ByteArrayInputStream bais = null;
 
 		try {
@@ -1432,6 +1450,8 @@ public class GEOEditor extends EditorPart {
 				}
 		}
 		setIsDirty(false);
+		logger.debug("OUT");
+
 	}
 
 	@Override
