@@ -67,6 +67,7 @@ public class DeployDatasetService {
 
 		// IF File selected has already an id of datasetassociated do the upload wiyhout asking further informations
 		boolean automatic = false;
+		boolean newDeployFromOld = false;
 		if(datasetId!=null){
 			logger.debug("Query already associated to dataset"+datasetId+" - "+datasetLabel);	
 			final Integer idInteger=Integer.valueOf(datasetId);
@@ -155,7 +156,7 @@ public class DeployDatasetService {
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error upload", "Dataset is no more present on server; you can do a new deploy");	
 				sbdw.setNewDeployFromOld(true);
-				return false;
+				newDeployFromOld = true;
 			}
 			if(noActiveServerException.isNoServer()){
 				logger.error("No server is defined active");			
@@ -165,15 +166,17 @@ public class DeployDatasetService {
 			}
 
 			dialog.close();
-			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated dataset "+datasetLabel+" succesfull");		
-			logger.debug("Deployed to the associated document "+datasetLabel+" succesfull");		
-			automatic = true;
+			if(!newDeployFromOld){
+				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated dataset "+datasetLabel+" succesfull");		
+				logger.debug("Deployed to the associated document "+datasetLabel+" succesfull");		
+				automatic = true;
+			}
 		}
 		else{
 			automatic = false;
 		}
 
-		if(!automatic)
+		if(!automatic || newDeployFromOld )
 		{
 			logger.debug("deploy a new Dataset: start wizard");		
 			// init wizard
