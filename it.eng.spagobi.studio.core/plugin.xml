@@ -68,29 +68,31 @@
              <insertionPoint
                    name="group.open"
                    separator="true"/>
-             <insertionPoint name="group.openWith"/>             
+             <insertionPoint name="group.openWith"/>
+                  <insertionPoint name="group.show"/>
+                         <insertionPoint name="group.generate"/>                        
+                         <insertionPoint name="group.build"/>                        
 			<insertionPoint
                    name="group.edit"
                    separator="true"/>
-
-<!--
-"group.new"             separator="true"
-"group.goto"            
-"group.open"            separator="true"
-"group.openWith"
-"group.show"            separator="true"
-"group.edit"            separator="true"
-"group.reorganize"
-"group.port"
-"group.generate"        separator="true"
-"group.search"          separator="true"
-"group.build"           separator="true"
-"additions"             separator="true" 
-"group.properties"      separator="true"
-                   -->
-             <insertionPoint
+			<insertionPoint
+                   name="group.reorganize"
+                   separator="true"/>
+            <insertionPoint
+                   name="group.port"
+                   separator="true"/>
+           <!-- <insertionPoint
+                   name="group.generate"
+                   separator="true"/>
+            <insertionPoint
+                   name="group.search"
+                   separator="true"/>
+            <insertionPoint
+                   name="group.build"
+                   separator="true"/>
+            <insertionPoint
                    name="additions"
-                   separator="true"/>              
+                   separator="true"/> -->   
              <insertionPoint
                    name="group.properties"
                    separator="true"/>
