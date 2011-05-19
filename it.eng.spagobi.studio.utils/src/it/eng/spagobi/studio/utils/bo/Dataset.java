@@ -49,6 +49,7 @@ public class Dataset {
 	
 	private String jsonQuery;
 
+	private String datamarts;
 	
 
 	//private it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter[] parameters;
@@ -455,6 +456,16 @@ public class Dataset {
 
 	public void setJsonQuery(String jsonQuery) {
 		this.jsonQuery = jsonQuery;
+	}
+
+
+	public String getDatamarts() {
+		return datamarts;
+	}
+
+
+	public void setDatamarts(String datamarts) {
+		this.datamarts = datamarts;
 	}
 
 	

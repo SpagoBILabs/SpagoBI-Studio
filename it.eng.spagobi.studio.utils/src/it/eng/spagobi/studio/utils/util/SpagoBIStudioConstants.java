@@ -58,6 +58,11 @@ public class SpagoBIStudioConstants {
 	public final static int BIOBJECT_LABEL_LIMIT=30;
 	public final static int BIOBJECT_NAME_LIMIT=40;
 	public final static int BIOBJECT_DESCRIPTION_LIMIT=160;
+	public final static int DATASET_LABEL_LIMIT=20;
+	public final static int DATASET_NAME_LIMIT=50;
+	public final static int DATASET_DESCR_LIMIT=160;
+
+	
 	
 	// Name of prohect folders
 	public static final String FOLDER_RESOURCE= "Resources";
@@ -65,7 +70,7 @@ public class SpagoBIStudioConstants {
 	public static final String FOLDER_DATA_SOURCE = "Data Source";
 	public static final String FOLDER_METADATA_MODEL = "Metadata_Model";
 	public static final String FOLDER_DATASET = "DataSet";
-	public static final String FOLDER_ANALYSIS = "Sbi Analysis";	
+	public static final String FOLDER_ANALYSIS = "Sbi_Analysis";	
 	public static final String FOLDER_PRIVATE_DOCUMENTS = "Private Documents";
 	
 	// name of project folder icons 
@@ -153,6 +158,7 @@ public class SpagoBIStudioConstants {
 	public static final String ICON_WIZARD_REFRESH = "refresh.JPG";
 	public static final String ICON_WIZARD_SERVER = "server_active.png";
 	public static final String ICON_WIZARD_MODEL = "metadata.png";
+	public static final String ICON_WIZARD_DELETE = "delete.png";
 	
 	
 	

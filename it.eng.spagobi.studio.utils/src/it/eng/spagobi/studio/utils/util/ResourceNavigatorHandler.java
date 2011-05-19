@@ -3,6 +3,8 @@ package it.eng.spagobi.studio.utils.util;
 import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.IPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,12 +28,16 @@ public class ResourceNavigatorHandler {
 	public static final String FILE_SERVER_HIER = "FileInServerHierarchy";
 	public static final String FILE_METAQUERY_HIER = "FileInMetaQueryHierarchy";
 
-	
+	public static final String FOLDER_SYSTEM = "FolderSystem";
+	public static final String FOLDER_PROJECT = "FolderProject";
+
+
 	private static Logger logger = LoggerFactory.getLogger(ResourceNavigatorHandler.class);
 
 
 
 	public static String getStateOfSelectedObject(Object objSel){
+		logger.debug("IN");
 		String toReturn = null;		
 		if(objSel instanceof Folder && isInHierarchy(SpagoBIStudioConstants.FOLDER_ANALYSIS, (Folder)objSel))
 			toReturn = ResourceNavigatorHandler.FOLDER_ANALYSIS_HIER;
@@ -52,17 +58,27 @@ public class ResourceNavigatorHandler {
 							if(objSel instanceof IFile && ((File)objSel).getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) 
 									&& isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, ((File)objSel)))
 								toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
-
-
+		logger.debug("OUT");
 		return toReturn;
+	}
+
+
+	public static boolean isSelectedObjSystemFolder(Object objSel){
+		logger.debug("IN");
+		boolean toreturn = false;
+		if(objSel instanceof Folder){
+			IFolder fold = (IFolder)objSel;
+			toreturn = isSpagoBISystemFolder(fold);	
+		}
+		logger.debug("OUT");
+		return toreturn;
 	}
 
 
 
 
-
-
 	public static String getStateOfSelectedFile(IFile file){
+		logger.debug("IN");
 		String toReturn = "";		
 
 		if(isFileInHierarchy(SpagoBIStudioConstants.FOLDER_ANALYSIS, file))
@@ -76,6 +92,7 @@ public class ResourceNavigatorHandler {
 				else
 					if(file.getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, file))
 						toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
+		logger.debug("OUT");
 		return toReturn;
 	}
 
@@ -116,6 +133,42 @@ public class ResourceNavigatorHandler {
 			return isInHierarchy(toSearch, (Folder)file.getParent() );
 		}
 		return false;
+	}
+
+
+	public static boolean isSpagoBISystemFolder(IFolder folder ){
+		logger.debug("IN");
+		boolean toreturn = false;
+
+		String projectName = folder.getProject().getName();
+		IPath resourcePath =folder.getFullPath();
+		String resPath = resourcePath.toOSString();
+
+		String[] systemFolders = new String[]{
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_ANALYSIS,				
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_ANALYSIS,				
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_DATA_SOURCE,
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_DATA_SOURCE,
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_DATASET,
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_DATASET,
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_METADATA_MODEL,
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_METADATA_MODEL,
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS,
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS,
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_RESOURCE+"/"+SpagoBIStudioConstants.FOLDER_SERVER,
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_RESOURCE+"\\"+SpagoBIStudioConstants.FOLDER_SERVER,
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_SERVER,
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_RESOURCE
+		};
+
+		for (int i = 0; i < systemFolders.length && !toreturn; i++) {
+			if(resPath.equals(systemFolders[i])){
+				toreturn = true;
+			}
+		}
+
+		logger.debug("OUT");
+		return toreturn;
 	}
 
 

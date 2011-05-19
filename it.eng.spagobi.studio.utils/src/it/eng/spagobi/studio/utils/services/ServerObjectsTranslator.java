@@ -49,6 +49,8 @@ public class ServerObjectsTranslator {
 		sdkDataset.setPivotColumnValue(ds.getPivotColumnValue());
 		sdkDataset.setPivotRowName(ds.getPivotRowName());
 		sdkDataset.setJsonQuery(ds.getJsonQuery());
+		sdkDataset.setDatamarts(ds.getDatamarts());
+		
 		return sdkDataset;
 	}
 
