@@ -83,7 +83,6 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 		 *  Use personalized icons for SpagoBi structure project folders
 		 */
 		public Image getImage(Object object) {
-			logger.debug("IN");
 
 			Image imageToReturn = null;
 
@@ -159,7 +158,7 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 			if(imageToReturn == null){
 				imageToReturn = super.getImage(object);
 			}
-			logger.debug("OUT");
+
 			return imageToReturn;
 		}
 

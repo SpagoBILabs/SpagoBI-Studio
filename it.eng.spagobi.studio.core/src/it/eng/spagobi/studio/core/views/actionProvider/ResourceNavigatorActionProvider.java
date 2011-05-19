@@ -129,7 +129,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		IContributionItem[] contributionItems = menu.getItems()	;
 		for (int j = 0; j < contributionItems.length; j++) {
 			IContributionItem conItem = contributionItems[j];
-			System.out.println(conItem.toString());
+			//System.out.println(conItem.toString());
 			//		menu.remove(conItem);
 		}
 
@@ -341,7 +341,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		}
 		});
 		queryACI.getAction().setText("New Query");
-		//queryACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+		queryACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_QUERY, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", queryACI);
 	}
 
@@ -355,7 +355,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		}
 		});
 		downACI.getAction().setText("Jpa Mapping");
-		//downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+//		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
 

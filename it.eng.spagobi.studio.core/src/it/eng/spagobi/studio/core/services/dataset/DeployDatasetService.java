@@ -6,6 +6,7 @@ import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
+import it.eng.spagobi.studio.utils.exceptions.NotAllowedOperationStudioException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
@@ -75,7 +76,7 @@ public class DeployDatasetService {
 			final org.eclipse.core.internal.resources.File fileSel2=fileSel;
 			final NoDocumentException datasetException=new NoDocumentException();
 			final NoActiveServerException noActiveServerException=new NoActiveServerException();
-
+			final NotAllowedOperationStudioException notAllowedOperationStudioException = new NotAllowedOperationStudioException();
 			IRunnableWithProgress op = new IRunnableWithProgress() {			
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
 					monitor.beginTask("Deploying to dataset "+label2, IProgressMonitor.UNKNOWN);
@@ -122,9 +123,15 @@ public class DeployDatasetService {
 						noActiveServerException.setNoServer(true);
 					}
 					catch (RemoteException e) {
-						logger.error("Error comunicating with server", e);		
-						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-								"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
+						if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+							logger.error("Current User has no permission to deploy dataset", e);
+							notAllowedOperationStudioException.setNotAllowed(true);
+						}
+						else{
+							logger.error("Error comunicating with server", e);		
+							MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+									"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
+						}
 					}
 
 					monitor.done();
@@ -166,6 +173,13 @@ public class DeployDatasetService {
 			}
 
 			dialog.close();
+
+			if(notAllowedOperationStudioException.isNotAllowed()){
+				logger.error("Current User has no permission to deploy dataset");
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", "Current user has no permission to deploy dataset");
+				return false;
+			}
+
 			if(!newDeployFromOld){
 				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated dataset "+datasetLabel+" succesfull");		
 				logger.debug("Deployed to the associated document "+datasetLabel+" succesfull");		
