@@ -99,7 +99,7 @@ public class UploadDatamartTemplateService {
 			}
 		}
 		else{
-			errorMessage = "Could not find folder "+businessModel.getName();				
+			errorMessage = "Could not find folder "+businessModel.getName()+": execute the JPA Mapping from the corresponding model";				
 		}
 
 		if(datamartFile == null){

@@ -112,14 +112,6 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 			return false;
 		}
 
-		try{			
-			fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setFileLastRefreshDateMetaData(fileSel);
-		}
-		catch (Exception e) {
-			logger.error("Error while setting last refresh date",e);		
-			return false;
-		}			
-
 
 
 		logger.info("Dataset has been deployed");		
@@ -128,7 +120,7 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		logger.debug("OUT");
 
 
-		
+
 		return true;
 	}
 
@@ -147,6 +139,7 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		String name=formPage.getNameText().getText();
 		String description=formPage.getDescriptionText().getText();
 		String type=formPage.getTypeLabel().getText();
+		String datamart = formPage.getDatamartLabel().getText();
 		Integer dataSourceId = null;
 
 		String labelDataSource = null;
@@ -167,8 +160,8 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		String query = formPage.getQueryText().getText();
 		// adapt query to list
 		String queryAdapted = DeployDatasetService.adaptQueryToList(query);
-		
-		
+
+
 		toReturn = new Dataset();
 		toReturn.setLabel(label);
 		toReturn.setName(name);
@@ -183,7 +176,7 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		toReturn.setPivotRowName(rowPivot);
 		toReturn.setNumberingRows(numberedColumnsPivot);
 		toReturn.setJsonQuery(queryAdapted);
-
+		toReturn.setDatamarts(datamart);
 		logger.debug("OUT");
 		return toReturn;
 	}

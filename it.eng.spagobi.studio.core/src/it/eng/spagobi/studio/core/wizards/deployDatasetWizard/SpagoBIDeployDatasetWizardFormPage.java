@@ -80,6 +80,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	private Text valuePivotText;
 	private Button numberedColumnsPivotCheck;
 	private Label typeLabel;
+	private Label datamartLabel;
 
 	private Text queryText;
 
@@ -196,6 +197,18 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		new Label(left, SWT.NONE).setText("Type: ");				
 		typeLabel = new Label(left, SWT.NONE);
 		typeLabel.setText(SpagoBIStudioConstants.DS_QBE);				
+
+		// Type
+		new Label(left, SWT.NONE).setText("Datamart: ");				
+		datamartLabel = new Label(left, SWT.NONE);
+		try{
+			String modelname = fileSelected.getPersistentProperty(SpagoBIStudioConstants.MODEL_NAME);
+			datamartLabel.setText(modelname);				
+		}
+		catch (Exception e) {
+			logger.error("Could not retrieve model, will be left blank");
+		}
+
 
 		// Datasource
 		new Label(left, SWT.NONE).setText("Datasource: ");
@@ -572,6 +585,16 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 
 	public void setDataSourceLabelIdMap(Map<String, Integer> dataSourceLabelIdMap) {
 		this.dataSourceLabelIdMap = dataSourceLabelIdMap;
+	}
+
+
+	public Label getDatamartLabel() {
+		return datamartLabel;
+	}
+
+
+	public void setDatamartLabel(Label datamartLabel) {
+		this.datamartLabel = datamartLabel;
 	}
 
 

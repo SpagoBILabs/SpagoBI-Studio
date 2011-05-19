@@ -2,6 +2,7 @@ package it.eng.spagobi.studio.core.views.actionProvider;
 
 
 
+import it.eng.spagobi.meta.editor.business.actions.DeleteModelObjectAction;
 import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
 import it.eng.spagobi.meta.editor.popup.actions.CreateJPAMappingProjectExplorerAction;
 import it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerAction;
@@ -10,6 +11,7 @@ import it.eng.spagobi.studio.chart.wizards.SpagoBINewChartWizard;
 import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.core.services.datamartTemplate.UploadDatamartTemplateService;
 import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
+import it.eng.spagobi.studio.core.services.resources.ResourcesHandler;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
@@ -27,12 +29,14 @@ import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.ecore.xmi.XMLResource.ResourceHandler;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IContributionManagerOverrides;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
@@ -66,9 +70,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 
 	public void fillContextMenu(IMenuManager menu) { 
-
-		super.fillContextMenu(menu);
 		logger.debug("IN");
+		super.fillContextMenu(menu);
+
 
 		IStructuredSelection sel=(IStructuredSelection)currentContext.getSelection();
 
@@ -77,7 +81,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		String currentState = ResourceNavigatorHandler.getStateOfSelectedObject(objSel);
 
 		currentState = currentState != null ? currentState : "";
-		
+
 		// if it is a folder of analysis hierarchy
 		if(currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_ANALYSIS_HIER)){
 			logger.debug("Folder Analysis");
@@ -106,11 +110,21 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			setQueryWizard(menu);	
 			setJpaNavigator(menu);
 			setUploadDatamartTemplateWizard(menu);
+			setDeleteModelWizard(menu);	
+
 		}
 		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
 			logger.debug("File under model hierarchy");
 			setDeployDatasetWizard(menu);	
 		}
+
+		if (!ResourceNavigatorHandler.isSelectedObjSystemFolder(objSel)
+		&& !currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)) // model has it's own delete		
+		{ // if it is a fie of analysis hierarchy
+			logger.debug("Folder not system");
+			setDeleteResourceWizard(menu);	
+		}
+
 
 
 
@@ -143,7 +157,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	 */
 
 	public void setNewDocumentWizard(IMenuManager menu){
-		//BIRT
+
 		ActionContributionItem birtACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			SpagoBINewBirtReportWizard sbindw = new SpagoBINewBirtReportWizard();	
@@ -238,7 +252,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 
 	public void setRefreshWizard(IMenuManager menu){
-		//BIRT
+
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			logger.debug("Refresh template");
@@ -253,7 +267,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 
 	public void setServerWizard(IMenuManager menu){
-		//BIRT
+
 		ActionContributionItem serverACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			logger.debug("New Server");
@@ -268,7 +282,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	}
 
 	public void setModelWizard(IMenuManager menu){
-		//BIRT
+
 		ActionContributionItem modelACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			logger.debug("New Model");
@@ -302,7 +316,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 		menu.add(new Separator());
 
-		//BIRT
+
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			SpagoBIDownloadWizard sbindw = new SpagoBIDownloadWizard();	
@@ -318,7 +332,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	public void setQueryWizard(IMenuManager menu){
 		menu.add(new Separator());
 
-		//BIRT
+
 		ActionContributionItem queryACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			CreateQueryProjectExplorerAction action = new CreateQueryProjectExplorerAction();
@@ -348,7 +362,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	}
 
 	public void setDeployDatasetWizard(IMenuManager menu){
-		//BIRT
+
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			logger.debug("New Deploy Dataset");
@@ -367,7 +381,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	}
 
 	public void setUploadDatamartTemplateWizard(IMenuManager menu){
-		//BIRT
+
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			logger.debug("New Upload datamart");
@@ -382,7 +396,39 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 
 
+	public void setDeleteResourceWizard(IMenuManager menu){
 
+		ActionContributionItem delACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("Delete action");
+			ResourcesHandler dts = new ResourcesHandler(); 
+			dts.deleteResource(currentContext.getSelection());
+		}
+		});
+		delACI.getAction().setText("Delete");
+		delACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DELETE, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.edit", delACI);
+	}
+
+	public void setDeleteModelWizard(IMenuManager menu){
+
+		ActionContributionItem delACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("Delete Model action");
+
+			boolean confirm = MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"Confirm delete", "You want to delete model and its reference?");
+			if(confirm){
+				DeleteModelObjectAction dts = new DeleteModelObjectAction(true); 
+				//dts.createCommand(selection)
+				dts.run();
+			}
+		}
+		});
+		delACI.getAction().setText("Delete");
+		delACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DELETE, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.edit", delACI);
+	}
 
 
 
