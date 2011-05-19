@@ -19,7 +19,7 @@
             objectClass="org.eclipse.core.internal.resources.Folder"
             targetID="it.eng.spagobi.studio.core.views.ResourceNavigator"
             >
-            		<filter name="path" value="*Sbi Analysis*"/>
+            		<filter name="path" value="*Sbi_Analysis*"/>
            <menu
             id="it.eng.spagobi.studio.core.main.menu" 
             icon="icons/sbiproject.gif"            
