@@ -156,9 +156,10 @@ public class SpagoBIStudioConstants {
 	public static final String ICON_WIZARD_DOWNLOAD = "download.JPG";
 	public static final String ICON_WIZARD_DEPLOY = "deploy.JPG";
 	public static final String ICON_WIZARD_REFRESH = "refresh.JPG";
-	public static final String ICON_WIZARD_SERVER = "server_active.png";
+	public static final String ICON_WIZARD_SERVER = "server.png";
 	public static final String ICON_WIZARD_MODEL = "metadata.png";
 	public static final String ICON_WIZARD_DELETE = "delete.png";
+	public static final String ICON_WIZARD_QUERY = "query.gif";
 	
 	
 	

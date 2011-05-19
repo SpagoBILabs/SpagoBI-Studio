@@ -9,6 +9,7 @@ import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 import java.util.Vector;
 
 import org.apache.axis.AxisFault;
+import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -16,6 +17,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,7 +199,12 @@ public class ServerHandler {
 					logger.debug("file "+res.getName()+ " present in Server folder, only server files should be here");					
 				}
 			}
-		} catch (Exception e) {
+		} 
+		catch (ResourceException e) {
+			logger.error("Check file is sync: try refreshing the server folder", e);
+		MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning", "Error in reading the file: to check the resource is sync with file systrem please try refreshing the server folder");
+		}
+		catch (Exception e) {
 			logger.error("Error in reading xml file ", e);
 			return null;
 		}
