@@ -160,15 +160,21 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 //								"Error upload", "Error while uploading the template: not allowed operation");	
 //						return;
 //					} 
+
 					catch (NoActiveServerException e1) {
 						noActiveServerException.setNoServer(true);
 						return;
 					}
 					catch (RemoteException e) {
-						logger.error("Error comunicating with server",e);		
+						if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+							logger.error("Current User has no permission to deploy dataset", e);
+							MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", "Current user has no permission to deploy dataset");	
+						}
+						else{
 						logger.error("Error comunicating with server", e);			
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-								"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
+							"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
+						}
 						return;
 					}
 					catch (CoreException e) {

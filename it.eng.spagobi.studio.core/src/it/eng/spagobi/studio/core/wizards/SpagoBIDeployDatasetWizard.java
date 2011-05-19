@@ -95,10 +95,18 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 			}
 			//			System.out.println(returnCode);
 			newDataset.setId(returnCode);
-		}  catch (Exception e) {
-			logger.error("No comunication with server, cannot deploy document on server", e);			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"No comunciation with server", "No comunication with server, cannot deploy document on server");		
+		}  
+
+		catch (Exception e) {
+			if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+				logger.error("Current User has no permission to save the dataset", e);
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", "Current user has no permission to save the dataset");	
+			}
+			else{
+				logger.error("No comunication with server, cannot deploy document on server", e);			
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+						"No comunciation with server", "No comunication with server, cannot deploy document on server");		
+			}
 			return false;
 
 		}

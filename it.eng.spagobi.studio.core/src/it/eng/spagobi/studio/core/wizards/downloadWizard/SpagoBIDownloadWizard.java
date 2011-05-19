@@ -353,9 +353,16 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		try{
 			sdkEngine=spagoBIServerObjects.getServerEngines().getEngine(engineId);
 		}
+
 		catch (Exception e) {
-			logger.error("No comunication with SpagoBI server, could not get engine", e);
-			MessageDialog.openError(getShell(), "", "Could not get engine the template from server");	
+			if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+				logger.error("Current User has no permission to retrieve engines", e);
+				MessageDialog.openError(getShell(), "", "Current user has no permission to retrieve engines");	
+			}
+			else{
+				logger.error("No comunication with SpagoBI server, could not get engine", e);
+				MessageDialog.openError(getShell(), "", "Could not get engine the template from server");	
+			}
 			return false;
 		}		
 

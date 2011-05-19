@@ -215,9 +215,9 @@ public class RefreshTemplateService {
 			}				
 			// check if document has been found (could have been deleted) or if the template was already present somewhere else
 			if(documentException.isNoDocument() || template.getContent()==null){
-				logger.warn("Document no more present on server "+document_label);					
+				logger.warn("Document no more present on server or no permission "+document_label);					
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error upload", "Document is no more present on server. Make a new Deploy.");	
+						"Error upload", "Document not retrieved; check it is still on server and you have enough permission to reach it. Make a new Deploy.");	
 				return;
 			}		
 			if(alreadyPresentException!=null && alreadyPresentException.isAlreadyPresent()){

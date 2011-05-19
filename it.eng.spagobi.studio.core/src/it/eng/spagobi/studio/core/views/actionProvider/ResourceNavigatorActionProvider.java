@@ -124,9 +124,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			logger.debug("Folder not system");
 			setDeleteResourceWizard(menu);	
 		}
-
-
-
+		
 
 		IContributionItem[] contributionItems = menu.getItems()	;
 		for (int j = 0; j < contributionItems.length; j++) {

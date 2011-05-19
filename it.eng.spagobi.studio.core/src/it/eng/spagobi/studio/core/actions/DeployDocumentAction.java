@@ -25,7 +25,6 @@ import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
-import it.eng.spagobi.studio.utils.exceptions.NotAllowedOperationException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
@@ -159,9 +158,16 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 						return;
 					}
 					catch (RemoteException e) {
+						if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+							logger.error("Current User has no permission to complete the operation", e);
+							MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", "Current User has no permission to complete the operation");	
+						}
+						else{
+						
 						logger.error("Error comunicating with server", e);		
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 								"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
+						}
 						return;
 					}
 

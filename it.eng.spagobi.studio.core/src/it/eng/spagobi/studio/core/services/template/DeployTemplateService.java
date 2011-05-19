@@ -105,7 +105,7 @@ public class DeployTemplateService {
 						Document doc=spagoBIServerObjects.getServerDocuments().getDocumentById(idInteger);
 						if(doc==null){
 							documentException.setNoDocument(true);
-							logger.warn("Document no more present on server: with id "+idInteger);					
+							logger.warn("Document not retrieved; check it is still on server and you have enough permission to reach it"+idInteger);					
 							return;
 						}
 						else{
@@ -151,9 +151,9 @@ public class DeployTemplateService {
 				return false;
 			} 
 			if(documentException.isNoDocument()){
-				logger.error("Document no more present");			
+				logger.error("Document not retrieved; check it is still on server and you have enough permission to reach it");			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error upload", "Document is no more present on server; you can do a new deploy");	
+						"Error upload", "Document not retrieved; check it is still on server and you have enough permission to reach it: make a new deploy");	
 				newDeploy = true;
 				sbdw.setNewDeployFromOld(true);
 			}

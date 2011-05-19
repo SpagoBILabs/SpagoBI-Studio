@@ -298,9 +298,9 @@ public class DocumentPropertyPageSettings implements IPropertyPageSettings {
 						return;
 					}
 					if(noDocumentException.isNoDocument()){
-						logger.error("Document no more present");			
+						logger.error("Document not retrieved; check it is still on server and you have enough permission to reach it");			
 						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-								"Error refresh", "Document is no more present on server");	
+								"Error", "Document not retrieved; check it is still on server and you have enough permission to reach it");	
 						return;
 					}
 

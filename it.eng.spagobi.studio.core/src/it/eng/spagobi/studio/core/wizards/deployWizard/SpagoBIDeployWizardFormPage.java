@@ -6,6 +6,7 @@ import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.Engine;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.exceptions.NotAllowedOperationStudioException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
@@ -81,7 +82,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 	Functionality functionality=null;
 
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployWizardFormPage.class);
-	
+
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
@@ -115,8 +116,8 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		try{
 			proxyObjects = new SpagoBIServerObjectsFactory(projectName);
 
-//			Server server = new ServerHandler().getCurrentActiveServer(projectName);
-//			 proxyFactory=new SDKProxyFactory(server);
+			//			Server server = new ServerHandler().getCurrentActiveServer(projectName);
+			//			 proxyFactory=new SDKProxyFactory(server);
 		}
 		catch (NoActiveServerException e1) {
 			logger.error("No active server found", e1);			
@@ -125,13 +126,14 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 			return;
 		}
 
-		
-//		final EnginesServiceProxy engineService=proxyFactory.getEnginesServiceProxy();
-//		final DataSetsSDKServiceProxy datasetService=proxyFactory.getDataSetsSDKServiceProxy();
-//		final DocumentsServiceProxy docService=proxyFactory.getDocumentsServiceProxy();
-//		final DataSourcesSDKServiceProxy datasourceService=proxyFactory.getDataSourcesSDKServiceProxy();
 
-		
+		//		final EnginesServiceProxy engineService=proxyFactory.getEnginesServiceProxy();
+		//		final DataSetsSDKServiceProxy datasetService=proxyFactory.getDataSetsSDKServiceProxy();
+		//		final DocumentsServiceProxy docService=proxyFactory.getDocumentsServiceProxy();
+		//		final DataSourcesSDKServiceProxy datasourceService=proxyFactory.getDataSourcesSDKServiceProxy();
+
+		final NotAllowedOperationStudioException notAllowedOperationStudioException = new NotAllowedOperationStudioException();	
+
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Deploy a new Document: ", IProgressMonitor.UNKNOWN);
@@ -142,17 +144,23 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 					datasetList=proxyObjects.getServerDatasets().getDataSetList();
 					datasourceList=proxyObjects.getServerDataSources().getDataSourceList();
 					functionality=proxyObjects.getServerDocuments().getDocumentsAsTree(null);			
-					
-					
-//					enginesList=engineService.getEngines();
-//					datasetList=datasetService.getDataSets();
-//					datasourceList=datasourceService.getDataSources();
-//					functionality=docService.getDocumentsAsTree(null);			
+
+
+					//					enginesList=engineService.getEngines();
+					//					datasetList=datasetService.getDataSets();
+					//					datasourceList=datasourceService.getDataSources();
+					//					functionality=docService.getDocumentsAsTree(null);			
 					String ciao= functionality.getId().toString()+" "+functionality.getName()+" label: "+functionality.getName();
 				}
 				catch (Exception e) {
-					logger.error("No comunication with SpagoBI server",e);		
-					MessageDialog.openError(getShell(), "No comunication with server", "Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible");	
+					if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+						logger.error("NotAllowed User Permission", e);
+						notAllowedOperationStudioException.setNotAllowed(true);
+					}
+					else{
+						logger.error("No comunication with SpagoBI server",e);		
+						MessageDialog.openError(getShell(), "No comunication with server", "Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible");	
+					}
 					return;
 				}
 				monitor.done();
@@ -178,6 +186,11 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		}	
 		dialog.close();
 
+		if(notAllowedOperationStudioException.isNotAllowed()){
+			logger.error("User has no permission to complete the operation");
+			MessageDialog.openError(getShell(), "Error", "User has no permission to complete the operation");	
+			return;
+		}
 
 
 

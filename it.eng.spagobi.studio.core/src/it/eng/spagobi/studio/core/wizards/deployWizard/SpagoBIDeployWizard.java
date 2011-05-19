@@ -212,10 +212,18 @@ public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 			}
 			//			System.out.println(returnCode);
 			newDocument.setId(returnCode);
-		}  catch (Exception e) {
-			SpagoBILogger.errorLog("No comunication with server, cannot deploy document on server", e);			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"No comunciation with server", "No comunication with server, cannot deploy document on server");		
+		}  
+
+		catch (Exception e) {
+			if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+				logger.error("Current User has no permission to deploy documents", e);
+				MessageDialog.openError(getShell(), "", "Current user has no permission to deploy document");	
+			}
+			else{
+				SpagoBILogger.errorLog("No comunication with server, cannot deploy document on server", e);			
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+						"No comunciation with server", "No comunication with server, cannot deploy document on server");		
+			}
 			return;
 
 		}
