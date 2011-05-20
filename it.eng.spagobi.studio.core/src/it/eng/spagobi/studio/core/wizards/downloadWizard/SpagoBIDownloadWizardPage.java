@@ -75,33 +75,33 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		FillLayout layout= new FillLayout();
 		container.setLayout(layout);
-		SDKProxyFactory proxyFactory = null;
-		try{
-			Server server = new ServerHandler().getCurrentActiveServer(projectName);
-			proxyFactory=new SDKProxyFactory(server);
-		}
-		catch (NoActiveServerException e1) {
-			SpagoBILogger.errorLog("No active server found", e1);			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "No active server found");	
-			return;
-		}
+//		SDKProxyFactory proxyFactory = null;
+//		try{
+//			Server server = new ServerHandler().getCurrentActiveServer(projectName);
+//			proxyFactory=new SDKProxyFactory(server);
+//		}
+//		catch (NoActiveServerException e1) {
+//			SpagoBILogger.errorLog("No active server found", e1);			
+//			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+//					"Error", "No active server found");	
+//			return;
+//		}
 
 
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Download documents tree", IProgressMonitor.UNKNOWN);
 				SDKProxyFactory proxyFactory = null;
-				try {
-					Server server = new ServerHandler().getCurrentActiveServer(projectName);
-					proxyFactory=new SDKProxyFactory(server);
-				}
-				catch (NoActiveServerException e1) {
-					SpagoBILogger.errorLog("No active server found", e1);			
-					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-							"Error", "No active server found");	
-					return;
-				}
+//				try {
+//					Server server = new ServerHandler().getCurrentActiveServer(projectName);
+//					proxyFactory=new SDKProxyFactory(server);
+//				}
+//				catch (NoActiveServerException e1) {
+//					SpagoBILogger.errorLog("No active server found", e1);			
+//					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+//							"Error", "No active server found");	
+//					return;
+//				}
 
 
 				try{
@@ -110,6 +110,12 @@ public class SpagoBIDownloadWizardPage extends WizardPage {
 
 					functionality=spagoBIServerObjects.getServerDocuments().getDocumentsAsTree(null);			
 
+				}
+				catch (NoActiveServerException e1) {
+					SpagoBILogger.errorLog("No active server found", e1);			
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"Error", "No active server found");	
+					return;
 				}
 				catch (Exception e) {
 					SpagoBILogger.errorLog("No comunication with SpagoBI server", e);
