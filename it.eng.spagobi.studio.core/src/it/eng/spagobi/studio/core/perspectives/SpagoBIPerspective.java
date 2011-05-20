@@ -11,6 +11,7 @@
  *******************************************************************************/
 package it.eng.spagobi.studio.core.perspectives;
 
+import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
@@ -49,6 +50,8 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		//		layout.addStandaloneView("it.eng.spagobi.studio.core.views.ResourceNavigator",  true /* show title */, IPageLayout.LEFT, 0.25f, editorArea);
 		this.factory = layout;
 
+		SpagoBIModelEditorWizard ciao = new SpagoBIModelEditorWizard();
+		
 		addViews();
 		addShortcuts();
 		addActions();

@@ -110,7 +110,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			setQueryWizard(menu);	
 			setJpaNavigator(menu);
 			setUploadDatamartTemplateWizard(menu);
-			setDeleteModelWizard(menu);	
 
 		}
 		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
@@ -118,8 +117,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			setDeployDatasetWizard(menu);	
 		}
 
-		if (!ResourceNavigatorHandler.isSelectedObjSystemFolder(objSel)
-		&& !currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)) // model has it's own delete		
+		if (!ResourceNavigatorHandler.isSelectedObjSystemFolder(objSel)) // model has it's own delete		
 		{ // if it is a fie of analysis hierarchy
 			logger.debug("Folder not system");
 			setDeleteResourceWizard(menu);	
