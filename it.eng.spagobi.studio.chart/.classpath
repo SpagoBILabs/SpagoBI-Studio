@@ -10,6 +10,5 @@
 	<classpathentry kind="lib" path="lib/org.slf4j.api_1.5.11.v20100519-1910.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/it.eng.spagobi.studio.utils"/>
 	<classpathentry kind="lib" path="lib/sbiutils.jar"/>
-	<classpathentry kind="lib" path="lib/axis-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
