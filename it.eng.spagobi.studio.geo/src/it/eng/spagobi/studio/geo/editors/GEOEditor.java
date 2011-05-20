@@ -26,6 +26,7 @@ import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.GeoFeature;
 import it.eng.spagobi.studio.utils.bo.GeoMap;
+import it.eng.spagobi.studio.utils.exceptions.MissingParValueException;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
@@ -578,7 +579,7 @@ public class GEOEditor extends EditorPart {
 									+ datasetLabel
 									+ " returned no metadata");
 						}
-					} catch (MissingParameterValue e2) {
+					} catch (MissingParValueException e2) {
 						logger.error(
 								"Could not execute dataset with label = "
 								+ datasetLabel
@@ -1062,7 +1063,7 @@ public class GEOEditor extends EditorPart {
 						"Dataset with label = " + metadata.getDataset()
 						+ " returned no metadata");
 			}
-		} catch (MissingParameterValue e2) {
+		} catch (MissingParValueException e2) {
 			logger.error("Could not execute dataset with label = "
 					+ metadata.getDataset()
 					+ " due to parameter lack: execute dataset test in server to retrieve metadata", e2);

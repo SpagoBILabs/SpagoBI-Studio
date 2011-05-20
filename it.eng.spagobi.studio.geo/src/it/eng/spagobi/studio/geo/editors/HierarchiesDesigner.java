@@ -34,6 +34,7 @@ import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.GeoFeature;
+import it.eng.spagobi.studio.utils.exceptions.MissingParValueException;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
@@ -671,7 +672,7 @@ public class HierarchiesDesigner {
 					MessageDialog.openWarning(mainComposite.getShell(), "Warning", "Dataset with label = "+datasetLabel+" returned no metadata");			
 				}
 			}
-			catch (MissingParameterValue e2) {
+			catch (MissingParValueException e2) {
 				logger.error("Could not execute dataset with label = "+datasetLabel+" metadata: execute dataset test in server to retrieve metadata", e2);
 				MessageDialog.openError(mainComposite.getShell(), "Error", "Could not execute dataset with label = "+datasetLabel+" metadata: probably missing parameter");
 			}

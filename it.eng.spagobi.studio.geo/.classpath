@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="lib/axis-1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar"/>
