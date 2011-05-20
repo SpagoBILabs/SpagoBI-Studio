@@ -9,14 +9,11 @@ import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.Document;
-import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.bo.Template;
+import it.eng.spagobi.studio.utils.exceptions.MissingParValueException;
 import it.eng.spagobi.studio.utils.exceptions.NoServerException;
-import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.ProxyHandler;
 import it.eng.spagobi.studio.utils.services.ServerObjectsTranslator;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
-import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import java.rmi.RemoteException;
 import java.util.Vector;
@@ -85,7 +82,7 @@ public class ServerDatasets {
 		return returnCode;
 	}
 	
-	public DataStoreMetadata getDataStoreMetadata(Integer datasetId) throws NoServerException, MissingParameterValue{
+	public DataStoreMetadata getDataStoreMetadata(Integer datasetId) throws NoServerException, MissingParValueException{
 		logger.debug("IN");
 		SDKDataStoreMetadata sdkDataStoreMetadata=null;
 		DataStoreMetadata toReturn=null;
@@ -101,7 +98,7 @@ public class ServerDatasets {
 		}
 		catch (Exception e) {
 			if(e instanceof MissingParameterValue){
-				throw (MissingParameterValue)e;
+				throw new MissingParValueException();
 			}
 			else{
 				logger.error("No comunication with SpagoBI server, could not retrieve dataset metadata informations", e);
