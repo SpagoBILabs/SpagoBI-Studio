@@ -2,6 +2,8 @@ package it.eng.spagobi.studio.core.views.actionProvider;
 
 
 
+import java.util.List;
+
 import it.eng.spagobi.meta.editor.business.actions.DeleteModelObjectAction;
 import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
 import it.eng.spagobi.meta.editor.popup.actions.CreateJPAMappingProjectExplorerAction;
@@ -76,53 +78,60 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 		IStructuredSelection sel=(IStructuredSelection)currentContext.getSelection();
 
-		Object objSel = sel.toList().get(0);
+		Object objSel = null; 
+		// actions to be done on one single selection
+		if(sel.toList()!= null && sel.toList().size()<=1){
+			objSel = sel.toList().get(0);
 
-		String currentState = ResourceNavigatorHandler.getStateOfSelectedObject(objSel);
+			String currentState = ResourceNavigatorHandler.getStateOfSelectedObject(objSel);
 
-		currentState = currentState != null ? currentState : "";
+			currentState = currentState != null ? currentState : "";
 
-		// if it is a folder of analysis hierarchy
-		if(currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_ANALYSIS_HIER)){
-			logger.debug("Folder Analysis");
+			// if it is a folder of analysis hierarchy
+			if(currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_ANALYSIS_HIER)){
+				logger.debug("Folder Analysis");
 
-			setDownloadWizard(menu);
-			setNewDocumentWizard(menu);			
+				setDownloadWizard(menu);
+				setNewDocumentWizard(menu);			
+			}
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_ANALYSIS_HIER)){ // if it is a fie of analysis hierarchy
+				logger.debug("File ANalysis");		
+
+				setDeployWizard(menu);			
+				setRefreshWizard(menu);			
+			}
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_SERVER_HIER)){ // if it is a fie of analysis hierarchy
+				logger.debug("Folder Server");
+
+				setServerWizard(menu);			
+			}
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_MODEL_HIER)){ // if it is a fie of analysis hierarchy
+				logger.debug("Folder Model");
+
+				setModelWizard(menu);			
+			}
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)){ // if it is a fie of analysis hierarchy
+				logger.debug("File under model hierarchy");
+				setQueryWizard(menu);	
+				setJpaNavigator(menu);
+				setUploadDatamartTemplateWizard(menu);
+
+			}
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
+				logger.debug("File under model hierarchy");
+				setDeployDatasetWizard(menu);	
+			}
 		}
-		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_ANALYSIS_HIER)){ // if it is a fie of analysis hierarchy
-			logger.debug("File ANalysis");		
 
-			setDeployWizard(menu);			
-			setRefreshWizard(menu);			
-		}
-		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_SERVER_HIER)){ // if it is a fie of analysis hierarchy
-			logger.debug("Folder Server");
-
-			setServerWizard(menu);			
-		}
-		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_MODEL_HIER)){ // if it is a fie of analysis hierarchy
-			logger.debug("Folder Model");
-
-			setModelWizard(menu);			
-		}
-		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)){ // if it is a fie of analysis hierarchy
-			logger.debug("File under model hierarchy");
-			setQueryWizard(menu);	
-			setJpaNavigator(menu);
-			setUploadDatamartTemplateWizard(menu);
-
-		}
-		else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
-			logger.debug("File under model hierarchy");
-			setDeployDatasetWizard(menu);	
-		}
-
-		if (!ResourceNavigatorHandler.isSelectedObjSystemFolder(objSel)) // model has it's own delete		
-		{ // if it is a fie of analysis hierarchy
+		
+		List<IStructuredSelection> selList = sel.toList();
+		
+		if (!ResourceNavigatorHandler.isSelectedObjSystemFolder(selList)) // model has it's own delete		
+		{ // if area files of analysis hierarchy
 			logger.debug("Folder not system");
 			setDeleteResourceWizard(menu);	
 		}
-		
+
 
 		IContributionItem[] contributionItems = menu.getItems()	;
 		for (int j = 0; j < contributionItems.length; j++) {
@@ -353,7 +362,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		}
 		});
 		downACI.getAction().setText("Jpa Mapping");
-//		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+		//		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
 

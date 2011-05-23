@@ -34,33 +34,6 @@ public class EarlyStudioStartup implements IStartup {
 	private static Logger logger = LoggerFactory.getLogger(EarlyStudioStartup.class);
 
 
-	String[] actionsToRemove = new String[]{
-			"org.eclipse.search.searchActionSet",
-			"org.eclipse.ui.externaltools.ExternalToolsSet",
-			"org.eclipse.mylyn.doc.actionSet",
-			"org.eclipse.mylyn.tasks.ui.navigation",
-			"org.eclipse.ui.cheatsheets.actionSet",
-			"org.eclipse.rse.core.search.searchActionSet",
-			"org.eclipse.ui.edit.text.actionSet.annotationNavigation",
-			"org.eclipse.ui.edit.text.actionSet.navigation",
-			"org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo",
-			"org.eclipse.ui.actionSet.keyBindings",
-			"org.eclipse.mylyn.context.ui.actionSet",
-	"org.eclipse.ui.actionSet.openFiles"};
-
-	String actionsToRemoveString = 
-		//"org.eclipse.search.searchActionSet " +
-		" org.eclipse.ui.externaltools.ExternalToolsSet" +
-		" org.eclipse.mylyn.doc.actionSet" +
-		" org.eclipse.mylyn.tasks.ui.navigation" +
-		" org.eclipse.ui.cheatsheets.actionSet" +
-		//	" org.eclipse.rse.core.search.searchActionSet" +
-		" org.eclipse.ui.edit.text.actionSet.annotationNavigation" +
-		" org.eclipse.ui.edit.text.actionSet.navigation" +
-		" org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo" +
-		" org.eclipse.ui.actionSet.keyBindings" +
-		" org.eclipse.mylyn.context.ui.actionSet" +
-		" org.eclipse.ui.actionSet.openFiles";
 
 	String actionsToRemoveStringConstant =
 		IWorkbenchActionConstants.M_LAUNCH + " "+
@@ -99,74 +72,74 @@ public class EarlyStudioStartup implements IStartup {
 		 * since  PlatformUI.getWorkbench().getActiveWorkbenchWindow() returns null
 		 * if it is called outside of the UI thread.
 		 * */
-		Display.getDefault().asyncExec(new Runnable() {
-			/* (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
-			public void run() {
-				logger.debug("IN");
-				final IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				if (workbenchWindow != null) {
-					workbenchWindow.addPerspectiveListener(new PerspectiveAdapter() {
-						/* (non-Javadoc)
-						 * @see org.eclipse.ui.PerspectiveAdapter#perspectiveActivated(org.eclipse.ui.IWorkbenchPage, org.eclipse.ui.IPerspectiveDescriptor)
-						 */
-						@Override
-						public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspectiveDescriptor) {
-							logger.debug("IN");
-							super.perspectiveActivated(page, perspectiveDescriptor);
-
-							if (perspectiveDescriptor.getId().indexOf(SpagoBIPerspective.PERSPECTIVE_ID) > -1) {
-								Vector<String> toDisable = getActionsToDisable();
-								if (workbenchWindow.getActivePage() instanceof WorkbenchPage) {
-									WorkbenchPage worbenchPage = (WorkbenchPage) workbenchWindow.getActivePage();
-									// Get the perspective
-									Perspective perspective = worbenchPage.findPerspective(perspectiveDescriptor);
-									ArrayList toRemove = new ArrayList();
-									if (perspective != null) {
-
-										logger.debug("Always Off Action Set");
-										for (IActionSetDescriptor actionSetDescriptor : perspective.getAlwaysOffActionSets()) {
-											String id = actionSetDescriptor.getId();
-											logger.debug("Id: "+id + "  - Label: "+actionSetDescriptor.getLabel());
-											
-										}
-										logger.debug("---------------------");
-										logger.debug("Always On Action Set");
-
-										for (IActionSetDescriptor actionSetDescriptor : perspective.getAlwaysOnActionSets()) {
-											String id = actionSetDescriptor.getId();
-											logger.debug("Id: "+id + "  - Label: "+actionSetDescriptor.getLabel());
-//											if (id.indexOf("org.eclipse.search.searchActionSet") > -1) {
-//												toRemove.add(actionSetDescriptor);
-//											}
-											if (actionsToRemoveString.indexOf(id) > -1) {
-												logger.debug("Disable "+actionSetDescriptor.getId());
-												toRemove.add(actionSetDescriptor);
-											}
-											if(isToDisable(toDisable, id)){
-												logger.debug("Disable "+actionSetDescriptor.getId());
-												toRemove.add(actionSetDescriptor);
-											}
-
-
-										}
-										perspective.turnOffActionSets((IActionSetDescriptor[]) toRemove.toArray(new IActionSetDescriptor[toRemove.size()]));
-									}
-								}
-							}
-							logger.debug("OUT");
-						}
-					
-					
-					});
-				}
-				logger.debug("OUT");
-			}
-		});
+		//		Display.getDefault().asyncExec(new Runnable() {
+		/* (non-Javadoc)
+		 * @see java.lang.Runnable#run()
+		 */
+		//		public void run() {
+		//				logger.debug("IN");
+		//				final IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		//				if (workbenchWindow != null) {
+		//					workbenchWindow.addPerspectiveListener(new PerspectiveAdapter() {
+		//						/* (non-Javadoc)
+		//						 * @see org.eclipse.ui.PerspectiveAdapter#perspectiveActivated(org.eclipse.ui.IWorkbenchPage, org.eclipse.ui.IPerspectiveDescriptor)
+		//						 */
+		//						@Override
+		//						public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspectiveDescriptor) {
+		//							logger.debug("IN");
+		//							super.perspectiveActivated(page, perspectiveDescriptor);
+		//
+		//							if (perspectiveDescriptor.getId().indexOf(SpagoBIPerspective.PERSPECTIVE_ID) > -1) {
+		//								Vector<String> toDisable = getActionsToDisable();
+		//								if (workbenchWindow.getActivePage() instanceof WorkbenchPage) {
+		//									WorkbenchPage worbenchPage = (WorkbenchPage) workbenchWindow.getActivePage();
+		//									// Get the perspective
+		//									Perspective perspective = worbenchPage.findPerspective(perspectiveDescriptor);
+		//									ArrayList toRemove = new ArrayList();
+		//									if (perspective != null) {
+		//
+		//										logger.debug("Always Off Action Set");
+		//										for (IActionSetDescriptor actionSetDescriptor : perspective.getAlwaysOffActionSets()) {
+		//											String id = actionSetDescriptor.getId();
+		//											logger.debug("Id: "+id + "  - Label: "+actionSetDescriptor.getLabel());
+		//											
+		//										}
+		//										logger.debug("---------------------");
+		//										logger.debug("Always On Action Set");
+		//
+		//										for (IActionSetDescriptor actionSetDescriptor : perspective.getAlwaysOnActionSets()) {
+		//											String id = actionSetDescriptor.getId();
+		//											logger.debug("Id: "+id + "  - Label: "+actionSetDescriptor.getLabel());
+		////											if (id.indexOf("org.eclipse.search.searchActionSet") > -1) {
+		////												toRemove.add(actionSetDescriptor);
+		////											}
+		//											if (actionsToRemoveString.indexOf(id) > -1) {
+		//												logger.debug("Disable "+actionSetDescriptor.getId());
+		//												toRemove.add(actionSetDescriptor);
+		//											}
+		//											if(isToDisable(toDisable, id)){
+		//												logger.debug("Disable "+actionSetDescriptor.getId());
+		//												toRemove.add(actionSetDescriptor);
+		//											}
+		//
+		//
+		//										}
+		//										perspective.turnOffActionSets((IActionSetDescriptor[]) toRemove.toArray(new IActionSetDescriptor[toRemove.size()]));
+		//									}
+		//								}
+		//							}
+		//							logger.debug("OUT");
+		//						}
+		//					
+		//					
+		//					});
+		//				}
+		//				logger.debug("OUT");
+		//			}
+		//		});
 		logger.debug("OUT");
 
 
-	}
 
+	}
 }
