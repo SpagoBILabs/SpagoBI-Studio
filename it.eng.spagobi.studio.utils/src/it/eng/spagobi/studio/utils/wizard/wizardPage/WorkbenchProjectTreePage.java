@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public class WorkbenchProjectTreePage extends WizardPage {
 
 	// Associate Tree item name with the folder it represent
 	HashMap<String, IFolder> itemFolderMap = null;
-	
+
 
 	public WorkbenchProjectTreePage(String pageName, IStructuredSelection _selection) {
 		super("Projects tree");
@@ -176,11 +177,27 @@ public class WorkbenchProjectTreePage extends WizardPage {
 		this.tree = tree;
 	}
 
+	/**
+	 * to be complete only one resource selected and not the project root
+	 */
 	public boolean isPageComplete() {
 		boolean isComplete=false;
 		if(getTree()!=null){
 			int count = getTree().getSelectionCount();
-			if(count==1)isComplete = true;
+			if(count==1){
+				//check the selected is not project root
+				TreeItem item = getTree().getSelection()[0];
+				if(item.getData() != null){
+					String data = item.getData().toString();
+					if(data.equalsIgnoreCase(WorkbenchProjectTreeGenerator.TREE_ROOT)){
+						isComplete = false;
+					}
+					else isComplete = true;
+
+				}
+				else isComplete = true;
+
+			}
 			else isComplete = false;
 		}
 		return isComplete;
@@ -194,6 +211,6 @@ public class WorkbenchProjectTreePage extends WizardPage {
 		this.itemFolderMap = itemFolderMap;
 	}
 
-	
-	
+
+
 }

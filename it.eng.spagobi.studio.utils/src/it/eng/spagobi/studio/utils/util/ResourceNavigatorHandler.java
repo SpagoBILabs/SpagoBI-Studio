@@ -1,10 +1,14 @@
 package it.eng.spagobi.studio.utils.util;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,13 +66,21 @@ public class ResourceNavigatorHandler {
 		return toReturn;
 	}
 
-
-	public static boolean isSelectedObjSystemFolder(Object objSel){
+	/** in order to enable delete
+	 *  check that selection has no structure folders
+	 * @param selList
+	 * @return
+	 */
+	public static boolean isSelectedObjSystemFolder(List<IStructuredSelection> selList){
 		logger.debug("IN");
 		boolean toreturn = false;
-		if(objSel instanceof Folder){
-			IFolder fold = (IFolder)objSel;
-			toreturn = isSpagoBISystemFolder(fold);	
+
+		for (Iterator iterator = selList.iterator(); iterator.hasNext() && !toreturn;) {
+			Object objSel = iterator.next();
+			if(objSel instanceof Folder){
+				IFolder fold = (IFolder)objSel;
+				toreturn = isSpagoBISystemFolder(fold);	
+			}
 		}
 		logger.debug("OUT");
 		return toreturn;

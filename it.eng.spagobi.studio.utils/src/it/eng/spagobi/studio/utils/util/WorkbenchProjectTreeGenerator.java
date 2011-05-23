@@ -52,11 +52,11 @@ public class WorkbenchProjectTreeGenerator {
 	Composite container=null;
 	ImageDescriptor folderDescriptor=null;
 	ImageDescriptor treeBaseDescriptor=null;
+	ImageDescriptor analysisDescriptor=null;
 
 	HashMap<String, ImageDescriptor> imageDescriptors=null;
 
-
-
+	public static final String TREE_ROOT = "treeRot";
 	private static Logger logger = LoggerFactory.getLogger(WorkbenchProjectTreeGenerator.class);
 
 
@@ -82,6 +82,7 @@ public class WorkbenchProjectTreeGenerator {
 		container=parent;
 		folderDescriptor=ImageDescriptorGatherer.getImageDesc("folder.gif", Activator.PLUGIN_ID);
 		treeBaseDescriptor=ImageDescriptorGatherer.getImageDesc("treebase.gif", Activator.PLUGIN_ID);
+		analysisDescriptor=ImageDescriptorGatherer.getImageDesc("analysis.png", Activator.PLUGIN_ID);
 
 		IProject project = new WorkspaceHandler().getProjectRootFolder(projectName);
 		if( tree == null ){
@@ -92,17 +93,23 @@ public class WorkbenchProjectTreeGenerator {
 		TreeItem root=new TreeItem(tree,SWT.SINGLE);
 		root.setText(project.getName());
 		root.setImage(treeBaseDescriptor.createImage());
+		// mark project root
+		root.setData(TREE_ROOT);
 
+		TreeItem analysis = new TreeItem(root,SWT.SINGLE);
+		analysis.setText(SpagoBIStudioConstants.FOLDER_ANALYSIS);
+		analysis.setImage(analysisDescriptor.createImage());
 
-		IFolder analysisFolder= project.getFolder(SpagoBIStudioConstants.FOLDER_ANALYSIS);
 		itemFolderMap = new HashMap<String, IFolder> ();
-		itemFolderMap = new HashMap<String, IFolder>();
+
+		IFolder analysisFolder = project.getFolder(SpagoBIStudioConstants.FOLDER_ANALYSIS);
+		itemFolderMap.put(SpagoBIStudioConstants.FOLDER_ANALYSIS, analysisFolder);
 		/** How any time an item name has been retrieved, in order to rename it */
 		HashMap<String, Integer> nameOccurencesMap = new HashMap<String, Integer>();
 
 		try{
 			if(analysisFolder != null && analysisFolder.exists()){
-				createItemsList(root, analysisFolder, itemFolderMap, nameOccurencesMap);
+				createItemsList(analysis, analysisFolder, itemFolderMap, nameOccurencesMap);
 			}
 			else {
 				logger.warn("Could not find analysis folder, probably not a spagoBIProject");
