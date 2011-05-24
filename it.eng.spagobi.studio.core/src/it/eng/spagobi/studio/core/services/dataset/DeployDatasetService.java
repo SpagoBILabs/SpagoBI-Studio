@@ -222,13 +222,8 @@ public class DeployDatasetService {
 		"[";
 		toReturn+=query;
 		toReturn+="], "+
-		"	\"distinct\":false,	" +
-		"	\"filters\":[],	" +
-		"	\"expression\":{},	" +
-		"	\"isNestedExpression\":false,	" +
-		"	\"havings\":[],	" +
-		"	\"subqueries\":[]}]},	"+
-		"	\"version\":7}	";
+		"	\"version\":"+SpagoBIStudioConstants.QBE_VERSION+"," +
+		"	\"generator\": SpagoBIMeta }	";
 		logger.debug("adapted query is "+toReturn);
 		return toReturn;
 

@@ -12,6 +12,7 @@ import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
+import it.eng.spagobi.studio.utils.util.ClassLoaderUtilities;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
 import java.io.BufferedInputStream;
@@ -502,7 +503,6 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		Object objSel = selection.toList().get(0);
 		Folder fileSelected=(Folder)objSel;
 		projectName = fileSelected.getProject().getName();
-
 
 	}
 
