@@ -4,6 +4,7 @@ import it.eng.spagobi.sdk.proxy.TestConnectionServiceProxy;
 import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlServerGenerator;
 import it.eng.spagobi.studio.utils.sdk.ProxyDataRetriever;
+import it.eng.spagobi.studio.utils.util.ClassLoaderUtilities;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Vector;
@@ -136,6 +137,9 @@ public class ServerHandler {
 	public Server getCurrentActiveServer(String projectname){
 		logger.debug("IN");
 		Server active = null;
+		// when dealing with server check class loader
+		ClassLoaderUtilities.setSpagoBIClassLoader();
+		
 		Vector<Server> names = getCurrentActiveServers(projectname);
 
 		if(names.size()== 0){

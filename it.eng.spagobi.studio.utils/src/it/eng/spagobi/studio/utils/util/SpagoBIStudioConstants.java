@@ -168,6 +168,11 @@ public class SpagoBIStudioConstants {
 	public static final String DATA_SOURCE_EXPLORER_VIEW_ID = "org.eclipse.datatools.connectivity.DataSourceExplorerNavigator";
 	
 	public static final String DS_QBE = "SbiQbeDataSet";
+	
+	
+	
+	// QBE VERSION
+	public static final String QBE_VERSION = "7";
 
 	
 }
