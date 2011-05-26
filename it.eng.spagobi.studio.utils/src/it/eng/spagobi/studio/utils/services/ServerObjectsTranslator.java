@@ -37,6 +37,7 @@ public class ServerObjectsTranslator {
 
 	static public SDKDataSet createSDKDataSet(Dataset ds){
 		SDKDataSet sdkDataset = new SDKDataSet();
+		sdkDataset.setId(ds.getId());
 		sdkDataset.setLabel(ds.getLabel());
 		sdkDataset.setName(ds.getName());
 		sdkDataset.setDescription(ds.getDescription());

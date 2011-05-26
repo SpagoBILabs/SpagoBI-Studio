@@ -46,11 +46,11 @@ public class Dataset {
 	private Boolean numberingRows;
 
 	private String transformer;
-	
+
 	private String jsonQuery;
 
 	private String datamarts;
-	
+
 
 	//private it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter[] parameters;
 
@@ -89,7 +89,8 @@ public class Dataset {
 		type=sdk.getType();
 		webServiceAddress=sdk.getWebServiceAddress();
 		webServiceOperation=sdk.getWebServiceOperation();
-
+		jsonQuery = sdk.getJsonQuery();
+		datamarts = sdk.getDatamarts();
 	}
 
 
@@ -468,6 +469,6 @@ public class Dataset {
 		this.datamarts = datamarts;
 	}
 
-	
-	
+
+
 }

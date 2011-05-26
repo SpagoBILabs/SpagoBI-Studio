@@ -318,6 +318,52 @@ public class BiObjectUtilities {
 
 	}
 
+	
+	
+	
+	
+	
+	public static IFile setDataSetMetaData(IFile newFile, Dataset dataset) throws CoreException{
+		if(dataset!=null){
+			if(dataset.getId()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_ID, dataset.getId().toString());			
+			}
+			if(dataset.getLabel()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL, dataset.getLabel());
+			}
+			if(dataset.getName()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_NAME, dataset.getName());
+			}
+			if(dataset.getDescription()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION, dataset.getDescription());
+			}
+			if(dataset.getDatamarts()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DATAMARTS, dataset.getDatamarts());
+			}
+			if(dataset.getJsonQuery()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_JSON_QUERY, dataset.getJsonQuery());
+			}
+			if(dataset.getTransformer()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_TRANSFORMER, dataset.getTransformer());
+			}
+			if(dataset.getPivotColumnName()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_COLUMN_NAME, dataset.getPivotColumnName());
+			}
+			if(dataset.getPivotColumnValue()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_COLUMN_VALUE, dataset.getPivotColumnValue());
+			}
+			if(dataset.getPivotRowName()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_ROW_NAME, dataset.getPivotRowName());
+			}
+			
+		}
+		return newFile;
+	}
+
+	
+	
+	
+	
 
 
 }
