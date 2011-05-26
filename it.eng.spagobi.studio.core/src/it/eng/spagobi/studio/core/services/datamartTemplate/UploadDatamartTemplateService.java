@@ -3,14 +3,10 @@ package it.eng.spagobi.studio.core.services.datamartTemplate;
 import it.eng.spagobi.meta.model.Model;
 import it.eng.spagobi.meta.model.business.BusinessModel;
 import it.eng.spagobi.meta.model.serializer.EmfXmiSerializer;
-import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
-import it.eng.spagobi.studio.core.util.JSONReader;
-import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.meta.querybuilder.ui.editor.SpagoBIDataSetEditor;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
-import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
@@ -18,22 +14,22 @@ import java.rmi.RemoteException;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
-import org.apache.xerces.util.URI;
 import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class UploadDatamartTemplateService {
 
@@ -70,42 +66,71 @@ public class UploadDatamartTemplateService {
 			logger.debug("model "+businessModel.getName());	
 		}
 		catch (Exception e) {
-			logger.error("error in retrieving business model ",e);
+			logger.error("error in retrieving business model; try refreshing model folder ",e);
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
-			"error in retrieving business model ");				
+			"error in retrieving business model: try refreshing model folder");				
 			return false;
 		}
 		final BusinessModel finalBusinessModel = businessModel;
 
-		// search for file datamart.jar, is rooted in the same folder of the sbiModel selected
-		IFile datamartFile = null;
-		String errorMessage = null;
-		Folder container = (Folder)fileSel.getParent();
-		if(container.getFolder(businessModel.getName()).exists()){
-			IFolder modelNameFolder = container.getFolder(businessModel.getName());
-			if(modelNameFolder.getFolder("dist").exists()){
-				logger.debug("Entered in "+businessModel.getName()+"/dist");
-				IFolder fold = modelNameFolder.getFolder("dist");
-				// search for datamart.jar
-				if(fold.getFile("datamart.jar").exists()){
-					datamartFile = fold.getFile("datamart.jar");
-				}
-				else{
-					errorMessage = "Could not find datamart.jar in "+businessModel.getName()+"/dist/";
-				}
-			}
-			else{
-				errorMessage = "Could not find dist folder on "+businessModel.getName()+"/: you must create at list one query asssociated to the model";	
-			}
-		}
-		else{
-			errorMessage = "Could not find folder "+businessModel.getName()+": execute the JPA Mapping from the corresponding model";				
-		}
+		// generate the jar
 
-		if(datamartFile == null){
-			logger.warn(errorMessage);
-			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
-					errorMessage);	
+
+		//Creta temp dir
+		long ll =System.currentTimeMillis();
+		String UUID =Long.valueOf(ll).toString();
+
+		String tempDirPath = System.getProperty("java.io.tmpdir");
+		String idFolderPath = businessModel.getName()+"_"+UUID;
+		String tempDirPathId = tempDirPath + idFolderPath;
+		logger.debug("create model in temporary folder "+tempDirPathId);
+
+		try{
+			new SpagoBIDataSetEditor().generateMapping(finalBusinessModel, tempDirPathId, null);
+		}
+		catch (Exception e) {
+			logger.error("Error in generating the datamart for model "+businessModel.getName(),e);
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in genertig datamart.ajr for model "+businessModel.getName());
+			return false;
+		}
+		logger.debug("model datamart.jar created in "+tempDirPathId);
+
+
+		// search for file datamart.jar, is rooted in the folder created
+
+		String pathToSearch = tempDirPathId + java.io.File.separator + businessModel.getName() + java.io.File.separator + "dist"+java.io.File.separator +"datamart.jar";
+		logger.debug("try reatrieving file "+pathToSearch);
+		Path tmppath = new Path(pathToSearch);
+
+		java.io.File datamart = tmppath.toFile();
+
+		//		if(datamart.exists()){
+		//			if(folder.getFolder(businessModel.getName()).exists()){
+		//				IFolder modelNameFolder = folder.getFolder(businessModel.getName());
+		//				if(modelNameFolder.getFolder("dist").exists()){
+		//					logger.debug("Entered in "+modelNameFolder.getFullPath().toOSString());
+		//					IFolder fold = modelNameFolder.getFolder("dist");
+		//					// search for datamart.jar
+		//					if(fold.getFile("datamart.jar").exists()){
+		//						datamartFile = fold.getFile("datamart.jar");
+		//					}
+		//					else
+		//						errorMessage = "Could not find datamart.jar in "+modelNameFolder.getFullPath().toOSString()+"/dist/";
+		//				}
+		//				else
+		//					errorMessage = "Could not find dist folder on "+folder.getFullPath().toOSString()+java.io.File.separator+businessModel.getName()+"/dist/ ";	
+		//			}
+		//			else
+		//				errorMessage = "Could not find dist folder on "+folder.getFullPath().toOSString()+java.io.File.separator+businessModel.getName()+"/ ";							
+		//		}
+		//		else{
+		//			errorMessage = "Could not find folder "+folder.getFullPath().toOSString();				
+		//		}
+
+		if(datamart == null){
+			logger.error("could not retrieve file "+pathToSearch);
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error",
+					"could not retrieve file "+pathToSearch);	
 			return false;
 		}
 		else{
@@ -115,7 +140,7 @@ public class UploadDatamartTemplateService {
 		// got the template datamart.jar
 
 
-		final IFile finalDatamartFile = datamartFile;
+		final java.io.File finalDatamartFile = datamart;
 		final NoActiveServerException noActiveServerException=new NoActiveServerException();
 
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
@@ -137,9 +162,7 @@ public class UploadDatamartTemplateService {
 				template.setFolderName(finalBusinessModel.getName());
 
 				// create template content
-				java.net.URI uri = finalDatamartFile.getLocationURI();
-				java.io.File fileJar = new java.io.File(uri.getPath());
-				FileDataSource fileDataSource=new FileDataSource(fileJar);
+				FileDataSource fileDataSource=new FileDataSource(finalDatamartFile);
 				DataHandler dataHandler=new DataHandler(fileDataSource);			
 				template.setContent(dataHandler);
 				logger.debug("built Template with content data handler");
@@ -183,6 +206,19 @@ public class UploadDatamartTemplateService {
 		MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Upload succesfull", "Uploaded to resources");		
 		logger.debug("Uploaded to resources in "+businessModel.getName());		
 
+		// delete the temporary file
+
+		try{
+			Path pathToDelete = new Path(tempDirPathId);
+			java.io.File toDelete = pathToDelete.toFile();
+			boolean deleted = toDelete.delete();	
+			if(deleted){
+				logger.warn("deleted folder "+tempDirPathId);
+			}
+		}
+		catch (Exception e) {
+			logger.warn("could not delete folder "+tempDirPathId);
+		}
 		logger.debug("OUT");
 		return true;
 

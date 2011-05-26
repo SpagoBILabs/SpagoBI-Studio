@@ -90,7 +90,7 @@ public class DeployDatasetService {
 
 						SpagoBIServerObjectsFactory spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectname);
 
-						// check ataset still exists
+						// check dataset still exists
 						Dataset ds=spagoBIServerObjects.getServerDatasets().getDataSet(idInteger);
 						if(ds==null){
 							datasetException.setNoDocument(true);
@@ -107,149 +107,149 @@ public class DeployDatasetService {
 								logger.debug("query is "+queryStr);					
 								adaptedQueryStrList = DeployDatasetService.adaptQueryToList(queryStr);								
 								logger.debug("adapted query list is "+adaptedQueryStrList);					
+								// only the query may be modified by meta so it is the only refreshed
 								ds.setJsonQuery(adaptedQueryStrList);
 								datasetException.setNoDocument(false);
 								spagoBIServerObjects.getServerDatasets().saveDataSet(ds);							}
 							catch (Exception e) {
 								logger.error("error in reading JSON object, update failed", e);
-							}							
-
+							}	
 
 						}
-					}
-
-					catch (NoActiveServerException e1) {
-						// no active server found 
-						noActiveServerException.setNoServer(true);
-					}
-					catch (RemoteException e) {
-						if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
-							logger.error("Current User has no permission to deploy dataset", e);
-							notAllowedOperationStudioException.setNotAllowed(true);
 						}
-						else{
-							logger.error("Error comunicating with server", e);		
-							MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-									"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
-						}
-					}
 
-					monitor.done();
-					if (monitor.isCanceled())
-						logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));
+						catch (NoActiveServerException e1) {
+							// no active server found 
+							noActiveServerException.setNoServer(true);
+						}
+						catch (RemoteException e) {
+							if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
+								logger.error("Current User has no permission to deploy dataset", e);
+								notAllowedOperationStudioException.setNotAllowed(true);
+							}
+							else{
+								logger.error("Error comunicating with server", e);		
+								MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+										"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
+							}
+						}
+
+						monitor.done();
+						if (monitor.isCanceled())
+							logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));
+					}
+				};
+
+
+				ProgressMonitorDialog dialog=new ProgressMonitorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());		
+				try {
+					dialog.run(true, true, op);
+				} 
+				catch (InvocationTargetException e1) {
+					logger.error("Error comunicating with server", e1);			
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"Error", "Missing comunication with server; check server definition and if service is avalaible");	
+					dialog.close();
+					return false;
+				} catch (InterruptedException e1) {
+					logger.error("Error comunicating with server", e1);			
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"Error", "Missing comunication with server; check server definition and if service is avalaible");	
+					dialog.close();
+					return false;
+				} 
+				if(datasetException.isNoDocument()){
+					logger.error("Document no more present");			
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"Error upload", "Dataset is no more present on server; you can do a new deploy");	
+					sbdw.setNewDeployFromOld(true);
+					newDeployFromOld = true;
 				}
-			};
+				if(noActiveServerException.isNoServer()){
+					logger.error("No server is defined active");			
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"Error", "No server is defined active");	
+					return false;
+				}
 
-
-			ProgressMonitorDialog dialog=new ProgressMonitorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());		
-			try {
-				dialog.run(true, true, op);
-			} 
-			catch (InvocationTargetException e1) {
-				logger.error("Error comunicating with server", e1);			
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error", "Missing comunication with server; check server definition and if service is avalaible");	
 				dialog.close();
-				return false;
-			} catch (InterruptedException e1) {
-				logger.error("Error comunicating with server", e1);			
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error", "Missing comunication with server; check server definition and if service is avalaible");	
-				dialog.close();
-				return false;
-			} 
-			if(datasetException.isNoDocument()){
-				logger.error("Document no more present");			
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error upload", "Dataset is no more present on server; you can do a new deploy");	
-				sbdw.setNewDeployFromOld(true);
-				newDeployFromOld = true;
+
+				if(notAllowedOperationStudioException.isNotAllowed()){
+					logger.error("Current User has no permission to deploy dataset");
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", "Current user has no permission to deploy dataset");
+					return false;
+				}
+
+				if(!newDeployFromOld){
+					MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated dataset "+datasetLabel+" succesfull");		
+					logger.debug("Deployed to the associated document "+datasetLabel+" succesfull");		
+					automatic = true;
+				}
 			}
-			if(noActiveServerException.isNoServer()){
-				logger.error("No server is defined active");			
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error", "No server is defined active");	
-				return false;
+			else{
+				automatic = false;
 			}
 
-			dialog.close();
+			if(!automatic || newDeployFromOld )
+			{
+				logger.debug("deploy a new Dataset: start wizard");		
+				// init wizard
+				sbdw.init(PlatformUI.getWorkbench(), sel);
+				// Create the wizard dialog
+				WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbdw);
 
-			if(notAllowedOperationStudioException.isNotAllowed()){
-				logger.error("Current User has no permission to deploy dataset");
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", "Current user has no permission to deploy dataset");
-				return false;
+				// Open the wizard dialog
+				dialog.open();	
 			}
 
-			if(!newDeployFromOld){
-				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated dataset "+datasetLabel+" succesfull");		
-				logger.debug("Deployed to the associated document "+datasetLabel+" succesfull");		
-				automatic = true;
-			}
-		}
-		else{
-			automatic = false;
+
+			logger.debug("OUT");
+			return automatic;
+
 		}
 
-		if(!automatic || newDeployFromOld )
-		{
-			logger.debug("deploy a new Dataset: start wizard");		
-			// init wizard
-			sbdw.init(PlatformUI.getWorkbench(), sel);
-			// Create the wizard dialog
-			WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbdw);
+		/**
+		 *  TODO CHECK not to lose some configurations
+		 * @param object
+		 * @param query
+		 * @return
+		 */
 
-			// Open the wizard dialog
-			dialog.open();	
+		public static String adaptQueryToList(String query){
+			String toReturn = null;
+			toReturn = "{\"catalogue\": " +
+			"{\"queries\": " +
+			"[";
+			toReturn+=query;
+			toReturn+="]}, "+
+			"	\"version\":"+SpagoBIStudioConstants.QBE_VERSION+"," +
+			"	\"generator\": SpagoBIMeta }	";
+			logger.debug("adapted query is "+toReturn);
+			return toReturn;
+
 		}
 
+		/** get metaQuery from JSON Object
+		 * 
+		 * @param objSel
+		 * @return
+		 */
+		public static String getMetaQuery(IFile objSel){
 
-		logger.debug("OUT");
-		return automatic;
+			logger.debug("IN");
+
+			String queryStr = null;
+			try{
+				JSONObject obj = JSONReader.createJSONObject(objSel);
+				//JSONObject queryMeta = obj.optJSONObject("queryMeta");
+				queryStr = obj.optString("query");
+				logger.debug("query is :"+queryStr);
+			}
+			catch (Exception e) {
+				logger.error("error in reading JSON object", e);
+			}
+			return queryStr;
+		}
+
 
 	}
-
-	/**
-	 *  TODO CHECK not to lose some configurations
-	 * @param object
-	 * @param query
-	 * @return
-	 */
-
-	public static String adaptQueryToList(String query){
-		String toReturn = null;
-		toReturn = "{\"catalogue\": " +
-		"{\"queries\": " +
-		"[";
-		toReturn+=query;
-		toReturn+="], "+
-		"	\"version\":"+SpagoBIStudioConstants.QBE_VERSION+"," +
-		"	\"generator\": SpagoBIMeta }	";
-		logger.debug("adapted query is "+toReturn);
-		return toReturn;
-
-	}
-
-	/** get metaQuery from JSON Object
-	 * 
-	 * @param objSel
-	 * @return
-	 */
-	public static String getMetaQuery(IFile objSel){
-
-		logger.debug("IN");
-
-		String queryStr = null;
-		try{
-			JSONObject obj = JSONReader.createJSONObject(objSel);
-			//JSONObject queryMeta = obj.optJSONObject("queryMeta");
-			queryStr = obj.optString("query");
-			logger.debug("query is :"+queryStr);
-		}
-		catch (Exception e) {
-			logger.error("error in reading JSON object", e);
-		}
-		return queryStr;
-	}
-
-
-}

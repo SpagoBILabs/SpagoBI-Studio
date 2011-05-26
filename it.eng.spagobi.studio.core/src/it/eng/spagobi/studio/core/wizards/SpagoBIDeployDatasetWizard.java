@@ -113,7 +113,9 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 
 		try{
 			// it is important to delete previous metadata!
+			//fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setDataSetMetaData(fileSel,newDataset);
 			fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setFileDataSetMetaData(fileSel,newDataset);
+			
 		}
 		catch (CoreException e) {
 			logger.error("Error while setting meta data",e);		
@@ -165,9 +167,9 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		String valuePivot = formPage.getValuePivotText().getText();
 		boolean numberedColumnsPivot = formPage.getNumberedColumnsPivotCheck().getSelection();
 
-		String query = formPage.getQueryText().getText();
+//		String query = formPage.getQueryText().getText();
 		// adapt query to list
-		String queryAdapted = DeployDatasetService.adaptQueryToList(query);
+		String queryAdapted = DeployDatasetService.adaptQueryToList(formPage.getQuery());
 
 
 		toReturn = new Dataset();

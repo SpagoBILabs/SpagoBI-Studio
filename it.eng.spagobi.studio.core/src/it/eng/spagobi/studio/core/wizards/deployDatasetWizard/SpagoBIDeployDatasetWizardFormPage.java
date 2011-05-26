@@ -82,7 +82,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	private Label typeLabel;
 	private Label datamartLabel;
 
-	private Text queryText;
+private String query;
 
 
 	private Map<String, Integer> dataSourceLabelIdMap;
@@ -132,15 +132,16 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		parent.setLayout(fl2);
 
 		final Composite left=new Composite(parent,SWT.BORDER);
-		final Composite right =  new Composite(parent, SWT.BORDER);
+//		final Composite right =  new Composite(parent, SWT.BORDER);
+//
 		// Left
 		GridLayout gl = new GridLayout();
 		int ncol = 2;
 		gl.numColumns = ncol;
 		left.setLayout(gl);
-		// Right
-		FillLayout fl=new FillLayout();
-		right.setLayout(fl);
+//		// Right
+//		FillLayout fl=new FillLayout();
+//		right.setLayout(fl);
 
 
 		// *************** Container **********************
@@ -271,7 +272,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 				numberedColumnsPivotLabel.setEnabled(selected);
 				numberedColumnsPivotCheck.setEnabled(selected);
 				numberedColumnsPivotCheck.redraw();
-
+				
 				//setControl(left);
 				//				lab.update();
 				//				lab.redraw();
@@ -281,11 +282,11 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 			}
 		});
 
-		queryText = new Text(right, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+//		queryText = new Text(left, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		fillValues();
 
 		setControl(left);
-		setControl(right);
+		setControl(parent);
 
 	}
 
@@ -299,8 +300,8 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		String queryStr = DeployDatasetService.getMetaQuery(fileSel);
 		logger.debug("Query in file is "+queryStr);
 		queryStr = queryStr != null ? queryStr : "";
-		queryText.setText(queryStr);
-
+//		queryText.setText(queryStr);
+		query = queryStr;
 
 		// first of all get info from server		
 		final SpagoBIServerObjectsFactory proxyObjects;
@@ -538,13 +539,13 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	}
 
 
-	public Text getQueryText() {
-		return queryText;
+	public String getQuery() {
+		return query;
 	}
 
 
-	public void setQueryText(Text query) {
-		this.queryText = query;
+	public void setQuery(String query) {
+		this.query = query;
 	}
 
 
