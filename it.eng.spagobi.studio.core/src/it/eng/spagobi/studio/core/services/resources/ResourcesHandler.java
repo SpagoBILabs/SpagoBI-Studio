@@ -1,5 +1,8 @@
 package it.eng.spagobi.studio.core.services.resources;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -19,25 +22,28 @@ public class ResourcesHandler {
 
 		IStructuredSelection sel=(IStructuredSelection)selection;
 
-		Object objSel = sel.toList().get(0);
-		if(objSel instanceof IResource){
+		List<Object> list = sel.toList();
+		boolean delete = MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Delete Reosurce", "Confirm Deleting resource");
+		if(delete){
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Object objSel = (Object) iterator.next();
 
-			boolean delete = MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Delete Reosurce", "Confirm Deleting resource");
-			if(delete){
-				IResource res = (IResource) objSel;
-				try{
-					res.delete(true, null);
-					logger.debug("resource cancelled");
-					toreturn = true;
-				}
-				catch (Exception e) {
-					logger.error("Error in deleting the resource", e);	
-					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in deleting the resource; try deleting it from resource navigato view");
-					toreturn = false;
+				if(objSel instanceof IResource){
+					IResource res = (IResource) objSel;
+					try{
+						res.delete(true, null);
+						logger.debug("resource cancelled "+res.getName());
+				
+					}
+					catch (Exception e) {
+						logger.error("Error in deleting the resource", e);	
+						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in deleting the resource; try deleting it from resource navigato view");
+						toreturn = false;
+					}
 				}
 			}
+			toreturn = true;
 		}
-
 		logger.debug("OUT");
 		return true;
 
