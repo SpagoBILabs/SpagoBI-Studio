@@ -70,20 +70,12 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	private Combo dataSourceCombo; 
 	private Button transformerCheck;
 
-	private Group pivotGroup;
-	private Label columnPivotLabel;
-	private Label rowPivotLabel;
-	private Label valuePivotLabel;
-	private Label numberedColumnsPivotLabel;
-	private Text columnPivotText;
-	private Text rowPivotText;
-	private Text valuePivotText;
-	private Button numberedColumnsPivotCheck;
 	private Label typeLabel;
 	private Label datamartLabel;
 
-private String query;
+	private String query;
 
+	Composite all = null;
 
 	private Map<String, Integer> dataSourceLabelIdMap;
 
@@ -115,7 +107,8 @@ private String query;
 	 */
 	public void createControl(final Composite parent) {
 		logger.debug("IN");
-		Shell shell = parent.getShell();
+		all=new Composite(parent, SWT.NONE);
+		Shell shell = all.getShell();
 		shell.setSize(800,600);
 		monitor=new ProgressMonitorPart(getShell(), null);
 
@@ -129,19 +122,19 @@ private String query;
 
 		FillLayout fl2=new FillLayout();
 		fl2.type=SWT.HORIZONTAL;
-		parent.setLayout(fl2);
+		all.setLayout(fl2);
 
-		final Composite left=new Composite(parent,SWT.BORDER);
-//		final Composite right =  new Composite(parent, SWT.BORDER);
-//
+		final Composite left=new Composite(all,SWT.BORDER);
+		//		final Composite right =  new Composite(parent, SWT.BORDER);
+		//
 		// Left
 		GridLayout gl = new GridLayout();
 		int ncol = 2;
 		gl.numColumns = ncol;
 		left.setLayout(gl);
-//		// Right
-//		FillLayout fl=new FillLayout();
-//		right.setLayout(fl);
+		//		// Right
+		//		FillLayout fl=new FillLayout();
+		//		right.setLayout(fl);
 
 
 		// *************** Container **********************
@@ -220,73 +213,27 @@ private String query;
 		new Label(left, SWT.NONE).setText("Transformer: ");
 		transformerCheck = new Button(left, SWT.CHECK);
 
-		// pivot group
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;		
-		pivotGroup = new Group(left, SWT.NULL);
-		pivotGroup.setText("Pivot");
-		pivotGroup.setLayoutData(gridData);
-		pivotGroup.setLayout(new FillLayout());
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		layout.horizontalSpacing = 10;
-		Composite pivotContainer = new Composite(pivotGroup, SWT.NULL);
-		pivotContainer.setLayout(layout);
-		columnPivotLabel = new Label(pivotContainer, SWT.NONE);
-		columnPivotLabel.setText("Column: ");	
-		columnPivotLabel.setEnabled(true);
-		columnPivotText= new Text(pivotContainer, SWT.BORDER);
-		columnPivotText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		columnPivotText.setEnabled(true);
-		rowPivotLabel = new Label(pivotContainer, SWT.NONE);
-		rowPivotLabel.setText("Row: ");	
-		rowPivotLabel.setEnabled(true);
-		rowPivotText= new Text(pivotContainer, SWT.BORDER);
-		rowPivotText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		rowPivotText.setEnabled(true);
-		valuePivotLabel = new Label(pivotContainer, SWT.NONE);
-		valuePivotLabel.setText("Value: ");	
-		valuePivotLabel.setEnabled(true);		
-		valuePivotText= new Text(pivotContainer, SWT.BORDER);
-		valuePivotText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		valuePivotText.setEnabled(true);
-		numberedColumnsPivotLabel = new Label(pivotContainer, SWT.NONE);
-		numberedColumnsPivotLabel.setText("Value: ");	
-		numberedColumnsPivotLabel.setEnabled(true);
-		numberedColumnsPivotCheck = new Button(pivotContainer, SWT.CHECK);
-		numberedColumnsPivotCheck.setEnabled(true);		
-
-
-
-
-		// enable / disable pivot group
-		transformerCheck.addListener(SWT.SELECTED, new Listener () {
+		transformerCheck.addListener(SWT.Selection, new Listener () {
+			
 			public void handleEvent (Event event) {
-				final boolean selected = transformerCheck.getSelection();
-				columnPivotLabel.setEnabled(selected);
-				columnPivotText.setEnabled(selected);
-				rowPivotLabel.setEnabled(selected);
-				rowPivotText.setEnabled(selected);
-				valuePivotLabel.setEnabled(selected);
-				valuePivotText.setEnabled(selected);
-				numberedColumnsPivotLabel.setEnabled(selected);
-				numberedColumnsPivotCheck.setEnabled(selected);
-				numberedColumnsPivotCheck.redraw();
-				
-				//setControl(left);
-				//				lab.update();
-				//				lab.redraw();
-				//				left.update();
-				//				Display.getCurrent().update();
+
+				//check if page is complete
+				boolean complete=isPageComplete();
+				if(complete){
+					setPageComplete(true);
+				}
+				else{
+					setPageComplete(false);	        	
+				}
 
 			}
 		});
 
-//		queryText = new Text(left, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		//		queryText = new Text(left, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		fillValues();
 
 		setControl(left);
-		setControl(parent);
+		setControl(all);
 
 	}
 
@@ -300,7 +247,7 @@ private String query;
 		String queryStr = DeployDatasetService.getMetaQuery(fileSel);
 		logger.debug("Query in file is "+queryStr);
 		queryStr = queryStr != null ? queryStr : "";
-//		queryText.setText(queryStr);
+		//		queryText.setText(queryStr);
 		query = queryStr;
 
 		// first of all get info from server		
@@ -427,7 +374,8 @@ private String query;
 		boolean isComplete=true;
 		String labelTextS=labelText.getText();
 		String nameTextS=nameText.getText();
-
+		boolean transform = transformerCheck.getSelection();
+		if(transform == true) return false;
 		if(labelTextS==null || nameTextS==null || labelTextS.equalsIgnoreCase("") || nameTextS.equalsIgnoreCase("")){
 			return false;
 		}
@@ -465,77 +413,6 @@ private String query;
 
 	public void setTransformerCheck(Button transformerCheck) {
 		this.transformerCheck = transformerCheck;
-	}
-
-
-	public Label getRowPivotLabel() {
-		return rowPivotLabel;
-	}
-
-
-	public void setRowPivotLabel(Label rowPivotLabel) {
-		this.rowPivotLabel = rowPivotLabel;
-	}
-
-
-	public Label getValuePivotLabel() {
-		return valuePivotLabel;
-	}
-
-
-	public void setValuePivotLabel(Label valuePivotLabel) {
-		this.valuePivotLabel = valuePivotLabel;
-	}
-
-
-	public Label getNumberedColumnsPivotLabel() {
-		return numberedColumnsPivotLabel;
-	}
-
-
-	public void setNumberedColumnsPivotLabel(Label numberedColumnsPivotLabel) {
-		this.numberedColumnsPivotLabel = numberedColumnsPivotLabel;
-	}
-
-
-
-	public Text getColumnPivotText() {
-		return columnPivotText;
-	}
-
-
-	public void setColumnPivotText(Text columnPivotText) {
-		this.columnPivotText = columnPivotText;
-	}
-
-
-	public Text getRowPivotText() {
-		return rowPivotText;
-	}
-
-
-	public void setRowPivotText(Text rowPivotText) {
-		this.rowPivotText = rowPivotText;
-	}
-
-
-	public Text getValuePivotText() {
-		return valuePivotText;
-	}
-
-
-	public void setValuePivotText(Text valuePivotText) {
-		this.valuePivotText = valuePivotText;
-	}
-
-
-	public Button getNumberedColumnsPivotCheck() {
-		return numberedColumnsPivotCheck;
-	}
-
-
-	public void setNumberedColumnsPivotCheck(Button numberedColumnsPivotCheck) {
-		this.numberedColumnsPivotCheck = numberedColumnsPivotCheck;
 	}
 
 
@@ -596,6 +473,12 @@ private String query;
 
 	public void setDatamartLabel(Label datamartLabel) {
 		this.datamartLabel = datamartLabel;
+	}
+
+
+	@Override
+	public boolean canFlipToNextPage() {
+		return transformerCheck.getSelection();
 	}
 
 

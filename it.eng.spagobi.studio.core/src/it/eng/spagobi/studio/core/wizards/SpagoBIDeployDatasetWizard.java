@@ -3,18 +3,14 @@ package it.eng.spagobi.studio.core.wizards;
 
 import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
 import it.eng.spagobi.studio.core.wizards.deployDatasetWizard.SpagoBIDeployDatasetWizardFormPage;
+import it.eng.spagobi.studio.core.wizards.deployDatasetWizard.SpagoBIDeployDatasetWizardPivotPage;
 import it.eng.spagobi.studio.utils.bo.Dataset;
-import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
-import java.io.File;
 import java.net.URI;
-
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -28,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 	private SpagoBIDeployDatasetWizardFormPage formPage;
+	private SpagoBIDeployDatasetWizardPivotPage pivotPage;
 
 	String projectName = null;
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployDatasetWizard.class);
@@ -49,9 +46,42 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 	 */
 
 	public void addPages() {
+		logger.debug("IN");
 		formPage = new SpagoBIDeployDatasetWizardFormPage(selection);
 		addPage(formPage);
+		pivotPage = new SpagoBIDeployDatasetWizardPivotPage(selection);
+		addPage(pivotPage);
+		logger.debug("OUT");
 	}
+
+	@Override
+	public boolean canFinish() {
+		// TODO Auto-generated method stub
+		boolean toReturn = super.canFinish();
+// check
+		boolean isComplete=true;
+		String labelTextS=formPage.getLabelText().getText();
+		String nameTextS=formPage.getNameText().getText();
+		boolean transform = formPage.getTransformerCheck().getSelection();
+		if(labelTextS==null || nameTextS==null || labelTextS.equalsIgnoreCase("") || nameTextS.equalsIgnoreCase("")){
+			return false;
+		}
+		if(transform == true) {
+			String rowPivot = pivotPage.getRowPivotText().getText();
+			String columnPivot = pivotPage.getColumnPivotText().getText();
+			String valuePivot = pivotPage.getValuePivotText().getText();
+			if(valuePivot == null || rowPivot==null || nameTextS==null || rowPivot.equalsIgnoreCase("") || columnPivot.equalsIgnoreCase("") || valuePivot.equalsIgnoreCase("")){
+				return false;
+			}	
+			
+		}
+
+		return isComplete;
+
+		
+	}
+
+
 
 	/**
 	 * This method is called when 'Finish' button is pressed in
@@ -115,7 +145,7 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 			// it is important to delete previous metadata!
 			//fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setDataSetMetaData(fileSel,newDataset);
 			fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setFileDataSetMetaData(fileSel,newDataset);
-			
+
 		}
 		catch (CoreException e) {
 			logger.error("Error while setting meta data",e);		
@@ -162,12 +192,12 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		}
 
 		boolean transformer = formPage.getTransformerCheck().getSelection();
-		String columnPivot = formPage.getColumnPivotText().getText();
-		String rowPivot = formPage.getRowPivotText().getText();
-		String valuePivot = formPage.getValuePivotText().getText();
-		boolean numberedColumnsPivot = formPage.getNumberedColumnsPivotCheck().getSelection();
+		String columnPivot = pivotPage.getColumnPivotText().getText();
+		String rowPivot = pivotPage.getRowPivotText().getText();
+		String valuePivot = pivotPage.getValuePivotText().getText();
+		boolean numberedColumnsPivot = pivotPage.getNumberedColumnsPivotCheck().getSelection();
 
-//		String query = formPage.getQueryText().getText();
+		//		String query = formPage.getQueryText().getText();
 		// adapt query to list
 		String queryAdapted = DeployDatasetService.adaptQueryToList(formPage.getQuery());
 
