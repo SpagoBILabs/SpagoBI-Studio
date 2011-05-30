@@ -140,7 +140,7 @@ public class DeployDocumentAction implements IObjectActionDelegate {
 						template.setContent(dataHandler);
 
 						// check document still exists
-						Document doc=spagoBIServerObjects.getServerDocuments().getDocumentById(idInteger);
+						Document doc=spagoBIServerObjects.getServerDocuments().getDocumentByLabel(label2);
 						if(doc==null){
 							documentException.setNoDocument(true);
 							logger.warn("Document no more present on server: with id "+idInteger);					

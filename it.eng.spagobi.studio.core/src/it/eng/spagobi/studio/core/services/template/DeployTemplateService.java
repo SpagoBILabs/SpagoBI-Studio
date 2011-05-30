@@ -102,7 +102,8 @@ public class DeployTemplateService {
 						template.setContent(dataHandler);
 
 						// check document still exists
-						Document doc=spagoBIServerObjects.getServerDocuments().getDocumentById(idInteger);
+						//Document doc=spagoBIServerObjects.getServerDocuments().getDocumentById(idInteger);
+						Document doc=spagoBIServerObjects.getServerDocuments().getDocumentByLabel(label2);
 						if(doc==null){
 							documentException.setNoDocument(true);
 							logger.warn("Document not retrieved; check it is still on server and you have enough permission to reach it"+idInteger);					

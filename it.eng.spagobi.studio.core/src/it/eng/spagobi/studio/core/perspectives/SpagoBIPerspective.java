@@ -95,12 +95,13 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		factory.addPerspectiveShortcut(PERSPECTIVE_ID);
 		factory.addShowViewShortcut(ResourceNavigator.VIEW_ID);
 		factory.addNewWizardShortcut(NewSpagoBIProjectWizard.SPAGOBI_PROJECT_WIZARD_ID);
+		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
+		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");
 	}
 
 	private void addActions() {
 		// Add "new wizards".
-		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
-		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");
+
 	}
 
 

@@ -36,6 +36,7 @@ public class MetadataHandler {
 	public void refreshMetadata(IFile file, NoDocumentException noDocumentException, NoActiveServerException noActiveServerException) throws Exception{
 		logger.debug("IN");
 		String documentId=null;
+		String documentLabel = null;
 		String projectname = file.getProject().getName();
 		// Recover document
 		Document document=null;
@@ -50,10 +51,10 @@ public class MetadataHandler {
 		}
 
 		try{
-			documentId=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
+//			documentId=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
 
-
-			document=proxyServerObjects.getServerDocuments().getDocumentById(Integer.valueOf(documentId));
+			documentLabel =file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_LABEL);
+			document=proxyServerObjects.getServerDocuments().getDocumentByLabel(documentLabel);
 		}
 		catch (Exception e) {
 			logger.error("Could not recover document Id",e);		

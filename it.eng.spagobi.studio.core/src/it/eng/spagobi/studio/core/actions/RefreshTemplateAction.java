@@ -138,7 +138,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 						spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectName);
 
 						// check document still exists
-						document=spagoBIServerObjects.getServerDocuments().getDocumentById(idInteger);
+						document=spagoBIServerObjects.getServerDocuments().getDocumentByLabel(label2);
 						if(document==null){
 							documentException.setNoDocument(true);
 							return;

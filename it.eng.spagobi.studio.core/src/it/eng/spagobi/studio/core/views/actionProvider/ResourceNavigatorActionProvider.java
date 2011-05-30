@@ -16,6 +16,7 @@ import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
 import it.eng.spagobi.studio.core.services.resources.ResourcesHandler;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
+import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 import it.eng.spagobi.studio.core.wizards.downloadWizard.SpagoBIDownloadWizard;
@@ -79,6 +80,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		IStructuredSelection sel=(IStructuredSelection)currentContext.getSelection();
 
 		Object objSel = null; 
+		
+		setSpagoBIProjectWizard(menu);
+		
 		// actions to be done on one single selection
 		if(sel.toList()!= null && sel.toList().size()<=1){
 			objSel = sel.toList().get(0);
@@ -131,7 +135,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			logger.debug("Folder not system");
 			setDeleteResourceWizard(menu);	
 		}
-
 
 		IContributionItem[] contributionItems = menu.getItems()	;
 		for (int j = 0; j < contributionItems.length; j++) {
@@ -415,32 +418,33 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		menu.appendToGroup("group.edit", delACI);
 	}
 
-	public void setDeleteModelWizard(IMenuManager menu){
+	
+	
+	public void setSpagoBIProjectWizard(IMenuManager menu){
 
 		ActionContributionItem delACI = new ActionContributionItem(new Action()
 		{	public void run() {
-			logger.debug("Delete Model action");
+			logger.debug("Spagobi Project");
+			NewSpagoBIProjectWizard sbindw = new NewSpagoBIProjectWizard(); 
+			sbindw.init(PlatformUI.getWorkbench(), (IStructuredSelection)currentContext.getSelection());
+			// Create the wizard dialog
+			WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbindw);
+			// Open the wizard dialog
+			dialog.open();
 
-			boolean confirm = MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-					"Confirm delete", "You want to delete model and its reference?");
-			if(confirm){
-				DeleteModelObjectAction dts = new DeleteModelObjectAction(true); 
-				//dts.createCommand(selection)
-				dts.run();
-			}
+			
 		}
 		});
-		delACI.getAction().setText("Delete");
-		delACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DELETE, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.edit", delACI);
+		delACI.getAction().setText("SpagoBI Project");
+		delACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_SPAGOBI, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", delACI);
 	}
 
 
 
 
 
-
-
+	
 
 
 }
