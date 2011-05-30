@@ -166,6 +166,7 @@ public class SpagoBIStudioConstants {
 	public static final String ICON_WIZARD_MODEL = "metadata.png";
 	public static final String ICON_WIZARD_DELETE = "delete.png";
 	public static final String ICON_WIZARD_QUERY = "query.gif";
+	public static final String ICON_WIZARD_SPAGOBI = "sbiproject.gif";
 	
 	
 	
