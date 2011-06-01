@@ -81,7 +81,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 		Object objSel = null; 
 		
-		setSpagoBIProjectWizard(menu);
+		//setSpagoBIProjectWizard(menu);
 		
 		// actions to be done on one single selection
 		if(sel.toList()!= null && sel.toList().size()<=1){
