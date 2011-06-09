@@ -45,7 +45,7 @@
   <!-- HOOK with console  																		-->
   <!-- ===============================================================================  -->
   
-  <consolePlugin />
+   <!--  consolePlugin /-->
   
   
 </configuration>
