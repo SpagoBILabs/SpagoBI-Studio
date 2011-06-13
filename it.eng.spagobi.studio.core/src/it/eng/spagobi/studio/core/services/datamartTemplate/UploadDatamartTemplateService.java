@@ -60,7 +60,7 @@ public class UploadDatamartTemplateService {
 		Model root = null;
 		BusinessModel businessModel= null;
 		try{
-			root = emfXmiSerializer.deserialize(fileSel.getContents());
+			root = emfXmiSerializer.deserialize(fileSel.getContents(true));
 			logger.debug("Model root is [{}] ",root );
 			businessModel = root.getBusinessModels().get(0);
 			logger.debug("model "+businessModel.getName());	
