@@ -223,7 +223,7 @@ public class DeployDatasetService {
 			toReturn+=query;
 			toReturn+="]}, "+
 			"	\"version\":"+SpagoBIStudioConstants.QBE_VERSION+"," +
-			"	\"generator\": SpagoBIMeta }	";
+			"	\"generator\": \"SpagoBIMeta\" }	";
 			logger.debug("adapted query is "+toReturn);
 			return toReturn;
 
