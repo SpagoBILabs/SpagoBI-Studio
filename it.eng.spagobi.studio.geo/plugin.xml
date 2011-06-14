@@ -12,6 +12,7 @@
             name="GEO Editor">
       </editor>
    </extension>
+   <!--
   <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
@@ -37,5 +38,5 @@
                style="push" /> 
       </objectContribution>
    </extension>
-   
+   -->
  </plugin>
