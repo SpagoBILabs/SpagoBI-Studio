@@ -12,6 +12,7 @@
             name="Document Composition Editor">
       </editor>
    </extension>
+  <!--
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
@@ -37,6 +38,7 @@
 
       </objectContribution>
    </extension>
+   -->
    <extension point="org.eclipse.ui.views">
 		<view
         category="it.eng.spagobi.studio.doccomp"

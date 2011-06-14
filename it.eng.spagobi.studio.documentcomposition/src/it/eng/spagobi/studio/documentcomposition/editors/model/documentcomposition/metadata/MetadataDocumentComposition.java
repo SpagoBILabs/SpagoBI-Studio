@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata;
 
-import it.eng.spagobi.studio.documentcomposition.actions.NewWorkbenchDocumentCompositionAction;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Iterator;
