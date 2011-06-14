@@ -12,6 +12,7 @@
             id="it.eng.spagobi.studio.dashboard.editors.DashboardEditor">
       </editor>
    </extension>
+   <!--
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
@@ -34,8 +35,8 @@
             style="push"
             menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
             class="it.eng.spagobi.studio.dashboard.actions.NewDashboardAction" />
-            <!-- menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" -->
+       // menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI" 
       </objectContribution>
    </extension>
-
+-->
 </plugin>
