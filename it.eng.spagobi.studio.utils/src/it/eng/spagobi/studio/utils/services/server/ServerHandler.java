@@ -55,6 +55,7 @@ public class ServerHandler {
 		boolean testResult = false;
 		message = "";
 		try {
+			ClassLoaderUtilities.setSpagoBIClassLoader();
 			TestConnectionServiceProxy proxy = new TestConnectionServiceProxy(server.getUser(), server.getPassword());
 			proxy.setEndpoint(server.getUrl() + "/sdk/TestConnectionService");
 			// set proxy configurations!
