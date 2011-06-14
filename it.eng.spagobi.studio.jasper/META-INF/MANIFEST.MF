@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jasper Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.jasper;singleton:=true
-Bundle-Version: 2.6.5
+Bundle-Version: 3.0.0
 Bundle-ClassPath: lib/dom4j.jar,
  .,
  lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
