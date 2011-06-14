@@ -1,5 +1,5 @@
             ===================================================
-                      SpagoBI Studio 2.6.5 source code
+                      SpagoBI Studio 3.0.0 source code
             ===================================================
             
 Each SpagoBiStudio plugin contains source code in src/ folder.
