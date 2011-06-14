@@ -150,7 +150,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 							template.setFileName(mytemplate.getFileName());
 							// get documents metadata
 							String fileExtension=recoverFileExtension(document,idInteger);						
-							overwriteTemplate(template, fileSel2, fileExtension);
+							overwriteTemplate(template, fileSel2, fileExtension, spagoBIServerObjects);
 						}
 					}
 
@@ -246,7 +246,11 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 
 
-	public void overwriteTemplate(Template template, org.eclipse.core.internal.resources.File fileSel, String extension) throws CoreException{
+	public void overwriteTemplate(Template template, 
+			org.eclipse.core.internal.resources.File fileSel, 
+			String extension,
+			SpagoBIServerObjectsFactory proxyServerObjects
+	) throws CoreException{
 		// get template URL to overwrite
 		try {
 			URI uri=fileSel.getLocationURI();
@@ -305,7 +309,7 @@ public class RefreshTemplateAction implements IObjectActionDelegate {
 
 			//Set File Metadata	
 			try{
-				newFile=BiObjectUtilities.setFileMetaData(newFile,document, true);
+				newFile=BiObjectUtilities.setFileMetaData(newFile,document, true,proxyServerObjects);
 				//newFile=BiObjectUtilities.setFileMetaData(newFile,document);
 
 				//Set ParametersFile Metadata	

@@ -435,7 +435,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 
 			//Set File Metadata	
 			try{
-				newFile=BiObjectUtilities.setFileMetaData(newFile,document, false);
+				newFile=BiObjectUtilities.setFileMetaData(newFile,document, false, spagoBIServerObjects);
 			}
 			catch (CoreException e) {
 				logger.error("Error while setting meta data", e);	

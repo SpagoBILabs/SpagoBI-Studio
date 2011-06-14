@@ -230,7 +230,7 @@ public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 
 		try{
 			// it is important to delete previous metadata!
-			fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setFileMetaData(fileSel,newDocument, newDeployFromOld);
+			fileSel=(org.eclipse.core.internal.resources.File)BiObjectUtilities.setFileMetaData(fileSel,newDocument, newDeployFromOld, proxyServerObjects);
 		}
 		catch (CoreException e) {
 			SpagoBILogger.errorLog("Error while setting meta data",e);		

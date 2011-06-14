@@ -154,8 +154,8 @@ public class RefreshTemplateService {
 							template.setContent(mytemplate.getContent());
 							template.setFileName(mytemplate.getFileName());
 							// get documents metadata
-							String fileExtension=recoverFileExtension(document,idInteger);						
-							overwriteTemplate(template, fileSel2, fileExtension);
+							String fileExtension=recoverFileExtension(document,idInteger, spagoBIServerObjects);						
+							overwriteTemplate(template, fileSel2, fileExtension, spagoBIServerObjects);
 						}
 					}
 
@@ -245,7 +245,10 @@ public class RefreshTemplateService {
 
 
 
-	public void overwriteTemplate(Template template, org.eclipse.core.internal.resources.File fileSel, String extension) throws CoreException{
+	public void overwriteTemplate(Template template, 
+			org.eclipse.core.internal.resources.File fileSel, 
+			String extension,
+			SpagoBIServerObjectsFactory proxyServerObjects) throws CoreException{
 		// get template URL to overwrite
 		try {
 			URI uri=fileSel.getLocationURI();
@@ -304,7 +307,7 @@ public class RefreshTemplateService {
 
 			//Set File Metadata	
 			try{
-				newFile=BiObjectUtilities.setFileMetaData(newFile,document, true);
+				newFile=BiObjectUtilities.setFileMetaData(newFile,document, true, proxyServerObjects);
 				//newFile=BiObjectUtilities.setFileMetaData(newFile,document);
 
 				//Set ParametersFile Metadata	
@@ -338,19 +341,7 @@ public class RefreshTemplateService {
 	 * @return
 	 */
 
-	public String recoverFileExtension(Document document, Integer documentId){
-		//Get the parameters
-		SDKProxyFactory proxyFactory = null;
-		SpagoBIServerObjectsFactory proxyServerObjects = null;
-		try{
-			proxyServerObjects = new SpagoBIServerObjectsFactory(projectName);
-		}
-		catch (NoActiveServerException e1) {
-			logger.error("No active server found", e1);			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "No active server found");	
-			return null;
-		}		
+	public String recoverFileExtension(Document document, Integer documentId, SpagoBIServerObjectsFactory proxyServerObjects){
 
 		try{
 			roles=proxyServerObjects.getServerDocuments().getCorrectRolesForExecution(documentId);
