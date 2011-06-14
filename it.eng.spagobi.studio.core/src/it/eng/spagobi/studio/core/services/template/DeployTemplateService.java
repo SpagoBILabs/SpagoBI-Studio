@@ -1,14 +1,5 @@
 package it.eng.spagobi.studio.core.services.template;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.rmi.RemoteException;
-
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-
-import it.eng.spagobi.studio.core.actions.DeployDocumentAction;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
@@ -17,7 +8,14 @@ import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
-import org.eclipse.core.resources.IFile;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.rmi.RemoteException;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
