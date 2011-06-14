@@ -9,6 +9,7 @@
             name="name">
       </editor>
    </extension>
+   <!--
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
@@ -34,6 +35,7 @@
             class="it.eng.spagobi.studio.jasper.actions.NewJasperAction" />
       </objectContribution>
    </extension>
+   -->
  <extension point = "org.eclipse.ui.editors">
    <editor
        id="org.eclipse.ui.IReport"
