@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Birt Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.birt;singleton:=true
-Bundle-Version: 2.6.5
+Bundle-Version: 3.0.0
 Bundle-Activator: it.eng.spagobi.studio.birt.Activator
 Require-Bundle: org.eclipse.core.resources;bundle-version="3.4.2",
  org.eclipse.ui.navigator;bundle-version="3.3.102",
