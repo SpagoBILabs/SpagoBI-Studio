@@ -119,16 +119,19 @@ public class BiObjectUtilities {
 	 * @throws CoreException
 	 */
 
-	public static IFile setFileMetaData(IFile newFile, Document document, boolean newDeployFromOld) throws CoreException, NoActiveServerException{
+	public static IFile setFileMetaData(IFile newFile, Document document, boolean newDeployFromOld, SpagoBIServerObjectsFactory proxyServer) throws CoreException, NoActiveServerException{
 
 		if(newDeployFromOld){
 			erasePersistentProperties(newFile);
 		}
 
 		String projectname = newFile.getProject().getName();
-		SpagoBIServerObjectsFactory proBiServerObjects = new SpagoBIServerObjectsFactory(projectname);
-		
-		if(proBiServerObjects == null){
+		if(proxyServer == null){
+			proxyServer = new SpagoBIServerObjectsFactory(projectname);
+		}
+
+
+		if(proxyServer == null){
 			logger.error("No active server is defined");
 			return null;
 		}
@@ -137,7 +140,7 @@ public class BiObjectUtilities {
 		Dataset dataSet=null;
 		if(document.getDataSetId()!=null){
 			try{
-				dataSet=proBiServerObjects.getServerDatasets().getDataSet(document.getDataSetId());
+				dataSet=proxyServer.getServerDatasets().getDataSet(document.getDataSetId());
 			}
 			catch (Exception e) {
 				logger.error("No comunication with SpagoBI server, could not retrieve dataset informations", e);
@@ -148,7 +151,7 @@ public class BiObjectUtilities {
 		DataSource dataSource=null;
 		if(document.getDataSourceId()!=null){
 			try{
-				dataSource=proBiServerObjects.getServerDataSources().getDataSource(document.getDataSourceId());
+				dataSource=proxyServer.getServerDataSources().getDataSource(document.getDataSourceId());
 			}
 			catch (Exception e) {
 				e.printStackTrace(); 
@@ -162,7 +165,7 @@ public class BiObjectUtilities {
 
 		Engine engine=null;
 		try{
-			engine=proBiServerObjects.getServerEngines().getEngine(engineId);
+			engine=proxyServer.getServerEngines().getEngine(engineId);
 		}
 		catch (Exception e) {
 			logger.error("No comunication with SpagoBI server, could not get engine", e);
@@ -187,7 +190,7 @@ public class BiObjectUtilities {
 			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_TYPE, document.getType());
 		}
 
-		newFile.setPersistentProperty(SpagoBIStudioConstants.SERVER, proBiServerObjects.getServerName());
+		newFile.setPersistentProperty(SpagoBIStudioConstants.SERVER, proxyServer.getServerName());
 
 
 		setFileEngineMetaData(newFile, engine);
@@ -318,11 +321,11 @@ public class BiObjectUtilities {
 
 	}
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	public static IFile setDataSetMetaData(IFile newFile, Dataset dataset) throws CoreException{
 		if(dataset!=null){
 			if(dataset.getId()!=null){
@@ -355,15 +358,15 @@ public class BiObjectUtilities {
 			if(dataset.getPivotRowName()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_ROW_NAME, dataset.getPivotRowName());
 			}
-			
+
 		}
 		return newFile;
 	}
 
-	
-	
-	
-	
+
+
+
+
 
 
 }
