@@ -51,6 +51,7 @@ public class Dataset {
 
 	private String datamarts;
 
+    private DatasetParameter[] parameters;
 
 	//private it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter[] parameters;
 
@@ -467,6 +468,16 @@ public class Dataset {
 
 	public void setDatamarts(String datamarts) {
 		this.datamarts = datamarts;
+	}
+
+
+	public DatasetParameter[] getParameters() {
+		return parameters;
+	}
+
+
+	public void setParameters(DatasetParameter[] parameters) {
+		this.parameters = parameters;
 	}
 
 
