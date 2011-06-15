@@ -76,6 +76,14 @@ public class SpagoBIServerObjectsFactory {
 		proxyHandler = new ProxyHandler(projectName);
 
 	}
+	
+	public SpagoBIServerObjectsFactory(Server server) throws NoActiveServerException {
+		super();
+		this.projectName = "";
+		proxyHandler = new ProxyHandler(server);
+
+	}
+	
 
 	public String getServerName(){
 		if(proxyHandler != null)
