@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.utils.bo;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
+import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 import it.eng.spagobi.sdk.maps.bo.SDKMap;
 
 public class Dataset {
@@ -51,7 +52,7 @@ public class Dataset {
 
 	private String datamarts;
 
-    private DatasetParameter[] parameters;
+	private DatasetParameter[] parameters;
 
 	//private it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter[] parameters;
 
@@ -92,6 +93,18 @@ public class Dataset {
 		webServiceOperation=sdk.getWebServiceOperation();
 		jsonQuery = sdk.getJsonQuery();
 		datamarts = sdk.getDatamarts();
+
+		// fill parameters
+		if(sdk.getParameters() != null){
+			DatasetParameter[] dsParArray = new DatasetParameter[sdk.getParameters().length];	
+			for (int i = 0; i < sdk.getParameters().length; i++) {
+				SDKDataSetParameter sdkPar = sdk.getParameters()[i];
+				DatasetParameter dsPar = new DatasetParameter(sdkPar);
+				dsParArray[i] =dsPar;
+			}
+			parameters = dsParArray;
+		}
+
 	}
 
 

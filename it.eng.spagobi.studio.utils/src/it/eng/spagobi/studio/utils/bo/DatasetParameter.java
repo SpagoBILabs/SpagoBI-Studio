@@ -1,12 +1,16 @@
 package it.eng.spagobi.studio.utils.bo;
 
+import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
+import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
+
 public class DatasetParameter {
 
-    private java.lang.String name;
+	private java.lang.String name;
 
-    private java.lang.String type;
+	private java.lang.String type;
 
-    private java.lang.String[] values;
+
+	private java.lang.String[] values;
 
 	public java.lang.String getName() {
 		return name;
@@ -31,7 +35,11 @@ public class DatasetParameter {
 	public void setValues(java.lang.String[] values) {
 		this.values = values;
 	}
-    
-    
-	
+
+
+	public DatasetParameter(SDKDataSetParameter sdkPar) {
+		name = name = sdkPar.getName();
+		type = sdkPar.getType();
+		values = sdkPar.getValues();
+	}
 }
