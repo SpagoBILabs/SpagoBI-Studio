@@ -9,14 +9,14 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
- org.eclipse.ui.navigator;bundle-version="3.3.102",
- org.eclipse.ui.net;bundle-version="1.0.0",
- org.eclipse.core.net;bundle-version="1.1.0",
- org.eclipse.ui.forms;bundle-version="3.5.0",
- it.eng.spagobi.meta.editor;bundle-version="1.0.0",
- org.eclipse.ui.intro;bundle-version="3.4.0",
- org.eclipse.ui.navigator.resources;bundle-version="3.4.202",
- it.eng.spagobi.studio.utils;bundle-version="1.0.0"
+ org.eclipse.ui.navigator,
+ org.eclipse.ui.net,
+ org.eclipse.core.net,
+ org.eclipse.ui.forms,
+ it.eng.spagobi.meta.editor,
+ org.eclipse.ui.intro,
+ org.eclipse.ui.navigator.resources,
+ it.eng.spagobi.studio.utils
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
