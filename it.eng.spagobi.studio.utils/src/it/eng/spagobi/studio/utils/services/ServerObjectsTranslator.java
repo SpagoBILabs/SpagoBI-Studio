@@ -54,6 +54,18 @@ public class ServerObjectsTranslator {
 		sdkDataset.setJsonQuery(ds.getJsonQuery());
 		sdkDataset.setDatamarts(ds.getDatamarts());
 		
+		SDKDataSetParameter[] sdkDataSetParameters = null;
+		DatasetParameter[] parArray = ds.getParameters();
+		if(parArray != null){
+			sdkDataSetParameters = new SDKDataSetParameter[parArray.length];
+			for (int i = 0; i < parArray.length; i++) {
+				DatasetParameter dsPar = parArray[i];
+				SDKDataSetParameter sdkPar = createSDKDataSetParameter(dsPar);
+				sdkDataSetParameters[i] = sdkPar;
+			}
+		}
+		sdkDataset.setParameters(sdkDataSetParameters);
+		
 		return sdkDataset;
 	}
 
