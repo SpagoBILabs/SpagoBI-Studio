@@ -60,7 +60,7 @@
          <dataSetPage
                displayName="%wizard.data.set.page.title"
                icon="icons/datasetpage.ico"
-               wizardPageClass="spagobi.birt.oda.design.impl.SpagoBIDataSetWizardPage"
+               wizardPageClass="it.eng.spagobi.studio.oda.design.impl.SpagoBIDataSetWizardPage"
                path="/"
                id="spagobi.birt.oda.dataSet.page1">
          </dataSetPage>

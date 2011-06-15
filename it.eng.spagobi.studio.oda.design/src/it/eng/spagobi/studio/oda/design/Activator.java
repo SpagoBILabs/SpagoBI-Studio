@@ -1,4 +1,4 @@
-package spagobi.birt.oda.design;
+package it.eng.spagobi.studio.oda.design;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
