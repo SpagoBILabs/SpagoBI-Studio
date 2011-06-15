@@ -5,7 +5,7 @@
  *************************************************************************
  */
 
-package spagobi.birt.oda.impl;
+package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 

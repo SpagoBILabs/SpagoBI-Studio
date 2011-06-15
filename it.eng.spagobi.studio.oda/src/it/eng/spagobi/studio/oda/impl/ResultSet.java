@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
-package spagobi.birt.oda.impl;
+package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreFieldMetadata;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;

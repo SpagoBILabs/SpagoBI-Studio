@@ -6,7 +6,7 @@
          id="%oda.data.source.id"
          point="org.eclipse.datatools.connectivity.oda.dataSource">
       <dataSource
-            driverClass="spagobi.birt.oda.impl.Driver"
+            driverClass="it.eng.spagobi.studio.oda.impl.Driver"
             defaultDisplayName="%data.source.name"
             setThreadContextClassLoader="false"
             odaVersion="3.2"

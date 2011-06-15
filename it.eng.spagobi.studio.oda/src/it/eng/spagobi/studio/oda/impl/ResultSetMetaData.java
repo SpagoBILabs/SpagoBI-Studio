@@ -5,7 +5,7 @@
  *************************************************************************
  */
 
-package spagobi.birt.oda.impl;
+package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.tools.dataset.common.datastore.IDataStoreMetaData;

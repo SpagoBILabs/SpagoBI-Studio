@@ -26,10 +26,10 @@ Bundle-ClassPath: .,
  lib/logback/org.slf4j.api_1.5.11.v20100519-1910.jar,
  lib/commons-logging-api-1.1.jar,
  lib/log4j-1.2.9.jar
-Bundle-Activator: spagobi.birt.oda.Activator
+Bundle-Activator: it.eng.spagobi.studio.oda.Activator
 Bundle-Localization: plugin
 Export-Package: it.eng.spagobi.commons.constants,
- spagobi.birt.oda.impl;version="1.0.0.qualifier";
+ it.eng.spagobi.studio.oda.impl;version="1.0.0.qualifier";
   uses:="org.eclipse.datatools.connectivity.oda.util.manifest,
    com.ibm.icu.util,
    org.eclipse.datatools.connectivity.oda.spec,

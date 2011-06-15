@@ -5,7 +5,7 @@
  *************************************************************************
  */
 
-package spagobi.birt.oda.impl;
+package it.eng.spagobi.studio.oda.impl;
 
 import org.eclipse.datatools.connectivity.oda.IConnection;
 import org.eclipse.datatools.connectivity.oda.IDriver;

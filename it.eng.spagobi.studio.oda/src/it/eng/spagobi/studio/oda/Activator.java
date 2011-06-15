@@ -1,4 +1,4 @@
-package spagobi.birt.oda;
+package it.eng.spagobi.studio.oda;
 
 
 import org.osgi.framework.BundleActivator;
