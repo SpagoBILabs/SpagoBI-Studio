@@ -5,7 +5,7 @@
  *************************************************************************
  */
 
-package spagobi.birt.oda.impl.server;
+package spagobi.birt.oda.impl;
 
 import org.eclipse.datatools.connectivity.oda.IConnection;
 import org.eclipse.datatools.connectivity.oda.IDataSetMetaData;

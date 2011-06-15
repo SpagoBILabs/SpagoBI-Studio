@@ -15,7 +15,6 @@ import org.eclipse.datatools.connectivity.oda.util.manifest.DataTypeMapping;
 import org.eclipse.datatools.connectivity.oda.util.manifest.ExtensionManifest;
 import org.eclipse.datatools.connectivity.oda.util.manifest.ManifestExplorer;
 
-import spagobi.birt.oda.impl.sdk.Connection;
 
 /**
  * Implementation class of IDriver for an ODA runtime driver.

@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
-Bundle-SymbolicName: spagobi.birt.oda; singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: it.eng.spagobi.studio.oda;singleton:=true
+Bundle-Version: 1.0.0
 Bundle-ClassPath: .,
  src,
  lib/spagobi-utils-3.0.jar,

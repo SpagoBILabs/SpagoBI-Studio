@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
-package spagobi.birt.oda.impl.server;
+package spagobi.birt.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
@@ -82,32 +82,75 @@ public class Query implements IQuery
 	 */
 	public void prepare( String queryText ) throws OdaException
 	{		
-		this.queryString = queryText;
-
-		if(queryText != null) {
+		
+		logger.debug("IN");
+	
+		try {
+			logger.debug("Prepare query for dataset [" + queryText + "]");
+			
+			if(queryText == null || queryText.trim().length() == 0) {
+				throw new RuntimeException("Query cannot be null or empty");
+			}
+			this.queryString = queryText;
+			
+			logger.debug("Retriving dataset list from spagobi server...");
+			SDKDataSet[] datasets = null;
 			try {
-				SDKDataSet[] datasets = dataSetServiceProxy.getDataSets();
+				datasets = dataSetServiceProxy.getDataSets();
+			} catch(Throwable t) {
+				throw new RuntimeException("Impossible to retrive spagobi's dataset list", t);
+			}
+			logger.debug("Dataset list from spagobi server retrieved succesfully");
+			
+			logger.debug("Look up dataset list for [" + queryText + "]");
+			dataSetMeta = null;
+			try {
 				for(int i =0; i<datasets.length; i++){
 					SDKDataSet datsSet = (SDKDataSet)datasets[i];
 					if(queryText.equals(datsSet.getLabel())){
-						SDKDataStoreMetadata sdkDataStoreMetadata =  dataSetServiceProxy.getDataStoreMetadata(datsSet);
 						dataSetMeta = datsSet;
-						dataSetParametersMeta = dataSetMeta.getParameters();
-						dataStoreMeta = sdkDataStoreMetadata;
 						break;
 					}
 				}
-			} catch (Exception t) {
-				throw (OdaException) new OdaException("Impossible to prepare query [" + queryText +"]").initCause(t);
+			} catch (Throwable t) {
+				throw new RuntimeException("Impossible to retrive store metadata for dataset [" + dataSetMeta.getName() + "]", t);
 			} 
 			
+			if(dataSetMeta == null) {
+				throw new RuntimeException("Impssible to find on server a dataset named [" + queryText + "]");
+			}
+			logger.debug("Dataset [" + queryText + "] succesfully found");
+			
+			logger.debug("Retrieving data store meta for dataset [" + queryText + "]...");
+			dataStoreMeta = null;
+			try {
+				dataStoreMeta =  dataSetServiceProxy.getDataStoreMetadata(dataSetMeta);
+				if(dataStoreMeta == null) {
+					throw new RuntimeException("Bad server response [null] for service [getDataStoreMetadata]");
+				}
+			} catch(Throwable t) {
+				throw new RuntimeException("Impossible to retrive store metadata for dataset [" + dataSetMeta.getName() + "]", t);
+			}
+			logger.debug("Data store meta for dataset [" + queryText + "] retrieved succesfully");
+			
+			logger.debug("Parsing dataset's parameters meta for dataset[" + queryText + "]...");
+			dataSetParametersMeta = dataSetMeta.getParameters();
 			if(dataSetParametersMeta != null) {
 				for(int i = 0; i < dataSetParametersMeta.length; i++) {
 					parameterNamesToIndexMap.put(dataSetParametersMeta[i].getName(), new Integer(i+1));
 				}
 			}
+			logger.debug("Dataset's parameters meta for dataset[" + queryText + "] parsed succesfully");
+			
+			logger.debug("Query for dataset [" + queryText + "] prepared successfully");
+		} catch (Exception t) {
+			throw (OdaException) new OdaException("Impossible to prepare query [" + queryText +"]").initCause(t);
+		}  finally {
+			logger.debug("OUT");
 		}
+		
 	}
+	
 
 	/*
 	 * @see org.eclipse.datatools.connectivity.oda.IQuery#setAppContext(java.lang.Object)
@@ -140,15 +183,31 @@ public class Query implements IQuery
 	public IResultSet executeQuery() throws OdaException
 	{
 		String result;
+		IDataStore dataStore;
+		
+		logger.debug("IN");
 		
 		try {
+			for(int i = 0; i < dataSetParametersMeta.length; i++) {
+				String name = dataSetParametersMeta[i].getName();
+				String value = dataSetParametersMeta[i].getValues() != null ? dataSetParametersMeta[i].getValues()[0]: "NULL";
+				
+				//System.err.println("Input parameter [" + name + "] is equal to [" + value + "]");
+			}
 			result = dataSetServiceProxy.executeDataSet( dataSetMeta.getLabel(), dataSetParametersMeta );
 		} catch (Throwable t) {
 			throw (OdaException) new OdaException("Impossible to execute dataset [" + dataSetMeta.getLabel() + "]").initCause(t);
 		}
 		
-		XmlDataReader dataReader = new XmlDataReader();
-		IDataStore dataStore = dataReader.read( result );
+		dataStore = null;
+		try {
+			XmlDataReader dataReader = new XmlDataReader();
+			dataStore = dataReader.read( result );
+		} catch (Throwable t) {
+			throw (OdaException) new OdaException("Impossible to parse resultset [" + result + "]").initCause(t);
+		}
+		
+		logger.debug("OUT");
 		
 		return new ResultSet( dataStore, dataStoreMeta );
 	}
@@ -200,6 +259,7 @@ public class Query implements IQuery
 	 */
 	public void setInt( int parameterId, int value ) throws OdaException
 	{
+		//System.err.println("Paraeter [" + dataSetParametersMeta[parameterId-1].getName() + "] is equal to [" + value + "]");
 		dataSetParametersMeta[parameterId-1].setValues(new String[]{"" + value});
 	}
 
@@ -216,6 +276,7 @@ public class Query implements IQuery
 	 */
 	public void setDouble( int parameterId, double value ) throws OdaException
 	{
+		//System.err.println("Paraeter [" + dataSetParametersMeta[parameterId-1].getName() + "] is equal to [" + value + "]");
 		dataSetParametersMeta[parameterId-1].setValues(new String[]{"" + value});
 	}
 
@@ -232,6 +293,7 @@ public class Query implements IQuery
 	 */
 	public void setBigDecimal( int parameterId, BigDecimal value ) throws OdaException
 	{
+		//System.err.println("Paraeter [" + dataSetParametersMeta[parameterId-1].getName() + "] is equal to [" + value + "]");
 		dataSetParametersMeta[parameterId-1].setValues(new String[]{"" + value});
 	}
 
@@ -240,6 +302,7 @@ public class Query implements IQuery
 	 */
 	public void setString( String parameterName, String value ) throws OdaException
 	{
+		//System.err.println("Paraeter [" + parameterName + "] is equal to [" + value + "]");
 		setString ( findInParameter( parameterName ), value);
 	}
 
@@ -248,6 +311,7 @@ public class Query implements IQuery
 	 */
 	public void setString( int parameterId, String value ) throws OdaException
 	{
+		//System.err.println("Paraeter [" + dataSetParametersMeta[parameterId-1].getName() + "] is equal to [" + value + "]");
         dataSetParametersMeta[parameterId-1].setValues(new String[]{"" + value});
 	}
 

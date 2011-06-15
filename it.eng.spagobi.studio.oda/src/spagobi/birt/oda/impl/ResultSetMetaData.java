@@ -5,7 +5,7 @@
  *************************************************************************
  */
 
-package spagobi.birt.oda.impl.sdk;
+package spagobi.birt.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.tools.dataset.common.datastore.IDataStoreMetaData;
@@ -13,7 +13,6 @@ import it.eng.spagobi.tools.dataset.common.datastore.IDataStoreMetaData;
 import org.eclipse.datatools.connectivity.oda.IResultSetMetaData;
 import org.eclipse.datatools.connectivity.oda.OdaException;
 
-import spagobi.birt.oda.impl.Driver;
 
 /**
  * Implementation class of IResultSetMetaData for an ODA runtime driver.
