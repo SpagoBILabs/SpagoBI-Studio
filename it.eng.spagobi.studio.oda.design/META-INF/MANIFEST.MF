@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
-Bundle-SymbolicName: spagobi.birt.oda.design; singleton:=true
+Bundle-SymbolicName: it.eng.spagobi.studio.oda.design;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: spagobi.birt.oda.design.Activator
 Bundle-Localization: plugin
