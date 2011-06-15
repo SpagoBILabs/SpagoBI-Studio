@@ -1,10 +1,12 @@
 package it.eng.spagobi.studio.utils.services;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
+import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
 import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.DatasetParameter;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.bo.Template;
@@ -55,7 +57,13 @@ public class ServerObjectsTranslator {
 		return sdkDataset;
 	}
 
-
+	static public SDKDataSetParameter createSDKDataSetParameter(DatasetParameter dsPar){
+		SDKDataSetParameter sdkDataSetParameter = new SDKDataSetParameter();
+		sdkDataSetParameter.setName(dsPar.getName());
+		sdkDataSetParameter.setType(dsPar.getType());
+		sdkDataSetParameter.setValues(dsPar.getValues());
+		return sdkDataSetParameter;
+	}
 
 }
 

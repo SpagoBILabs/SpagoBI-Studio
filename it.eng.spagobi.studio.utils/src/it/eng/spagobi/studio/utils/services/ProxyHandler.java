@@ -32,6 +32,15 @@ public class ProxyHandler {
 		proxyFactory=new SDKProxyFactory(server);
 	}
 
+	// caled by ODA project
+	public ProxyHandler(Server server) throws NoActiveServerException {
+		super();
+		//Server server = new ServerHandler().getCurrentActiveServer(projectName);
+		if(server == null) throw new NoActiveServerException();
+		serverName = server.getName();
+		proxyFactory=new SDKProxyFactory(server);
+	}
+
 
 
 

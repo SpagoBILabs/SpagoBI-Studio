@@ -1,6 +1,7 @@
 package it.eng.spagobi.studio.utils.services.serverobjects;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
+import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
@@ -8,6 +9,7 @@ import it.eng.spagobi.sdk.exceptions.MissingParameterValue;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.DatasetParameter;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.MissingParValueException;
@@ -81,6 +83,26 @@ public class ServerDatasets {
 			returnCode = proxyHandler.getDataSetsSDKServiceProxy().saveDataset(sdkDataSet);
 		return returnCode;
 	}
+	
+	
+	
+	public String executeDataSet(String dataSetLabel, DatasetParameter[] parameters) throws RemoteException{
+		String returnCode = null;
+		SDKDataSetParameter[] sdkParArray = null;
+		if(parameters != null){
+			sdkParArray = new SDKDataSetParameter[parameters.length];
+			for (int i = 0; i < sdkParArray.length; i++) {
+				DatasetParameter dsP = parameters[i];
+				sdkParArray[i] = ServerObjectsTranslator.createSDKDataSetParameter(dsP);
+			}
+		}
+		
+		if(proxyHandler.getDataSetsSDKServiceProxy() != null)
+			returnCode = proxyHandler.getDataSetsSDKServiceProxy().executeDataSet(dataSetLabel, sdkParArray);
+		return returnCode;
+	}
+	
+	
 	
 	public DataStoreMetadata getDataStoreMetadata(Integer datasetId) throws NoServerException, MissingParValueException{
 		logger.debug("IN");
