@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
+import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
+import it.eng.spagobi.studio.utils.services.serverobjects.ServerDatasets;
 
 import java.util.Properties;
 
@@ -44,7 +47,7 @@ public class Connection implements IConnection
 {
 	
 	boolean isOpen;
-	DataSetsSDKServiceProxy dataSetServiceProxy;
+	ServerDatasets  dataSetServiceProxy;
 	
 	public static final String CONN_PROP_SERVER_URL = "ServerUrl";
 	public static final String CONN_PROP_USER = "Username";
@@ -84,7 +87,9 @@ public class Connection implements IConnection
 				throw new RuntimeException("Connection paramters (["+CONN_PROP_SERVER_URL+"],["+CONN_PROP_USER+"],["+CONN_PROP_PASSWORD+"]) cannot be null");
 			}
 			
-			dataSetServiceProxy = createDataSetServiceProxy(serverUrl, username, password);
+			Server spagoBIServer = new Server("SERVER", serverUrl, username, password, true);
+			SpagoBIServerObjectsFactory spagoBIServerProxyFactory = new SpagoBIServerObjectsFactory( spagoBIServer );
+			dataSetServiceProxy = spagoBIServerProxyFactory.getServerDatasets();
 			
 			logger.info("Connection sucesfully opened");
 			

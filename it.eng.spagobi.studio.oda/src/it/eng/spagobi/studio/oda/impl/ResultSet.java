@@ -24,6 +24,8 @@ package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreFieldMetadata;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
 import it.eng.spagobi.tools.dataset.common.datastore.IDataStore;
 import it.eng.spagobi.tools.dataset.common.datastore.IField;
 import it.eng.spagobi.tools.dataset.common.datastore.IRecord;
@@ -55,9 +57,9 @@ public class ResultSet implements IResultSet
 	private int maxRows;
     private int currentRowIndex;
     private IDataStore dataStore;
-    private SDKDataStoreMetadata dataStoreMeta;
+    private DataStoreMetadata dataStoreMeta;
 	
-    public ResultSet(IDataStore dataStore, SDKDataStoreMetadata dataStoreMeta) {
+    public ResultSet(IDataStore dataStore, DataStoreMetadata dataStoreMeta) {
     	this.dataStore = dataStore;
     	this.dataStoreMeta = dataStoreMeta;
     	this.currentRowIndex = -1;
@@ -133,8 +135,8 @@ public class ResultSet implements IResultSet
 			throw (OdaException) new OdaException("Impossible to read row [" + getRow() + "]. The resultset contains [" + dataStore.getRecordsCount() + "] rows");
 		}
 		
-		SDKDataStoreFieldMetadata[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
-		SDKDataStoreFieldMetadata sdkFieldMeta = sdkFieldsMeta[index-1];
+		DataStoreMetadataField[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
+		DataStoreMetadataField sdkFieldMeta = sdkFieldsMeta[index-1];
 		String fieldName = sdkFieldMeta.getName();
 		int fieldIndex = dataStore.getMetaData().getFieldIndex(fieldName);	
 		IField field = record.getFieldAt(fieldIndex);
@@ -159,8 +161,8 @@ public class ResultSet implements IResultSet
 			throw (OdaException) new OdaException("Impossible to read row [" + getRow() + "]. The resultset contains [" + dataStore.getRecordsCount() + "] rows");
 		}
 		
-		SDKDataStoreFieldMetadata[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
-		SDKDataStoreFieldMetadata sdkFieldMeta = sdkFieldsMeta[index-1];
+		DataStoreMetadataField[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
+		DataStoreMetadataField sdkFieldMeta = sdkFieldsMeta[index-1];
 		String fieldName = sdkFieldMeta.getName();
 		int fieldIndex = dataStore.getMetaData().getFieldIndex(fieldName);	
 		IField field = record.getFieldAt(fieldIndex);

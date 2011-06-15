@@ -38,4 +38,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.datatools.connectivity.oda,
- org.eclipse.datatools.connectivity.oda.profile
+ org.eclipse.datatools.connectivity.oda.profile,
+ it.eng.spagobi.studio.utils;bundle-version="3.0.0"

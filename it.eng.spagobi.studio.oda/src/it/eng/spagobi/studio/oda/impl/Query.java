@@ -27,6 +27,10 @@ import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
+import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
+import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.bo.DatasetParameter;
+import it.eng.spagobi.studio.utils.services.serverobjects.ServerDatasets;
 import it.eng.spagobi.tools.dataset.common.datareader.XmlDataReader;
 import it.eng.spagobi.tools.dataset.common.datastore.IDataStore;
 
@@ -37,6 +41,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import org.eclipse.datatools.connectivity.oda.IParameterMetaData;
 import org.eclipse.datatools.connectivity.oda.IQuery;
@@ -63,14 +68,14 @@ public class Query implements IQuery
 	String queryString;
 	Map<String, Integer> parameterNamesToIndexMap;
 	
-	DataSetsSDKServiceProxy dataSetServiceProxy;
-	SDKDataSet dataSetMeta;
-	SDKDataSetParameter[] dataSetParametersMeta;
-	SDKDataStoreMetadata dataStoreMeta;
+	ServerDatasets dataSetServiceProxy;
+	Dataset dataSetMeta;
+	DatasetParameter[] dataSetParametersMeta;
+	DataStoreMetadata dataStoreMeta;
 	
 	private static Logger logger = LoggerFactory.getLogger(Query.class);
 	
-	public Query(DataSetsSDKServiceProxy dataSetServiceProxy) {
+	public Query(ServerDatasets dataSetServiceProxy) {
 		this.maxRows = -1;
 		this.queryString = null;
 		this.parameterNamesToIndexMap = new HashMap<String, Integer>();
@@ -94,9 +99,9 @@ public class Query implements IQuery
 			this.queryString = queryText;
 			
 			logger.debug("Retriving dataset list from spagobi server...");
-			SDKDataSet[] datasets = null;
+			Vector<Dataset> datasets = null;
 			try {
-				datasets = dataSetServiceProxy.getDataSets();
+				datasets = dataSetServiceProxy.getAllDatasets();
 			} catch(Throwable t) {
 				throw new RuntimeException("Impossible to retrive spagobi's dataset list", t);
 			}
@@ -105,8 +110,9 @@ public class Query implements IQuery
 			logger.debug("Look up dataset list for [" + queryText + "]");
 			dataSetMeta = null;
 			try {
-				for(int i =0; i<datasets.length; i++){
-					SDKDataSet datsSet = (SDKDataSet)datasets[i];
+				
+				for(int i =0; i<datasets.size(); i++){
+					Dataset datsSet = (Dataset)datasets.get(i);
 					if(queryText.equals(datsSet.getLabel())){
 						dataSetMeta = datsSet;
 						break;
@@ -124,7 +130,7 @@ public class Query implements IQuery
 			logger.debug("Retrieving data store meta for dataset [" + queryText + "]...");
 			dataStoreMeta = null;
 			try {
-				dataStoreMeta =  dataSetServiceProxy.getDataStoreMetadata(dataSetMeta);
+				dataStoreMeta =  dataSetServiceProxy.getDataStoreMetadata(dataSetMeta.getId());
 				if(dataStoreMeta == null) {
 					throw new RuntimeException("Bad server response [null] for service [getDataStoreMetadata]");
 				}

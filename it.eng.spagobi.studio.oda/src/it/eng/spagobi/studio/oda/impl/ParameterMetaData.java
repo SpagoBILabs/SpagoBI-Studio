@@ -8,6 +8,7 @@
 package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
+import it.eng.spagobi.studio.utils.bo.DatasetParameter;
 
 import org.apache.axis.description.TypeDesc;
 import org.eclipse.datatools.connectivity.oda.IParameterMetaData;
@@ -25,9 +26,9 @@ import org.eclipse.datatools.connectivity.oda.OdaException;
  */
 public class ParameterMetaData implements IParameterMetaData 
 {
-	SDKDataSetParameter[] sdkParametersMeta;
+	DatasetParameter[] sdkParametersMeta;
 	
-	public ParameterMetaData(SDKDataSetParameter[] sdkParametersMeta) {
+	public ParameterMetaData(DatasetParameter[] sdkParametersMeta) {
 		this.sdkParametersMeta = sdkParametersMeta;
 	}
 	/* 
@@ -60,7 +61,7 @@ public class ParameterMetaData implements IParameterMetaData
 	public int getParameterType( int param ) throws OdaException 
 	{
 		String type = sdkParametersMeta[param-1].getType(); 
-		TypeDesc typeDesc = sdkParametersMeta[param-1].getTypeDesc();
+		//TypeDesc typeDesc = sdkParametersMeta[param-1].getTypeDesc();
         return java.sql.Types.CHAR;   // as defined in data set extension manifest
 	}
 
