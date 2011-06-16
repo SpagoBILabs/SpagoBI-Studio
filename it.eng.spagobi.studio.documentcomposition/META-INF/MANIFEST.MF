@@ -24,8 +24,7 @@ Bundle-ClassPath: lib/xpp3_min-1.1.4c.jar,
  lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar,
  lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
  lib/dom4j.jar,
- lib/org.slf4j.api_1.5.11.v20100519-1910.jar,
- lib/sbiutils.jar
+ lib/org.slf4j.api_1.5.11.v20100519-1910.jar
 Export-Package: it.eng.spagobi.studio.documentcomposition.actions,
  it.eng.spagobi.studio.documentcomposition.services,
  it.eng.spagobi.studio.documentcomposition.wizards
