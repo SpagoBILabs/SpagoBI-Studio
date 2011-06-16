@@ -54,19 +54,19 @@ public class DocumentContained {
 	Designer designer;
 	private static Logger logger = LoggerFactory.getLogger(DocumentContained.class);
 
-	public static final String IMG_JASPER_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.png";
-	public static final String IMG_BIRT_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport.png";
-	public static final String IMG_DASHBOARD="it/eng/spagobi/studio/documentcomposition/resources/images/IconDashboard.png";
-	public static final String IMG_CHART="it/eng/spagobi/studio/documentcomposition/resources/images/IconChart.png";
-	public static final String IMG_DOCUMENT_COMPOSITION="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_OLAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconOlap.png";
-	public static final String IMG_ETL="it/eng/spagobi/studio/documentcomposition/resources/images/IconEtl.png";
-	public static final String IMG_OFFICE_DOC="it/eng/spagobi/studio/documentcomposition/resources/images/IconOfficeDoc.png";
-	public static final String IMG_MAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconMap.png";
-	public static final String IMG_DATAMART="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_DOSSIER="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_DATA_MINING="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
-	public static final String IMG_GENERAL="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
+	public static final String IMG_JASPER_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport2.png";
+	public static final String IMG_BIRT_REPORT="it/eng/spagobi/studio/documentcomposition/resources/images/IconReport2.png";
+	public static final String IMG_DASHBOARD="it/eng/spagobi/studio/documentcomposition/resources/images/IconDashboard2.png";
+	public static final String IMG_CHART="it/eng/spagobi/studio/documentcomposition/resources/images/IconChart2.png";
+	public static final String IMG_DOCUMENT_COMPOSITION="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral2.png";
+	public static final String IMG_OLAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconOlap2.png";
+	public static final String IMG_ETL="it/eng/spagobi/studio/documentcomposition/resources/images/IconEtl2.png";
+	public static final String IMG_OFFICE_DOC="it/eng/spagobi/studio/documentcomposition/resources/images/IconOfficeDoc2.png";
+	public static final String IMG_MAP="it/eng/spagobi/studio/documentcomposition/resources/images/IconMap2.png";
+	public static final String IMG_DATAMART="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral2.png";
+	public static final String IMG_DOSSIER="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral2.png";
+	public static final String IMG_DATA_MINING="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral2.png";
+	public static final String IMG_GENERAL="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral2.png";
 	public static final String BACKGROUND="it/eng/spagobi/studio/documentcomposition/resources/images/white.PNG";
 
 	public static final String TYPE_REPORT=SpagoBIDocCompCostants.REPORT_TYPE_CODE;
