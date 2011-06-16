@@ -208,6 +208,7 @@ public class Query implements IQuery
 		dataStore = null;
 		try {
 			XmlDataReader dataReader = new XmlDataReader();
+			//JSONDataReader  dataReader = new JSONDataReader ();
 			dataStore = dataReader.read( result );
 		} catch (Throwable t) {
 			throw (OdaException) new OdaException("Impossible to parse resultset [" + result + "]").initCause(t);
