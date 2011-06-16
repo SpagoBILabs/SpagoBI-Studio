@@ -21,10 +21,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.documentcomposition.editors;
 
 
-import it.eng.spagobi.commons.constants.SpagoBIConstants;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
+import it.eng.spagobi.studio.documentcomposition.util.SpagoBIDocCompCostants;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.InputStream;
@@ -69,16 +69,16 @@ public class DocumentContained {
 	public static final String IMG_GENERAL="it/eng/spagobi/studio/documentcomposition/resources/images/IconGeneral.png";
 	public static final String BACKGROUND="it/eng/spagobi/studio/documentcomposition/resources/images/white.PNG";
 
-	public static final String TYPE_REPORT=SpagoBIConstants.REPORT_TYPE_CODE;
+	public static final String TYPE_REPORT=SpagoBIDocCompCostants.REPORT_TYPE_CODE;
 	public static final String TYPE_DOSSIER="DOSSIER";
 	public static final String TYPE_OLAP="OLAP";
 	public static final String TYPE_DATA_MINING = "DATA_MINING";
-	public static final String TYPE_DASH=SpagoBIConstants.DASH_TYPE_CODE;
+	public static final String TYPE_DASH=SpagoBIDocCompCostants.DASH_TYPE_CODE;
 	public static final String TYPE_DATAMART="DATAMART";
 	public static final String TYPE_MAP="MAP";
 	public static final String TYPE_OFFICE_DOC="OFFICE_DOC";
 	public static final String TYPE_ETL="ETL";
-	public static final String TYPE_DOCUMENT_COMPOSITIOn=SpagoBIConstants.DOCUMENT_COMPOSITE_TYPE;
+	public static final String TYPE_DOCUMENT_COMPOSITIOn=SpagoBIDocCompCostants.DOCUMENT_COMPOSITE_TYPE;
 
 
 	public DocumentContained(Composite parent, int style, Designer _designer) throws Exception{
