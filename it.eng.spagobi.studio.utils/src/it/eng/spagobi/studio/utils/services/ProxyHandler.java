@@ -10,6 +10,7 @@ import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.server.ServerHandler;
+import it.eng.spagobi.studio.utils.util.ClassLoaderUtilities;
 
 public class ProxyHandler {
 
@@ -26,6 +27,7 @@ public class ProxyHandler {
 
 	public ProxyHandler(String projectName) throws NoActiveServerException {
 		super();
+		ClassLoaderUtilities.setSpagoBIClassLoader();
 		Server server = new ServerHandler().getCurrentActiveServer(projectName);
 		if(server == null) throw new NoActiveServerException();
 		serverName = server.getName();
@@ -35,6 +37,7 @@ public class ProxyHandler {
 	// caled by ODA project
 	public ProxyHandler(Server server) throws NoActiveServerException {
 		super();
+		ClassLoaderUtilities.setSpagoBIClassLoader();
 		//Server server = new ServerHandler().getCurrentActiveServer(projectName);
 		if(server == null) throw new NoActiveServerException();
 		serverName = server.getName();

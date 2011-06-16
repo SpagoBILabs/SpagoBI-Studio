@@ -55,7 +55,7 @@ public class ServerHandler {
 		boolean testResult = false;
 		message = "";
 		try {
-			ClassLoaderUtilities.setSpagoBIClassLoader();
+			//ClassLoaderUtilities.setSpagoBIClassLoader();
 			TestConnectionServiceProxy proxy = new TestConnectionServiceProxy(server.getUser(), server.getPassword());
 			proxy.setEndpoint(server.getUrl() + "/sdk/TestConnectionService");
 			// set proxy configurations!
@@ -139,7 +139,7 @@ public class ServerHandler {
 		logger.debug("IN");
 		Server active = null;
 		// when dealing with server check class loader
-		ClassLoaderUtilities.setSpagoBIClassLoader();
+		//ClassLoaderUtilities.setSpagoBIClassLoader();
 		
 		Vector<Server> names = getCurrentActiveServers(projectname);
 
