@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.21" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 2.6.0.v20100531 Build &lt;2.6.0.v20100609-1613></property>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.22" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 2.6.2.r262_v20110209 Build &lt;2.6.2.v20110214-1523></property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="bidiLayoutOrientation">ltr</property>
@@ -10,7 +10,7 @@
             <property name="fontFamily">sans-serif</property>
             <property name="fontSize">10pt</property>
         </style>
-        <style name="crosstab" id="5">
+        <style name="crosstab-cell" id="5">
             <property name="borderBottomColor">#CCCCCC</property>
             <property name="borderBottomStyle">solid</property>
             <property name="borderBottomWidth">1pt</property>
@@ -24,7 +24,7 @@
             <property name="borderTopStyle">solid</property>
             <property name="borderTopWidth">1pt</property>
         </style>
-        <style name="crosstab-cell" id="6">
+        <style name="crosstab" id="6">
             <property name="borderBottomColor">#CCCCCC</property>
             <property name="borderBottomStyle">solid</property>
             <property name="borderBottomWidth">1pt</property>
