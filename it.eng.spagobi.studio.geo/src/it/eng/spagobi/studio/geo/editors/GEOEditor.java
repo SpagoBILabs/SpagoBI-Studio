@@ -1,6 +1,5 @@
 package it.eng.spagobi.studio.geo.editors;
 
-import it.eng.spagobi.sdk.exceptions.MissingParameterValue;
 import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.editors.model.bo.ColumnBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;

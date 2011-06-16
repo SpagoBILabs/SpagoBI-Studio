@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.geo.editors;
 
 
-import it.eng.spagobi.sdk.exceptions.MissingParameterValue;
 import it.eng.spagobi.studio.geo.editors.model.bo.DatamartProviderBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.LevelBO;
