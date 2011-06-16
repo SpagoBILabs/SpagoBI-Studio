@@ -1,6 +1,5 @@
 package it.eng.spagobi.studio.core.wizards.downloadWizard;
 
-import it.eng.spagobi.commons.constants.SpagoBIConstants;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.DocumentParameter;
@@ -12,7 +11,6 @@ import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
-import it.eng.spagobi.studio.utils.util.ClassLoaderUtilities;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
 import java.io.BufferedInputStream;
@@ -82,7 +80,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 	public boolean downloadDocument(Document document){
 		logger.debug("IN");
 		// if it is a document composed download also contained documents
-		if(document.getType().equalsIgnoreCase(SpagoBIConstants.DOCUMENT_COMPOSITE_TYPE) ){
+		if(document.getType().equalsIgnoreCase("DOCUMENT_COMPOSITE") ){
 			// ask user if wants to download related template
 			boolean downloadContained=MessageDialog.openQuestion(getShell(), "Download contained Documents?", "You have selected a document composition, do you want to download contained documents? You will be notified if they already esists in your workspace");	
 			if(downloadContained==true){
