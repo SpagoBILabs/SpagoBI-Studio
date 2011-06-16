@@ -39,10 +39,8 @@ Bundle-ClassPath: .,
  lib/xml-apis-2.0.2.jar,
  lib/xmlsec-1.4.2.jar,
  lib/xpp3_min-1.1.4c.jar,
- lib/xstream-1.3.1.jar,
- lib/sbiutils.jar
-Export-Package: it.eng.spagobi.commons.constants,
- it.eng.spagobi.studio.core.actions;
+ lib/xstream-1.3.1.jar
+Export-Package: it.eng.spagobi.studio.core.actions;
   uses:="org.eclipse.jface.action,
    it.eng.spagobi.studio.utils.bo,
    org.eclipse.ui,

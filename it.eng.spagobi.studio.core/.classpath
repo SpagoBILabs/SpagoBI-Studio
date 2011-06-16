@@ -24,6 +24,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/it.eng.spagobi.meta.editor"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/it.eng.spagobi.studio.utils"/>
-	<classpathentry exported="true" kind="lib" path="lib/sbiutils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
