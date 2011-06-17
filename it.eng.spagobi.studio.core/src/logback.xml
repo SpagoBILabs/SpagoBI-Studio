@@ -14,7 +14,7 @@
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
       <maxIndex>0</maxIndex>
-      <FileNamePattern>./log/spagobi/metagenerator.log.%i</FileNamePattern>
+      <FileNamePattern>./log/spagobi/studiogenerator.log.%i</FileNamePattern>
     </rollingPolicy>
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
       <MaxFileSize>10000KB</MaxFileSize>
