@@ -1,7 +1,9 @@
 package it.eng.spagobi.studio.core.wizards.serverWizard;
 
 import it.eng.spagobi.studio.core.actions.NewServerAction;
+import it.eng.spagobi.studio.core.util.SWTComponentUtilities;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlServerGenerator;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 import it.eng.spagobi.studio.utils.bo.Server;
@@ -75,8 +77,9 @@ public class NewServerWizard extends AbstractSpagoBIDocumentWizard {
 			String pwd = page.getTextPwd().getText();
 			boolean active = page.getCheckActive().getSelection();
 
-			
+
 			Server server = new Server( name, url, user, pwd, active);
+
 
 			XmlServerGenerator xmlgen = new XmlServerGenerator();
 			String xmlString = xmlgen.transformToXml(server);
@@ -103,6 +106,13 @@ public class NewServerWizard extends AbstractSpagoBIDocumentWizard {
 				bais = new ByteArrayInputStream(bytes);
 				newFile.create(bais, true, null);
 			}
+		
+			if(active){
+				logger.debug("deactivate all other servers");
+				new ServerHandler(server).deactivateOtherServers(newFile);
+				SWTComponentUtilities.getNavigatorReference(SpagoBIStudioConstants.RESOURCE_NAVIGATOR_ID);
+			}
+		
 		}
 		catch (Exception e) {
 			logger.error("Error in writing file with path "+pathNewFile);
