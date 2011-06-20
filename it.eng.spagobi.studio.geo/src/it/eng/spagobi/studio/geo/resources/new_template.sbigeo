@@ -41,10 +41,11 @@
             <PARAM name='title'>Layers</PARAM>
           </WINDOW>
           
-          <WINDOW name='detail'>
+    <!--      <WINDOW name='detail'>
             <PARAM name='visible'>true</PARAM>
             <PARAM name='title'>Dettagli</PARAM>
           </WINDOW>
+          -->
           
           <WINDOW name='legend'>
             <PARAM name='visible'>true</PARAM>

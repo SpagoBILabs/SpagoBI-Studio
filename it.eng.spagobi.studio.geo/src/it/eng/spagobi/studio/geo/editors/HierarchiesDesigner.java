@@ -389,7 +389,7 @@ public class HierarchiesDesigner {
 		labelType.setLayoutData (data);
 
 		final Combo textType	= new Combo(dialog, SWT.BORDER);	
-		textType.add("default");
+		//textType.add("default");
 		textType.add("custom");
 		//		final Text textType = new Text (dialog, SWT.BORDER);
 		textType.select(0);
@@ -521,7 +521,9 @@ public class HierarchiesDesigner {
 
 		final Button checkIsDef = new Button(dialog, SWT.CHECK | SWT.RIGHT);
 		final boolean[] isDefault = new boolean[1];
+		isDefault[0] = true;
 		checkIsDef.setText("Is default");
+		checkIsDef.setSelection(true);
 		if(level != null){
 			String defHier =geoDocument.getDatamartProvider().getHierarchy();
 			String defLev =geoDocument.getDatamartProvider().getLevel();

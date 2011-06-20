@@ -1351,7 +1351,7 @@ public class GEOEditor extends EditorPart {
 					| SWT.DROP_DOWN | SWT.READ_ONLY);
 			comboAgg.add("");
 			comboAgg.add("sum");
-			comboAgg.add("media");
+			comboAgg.add("avg");
 
 
 			for (int k = 0; k < comboAgg.getItemCount(); k++) {

@@ -44,7 +44,7 @@ public class MeasuresDesigner {
 		editor = _editor;
 		geoDocument = _geoDocument;
 	}
-	
+
 	private KPI fillMeasure(Shell dialog, String columnName){
 		KPI kpi = new KPI();
 		kpi.setColumnId(columnName);
@@ -53,33 +53,33 @@ public class MeasuresDesigner {
 
 		Text desc = (Text)dialog.getData("Description");
 		kpi.setDescription(desc.getText());
-		
+
 		Combo aggFunct = (Combo)dialog.getData("AggFunction");
 		kpi.setAggFunct(aggFunct.getText());
-		
+
 		Label col = (Label)dialog.getData("Color");
 		Color bgCol =col.getBackground();
 		String hexCol = DesignerUtils.convertRGBToHexadecimal(bgCol.getRGB());
 		kpi.setColor(hexCol);
-		
+
 		Combo treshType = (Combo)dialog.getData("TresholdsType");
 		tresholds.setType(treshType.getText());
 		Text treshLb = (Text)dialog.getData("TresholdsLb");
 		tresholds.setLbValue(treshLb.getText());
 		Text treshUb = (Text)dialog.getData("TresholdsUb");
 		tresholds.setUbValue(treshUb.getText());
-		
+
 		Param param = new Param();
 		tresholds.setParam(param);
-		
+
 		Combo treshParamName = (Combo)dialog.getData("TresholdsParamName");
 		param.setName(treshParamName.getText());
 		Text treshParamVal = (Text)dialog.getData("TresholdsParamValue");
 		param.setValue(treshParamVal.getText());
-		
+
 		Colours colours = new Colours();
 		kpi.setColours(colours);
-		
+
 
 		Combo colType = (Combo)dialog.getData("ColType");
 		colours.setType(colType.getText());
@@ -92,22 +92,22 @@ public class MeasuresDesigner {
 		Color bgCol3 =colNullVal.getBackground();
 		String hexCol3 = DesignerUtils.convertRGBToHexadecimal(bgCol3.getRGB());
 		colours.setNullValuesColor(hexCol3);
-		
+
 		Param colParam = new Param();
 		colours.setParam(colParam);
-		
+
 		Combo colParamName = (Combo)dialog.getData("ColParamName");
 		colParam.setName(colParamName.getText());
 		Label colParamVal = (Label)dialog.getData("ColParamVal");
 		Color bgCol4 =colParamVal.getBackground();
 		String hexCol4 = DesignerUtils.convertRGBToHexadecimal(bgCol4.getRGB());
 		colParam.setValue(hexCol4);
-		
+
 		return kpi;
 	} 
-	
+
 	public void createMeasuresShell(final Composite sectionClient, final String columnName){
-		
+
 		KPI kpi = KpiBO.getMeasureByColumnId(geoDocument, columnName);
 
 
@@ -124,8 +124,8 @@ public class MeasuresDesigner {
 		FormData data = new FormData ();
 		data.width = 140;
 		labelIsDef.setLayoutData (data);
-		
-		
+
+
 		//checkbox default
 		final Button isDefault = new Button(dialog, SWT.CHECK| SWT.RIGHT);
 		data = new FormData ();
@@ -135,30 +135,31 @@ public class MeasuresDesigner {
 		data.top = new FormAttachment (labelIsDef, 0, SWT.CENTER);
 		isDefault.setLayoutData (data);
 		dialog.setData("defaultKpi", columnName);
-	
+		isDefault.setSelection(true);
+
 		final boolean[] isDefaultRes = new boolean[1];
 		if(kpi != null){
 			Measures measures =geoDocument.getMapRenderer().getMeasures();
 			if(measures != null){
 				String columnNameDef = measures.getDefaultKpi();
-				if(columnNameDef.equals(columnName)){
+				if(columnNameDef != null && columnNameDef.equals(columnName)){
 					isDefault.setSelection(true);
 					isDefaultRes[0]=true;
 				}else{
 					isDefault.setSelection(false);
 					isDefaultRes[0]=false;
 				}
-				
+
 			}
 		}
 		isDefault.addSelectionListener(new SelectionListener() {
-	        public void widgetSelected(SelectionEvent event) {
-	        	isDefaultRes[0] = event.widget == isDefault;
-	        }
-	        public void widgetDefaultSelected(SelectionEvent event) {
-	        	isDefaultRes[0] = event.widget == isDefault;
-	        }
-	    });
+			public void widgetSelected(SelectionEvent event) {
+				isDefaultRes[0] = event.widget == isDefault;
+			}
+			public void widgetDefaultSelected(SelectionEvent event) {
+				isDefaultRes[0] = event.widget == isDefault;
+			}
+		});
 		Label label = new Label (dialog, SWT.RIGHT);
 		label.setText ("Description:");
 		data = new FormData ();
@@ -175,11 +176,11 @@ public class MeasuresDesigner {
 		cancel.setLayoutData (data);
 		cancel.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {
-//				System.out.println("User cancelled dialog");
+				//				System.out.println("User cancelled dialog");
 				dialog.close ();
 			}
 		});
-		
+
 		final Text text = createTextWithLayout(dialog, label, data, "Description");
 		if(kpi != null){
 			text.setText(kpi.getDescription());
@@ -192,10 +193,10 @@ public class MeasuresDesigner {
 		Label labelAgg = new Label (dialog, SWT.RIGHT);
 		labelAgg.setText ("Aggregate function:");		
 		labelAgg.setLayoutData (data);
-		
+
 		final Combo textAgg = createComboWithLayout(dialog, labelAgg, data, "AggFunction");
 		textAgg.add("sum");
-		textAgg.add("media");
+		textAgg.add("avg");
 		if(kpi != null){
 			for(int i =0; i<textAgg.getItemCount(); i++){
 				if(kpi.getAggFunct() != null && kpi.getAggFunct().equalsIgnoreCase(textAgg.getItem(i))){
@@ -212,11 +213,11 @@ public class MeasuresDesigner {
 		labelCol.setLayoutData (data);
 		Composite textColor = null;
 		if(kpi != null){
-			 textColor = createColorPickWithLayout(dialog, labelCol, data, "Color", kpi.getColor());
+			textColor = createColorPickWithLayout(dialog, labelCol, data, "Color", kpi.getColor());
 		}else{
-			 textColor = createColorPickWithLayout(dialog, labelCol, data, "Color");
+			textColor = createColorPickWithLayout(dialog, labelCol, data, "Color");
 		}
-		
+
 		//tresholds
 		data = new FormData ();
 		data.width = 140;
@@ -224,7 +225,7 @@ public class MeasuresDesigner {
 		Label labelTreshType = new Label (dialog, SWT.RIGHT);
 		labelTreshType.setText ("Tresholds type:");		
 		labelTreshType.setLayoutData (data);
-		
+
 		final Combo textTreshType = createComboWithLayout(dialog, labelTreshType, data, "TresholdsType");
 		textTreshType.add("static");
 		textTreshType.add("uniform");
@@ -250,7 +251,7 @@ public class MeasuresDesigner {
 		if(kpi != null && kpi.getTresholds()!= null){
 			textTreshLb.setText(kpi.getTresholds().getLbValue());
 		}
-		
+
 		data = new FormData ();
 		data.width = 140;
 		data.top = new FormAttachment(textTreshLb, 5);
@@ -261,14 +262,14 @@ public class MeasuresDesigner {
 		if(kpi != null && kpi.getTresholds()!= null){
 			textTreshUb.setText(kpi.getTresholds().getUbValue());
 		}
-		
+
 		data = new FormData ();
 		data.width = 140;
 		data.top = new FormAttachment(textTreshUb, 5);
 		Label labelTreshParamName = new Label (dialog, SWT.RIGHT);
 		labelTreshParamName.setText ("Tresholds param name:");		
 		labelTreshParamName.setLayoutData (data);
-		
+
 		final Combo textTreshParamName = createComboWithLayout(dialog, labelTreshParamName, data, "TresholdsParamName");
 		textTreshParamName.setEnabled(false);
 		textTreshParamName.add("range");
@@ -296,7 +297,7 @@ public class MeasuresDesigner {
 			}
 		});
 		////////////end 
-		
+
 		data = new FormData ();
 		data.width = 140;
 		data.top = new FormAttachment(textTreshParamName, 5);
@@ -307,7 +308,7 @@ public class MeasuresDesigner {
 		if(kpi != null && kpi.getTresholds()!= null && kpi.getTresholds().getParam() != null){
 			textTreshParamVal.setText(kpi.getTresholds().getParam().getValue());
 		}
-		
+
 		//colours
 		data = new FormData ();
 		data.width = 140;
@@ -325,7 +326,7 @@ public class MeasuresDesigner {
 				}
 			}
 		}
-		
+
 		data = new FormData ();
 		data.width = 140;
 		data.top = new FormAttachment(textColoursType, 5);
@@ -338,7 +339,7 @@ public class MeasuresDesigner {
 		}else{
 			textColoursOutbound = createColorPickWithLayout(dialog, labelColoursOutbound, data, "ColOutbound");
 		}
-		
+
 		data = new FormData ();
 		data.width = 140;
 		data.top = new FormAttachment(textColoursOutbound, 5);
@@ -351,14 +352,14 @@ public class MeasuresDesigner {
 		}else{
 			textColoursNullVal = createColorPickWithLayout(dialog, labelColoursNullVal, data, "ColNullVal");
 		}
-		
+
 		data = new FormData ();
 		data.width = 140;
 		data.top = new FormAttachment(textColoursNullVal, 5);
 		Label labelColParamName = new Label (dialog, SWT.RIGHT);
 		labelColParamName.setText ("Colours param name:");		
 		labelColParamName.setLayoutData (data);
-		
+
 		final Combo textColParamName = createComboWithLayout(dialog, labelColParamName, data, "ColParamName");
 		textColParamName.setEnabled(false);
 		textColParamName.add("BASE_COLOR");
@@ -397,7 +398,7 @@ public class MeasuresDesigner {
 		}else{
 			textColParamVal = createColorPickWithLayout(dialog, labelColParamVal, data, "ColParamVal");
 		}
-		
+
 		data.bottom = new FormAttachment (cancel, 0, SWT.DEFAULT);
 
 		Button ok = new Button (dialog, SWT.PUSH);
@@ -411,7 +412,7 @@ public class MeasuresDesigner {
 			public void widgetSelected (SelectionEvent e) {
 				//add or modify measure
 				KPI kpiToAdd = fillMeasure(dialog, columnName);
-				
+
 				KpiBO.setNewMeasure(geoDocument, kpiToAdd);
 				if(isDefaultRes[0]){
 					Measures measures = geoDocument.getMapRenderer().getMeasures();
@@ -423,7 +424,7 @@ public class MeasuresDesigner {
 				dialog.close ();
 			}
 		});
-		
+
 		Button delete = new Button (dialog, SWT.PUSH);
 		delete.setText ("Delete");
 		data = new FormData ();
@@ -451,10 +452,10 @@ public class MeasuresDesigner {
 		dialog.setDefaultButton (ok);
 		dialog.pack ();
 		dialog.open ();
-		
+
 	}
-	
-	
+
+
 	private Text createTextWithLayout(Shell dialog, Label itsLabel, FormData data, String dataKey){
 		Text text = new Text (dialog, SWT.BORDER);
 		data = new FormData ();
@@ -477,7 +478,7 @@ public class MeasuresDesigner {
 		dialog.setData(dataKey, combo);
 		return combo;
 	}
-	
+
 	private Composite createColorPickWithLayout(Shell dialog, Label itsLabel, FormData data, String dataKey){
 		final Label colorLabel = new Label(dialog, SWT.BORDER);
 		data = new FormData ();
@@ -487,7 +488,7 @@ public class MeasuresDesigner {
 		data.top = new FormAttachment (itsLabel, 0, SWT.CENTER);
 		colorLabel.setLayoutData(data);
 		dialog.setData(dataKey, colorLabel);
-		
+
 		Composite colorSection = DesignerUtils.createColorPicker(dialog, "#FF0000", colorLabel);
 		data = new FormData ();
 		data.width = 50;
@@ -506,7 +507,7 @@ public class MeasuresDesigner {
 		data.top = new FormAttachment (itsLabel, 0, SWT.CENTER);
 		colorLabel.setLayoutData(data);
 		dialog.setData(dataKey, colorLabel);
-		
+
 		Composite colorSection = DesignerUtils.createColorPicker(dialog, selectedColor, colorLabel);
 		data = new FormData ();
 		data.width = 50;
@@ -516,7 +517,7 @@ public class MeasuresDesigner {
 		colorSection.setLayoutData (data);
 		return colorSection;
 	}
-	
+
 	public GEOEditor getEditor() {
 		return editor;
 	}
@@ -540,5 +541,5 @@ public class MeasuresDesigner {
 	public void setGeoDocument(GEODocument geoDocument) {
 		this.geoDocument = geoDocument;
 	}
-	
+
 }

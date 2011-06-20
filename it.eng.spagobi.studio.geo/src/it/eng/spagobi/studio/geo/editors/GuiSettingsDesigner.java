@@ -117,7 +117,7 @@ public class GuiSettingsDesigner {
 		createWindowGroup("Navigation", toolkit,  rl);
 		createWindowGroup("Measures", toolkit,  rl);
 		createWindowGroup("Layers", toolkit,  rl);
-		createWindowGroup("Detail", toolkit,  rl);
+		//createWindowGroup("Detail", toolkit,  rl);
 		createWindowGroup("Legend", toolkit,  rl);
 		createWindowGroup("Colourpicker", toolkit,  rl);
 	
