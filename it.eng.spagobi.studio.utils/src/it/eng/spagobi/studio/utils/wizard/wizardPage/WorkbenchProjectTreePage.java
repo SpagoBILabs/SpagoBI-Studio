@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.slf4j.Logger;
@@ -56,6 +57,12 @@ public class WorkbenchProjectTreePage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 		logger.debug("IN");	
+
+//		Shell shell = parent.getShell();
+//		int x = shell.getSize().x;		
+//		int y = shell.getSize().y;
+//		shell.setSize(x, y);
+		
 		Composite composite =  new Composite(parent, SWT.NULL);
 		composite.setLayout(new RowLayout(SWT.VERTICAL));
 		setPageComplete(false);
@@ -66,7 +73,7 @@ public class WorkbenchProjectTreePage extends WizardPage {
 		int ncol = 2;
 		nameLayout.numColumns = ncol;
 		projectGroup.setLayout(nameLayout);
-		projectGroup.setLayoutData(new RowData(500,90));
+		projectGroup.setLayoutData(new RowData(600,90));
 
 		Label aaName=new Label(projectGroup, SWT.NONE);
 		aaName.setText("Select Project: ");	
@@ -75,7 +82,7 @@ public class WorkbenchProjectTreePage extends WizardPage {
 		// Tree to select folder
 
 		final Group belowGroup=new Group(composite,SWT.BORDER);		
-		belowGroup.setLayoutData(new RowData(500,300));
+		belowGroup.setLayoutData(new RowData(600,300));
 		//		final StackLayout layout = new StackLayout();
 		//		belowGroup.setLayout(layout);
 		final FillLayout layout = new FillLayout();
