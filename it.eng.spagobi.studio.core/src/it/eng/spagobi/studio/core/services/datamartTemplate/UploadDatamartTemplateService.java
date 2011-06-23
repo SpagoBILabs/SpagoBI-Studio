@@ -81,6 +81,11 @@ public class UploadDatamartTemplateService {
 		String UUID =Long.valueOf(ll).toString();
 
 		String tempDirPath = System.getProperty("java.io.tmpdir");
+		logger.debug("Temp dir is: "+tempDirPath + " check if ends with "+java.io.File.pathSeparator);
+		if(!tempDirPath.endsWith(java.io.File.separator)){
+			tempDirPath += java.io.File.separator;
+		}
+		
 		String idFolderPath = businessModel.getName()+"_"+UUID;
 		String tempDirPathId = tempDirPath + idFolderPath;
 		logger.debug("create model in temporary folder "+tempDirPathId);
