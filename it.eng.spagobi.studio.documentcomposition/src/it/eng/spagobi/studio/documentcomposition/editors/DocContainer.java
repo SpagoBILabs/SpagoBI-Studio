@@ -76,12 +76,12 @@ public class DocContainer {
 	String title="";
 	private static Logger logger = LoggerFactory.getLogger(DocContainer.class);
 
-	
-	public static final int DEFAULT_WIDTH=200;
-	public static final int DEFAULT_HEIGHT=200;
+
+	public static final int DEFAULT_WIDTH=100;
+	public static final int DEFAULT_HEIGHT=100;
 	public static final int MIN_MARGIN_BOUNDS=0;
 	public static final int ALIGNMENT_MARGIN=20;
-	
+
 	// default color for containers
 	public static RGB COLOR_CONTAINERS = new RGB(255,255,255);
 
@@ -557,9 +557,10 @@ public class DocContainer {
 							return;
 						}
 						doTransfer=documentContained.recoverDocumentMetadata(idContainer, file);
-
-						// add the document!!
-						(new ModelBO()).addNewDocumentToModel(documentContained.getMetadataDocument(), calculateTemplateStyle(false));
+						if(doTransfer == true){
+							// add the document!!
+							(new ModelBO()).addNewDocumentToModel(documentContained.getMetadataDocument(), calculateTemplateStyle(false));
+						}					
 					}
 				}
 				if(doTransfer==true){

@@ -69,7 +69,7 @@ public class Designer {
 
 	DocumentCompositionEditor editor=null;
 	private static Logger logger = LoggerFactory.getLogger(Designer.class);
-	
+
 	public static synchronized String createID()
 	{
 		return String.valueOf(idCounter++);
@@ -258,7 +258,7 @@ public class Designer {
 	 */
 
 	public void addShellMouseControls(final Composite shell){
-	logger.debug("IN");
+		logger.debug("IN");
 		final Point[] offset = new Point[1];
 		Listener listener = new Listener() {
 			public void handleEvent(Event event) {
@@ -361,7 +361,7 @@ public class Designer {
 									int newY=event.y - pt.y;
 									boolean doesIntersect=DocContainer.doesIntersect(selectedDoc1.getIdContainer(), selectedDoc1.getDesigner(),newX, newY, selectedDoc1.getDocumentContained().getGroup().getBounds().width,selectedDoc1.getDocumentContained().getGroup().getBounds().height,true);
 									boolean doesExceed=DocContainer.doesExceed(selectedDoc1.getIdContainer(), selectedDoc1.getDesigner(),newX, newY, selectedDoc1.getDocumentContained().getGroup().getBounds().width,selectedDoc1.getDocumentContained().getGroup().getBounds().height,true);
-	
+
 									if(doesIntersect==false && doesExceed==false){
 										selectedDoc1.getDocumentContained().getGroup().setLocation(newX, newY);
 										// Update model if document is present
@@ -415,7 +415,7 @@ public class Designer {
 
 					public void handleEvent(Event e) {
 						if(getState().equals(Designer.NORMAL)){
-							addNewDocContainer(composite, currentX, currentY, DocContainer.DEFAULT_WIDTH, DocContainer.DEFAULT_HEIGHT, true);
+							addNewDocContainer(composite, currentX, currentY, DocContainer.DEFAULT_WIDTH+50, DocContainer.DEFAULT_HEIGHT+50, true);
 							editor.setIsDirty(true);
 						}
 					}
@@ -534,39 +534,50 @@ public class Designer {
 				localFileName=document.getLocalFileName();	
 				MetadataDocument metadataDocument=null;
 				if(localFileName!=null){
-					
+
 					// search for the right file
-					
+
 					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 					IPath workspacePath=root.getLocation();
 					IProject project = root.getProject(getProjectName());
 					IPath projectLocation=project.getLocation();
 					IPath pathRetrieved=FileFinder.retrieveFile(localFileName, projectLocation.toString(), workspacePath);
-					IFile fileToGet = ResourcesPlugin.getWorkspace().getRoot().getFile(pathRetrieved);
-					
-					if(fileToGet.exists()){
-						// not put yet Id beacuase not linked yet to the group;  create the metadata document from FIles METADATA
-						// add the metadata document to the metadata container
-						metadataDocument=new MetadataDocument(fileToGet);
-						(new MetadataBO()).getMetadataDocumentComposition().addMetadataDocument(metadataDocument);
-						
-						
-						// ************		PREPARE MEASURES FOR THE DESIGNER	*****************
-						String videoWidth=(new ModelBO()).getModel().getDocumentsConfiguration().getVideoWidth();
-						String videoHeight=(new ModelBO()).getModel().getDocumentsConfiguration().getVideoHeight();
-						int vWidth=Integer.valueOf(videoWidth);
-						int vHeight=Integer.valueOf(videoHeight);
+					if(pathRetrieved != null){
 
-						int widthToPut=MetadataStyle.fromVideoWidthToDesignerWidth(metadataStyle.getWidth(), vWidth, DESIGNER_WIDTH);
-						int heightToPut=MetadataStyle.fromVideoHeightToDesignerHeight(metadataStyle.getHeight(), vHeight, DESIGNER_HEIGHT);
+						IFile fileToGet = ResourcesPlugin.getWorkspace().getRoot().getFile(pathRetrieved);
 
-						// scale x and y to default designer sizes
-						int scaledX=(DESIGNER_WIDTH*metadataStyle.getX())/vWidth;
-						int scaledY=(DESIGNER_HEIGHT*metadataStyle.getY())/vHeight;
+						if(fileToGet.exists()){
+							// not put yet Id beacuase not linked yet to the group;  create the metadata document from FIles METADATA
+							// add the metadata document to the metadata container
+							metadataDocument=new MetadataDocument(fileToGet);
+							(new MetadataBO()).getMetadataDocumentComposition().addMetadataDocument(metadataDocument);
 
-						addDocContainerFromTemplate(mainComposite, scaledX, scaledY, widthToPut, heightToPut, metadataDocument, document);
 
-					
+							// ************		PREPARE MEASURES FOR THE DESIGNER	*****************
+							String videoWidth=(new ModelBO()).getModel().getDocumentsConfiguration().getVideoWidth();
+							String videoHeight=(new ModelBO()).getModel().getDocumentsConfiguration().getVideoHeight();
+							int vWidth=Integer.valueOf(videoWidth);
+							int vHeight=Integer.valueOf(videoHeight);
+
+							int widthToPut=MetadataStyle.fromVideoWidthToDesignerWidth(metadataStyle.getWidth(), vWidth, DESIGNER_WIDTH);
+							int heightToPut=MetadataStyle.fromVideoHeightToDesignerHeight(metadataStyle.getHeight(), vHeight, DESIGNER_HEIGHT);
+
+							// scale x and y to default designer sizes
+							int scaledX=(DESIGNER_WIDTH*metadataStyle.getX())/vWidth;
+							int scaledY=(DESIGNER_HEIGHT*metadataStyle.getY())/vHeight;
+
+							addDocContainerFromTemplate(mainComposite, scaledX, scaledY, widthToPut, heightToPut, metadataDocument, document);
+
+
+						}
+						else{
+							MessageDialog.openError(mainComposite.getShell(), 
+									"Error", "Could not find file "+localFileName+", download idt again!");
+							logger.error("END "+Designer.class.toString()+": Initialize designer function: " +
+									"Could not find file "+localFileName+", download idt again!");
+							// delete from model!!!!
+							new ModelBO().deleteDocumentFromModel(document);
+						}
 					}
 					else{
 						MessageDialog.openError(mainComposite.getShell(), 
@@ -574,7 +585,7 @@ public class Designer {
 						logger.error("END "+Designer.class.toString()+": Initialize designer function: " +
 								"Could not find file "+localFileName+", download idt again!");
 						// delete from model!!!!
-						new ModelBO().deleteDocumentFromModel(document);
+						new ModelBO().deleteDocumentFromModel(document);					
 					}
 				}
 			}
@@ -586,10 +597,10 @@ public class Designer {
 
 			}
 		}
-		
+
 		// reloading navigation view
 		reloadNavigationView();
-		
+
 		logger.debug("OUT");
 
 	}
@@ -625,8 +636,8 @@ public class Designer {
 	}
 
 
-	
-	
+
+
 	/** Reload the view with navigations
 	 * 
 	 * @param id
