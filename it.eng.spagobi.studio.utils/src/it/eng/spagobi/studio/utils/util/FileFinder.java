@@ -17,11 +17,13 @@ public class FileFinder {
 		boolean found=searchInSubtree(fileName,directory);
 		return found;
 	}
-	
+
 	public static IPath retrieveFile(String fileName,String directoryPath, IPath workspacePath){
 
 		File directory=new File(directoryPath);
 		File file=getFileFromSubtree(fileName,directory);
+
+		if(file == null) return null;
 
 		// remove from absolutePath workspace part
 		String workspacePathS=workspacePath.toString();
@@ -36,7 +38,7 @@ public class FileFinder {
 		return iPath;
 	}
 
-	
+
 
 	public static boolean searchInSubtree(String fileName, File directory){
 
@@ -56,11 +58,11 @@ public class FileFinder {
 				}
 
 				File file=new File(absPath);
-//				if(file.isFile())System.out.println("- File: "+file.getName());
-//				if(file.isDirectory())System.out.println("Directory: "+file.getName());
+				//				if(file.isFile())System.out.println("- File: "+file.getName());
+				//				if(file.isDirectory())System.out.println("Directory: "+file.getName());
 				// if it is a file check if it's name is equal to file we are searching
 				if(file.isFile() && file.getName().equals(fileName)){
-//					System.out.println("TROVATO");
+					//					System.out.println("TROVATO");
 					found=true;
 				}
 				else{
@@ -75,7 +77,7 @@ public class FileFinder {
 		return found;
 	}
 
-	
+
 	/** given the projects directory returns in subtree file with than name
 	 * 
 	 * @param fileName
@@ -101,11 +103,11 @@ public class FileFinder {
 				}
 
 				File file=new File(absPath);
-//				if(file.isFile())System.out.println("- File: "+file.getName());
-//				if(file.isDirectory())System.out.println("Directory: "+file.getName());
+				//				if(file.isFile())System.out.println("- File: "+file.getName());
+				//				if(file.isDirectory())System.out.println("Directory: "+file.getName());
 				// if it is a file check if it's name is equal to file we are searching
 				if(file.isFile() && file.getName().equals(fileName)){
-//					System.out.println("TROVATO");
+					//					System.out.println("TROVATO");
 					toReturn=file;
 				}
 				else{
@@ -125,7 +127,7 @@ public class FileFinder {
 		String PATH="C:/prova";
 		String FILE="filefile.txt";
 		boolean found=FileFinder.fileExistsInSubtree(FILE, PATH);
-//		System.out.println("Trovato? "+found);
+		//		System.out.println("Trovato? "+found);
 	}
 
 }
