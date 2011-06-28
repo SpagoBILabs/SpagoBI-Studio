@@ -154,7 +154,7 @@
 				<PARAMETER name='orientation' description='Orientation'
 					type='COMBO' values='vertical,horizontal' defaultValue='vertical'
 					tooltip='set the orientation of the chart'/>
-				<PARAMETER name='Cumulative' description='Add cumulative serie'
+				<PARAMETER name='cumulative' description='Add cumulative serie'
 					type='BOOLEAN' defaultValue='false' tooltip='add the cumulative serie in the chart'/>
 				<PARAMETER name='make_percentage' description='Make percentage'
 					type='BOOLEAN' defaultValue='false'/>
