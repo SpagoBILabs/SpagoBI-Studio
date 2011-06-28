@@ -127,10 +127,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		}
 
 
-		//		final EnginesServiceProxy engineService=proxyFactory.getEnginesServiceProxy();
-		//		final DataSetsSDKServiceProxy datasetService=proxyFactory.getDataSetsSDKServiceProxy();
-		//		final DocumentsServiceProxy docService=proxyFactory.getDocumentsServiceProxy();
-		//		final DataSourcesSDKServiceProxy datasourceService=proxyFactory.getDataSourcesSDKServiceProxy();
+
 
 		final NotAllowedOperationStudioException notAllowedOperationStudioException = new NotAllowedOperationStudioException();	
 
@@ -145,11 +142,6 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 					datasourceList=proxyObjects.getServerDataSources().getDataSourceList();
 					functionality=proxyObjects.getServerDocuments().getDocumentsAsTree(null);			
 
-
-					//					enginesList=engineService.getEngines();
-					//					datasetList=datasetService.getDataSets();
-					//					datasourceList=datasourceService.getDataSources();
-					//					functionality=docService.getDocumentsAsTree(null);			
 					String ciao= functionality.getId().toString()+" "+functionality.getName()+" label: "+functionality.getName();
 				}
 				catch (Exception e) {
@@ -256,6 +248,12 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 		typeLabel=BiObjectUtilities.getTypeFromExtension(fileSelected.getName());
 
+		int indexPoint=fileSelected.getName().indexOf('.');
+		String extension = "";
+		if(indexPoint!=-1){
+			extension=fileSelected.getName().substring(indexPoint+1);
+		}
+
 		if(typeLabel==null){
 			logger.error("File "+fileSelected.getName()+" has unknown exstension");
 			MessageDialog.openError(getShell(), "No type", "File "+fileSelected.getName()+" has unknown exstension");
@@ -273,11 +271,51 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 
 		for (Engine engine : enginesList) {
-			if(engine.getDocumentType().equalsIgnoreCase(typeLabel)){		
-				engineCombo.add(engine.getLabel());
-				engineLabelIdMap.put(engine.getLabel(), engine.getId());					
+			if(engine.getDocumentType().equalsIgnoreCase(typeLabel)){
+
+				// if type == REPORT select directly the right engine
+				//BIRT
+				if(typeLabel.equalsIgnoreCase(SpagoBIStudioConstants.REPORT_TYPE) 
+						&& extension.equals(SpagoBIStudioConstants.BIRT_REPORT_ENGINE_EXTENSION)){
+					if(engine.getDriverClassName().equals(SpagoBIStudioConstants.BIRT_ENGINE_DRIVER)){
+						engineCombo.add(engine.getLabel());
+						engineLabelIdMap.put(engine.getLabel(), engine.getId());	
+					}
+				}
+				else //JASPER
+					if(typeLabel.equalsIgnoreCase(SpagoBIStudioConstants.REPORT_TYPE) 
+							&& extension.equals(SpagoBIStudioConstants.JASPER_REPORT_ENGINE_EXTENSION)){
+						if(engine.getDriverClassName().equals(SpagoBIStudioConstants.JASPER_ENGINE_DRIVER)){
+							engineCombo.add(engine.getLabel());
+							engineLabelIdMap.put(engine.getLabel(), engine.getId());	
+						}
+					}
+					else // CHART 
+						if(typeLabel.equalsIgnoreCase(SpagoBIStudioConstants.CHART_TYPE)
+								&& extension.equals(SpagoBIStudioConstants.CHART_ENGINE_EXTENSION)){
+							if(engine.getClassName().equals(SpagoBIStudioConstants.CHART_ENGINE_CLASS)){
+								engineCombo.add(engine.getLabel());
+								engineLabelIdMap.put(engine.getLabel(), engine.getId());
+							}
+						}
+						else // DASHBOARD
+							if(typeLabel.equalsIgnoreCase(SpagoBIStudioConstants.CHART_TYPE)
+									&& extension.equals(SpagoBIStudioConstants.DASHBOARD_ENGINE_EXTENSION)){
+								if(engine.getClassName().equals(SpagoBIStudioConstants.DASHBOARD_ENGINE_CLASS)){
+									engineCombo.add(engine.getLabel());
+									engineLabelIdMap.put(engine.getLabel(), engine.getId());	
+								}
+							}
+
+							else{
+								engineCombo.add(engine.getLabel());
+								engineLabelIdMap.put(engine.getLabel(), engine.getId());					
+							}
 			}
 		}
+
+
+
 
 		// Select dataset
 		new Label(left, SWT.NONE).setText("Dataset");
@@ -349,6 +387,13 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 			}
 		});
+
+		// if only one choice is allowed set it
+		if(engineCombo.getItemCount()==1){
+			engineCombo.select(0);
+			//			engineCombo.setEnabled(false);
+
+		}
 
 
 
