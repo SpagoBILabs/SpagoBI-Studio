@@ -96,7 +96,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	 */
 	public SpagoBIDeployDatasetWizardFormPage(IStructuredSelection selection) {
 		super("wizardPage");
-		setTitle("Deploy Dataste");
+		setTitle("Deploy Dataset");
 		setDescription("Deploy a new dataset; select the new dataset properties");
 		this.selection = selection;
 	}
@@ -109,7 +109,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		logger.debug("IN");
 		all=new Composite(parent, SWT.NONE);
 		Shell shell = all.getShell();
-		shell.setSize(800,600);
+		shell.setSize(650,400);
 		monitor=new ProgressMonitorPart(getShell(), null);
 
 		// get selection file

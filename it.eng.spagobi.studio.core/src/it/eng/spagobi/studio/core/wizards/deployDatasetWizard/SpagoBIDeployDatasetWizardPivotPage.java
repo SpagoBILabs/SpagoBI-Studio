@@ -85,7 +85,7 @@ public class SpagoBIDeployDatasetWizardPivotPage extends WizardPage {
 		logger.debug("IN");
 		Composite all=new Composite(parent, SWT.NONE);
 		Shell shell = all.getShell();
-		shell.setSize(800,600);
+		shell.setSize(650,400);
 
 		// get selection file
 		Object objSel = selection.toList().get(0);
