@@ -96,19 +96,19 @@ public class WorkbenchProjectTreeGenerator {
 		// mark project root
 		root.setData(TREE_ROOT);
 
-		TreeItem analysis = new TreeItem(root,SWT.SINGLE);
-		analysis.setText(SpagoBIStudioConstants.FOLDER_ANALYSIS);
-		analysis.setImage(analysisDescriptor.createImage());
-
 		itemFolderMap = new HashMap<String, IFolder> ();
 
 		IFolder analysisFolder = project.getFolder(SpagoBIStudioConstants.FOLDER_ANALYSIS);
-		itemFolderMap.put(SpagoBIStudioConstants.FOLDER_ANALYSIS, analysisFolder);
 		/** How any time an item name has been retrieved, in order to rename it */
 		HashMap<String, Integer> nameOccurencesMap = new HashMap<String, Integer>();
 
 		try{
 			if(analysisFolder != null && analysisFolder.exists()){
+				// only if the folder exist otherwise don't draw it
+				itemFolderMap.put(SpagoBIStudioConstants.FOLDER_ANALYSIS, analysisFolder);
+				TreeItem analysis = new TreeItem(root,SWT.SINGLE);
+				analysis.setText(SpagoBIStudioConstants.FOLDER_ANALYSIS);
+				analysis.setImage(analysisDescriptor.createImage());
 				createItemsList(analysis, analysisFolder, itemFolderMap, nameOccurencesMap);
 			}
 			else {
