@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.utils.util;
 
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
 
 public class SpagoBIStudioConstants {
@@ -62,6 +61,22 @@ public class SpagoBIStudioConstants {
 	public final static int DATASET_NAME_LIMIT=50;
 	public final static int DATASET_DESCR_LIMIT=160;
 
+	
+	// Engines Drivers
+	
+	public final static String BIRT_ENGINE_DRIVER="it.eng.spagobi.engines.drivers.birt.BirtReportDriver";
+	public final static String JASPER_ENGINE_DRIVER="it.eng.spagobi.engines.drivers.jasperreport.JasperReportDriver";
+	public final static String CHART_ENGINE_CLASS="it.eng.spagobi.engines.chart.SpagoBIChartInternalEngine";
+	public final static String DASHBOARD_ENGINE_CLASS="it.eng.spagobi.engines.dashboard.SpagoBIDashboardInternalEngine";
+	public final static String GEO_ENGINE_DRIVER="it.eng.spagobi.engines.drivers.geo.GeoDriver";
+
+	
+	// ENGINE_TYPE
+	public final static String REPORT_TYPE="REPORT";
+	public final static String CHART_TYPE="DASH";
+	public final static String GEO_TYPE="MAP";
+	
+	
 	
 	
 	// Name of prohect folders
