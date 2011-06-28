@@ -306,6 +306,14 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 									engineLabelIdMap.put(engine.getLabel(), engine.getId());	
 								}
 							}
+							else // GEO
+								if(typeLabel.equalsIgnoreCase(SpagoBIStudioConstants.GEO_TYPE)
+										&& extension.equals(SpagoBIStudioConstants.GEO_ENGINE_EXTENSION)){
+									if(engine.getDriverName().equals(SpagoBIStudioConstants.GEO_ENGINE_DRIVER)){
+										engineCombo.add(engine.getLabel());
+										engineLabelIdMap.put(engine.getLabel(), engine.getId());	
+									}
+								}
 
 							else{
 								engineCombo.add(engine.getLabel());
