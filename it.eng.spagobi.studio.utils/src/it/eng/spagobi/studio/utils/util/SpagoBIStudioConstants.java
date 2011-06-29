@@ -42,11 +42,11 @@ public class SpagoBIStudioConstants {
 	
 	// Engine Labels
 	public final static String DASHBOARD_ENGINE_LABEL="DashboardInternalEng";
-	public final static String CHART_ENGINE_LABEL="ChartEngine";
+	public final static String CHART_ENGINE_LABEL="ChartInternalEng";
 	public final static String JASPER_REPORT_ENGINE_LABEL="JasperReportEngine";
 	public final static String BIRT_REPORT_ENGINE_LABEL="BirtEngine";
 	public final static String OLAP_ENGINE_LABEL="JPivotEngine";
-	public final static String ETL_ENGINE_LABEL="TalendEngine";
+	public final static String ETL_ENGINE_LABEL="TALEND";
 	public final static String DOSSIER_ENGINE_LABEL="Dossier";
 	public final static String DATA_MINING_ENGINE_LABEL="WekaEngine";
 	public final static String QBE_ENGINE_LABEL="QbeEngine";
