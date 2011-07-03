@@ -25,7 +25,8 @@ Bundle-ClassPath: .,
  lib/logback/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
  lib/logback/org.slf4j.api_1.5.11.v20100519-1910.jar,
  lib/commons-logging-api-1.1.jar,
- lib/log4j-1.2.9.jar
+ lib/log4j-1.2.9.jar,
+ lib/json.jar
 Bundle-Activator: it.eng.spagobi.studio.oda.Activator
 Bundle-Localization: plugin
 Export-Package: it.eng.spagobi.commons.constants,

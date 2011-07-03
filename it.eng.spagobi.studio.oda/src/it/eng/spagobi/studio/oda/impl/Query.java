@@ -31,6 +31,7 @@ import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.DatasetParameter;
 import it.eng.spagobi.studio.utils.services.serverobjects.ServerDatasets;
+import it.eng.spagobi.tools.dataset.common.datareader.JSONDataReader;
 import it.eng.spagobi.tools.dataset.common.datareader.XmlDataReader;
 import it.eng.spagobi.tools.dataset.common.datastore.IDataStore;
 
@@ -207,8 +208,8 @@ public class Query implements IQuery
 		
 		dataStore = null;
 		try {
-			XmlDataReader dataReader = new XmlDataReader();
-			//JSONDataReader  dataReader = new JSONDataReader ();
+			//XmlDataReader dataReader = new XmlDataReader();
+			JSONDataReader dataReader = new JSONDataReader ();
 			dataStore = dataReader.read( result );
 		} catch (Throwable t) {
 			throw (OdaException) new OdaException("Impossible to parse resultset [" + result + "]").initCause(t);
