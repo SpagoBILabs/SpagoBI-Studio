@@ -13,12 +13,9 @@ import java.rmi.RemoteException;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.eclipse.core.internal.resources.File;
-import org.eclipse.core.internal.resources.Folder;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -36,6 +33,7 @@ public class UploadDatamartTemplateService {
 	ISelection selection; 
 	private static Logger logger = LoggerFactory.getLogger(UploadDatamartTemplateService.class);
 	String projectname = null;
+	String modelname = null;
 
 	public UploadDatamartTemplateService(ISelection _selection) {
 		selection = _selection;	
@@ -46,12 +44,11 @@ public class UploadDatamartTemplateService {
 
 		IStructuredSelection sel=(IStructuredSelection)selection;
 
-		// go on only if ysou selected a document
+		// go on only if is selected a document
 		Object objSel = sel.toList().get(0);
 		File fileSel=(File)objSel;
 		projectname = fileSel.getProject().getName();
-
-
+		modelname = fileSel.getName();
 
 		logger.debug("get datamart.jar of model file name "+fileSel.getName());
 
@@ -72,11 +69,12 @@ public class UploadDatamartTemplateService {
 			return false;
 		}
 		final BusinessModel finalBusinessModel = businessModel;
-
+		final File finalBusinessModelFile = fileSel ; 
+		
 		// generate the jar
 
 
-		//Creta temp dir
+		//Create temp dir
 		long ll =System.currentTimeMillis();
 		String UUID =Long.valueOf(ll).toString();
 
@@ -141,16 +139,14 @@ public class UploadDatamartTemplateService {
 		else{
 			logger.debug("found file "+businessModel.getName()+"/dist/datamart.jar");
 		}
-
+		
 		// got the template datamart.jar
-
-
 		final java.io.File finalDatamartFile = datamart;
 		final NoActiveServerException noActiveServerException=new NoActiveServerException();
 
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-				monitor.beginTask("Deploying datamart.jar", IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Deploying model files (datamart.jar and " + modelname +")", IProgressMonitor.UNKNOWN);
 
 				SpagoBIServerObjectsFactory spagoBIServerObjects = null;
 				try{
@@ -162,22 +158,46 @@ public class UploadDatamartTemplateService {
 					return;
 				}
 
-				Template template = new Template();
-				template.setFileName(finalDatamartFile.getName());
-				template.setFolderName(finalBusinessModel.getName());
-
-				// create template content
+				Template datamartTemplate = new Template();
+				Template modelTemplate = new Template();
+				
+				//defines properties for datamart file
+				datamartTemplate.setFileName(finalDatamartFile.getName());
+				datamartTemplate.setFolderName(finalBusinessModel.getName());
+				// create templates content
 				FileDataSource fileDataSource=new FileDataSource(finalDatamartFile);
 				DataHandler dataHandler=new DataHandler(fileDataSource);			
-				template.setContent(dataHandler);
-				logger.debug("built Template with content data handler");
+				datamartTemplate.setContent(dataHandler);
+				logger.debug("built Datamart template with content data handler");
+				
+				//defines properties for sbimodel file 
+				modelTemplate.setFileName(modelname);
+				modelTemplate.setFolderName(finalBusinessModel.getName());
+				// create templates content
+				try{
+					ByteArrayDataSource byteDataSource = new ByteArrayDataSource(finalBusinessModelFile.getContents(),"application/octet-stream");	
+					dataHandler = new DataHandler(byteDataSource);
+					modelTemplate.setContent(dataHandler);
+					logger.debug("built Model template with content data handler");
+				}catch(Exception e){
+					logger.error("error in getting model template",e);
+					throw new InvocationTargetException(e);
+				}
+
 
 				try {
-					spagoBIServerObjects.getServerDocuments().uploadDatamartTemplate(template);
+					spagoBIServerObjects.getServerDocuments().uploadDatamartTemplate(datamartTemplate);
 				} catch (RemoteException e2) {
 					logger.error("error in uploading datamart",e2);
 					throw new InvocationTargetException(e2);
 				}
+				try {
+					spagoBIServerObjects.getServerDocuments().uploadDatamartModel(modelTemplate);
+				} catch (RemoteException e3) {
+					logger.error("error in uploading model file",e3);
+					throw new InvocationTargetException(e3);
+				}
+
 				monitor.done();
 				if (monitor.isCanceled())
 					logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));
@@ -228,20 +248,6 @@ public class UploadDatamartTemplateService {
 		return true;
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
