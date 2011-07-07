@@ -2,9 +2,6 @@ package it.eng.spagobi.studio.core.views.actionProvider;
 
 
 
-import java.util.List;
-
-import it.eng.spagobi.meta.editor.business.actions.DeleteModelObjectAction;
 import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
 import it.eng.spagobi.meta.editor.popup.actions.CreateJPAMappingProjectExplorerAction;
 import it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerAction;
@@ -13,6 +10,7 @@ import it.eng.spagobi.studio.chart.wizards.SpagoBINewChartWizard;
 import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.core.services.datamartTemplate.UploadDatamartTemplateService;
 import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
+import it.eng.spagobi.studio.core.services.modelTemplate.RefreshModelService;
 import it.eng.spagobi.studio.core.services.resources.ResourcesHandler;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
@@ -29,24 +27,19 @@ import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
 import it.eng.spagobi.studio.utils.util.ResourceNavigatorHandler;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.ecore.xmi.XMLResource.ResourceHandler;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IContributionManagerOverrides;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionContext;
-import org.eclipse.ui.internal.WorkbenchPlugin;
-import org.eclipse.ui.internal.registry.ActionSetRegistry;
-import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.slf4j.Logger;
@@ -119,7 +112,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 				setQueryWizard(menu);	
 				setJpaNavigator(menu);
 				setUploadDatamartTemplateWizard(menu);
-
+				setRefreshModelWizard(menu);
 			}
 			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
 				logger.debug("File under model hierarchy");
@@ -403,7 +396,20 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	}
 
 
+	public void setRefreshModelWizard(IMenuManager menu){
 
+		ActionContributionItem downACI = new ActionContributionItem(new Action(){	
+			public void run() {
+				logger.debug("Refresh Model template");
+				RefreshModelService dts = new RefreshModelService(currentContext.getSelection()); 
+				dts.refreshModelTemplate();
+			}
+		});
+		downACI.getAction().setText("Refresh Model template");
+		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_REFRESH, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", downACI);
+	}
+	
 	public void setDeleteResourceWizard(IMenuManager menu){
 
 		ActionContributionItem delACI = new ActionContributionItem(new Action()
