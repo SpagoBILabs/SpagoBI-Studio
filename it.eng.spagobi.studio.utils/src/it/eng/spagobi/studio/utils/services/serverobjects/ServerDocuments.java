@@ -47,6 +47,12 @@ public class ServerDocuments {
 		return;
 	}
 
+	public void uploadDatamartModel(Template template) throws RemoteException{
+		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
+		if(proxyHandler.getDocumentsServiceProxy() != null)
+			proxyHandler.getDocumentsServiceProxy().uploadDatamartModel(sdkTemplate);
+		return;
+	}
 
 	public Functionality getDocumentsAsTree(String str) throws RemoteException{
 		Functionality toReturn = null;
@@ -85,6 +91,29 @@ public class ServerDocuments {
 		return toReturn;
 	}
 
+	public Template downloadDatamartFile(String folderName, String fileName) throws RemoteException{
+		Template toReturn = null;
+		SDKTemplate sdkTemplate = null;
+
+		if(proxyHandler.getDocumentsServiceProxy()!= null)
+			sdkTemplate = proxyHandler.getDocumentsServiceProxy().downloadDatamartFile(folderName, fileName);
+		if(sdkTemplate != null){
+			toReturn = new Template(sdkTemplate);
+		}
+		return toReturn;
+	}
+	
+	public Template downloadDatamartModelFiles(String folderName, String fileDatamartName , String fileModelName) throws RemoteException{
+		Template toReturn = null;
+		SDKTemplate sdkTemplate = null;
+
+		if(proxyHandler.getDocumentsServiceProxy()!= null)
+			sdkTemplate = proxyHandler.getDocumentsServiceProxy().downloadDatamartModelFiles(folderName, fileDatamartName, fileModelName);
+		if(sdkTemplate != null){
+			toReturn = new Template(sdkTemplate);
+		}
+		return toReturn;
+	}
 
 	public Document getDocumentByLabel(String label) throws RemoteException{
 		Document toReturn = null;
