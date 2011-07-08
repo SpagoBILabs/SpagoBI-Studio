@@ -12,6 +12,7 @@ import it.eng.spagobi.studio.utils.services.ProxyHandler;
 import it.eng.spagobi.studio.utils.services.ServerObjectsTranslator;
 
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,6 +152,15 @@ public class ServerDocuments {
 		return toReturn;
 	}
 
+	public HashMap<String, String> getAllDatamartModels()  throws RemoteException{
+		HashMap<String,String> toReturn = null;
+
+		if(proxyHandler.getDocumentsServiceProxy()!= null)
+			toReturn = proxyHandler.getDocumentsServiceProxy().getAllDatamartModels();
+
+		return toReturn;
+	}
+	
 	public ProxyHandler getProxyHandler() {
 		return proxyHandler;
 	}

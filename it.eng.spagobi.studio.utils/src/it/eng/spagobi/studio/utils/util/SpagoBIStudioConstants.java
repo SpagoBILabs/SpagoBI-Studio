@@ -37,6 +37,7 @@ public class SpagoBIStudioConstants {
 	public final static String SERVER_EXTENSION="sbiserver";
 	public final static String MODEL_EXTENSION="sbimodel";
 	public final static String META_QUERY_EXTENSION="metaquery";
+	public final static String BACKUP_EXTENSION="bck";
 
 	
 	
@@ -79,11 +80,12 @@ public class SpagoBIStudioConstants {
 	
 	
 	
-	// Name of prohect folders
+	// Name of project folders
 	public static final String FOLDER_RESOURCE= "Resources";
 	public static final String FOLDER_SERVER = "Server";
 	public static final String FOLDER_DATA_SOURCE = "Data Source";
 	public static final String FOLDER_METADATA_MODEL = "Metadata_Model";
+	public static final String FOLDER_METADATA_MODEL_BCK = "Backup_Models";
 	public static final String FOLDER_DATASET = "DataSet";
 	public static final String FOLDER_ANALYSIS = "Sbi_Analysis";	
 	public static final String FOLDER_PRIVATE_DOCUMENTS = "Private Documents";

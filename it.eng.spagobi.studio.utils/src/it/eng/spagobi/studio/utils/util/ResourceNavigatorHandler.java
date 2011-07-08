@@ -29,6 +29,7 @@ public class ResourceNavigatorHandler {
 
 	public static final String FILE_ANALYSIS_HIER = "FileInAnalysisHierarchy";
 	public static final String FILE_MODEL_HIER = "FileInModelHierarchy";
+	public static final String FILE_BCK_MODEL_HIER = "FileInBckModelHierarchy";
 	public static final String FILE_SERVER_HIER = "FileInServerHierarchy";
 	public static final String FILE_METAQUERY_HIER = "FileInMetaQueryHierarchy";
 
@@ -56,12 +57,16 @@ public class ResourceNavigatorHandler {
 						toReturn = ResourceNavigatorHandler.FOLDER_MODEL_HIER;
 					else
 						if(objSel instanceof IFile && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_METADATA_MODEL, (File)objSel) 
-								&& ((File)objSel).getName().endsWith(SpagoBIStudioConstants.MODEL_EXTENSION))
+								&& ((File)objSel).getName().endsWith(SpagoBIStudioConstants.MODEL_EXTENSION) )
 							toReturn = ResourceNavigatorHandler.FILE_MODEL_HIER;
 						else
-							if(objSel instanceof IFile && ((File)objSel).getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) 
-									&& isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, ((File)objSel)))
-								toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
+							if(objSel instanceof IFile && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_METADATA_MODEL, (File)objSel) 
+									&& ((File)objSel).getName().endsWith(SpagoBIStudioConstants.BACKUP_EXTENSION) )
+								toReturn = ResourceNavigatorHandler.FILE_BCK_MODEL_HIER;
+							else
+								if(objSel instanceof IFile && ((File)objSel).getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) 
+										&& isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, ((File)objSel)))
+									toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
 		logger.debug("OUT");
 		return toReturn;
 	}
