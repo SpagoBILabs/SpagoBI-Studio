@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
+import java.util.Iterator;
 
 import javax.activation.DataHandler;
 
@@ -46,6 +47,7 @@ import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -68,7 +70,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-public class RefreshModelService {
+public class RestoreModelService {
 
 	private final Template template = new Template();
 
@@ -83,16 +85,16 @@ public class RefreshModelService {
 	Engine engine=null;
 	
 	AlreadyPresentException alreadyPresentException = new AlreadyPresentException();
-	private static Logger logger = LoggerFactory.getLogger(RefreshModelService.class);
+	private static Logger logger = LoggerFactory.getLogger(RestoreModelService.class);
 
 
-	public RefreshModelService(ISelection _selection) {
+	public RestoreModelService(ISelection _selection) {
 		selection = _selection;	
 	}
 
 
 
-	public void refreshModelTemplate() {
+	public void RestoreModelTemplate() {
 		
 		IStructuredSelection sel = (IStructuredSelection)selection;
 
@@ -102,7 +104,7 @@ public class RefreshModelService {
 		try{
 			fileSel = (File)objSel;
 			projectName = fileSel.getProject().getName();
-			modelName = fileSel.getName();
+			modelName = fileSel.getName().substring(0, fileSel.getName().indexOf(SpagoBIStudioConstants.BACKUP_EXTENSION)-1);
 		}
 		catch (Exception e) {
 			logger.error("No file selected",e);		
@@ -112,119 +114,40 @@ public class RefreshModelService {
 			return;
 		}
 
-		logger.debug("get datamart.jar of model file name "+fileSel.getName());
-
-		EmfXmiSerializer emfXmiSerializer = new EmfXmiSerializer();
-
-		Model root = null;
-		BusinessModel businessModel= null;
-		try{
-			root = emfXmiSerializer.deserialize(fileSel.getContents(true));
-			logger.debug("Model root is [{}] ",root );
-			businessModel = root.getBusinessModels().get(0);
-			logger.debug("model "+businessModel.getName());	
-		}
-		catch (Exception e) {
-			logger.error("error in retrieving business model; try refreshing model folder ",e);
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
-			"error in retrieving business model: try refreshing model folder");				
-			return;
-		}
-		final BusinessModel finalBusinessModel = businessModel;
-		
-		ProgressMonitorPart monitor;
-		monitor = new ProgressMonitorPart(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), null);
-		logger.debug("Do the model template refresh, model with name  " + modelName);
-		
-		final org.eclipse.core.internal.resources.File fileSel2 = fileSel ;
-		final NoDocumentException documentException = new NoDocumentException();
-		final NoActiveServerException noActiveServerException = new NoActiveServerException();
-
-		IRunnableWithProgress op = new IRunnableWithProgress() {			
-			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-
-				monitor.beginTask("Template Refresh for model " + modelName, IProgressMonitor.UNKNOWN);
-
-				// document associated, upload the template
-				SpagoBIServerObjectsFactory spagoBIServerObjects = null;
-				try{
-					spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectName);
-					
-					documentException.setNoDocument(false);
-					Template mytemplate  = spagoBIServerObjects.getServerDocuments().downloadDatamartFile(finalBusinessModel.getName(), modelName);
-					if (mytemplate == null){
-						logger.error("The download operation has returned a null object!");			
-						documentException.setNoDocument(true) ;
-						return;
-					}
-					template.setContent(mytemplate.getContent());
-					template.setFileName(mytemplate.getFileName());						
-					overwriteTemplate(template, fileSel2);					
+		boolean restore = MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Restore model template", "Confirm restore template for model " + modelName + " ?");
+		if(restore){
+			logger.debug("Do the model template restore model with name  " + modelName);
+			
+			try {
+				// get the directory
+				Folder folder = (Folder)fileSel.getParent().getParent();
+				String projectName = folder.getProject().getName();
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				IProject project = root.getProject(projectName);
+				IPath pathFolder = folder.getProjectRelativePath(); 
+				
+				IPath pathNewFile = pathFolder.append(modelName); 
+				IFile newFile = project.getFile(pathNewFile);	
+				if (newFile.exists()){
+					newFile.delete(true, null);
 				}
+				newFile.create(fileSel.getContents(), true, null);
+				fileSel.delete(true, null);
 
-				 
-				catch (NoActiveServerException e1) {
-					noActiveServerException.setNoServer(true);
-					return;
-				}
-				catch (RemoteException re) {
-					logger.error("Error comunicating with server",re);			
-					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-							"Error comunicating with server", "Error while uploading the template: missing comunication with server");	
-					return;
-				}
-				catch (CoreException ec) {
-					logger.error("Error in fie creation",ec);		
-					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-							"Error in file creation", "Error in file creation");	
-					return;
-				}
+			}catch (Exception e1) {
 
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in restore the file");				
+				logger.error("Error in restore the file", e1);		
 
-				monitor.done();
-				if (monitor.isCanceled())
-					logger.error("The long running operation was cancelled");		
+				return ;
 			}
-		};
 
+			String succesfullMessage="Succesfully restore for the template " + modelName ;
+			
+			logger.debug(succesfullMessage);					
+			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Restore succesfull", succesfullMessage);		
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());		
-		try {
-			dialog.run(true, true, op);
-		} catch (InvocationTargetException e1) {
-			logger.error("Error comunicating with server", e1);			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "Missing comunication with server; check server definition and if service is avalaible");	
-			dialog.close();
-			return;
-		} catch (InterruptedException e1) {
-			logger.error("Error comunicating with server");		
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "Missing comunication with server; check server definition and if service is avalaible");	
-			dialog.close();
-			return;
-		} 
-		if(noActiveServerException.isNoServer()){
-			logger.error("No server is defined active");			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "No server is defined active");	
-			return;
-		}				
-		// check if document has been found (could have been deleted) 
-		if(documentException.isNoDocument() || template.getContent()==null){
-			logger.warn("Document no more present on server or no permission " + modelName);					
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error upload", "Document not retrieved; check it is still on server and you have enough permission to reach it. Make a new Upload.");	
-			return;
-		}		
-		
-		dialog.close();
-
-		String succesfullMessage="Succesfully replaced with the last model template (" + modelName + ")" ;
-		
-		logger.debug(succesfullMessage);					
-		MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Refresh succesfull", succesfullMessage);		
-		
+		}
 	}
 
 

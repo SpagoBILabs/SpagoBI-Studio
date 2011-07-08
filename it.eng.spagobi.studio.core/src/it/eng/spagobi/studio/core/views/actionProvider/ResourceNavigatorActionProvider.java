@@ -11,12 +11,14 @@ import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.core.services.datamartTemplate.UploadDatamartTemplateService;
 import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
 import it.eng.spagobi.studio.core.services.modelTemplate.RefreshModelService;
+import it.eng.spagobi.studio.core.services.modelTemplate.RestoreModelService;
 import it.eng.spagobi.studio.core.services.resources.ResourcesHandler;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
+import it.eng.spagobi.studio.core.wizards.downloadModelWizard.SpagoBIDownloadModelWizard;
 import it.eng.spagobi.studio.core.wizards.downloadWizard.SpagoBIDownloadWizard;
 import it.eng.spagobi.studio.core.wizards.serverWizard.NewServerWizard;
 import it.eng.spagobi.studio.dashboard.wizards.SpagoBINewDashboardWizard;
@@ -91,30 +93,35 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 				setDownloadWizard(menu);
 				setNewDocumentWizard(menu);			
 			}
-			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_ANALYSIS_HIER)){ // if it is a fie of analysis hierarchy
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_ANALYSIS_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("File ANalysis");		
 
 				setDeployWizard(menu);			
 				setRefreshWizard(menu);			
 			}
-			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_SERVER_HIER)){ // if it is a fie of analysis hierarchy
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_SERVER_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("Folder Server");
 
 				setServerWizard(menu);			
 			}
-			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_MODEL_HIER)){ // if it is a fie of analysis hierarchy
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_MODEL_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("Folder Model");
 
-				setModelWizard(menu);			
+				setModelWizard(menu);		
+				setDownloadModelWizard(menu);
 			}
-			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)){ // if it is a fie of analysis hierarchy
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("File under model hierarchy");
 				setQueryWizard(menu);	
 				setJpaNavigator(menu);
 				setUploadDatamartTemplateWizard(menu);
 				setRefreshModelWizard(menu);
 			}
-			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a fie of analysis hierarchy
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_BCK_MODEL_HIER)){ // if it is a file of backup model
+				logger.debug("File under backup model hierarchy");
+				setRestoreModel(menu);	
+			}
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_METAQUERY_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("File under model hierarchy");
 				setDeployDatasetWizard(menu);	
 			}
@@ -307,6 +314,20 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		modelACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_MODEL, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", modelACI);
 	}
+	
+	public void setDownloadModelWizard(IMenuManager menu){
+
+		ActionContributionItem modelACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("Download Model");
+			SpagoBIDownloadModelWizard sbindw = new SpagoBIDownloadModelWizard();	
+			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "Download model");
+		}
+		});
+		modelACI.getAction().setText("Download Models");
+		modelACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", modelACI);
+	}
 
 
 
@@ -390,7 +411,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			dts.datamartUpload();
 		}
 		});
-		downACI.getAction().setText("Upload Datamart");
+		downACI.getAction().setText("Upload Datamart and Model on server");
 		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DEPLOY, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
@@ -405,7 +426,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 				dts.refreshModelTemplate();
 			}
 		});
-		downACI.getAction().setText("Refresh Model template");
+		downACI.getAction().setText("Refresh Model template from server");
 		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_REFRESH, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
@@ -447,7 +468,19 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	}
 
 
+	public void setRestoreModel(IMenuManager menu){
 
+		ActionContributionItem downACI = new ActionContributionItem(new Action()
+			{	public void run() {
+				logger.debug("Restore Model template");
+				RestoreModelService dts = new RestoreModelService(currentContext.getSelection()); 
+				dts.RestoreModelTemplate();
+			}
+			});
+		downACI.getAction().setText("Restore model file");
+		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_ANALYSIS, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", downACI);
+	}
 
 
 	
