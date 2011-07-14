@@ -151,7 +151,7 @@ public class SpagoBIStudioConstants {
 	
 	public static QualifiedName MODEL_NAME = new QualifiedName("it.eng.spagobi.meta.editor.modelId", "modelId");
 	public static QualifiedName MODEL_FILE_NAME = new QualifiedName("it.eng.spagobi.meta.editor.modelFileName", "modelFileName");
-	
+	public static QualifiedName DIRTY_MODEL = new QualifiedName("it.eng.spagobi.meta.mode.dirty", "dirty");
 	
 	
 	// Welcome VIEW ID
@@ -198,5 +198,6 @@ public class SpagoBIStudioConstants {
 	// QBE VERSION
 	public static final String QBE_VERSION = "7";
 
+	
 	
 }
