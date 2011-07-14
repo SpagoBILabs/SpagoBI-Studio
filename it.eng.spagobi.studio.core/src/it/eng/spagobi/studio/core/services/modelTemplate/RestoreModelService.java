@@ -187,6 +187,8 @@ public class RestoreModelService {
 			}
 			// create new File
 			newFile.create(is, true, null);
+			//set the dirty property to true 
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DIRTY_MODEL, "true");
 
 		} catch (IOException e1) {
 

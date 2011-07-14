@@ -264,7 +264,8 @@ public class RefreshModelService {
 			}
 			// create new File
 			newFile.create(is, true, null);
-
+			//set the dirty property to true 
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DIRTY_MODEL, "true");
 		} catch (IOException e1) {
 
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in writing the file");				

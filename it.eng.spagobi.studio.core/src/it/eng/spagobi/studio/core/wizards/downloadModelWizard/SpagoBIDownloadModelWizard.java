@@ -1,10 +1,8 @@
 package it.eng.spagobi.studio.core.wizards.downloadModelWizard;
 
-import it.eng.spagobi.studio.core.log.SpagoBILogger;
-import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
-import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
 
 import java.io.BufferedInputStream;
@@ -16,7 +14,6 @@ import java.util.Vector;
 
 import javax.activation.DataHandler;
 
-import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -219,6 +216,8 @@ public class SpagoBIDownloadModelWizard extends AbstractSpagoBIDocumentWizard  {
 				newFile.delete(true, null);
 			}
 			newFile.create(is, true, null);
+			//set the dirty property to true 
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DIRTY_MODEL, "true");
 		
 		} catch (IOException e1) {
 		
