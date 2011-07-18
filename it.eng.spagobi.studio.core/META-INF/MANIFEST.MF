@@ -71,6 +71,7 @@ Import-Package: it.eng.spagobi.meta.editor.multi.wizards,
  it.eng.spagobi.studio.geo.actions,
  it.eng.spagobi.studio.geo.services,
  it.eng.spagobi.studio.geo.wizards,
+ it.eng.spagobi.studio.highchart.wizard,
  it.eng.spagobi.studio.jasper.actions,
  it.eng.spagobi.studio.jasper.services,
  it.eng.spagobi.studio.jasper.wizards

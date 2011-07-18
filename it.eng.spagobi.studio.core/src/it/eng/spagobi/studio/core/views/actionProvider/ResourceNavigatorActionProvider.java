@@ -24,6 +24,7 @@ import it.eng.spagobi.studio.core.wizards.serverWizard.NewServerWizard;
 import it.eng.spagobi.studio.dashboard.wizards.SpagoBINewDashboardWizard;
 import it.eng.spagobi.studio.documentcomposition.wizards.SpagoBIDocumentCompositionWizard;
 import it.eng.spagobi.studio.geo.wizards.SpagoBIGEOWizard;
+import it.eng.spagobi.studio.highchart.wizard.SpagoBINewHighChartWizard;
 import it.eng.spagobi.studio.jasper.wizards.SpagoBINewJasperReportWizard;
 import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
 import it.eng.spagobi.studio.utils.util.ResourceNavigatorHandler;
@@ -200,6 +201,19 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		chartACI.getAction().setText("Chart");
 		chartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", chartACI);	
+		
+		//high Chart
+		ActionContributionItem highChartACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("New HighChart");
+			SpagoBINewHighChartWizard sbindw = new SpagoBINewHighChartWizard();	
+			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New HighChart Wizard");
+		}
+		});
+		highChartACI.getAction().setText("High Chart");
+		highChartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", highChartACI);	
+		
 
 		//Dashboard
 		ActionContributionItem dashACI = new ActionContributionItem(new Action()
