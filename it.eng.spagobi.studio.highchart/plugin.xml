@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Chart Editor"
+            extensions="sbihchart"
+            icon="icons/objecticon_CHART.png"
+            class="it.eng.spagobi.studio.highchart.editors.HighChartEditor"
+            id="it.eng.spagobi.studio.highchart.editors.HighChartEditor">
+      </editor>T
+   </extension>
+
+
+</plugin>

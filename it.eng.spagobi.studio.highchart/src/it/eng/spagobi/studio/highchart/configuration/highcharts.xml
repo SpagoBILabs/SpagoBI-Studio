@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<HIGHCHARTS>
+	<HIGHCHART type='area' imagePath='it/eng/spagobi/studio/chart/resources/images/dialchart.PNG'  >
+	</HIGHCHART>
+	<HIGHCHART type='line' imagePath='it/eng/spagobi/studio/chart/resources/images/barchart.PNG' >
+	</HIGHCHART>
+	<HIGHCHART type='spline' imagePath='it/eng/spagobi/studio/chart/resources/images/piechart.png' >
+	</HIGHCHART>
+	<HIGHCHART type='areaspline' imagePath='it/eng/spagobi/studio/chart/resources/images/clusterchart.PNG' >
+	</HIGHCHART>
+	<HIGHCHART type='column' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+	</HIGHCHART>
+	<HIGHCHART type='bar' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+	</HIGHCHART>
+		<HIGHCHART type='pie' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+	</HIGHCHART>
+		<HIGHCHART type='scatter' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+	</HIGHCHART>
+</HIGHCHARTS>
