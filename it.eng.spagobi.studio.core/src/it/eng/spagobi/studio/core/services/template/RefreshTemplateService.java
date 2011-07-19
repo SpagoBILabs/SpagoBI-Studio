@@ -153,8 +153,15 @@ public class RefreshTemplateService {
 							Template mytemplate  = spagoBIServerObjects.getServerDocuments().downloadTemplate(idInteger);
 							template.setContent(mytemplate.getContent());
 							template.setFileName(mytemplate.getFileName());
+							String fileName = mytemplate.getFileName();
+							String previousExtension = null;
+							int index=fileName.indexOf('.');
+							if(index!=-1){
+								previousExtension=fileName.substring(index+1, fileName.length());
+							}
+							
 							// get documents metadata
-							String fileExtension=recoverFileExtension(document,idInteger, spagoBIServerObjects);						
+							String fileExtension=recoverFileExtension(document,idInteger, spagoBIServerObjects, previousExtension);						
 							overwriteTemplate(template, fileSel2, fileExtension, spagoBIServerObjects);
 						}
 					}
@@ -341,7 +348,7 @@ public class RefreshTemplateService {
 	 * @return
 	 */
 
-	public String recoverFileExtension(Document document, Integer documentId, SpagoBIServerObjectsFactory proxyServerObjects){
+	public String recoverFileExtension(Document document, Integer documentId, SpagoBIServerObjectsFactory proxyServerObjects, String previousExtension){
 
 		try{
 			roles=proxyServerObjects.getServerDocuments().getCorrectRolesForExecution(documentId);
@@ -393,7 +400,7 @@ public class RefreshTemplateService {
 
 		String type=document.getType();
 		String engineName=engine!=null?engine.getLabel(): null;
-		String extension=BiObjectUtilities.getFileExtension(type, engineName);
+		String extension=BiObjectUtilities.getFileExtension(null,type, engineName, previousExtension);
 		return extension;
 	}
 
