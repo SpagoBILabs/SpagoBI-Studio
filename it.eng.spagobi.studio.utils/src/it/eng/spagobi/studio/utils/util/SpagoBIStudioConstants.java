@@ -29,6 +29,7 @@ public class SpagoBIStudioConstants {
 	// TYPES FOR SPAGOBI STUDIO
 	public final static String DASHBOARD_ENGINE_EXTENSION="sbidash";
 	public final static String CHART_ENGINE_EXTENSION="sbichart";
+	public final static String HIGHCHART_ENGINE_EXTENSION="sbihchart";
 	public final static String JASPER_REPORT_ENGINE_EXTENSION="jrxml";
 	public final static String BIRT_REPORT_ENGINE_EXTENSION="rptdesign";
 	public final static String DOCUMENT_COMPOSITION_ENGINE_EXTENSION="sbidoccomp";
@@ -55,7 +56,7 @@ public class SpagoBIStudioConstants {
 	public final static String GEO_ENGINE_LABEL="GeoEngine";
 	public final static String DOCUMENT_COMPOSITION_ENGINE_LABEL="DocumentCompositionInternalEng";
 	
-	public final static int BIOBJECT_LABEL_LIMIT=30;
+	public final static int BIOBJECT_LABEL_LIMIT=20;
 	public final static int BIOBJECT_NAME_LIMIT=40;
 	public final static int BIOBJECT_DESCRIPTION_LIMIT=160;
 	public final static int DATASET_LABEL_LIMIT=20;

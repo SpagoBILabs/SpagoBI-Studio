@@ -33,6 +33,8 @@ import java.util.Date;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +70,9 @@ public class BiObjectUtilities {
 		}
 		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.DOCUMENT_COMPOSITION_ENGINE_EXTENSION)){
 			return SpagoBIConstants.DOCUMENT_COMPOSITE_TYPE;
+		}
+		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.HIGHCHART_ENGINE_EXTENSION)){
+			return SpagoBIConstants.DASH_TYPE_CODE;
 		}
 		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.GEO_ENGINE_EXTENSION)){
 			return SpagoBIConstants.MAP_TYPE_CODE;
@@ -283,13 +288,29 @@ public class BiObjectUtilities {
 
 
 
-	public static String getFileExtension(String type, String engine){
+	public static String getFileExtension(Shell shell, String type, String engine, String previousExtension){
 		String extension=null;
 		if(type.equalsIgnoreCase(SpagoBIConstants.DASH_TYPE_CODE) && engine.equalsIgnoreCase(SpagoBIStudioConstants.DASHBOARD_ENGINE_LABEL) ){
 			extension="."+SpagoBIStudioConstants.DASHBOARD_ENGINE_EXTENSION;
 		}
 		else if(type.equalsIgnoreCase(SpagoBIConstants.DASH_TYPE_CODE) && engine.equalsIgnoreCase(SpagoBIStudioConstants.CHART_ENGINE_LABEL)){
-			extension="."+SpagoBIStudioConstants.CHART_ENGINE_EXTENSION;
+
+			if(previousExtension.equals(SpagoBIStudioConstants.CHART_ENGINE_EXTENSION) || previousExtension.equals(SpagoBIStudioConstants.HIGHCHART_ENGINE_EXTENSION)){
+				extension = "."+previousExtension;
+			}
+			else{
+				if(shell != null){
+				boolean change = MessageDialog.openConfirm(shell, "", "There is a chart template with a wrong extension, bring it to HighChart extension? Clicking no will give JfreeChart extension");	
+				if(change){
+					extension="."+SpagoBIStudioConstants.HIGHCHART_ENGINE_EXTENSION;
+
+				}else{
+					extension="."+SpagoBIStudioConstants.CHART_ENGINE_EXTENSION;
+
+				}
+			}
+				else extension = "."+previousExtension;
+				}
 		}
 		else if(type.equalsIgnoreCase(SpagoBIConstants.REPORT_TYPE_CODE) && engine.equalsIgnoreCase(SpagoBIStudioConstants.BIRT_REPORT_ENGINE_LABEL)){
 			extension="."+SpagoBIStudioConstants.BIRT_REPORT_ENGINE_EXTENSION;
