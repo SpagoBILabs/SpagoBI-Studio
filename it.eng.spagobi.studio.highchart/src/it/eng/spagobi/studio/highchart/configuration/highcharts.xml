@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <HIGHCHARTS>
-	<HIGHCHART type='area' imagePath='it/eng/spagobi/studio/chart/resources/images/dialchart.PNG'  >
+	<HIGHCHART type='area' imagePath='it/eng/spagobi/studio/highchart/resources/images/areaHighChart.PNG'  >
 	</HIGHCHART>
-	<HIGHCHART type='line' imagePath='it/eng/spagobi/studio/chart/resources/images/barchart.PNG' >
+	<HIGHCHART type='line' imagePath='it/eng/spagobi/studio/highchart/resources/images/lineHighChart.PNG' >
 	</HIGHCHART>
-	<HIGHCHART type='spline' imagePath='it/eng/spagobi/studio/chart/resources/images/piechart.png' >
+	<HIGHCHART type='spline' imagePath='it/eng/spagobi/studio/highchart/resources/images/splineHighChart.PNG' >
 	</HIGHCHART>
-	<HIGHCHART type='areaspline' imagePath='it/eng/spagobi/studio/chart/resources/images/clusterchart.PNG' >
+	<HIGHCHART type='areaspline' imagePath='it/eng/spagobi/studio/highchart/resources/images/areaSplineHighChart.PNG' >
 	</HIGHCHART>
-	<HIGHCHART type='column' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+	<HIGHCHART type='column' imagePath='it/eng/spagobi/studio/highchart/resources/images/columnHighChart.PNG' >
 	</HIGHCHART>
-	<HIGHCHART type='bar' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+	<HIGHCHART type='bar' imagePath='it/eng/spagobi/studio/highchart/resources/images/barHighChart.PNG' >
 	</HIGHCHART>
-		<HIGHCHART type='pie' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+		<HIGHCHART type='pie' imagePath='it/eng/spagobi/studio/highchart/resources/images/pieHighChart.PNG' >
 	</HIGHCHART>
-		<HIGHCHART type='scatter' imagePath='it/eng/spagobi/studio/chart/resources/images/boxchart.PNG' >
+		<HIGHCHART type='scatter' imagePath='it/eng/spagobi/studio/highchart/resources/images/scatterHighChart.PNG' >
 	</HIGHCHART>
 </HIGHCHARTS>
