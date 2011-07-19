@@ -15,7 +15,7 @@
 				<STYLE_INFO name="font" description="" type="COMBO"
 					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
 				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
-				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#000000'/>
 				<STYLE_INFO name="orientation" description="" type="COMBO"
 					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
 			</STYLE>
@@ -23,7 +23,7 @@
 				<STYLE_INFO name="font" description="" type="COMBO"
 					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
 				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
-				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#000000'/>
 				<STYLE_INFO name="orientation" description="" type="COMBO"
 					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
 			</STYLE>
@@ -31,7 +31,7 @@
 				<STYLE_INFO name="font" description="" type="COMBO"
 					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
 				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
-				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#000000'/>
 				<STYLE_INFO name="orientation" description="" type="COMBO"
 					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
 			</STYLE>
@@ -39,7 +39,7 @@
 				<STYLE_INFO name="font" description="" type="COMBO"
 					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL' />
 				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
-				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#000000'/>
 				<STYLE_INFO name="orientation" description="" type="COMBO"
 					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
 			</STYLE>
@@ -47,7 +47,7 @@
 				<STYLE_INFO name="font" description="" type="COMBO"
 					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
 				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
-				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#777777'/>
 				<STYLE_INFO name="orientation" description="" type="COMBO"
 					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
 			</STYLE>
@@ -55,7 +55,7 @@
 				<STYLE_INFO name="font" description="" type="COMBO"
 					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
 				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
-				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#000000'/>
 				<STYLE_INFO name="orientation" description="" type="COMBO"
 					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
 			</STYLE>
