@@ -301,6 +301,13 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 			return false;
 		}
 
+		String templateFileName=template.getFileName();
+		String previousExtension = null;
+		int index=templateFileName.indexOf('.');
+		if(index!=-1){
+			previousExtension=templateFileName.substring(index+1, templateFileName.length());
+		}
+
 		// Recover information field like dataSource, dataSet, engine names!
 
 
@@ -367,7 +374,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 
 		String type=document.getType();
 		String engineName=sdkEngine!=null?sdkEngine.getLabel(): null;
-		String extension=BiObjectUtilities.getFileExtension(type, engineName);
+		String extension=BiObjectUtilities.getFileExtension(getShell(), type, engineName, previousExtension);
 
 		// create the file in the selected directory
 		// get the folder selected 
@@ -382,7 +389,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		IProject project = root.getProject(projectName);
 		IPath pathFolder = folderSel.getProjectRelativePath(); 
 
-		String templateFileName=template.getFileName();
+
 
 		// remove previous extensions only if a new Extension was found
 		String fileName="";
