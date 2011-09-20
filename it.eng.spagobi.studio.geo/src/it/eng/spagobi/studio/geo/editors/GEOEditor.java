@@ -1,5 +1,10 @@
 package it.eng.spagobi.studio.geo.editors;
 
+import it.eng.spagobi.server.services.api.bo.IDataSet;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
+import it.eng.spagobi.server.services.api.exception.MissingParValueException;
+import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.geo.Activator;
 import it.eng.spagobi.studio.geo.editors.model.bo.ColumnBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;
@@ -25,9 +30,7 @@ import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.GeoFeature;
 import it.eng.spagobi.studio.utils.bo.GeoMap;
-import it.eng.spagobi.studio.utils.exceptions.MissingParValueException;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.exceptions.NoServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
@@ -107,7 +110,7 @@ public class GEOEditor extends EditorPart {
 	private HashMap<String, Dataset> datasetInfos;
 	private HashMap<String, GeoMap> mapInfos;
 
-	private HashMap<String, DataStoreMetadata> tempDsMetadataInfos;
+	private HashMap<String, IDataStoreMetadata> tempDsMetadataInfos;
 	private HashMap<String, GeoFeature[]> tempMapMetadataInfos;
 
 	private String selectedDataset;
@@ -158,7 +161,7 @@ public class GEOEditor extends EditorPart {
 
 			mapInfos = new HashMap<String, GeoMap>();
 			datasetInfos = new HashMap<String, Dataset>();
-			tempDsMetadataInfos = new HashMap<String, DataStoreMetadata>();
+			tempDsMetadataInfos = new HashMap<String, IDataStoreMetadata>();
 			tempMapMetadataInfos = new HashMap<String, GeoFeature[]>();
 		} catch (Exception e) {
 			logger.warn("Error occurred:" + e.getMessage());
@@ -174,10 +177,10 @@ public class GEOEditor extends EditorPart {
 		// Document properties
 		IWorkbenchPage aa = a.getActivePage();
 
-		Dataset[] dataSets = null;
+		IDataSet[] dataSets = null;
 
 
-		Vector<Dataset> datasetVector;
+		Vector<IDataSet> datasetVector;
 
 		SpagoBIServerObjectsFactory proxyServerObjects = null;
 		try{
@@ -199,12 +202,6 @@ public class GEOEditor extends EditorPart {
 
 			}
 		}
-		catch (NoServerException e1) {
-			logger.error("Not working server found", e1);			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "Not working server found");	
-			return;
-		}
 		catch (NoActiveServerException e1) {
 			logger.error("No active server found", e1);			
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
@@ -215,6 +212,11 @@ public class GEOEditor extends EditorPart {
 			logger.error("Error in retrieving the dataset and maps list", e1);			
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"Error", "Error in retrieving the dataset and maps list");	
+			return;
+		}catch (Exception e1) {
+			logger.error("Not working server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "Not working server found");	
 			return;
 		}
 
@@ -539,7 +541,7 @@ public class GEOEditor extends EditorPart {
 				int indexSelection = datasetCombo.getSelectionIndex();
 				String datasetLabel = datasetCombo.getItem(indexSelection);
 				selectedDataset = datasetLabel;
-				DataStoreMetadata dataStoreMetadata = null;
+				IDataStoreMetadata dataStoreMetadata = null;
 				// get the metadata
 				if (tempDsMetadataInfos.get(datasetLabel) != null) {
 					dataStoreMetadata = tempDsMetadataInfos.get(datasetLabel);
@@ -562,7 +564,7 @@ public class GEOEditor extends EditorPart {
 						datasource.setType("connection");
 						datasource.setUrl(sdkdataSource.getUrlConnection());
 						datasource.setUser(sdkdataSource.getName());*/
-					} catch (NoServerException e3) {
+					} catch (Exception e3) {
 						logger.error(e3.getMessage(), e3);
 					}
 
@@ -726,7 +728,7 @@ public class GEOEditor extends EditorPart {
 									"No features returned from map with label "
 									+ mapLabel);
 						}
-					} catch (NoServerException e1) {
+					} catch (Exception e1) {
 						logger.error(
 								"Could not get features associated to map with label = "
 								+ mapLabel, e1);
@@ -1025,7 +1027,7 @@ public class GEOEditor extends EditorPart {
 						"No features returned from map with label "
 						+ selectedMap);
 			}
-		} catch (NoServerException e1) {
+		} catch (Exception e1) {
 			logger.error(
 					"Could not get features associated to map with label = "
 					+ selectedMap, e1);
@@ -1050,7 +1052,7 @@ public class GEOEditor extends EditorPart {
 			selectedDataset = metadata.getDataset();
 			Dataset dataset = datasetInfos.get(metadata.getDataset());
 			
-			DataStoreMetadata dataStoreMetadata = sbso.getServerDatasets()
+			IDataStoreMetadata dataStoreMetadata = sbso.getServerDatasets()
 			.getDataStoreMetadata(dataset.getId());
 			if (dataStoreMetadata != null) {
 				tempDsMetadataInfos.put(metadata.getDataset(),
@@ -1251,7 +1253,7 @@ public class GEOEditor extends EditorPart {
 
 	}
 
-	private void fillDatasetTable(DataStoreMetadata dataStoreMetadata,
+	private void fillDatasetTable(IDataStoreMetadata dataStoreMetadata,
 			boolean replace) {
 		// if dataset changed than new Metadata
 		logger.debug("IN");
@@ -1261,7 +1263,7 @@ public class GEOEditor extends EditorPart {
 
 		for (int i = 0; i < dataStoreMetadata.getFieldsMetadata().length; i++) {
 
-			DataStoreMetadataField dsmf = dataStoreMetadata.getFieldsMetadata()[i];
+			IDataStoreMetadataField dsmf = dataStoreMetadata.getFieldsMetadata()[i];
 			// find out the current column
 			Column column = ColumnBO.getColumnByName(geoDocument, dsmf
 					.getName());
@@ -1468,12 +1470,12 @@ public class GEOEditor extends EditorPart {
 		this.selectedDataset = selectedDataset;
 	}
 
-	public HashMap<String, it.eng.spagobi.studio.utils.bo.DataStoreMetadata> getTempDsMetadataInfos() {
+	public HashMap<String, IDataStoreMetadata> getTempDsMetadataInfos() {
 		return tempDsMetadataInfos;
 	}
 
 	public void setTempDsMetadataInfos(
-			HashMap<String, DataStoreMetadata> tempDsMetadataInfos) {
+			HashMap<String, IDataStoreMetadata> tempDsMetadataInfos) {
 		this.tempDsMetadataInfos = tempDsMetadataInfos;
 	}
 

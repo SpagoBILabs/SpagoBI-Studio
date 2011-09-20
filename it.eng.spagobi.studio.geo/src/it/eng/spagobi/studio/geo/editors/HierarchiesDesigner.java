@@ -21,6 +21,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.geo.editors;
 
 
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
+import it.eng.spagobi.server.services.api.exception.MissingParValueException;
+import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.geo.editors.model.bo.DatamartProviderBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.HierarchyBO;
 import it.eng.spagobi.studio.geo.editors.model.bo.LevelBO;
@@ -33,9 +37,7 @@ import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.GeoFeature;
-import it.eng.spagobi.studio.utils.exceptions.MissingParValueException;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.exceptions.NoServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 
 import java.util.Iterator;
@@ -642,7 +644,7 @@ public class HierarchiesDesigner {
 
 			return null;
 		}
-		DataStoreMetadata dataStoreMetadata=null;
+		IDataStoreMetadata dataStoreMetadata=null;
 		// get the metadata
 		if(editor.getTempDsMetadataInfos().get(datasetLabel)!=null){
 			dataStoreMetadata=editor.getTempDsMetadataInfos().get(datasetLabel);
@@ -685,7 +687,7 @@ public class HierarchiesDesigner {
 		if(dataStoreMetadata!=null){
 
 			for (int i = 0; i < dataStoreMetadata.getFieldsMetadata().length; i++) {
-				DataStoreMetadataField dsmf=dataStoreMetadata.getFieldsMetadata()[i];
+				IDataStoreMetadataField dsmf=dataStoreMetadata.getFieldsMetadata()[i];
 				String column = dsmf.getName();
 				textColumn.add(column);				
 			}
@@ -714,7 +716,7 @@ public class HierarchiesDesigner {
 				MessageDialog.openWarning(mainComposite.getShell(), "Warning", "No features returned");			
 			}
 		}
-		catch (NoServerException e1) {
+		catch (Exception e1) {
 			logger.error("Could not get features", e1);
 			MessageDialog.openError(mainComposite.getShell(), "Error", "Could not get features");
 		}
