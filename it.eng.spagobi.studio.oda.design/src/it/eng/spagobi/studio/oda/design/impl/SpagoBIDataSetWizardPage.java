@@ -1,9 +1,24 @@
-/*
- *************************************************************************
- * Copyright (c) 2010 <<Your Company Name here>>
- *  
- *************************************************************************
- */
+/**
+
+SpagoBI - The Business Intelligence Free Platform
+
+Copyright (C) 2005-2010 Engineering Ingegneria Informatica S.p.A.
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+**/
 
 package it.eng.spagobi.studio.oda.design.impl;
 
@@ -30,6 +45,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 /**
@@ -103,7 +121,7 @@ public class SpagoBIDataSetWizardPage extends DataSetWizardPage
         m_queryTextField = new Text( composite, SWT.BORDER
                 | SWT.V_SCROLL | SWT.H_SCROLL );
         GridData data = new GridData( GridData.FILL_HORIZONTAL );
-        data.heightHint = 100;
+        data.heightHint = 20;
         m_queryTextField.setLayoutData( data );
         m_queryTextField.addModifyListener( new ModifyListener( ) 
         {
@@ -112,6 +130,30 @@ public class SpagoBIDataSetWizardPage extends DataSetWizardPage
                 validateData();
             }
         } );
+        
+       
+        Table dataset = new Table(composite, SWT.BORDER);
+        TableColumn tc1 = new TableColumn(dataset, SWT.LEFT);
+        TableColumn tc2 = new TableColumn(dataset, SWT.LEFT);
+        TableColumn tc3 = new TableColumn(dataset, SWT.LEFT);
+        tc1.setText("First Name");
+        tc2.setText("Last Name");
+        tc3.setText("Address");
+        tc1.setWidth(70);
+        tc2.setWidth(70);
+        tc3.setWidth(80);
+        dataset.setHeaderVisible(true);
+
+        
+        GridData gdL = new GridData(GridData.FILL_BOTH);
+        dataset.setLayoutData(gdL);	
+        
+        TableItem ti = new TableItem(dataset, 0);
+		ti.setText(new String[]{"dtaset name1", "dtaset name2", "dtaset name3"});
+		ti = new TableItem(dataset, 2);
+		ti.setText(new String[]{"dtaset name4", "dtaset name5", "dtaset name6"});
+		
+	
         setPageComplete( true );
         return composite;
     }

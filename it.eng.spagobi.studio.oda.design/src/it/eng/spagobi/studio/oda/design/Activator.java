@@ -10,7 +10,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "spagobi.birt.oda.design"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "it.eng.spagobi.studio.oda.design"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

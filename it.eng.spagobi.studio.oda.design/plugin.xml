@@ -51,8 +51,8 @@
       <dataSetUI
             supportsOutParameters="false"
             supportsInParameters="true"
-            initialPageId="spagobi.birt.oda.dataSet.page1"
-            id="spagobi.birt.oda.dataSet">
+            initialPageId="it.eng.spagobi.studio.oda.dataSet.page1"
+            id="it.eng.spagobi.studio.oda.dataSet">
          <dataSetWizard
                class="org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizard"
                windowTitle="%wizard.data.set.window.title">
@@ -62,7 +62,7 @@
                icon="icons/datasetpage.ico"
                wizardPageClass="it.eng.spagobi.studio.oda.design.impl.SpagoBIDataSetWizardPage"
                path="/"
-               id="spagobi.birt.oda.dataSet.page1">
+               id="it.eng.spagobi.studio.oda.dataSet.page1">
          </dataSetPage>
       </dataSetUI>
    </extension>
