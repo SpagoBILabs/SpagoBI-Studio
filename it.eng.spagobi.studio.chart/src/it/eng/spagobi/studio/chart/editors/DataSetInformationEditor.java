@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.chart.editors;
 
 
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
 import it.eng.spagobi.studio.chart.editors.model.chart.ChartModel;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
@@ -82,7 +84,7 @@ public class DataSetInformationEditor {
 		noDataSet=new org.eclipse.swt.widgets.Label(sectionClientDatasetInformation, SWT.NULL);
 
 		if(sbso != null && model.getSdkDataSetId()!=null){
-			DataStoreMetadata dataStoreMetadata= null;
+			IDataStoreMetadata dataStoreMetadata= null;
 			try {
 				dataStoreMetadata=sbso.getServerDatasets().getDataStoreMetadata(model.getSdkDataSetId());
 				//				SDKProxyFactory proxyFactory = new SDKProxyFactory();
@@ -153,12 +155,12 @@ public class DataSetInformationEditor {
 	}
 
 
-	private void fillDatasetTable(DataStoreMetadata dataStoreMetadata) {
+	private void fillDatasetTable(IDataStoreMetadata dataStoreMetadata) {
 		// if dataset changed than new Metadata
 
 		for (int i = 0; i < dataStoreMetadata.getFieldsMetadata().length; i++) {
 			TableItem item = new TableItem(datasetTable, SWT.TRANSPARENT);
-			DataStoreMetadataField dsmf = dataStoreMetadata.getFieldsMetadata()[i];
+			IDataStoreMetadataField dsmf = dataStoreMetadata.getFieldsMetadata()[i];
 			// find out the current column
 			item.setText(0, dsmf.getName());
 			item.setText(1, dsmf.getClassName());

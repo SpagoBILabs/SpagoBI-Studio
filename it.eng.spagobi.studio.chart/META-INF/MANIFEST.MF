@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms;bundle-version="3.3.103",
  org.eclipse.gef;bundle-version="3.4.1",
  org.eclipse.ui.navigator;bundle-version="3.3.102",
- it.eng.spagobi.studio.utils;bundle-version="1.0.0"
+ it.eng.spagobi.studio.utils;bundle-version="1.0.0",
+ it.eng.spagobi.server.services.api;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: lib/dom4j.jar,
