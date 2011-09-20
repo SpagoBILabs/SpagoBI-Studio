@@ -1,8 +1,9 @@
 package it.eng.spagobi.studio.utils.bo;
 
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
+import it.eng.spagobi.server.services.api.bo.ITemplate;
 
-public class Template {
+public class Template implements ITemplate {
 
 	private javax.activation.DataHandler content;
 

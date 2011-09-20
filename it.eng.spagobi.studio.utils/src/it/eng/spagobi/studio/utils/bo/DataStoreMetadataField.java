@@ -23,8 +23,9 @@ package it.eng.spagobi.studio.utils.bo;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreFieldMetadata;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.sdk.maps.bo.SDKMap;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
 
-public class DataStoreMetadataField {
+public class DataStoreMetadataField implements IDataStoreMetadataField{
 
 	private java.lang.String className;
 

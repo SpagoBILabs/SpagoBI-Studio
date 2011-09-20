@@ -7,13 +7,19 @@ import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
 import it.eng.spagobi.sdk.exceptions.MissingParameterValue;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
+import it.eng.spagobi.server.services.api.ISpagoBIServerDatasetServiceProxy;
+import it.eng.spagobi.server.services.api.bo.IDataSet;
+import it.eng.spagobi.server.services.api.bo.IDataSetParameter;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDocument;
+import it.eng.spagobi.server.services.api.bo.ITemplate;
+import it.eng.spagobi.server.services.api.exception.MissingParValueException;
+import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.DatasetParameter;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
-import it.eng.spagobi.studio.utils.exceptions.MissingParValueException;
-import it.eng.spagobi.studio.utils.exceptions.NoServerException;
 import it.eng.spagobi.studio.utils.services.ProxyHandler;
 import it.eng.spagobi.studio.utils.services.ServerObjectsTranslator;
 
@@ -23,12 +29,12 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServerDatasets {
+public class ServerDatasets implements ISpagoBIServerDatasetServiceProxy {
 
 	private static Logger logger = LoggerFactory.getLogger(ServerDatasets.class);
 	ProxyHandler proxyHandler = null;
 	
-	public Integer saveNewDocument(Document newDocument, Template template, Integer functionalityId) throws RemoteException{
+	public Integer saveNewDocument(IDocument newDocument, ITemplate template, Integer functionalityId) throws RemoteException{
 		Integer returnCode = null;
 		SDKDocument sdkDocument = ServerObjectsTranslator.createSDKDocument(newDocument);
 		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
@@ -38,7 +44,7 @@ public class ServerDatasets {
 		return returnCode;
 	}
 
-	public void uploadTemplate(Integer id, Template template) throws RemoteException{
+	public void uploadTemplate(Integer id, ITemplate template) throws RemoteException{
 		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
 		if(proxyHandler.getDocumentsServiceProxy() != null)
 			proxyHandler.getDocumentsServiceProxy().uploadTemplate(id, sdkTemplate);
@@ -46,8 +52,8 @@ public class ServerDatasets {
 		return;
 	}
 
-	public Dataset[] getDataSetList() throws RemoteException{
-		Dataset[] toReturn = null;
+	public IDataSet[] getDataSetList() throws RemoteException{
+		IDataSet[] toReturn = null;
 		SDKDataSet[] sdkDatasets = null;
 		if(proxyHandler.getDataSetsSDKServiceProxy() != null)
 			sdkDatasets = proxyHandler.getDataSetsSDKServiceProxy().getDataSets();
@@ -64,7 +70,7 @@ public class ServerDatasets {
 
 
 
-	public Dataset getDataSet(Integer id) throws RemoteException{
+	public IDataSet getDataSet(Integer id) throws RemoteException{
 		Dataset toReturn = null;
 		SDKDataSet sdkDataset = null;
 		if(proxyHandler.getDataSetsSDKServiceProxy() != null)
@@ -76,7 +82,7 @@ public class ServerDatasets {
 		return toReturn;
 	}
 	
-	public Integer saveDataSet(Dataset newDataset) throws RemoteException{
+	public Integer saveDataSet(IDataSet newDataset) throws RemoteException{
 		Integer returnCode = null;
 		SDKDataSet sdkDataSet = ServerObjectsTranslator.createSDKDataSet(newDataset);
 		if(proxyHandler.getDocumentsServiceProxy() != null)
@@ -86,13 +92,13 @@ public class ServerDatasets {
 	
 	
 	
-	public String executeDataSet(String dataSetLabel, DatasetParameter[] parameters) throws RemoteException{
+	public String executeDataSet(String dataSetLabel, IDataSetParameter[] parameters) throws RemoteException{
 		String returnCode = null;
 		SDKDataSetParameter[] sdkParArray = null;
 		if(parameters != null){
 			sdkParArray = new SDKDataSetParameter[parameters.length];
 			for (int i = 0; i < sdkParArray.length; i++) {
-				DatasetParameter dsP = parameters[i];
+				IDataSetParameter dsP = parameters[i];
 				sdkParArray[i] = ServerObjectsTranslator.createSDKDataSetParameter(dsP);
 			}
 		}
@@ -104,10 +110,10 @@ public class ServerDatasets {
 	
 	
 	
-	public DataStoreMetadata getDataStoreMetadata(Integer datasetId) throws NoServerException, MissingParValueException{
+	public IDataStoreMetadata getDataStoreMetadata(Integer datasetId) throws NoServerException, MissingParValueException{
 		logger.debug("IN");
 		SDKDataStoreMetadata sdkDataStoreMetadata=null;
-		DataStoreMetadata toReturn=null;
+		IDataStoreMetadata toReturn=null;
 		try{
 //			Server server = new ServerHandler().getCurrentActiveServer(projectName);			
 //			SDKProxyFactory proxyFactory=new SDKProxyFactory(server);
@@ -136,9 +142,9 @@ public class ServerDatasets {
 	}
 	
 
-	public Vector<Dataset> getAllDatasets() throws NoServerException{
+	public Vector<IDataSet> getAllDatasets() throws NoServerException{
 		logger.debug("IN");
-		Vector<Dataset> toReturn=new Vector<Dataset>();
+		Vector<IDataSet> toReturn=new Vector<IDataSet>();
 
 		SDKDataSet[] sdkDataSets=null;
 		try{
@@ -157,7 +163,7 @@ public class ServerDatasets {
 
 		for (int i = 0; i < sdkDataSets.length; i++) {
 			SDKDataSet sdkDataSet=sdkDataSets[i];
-			Dataset dataset=new Dataset(sdkDataSet);
+			IDataSet dataset=new Dataset(sdkDataSet);
 			if(dataset!=null){
 				toReturn.add(dataset);
 			}

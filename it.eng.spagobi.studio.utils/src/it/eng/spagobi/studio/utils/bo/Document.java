@@ -1,8 +1,9 @@
 package it.eng.spagobi.studio.utils.bo;
 
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
+import it.eng.spagobi.server.services.api.bo.IDocument;
 
-public class Document {
+public class Document implements IDocument{
 
 	private  Integer dataSetId;
 

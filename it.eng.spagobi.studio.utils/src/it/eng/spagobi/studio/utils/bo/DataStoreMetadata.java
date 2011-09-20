@@ -21,12 +21,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package it.eng.spagobi.studio.utils.bo;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
 
 import java.util.HashMap;
 
-public class DataStoreMetadata {
+public class DataStoreMetadata implements IDataStoreMetadata {
 
-	private DataStoreMetadataField[] fieldsMetadata;
+	private IDataStoreMetadataField[] fieldsMetadata;
 
 	private HashMap properties;
 
@@ -55,7 +57,7 @@ public class DataStoreMetadata {
 	 * 
 	 * @return fieldsMetadata
 	 */
-	public DataStoreMetadataField[] getFieldsMetadata() {
+	public IDataStoreMetadataField[] getFieldsMetadata() {
 		return fieldsMetadata;
 	}
 
@@ -65,7 +67,7 @@ public class DataStoreMetadata {
 	 * 
 	 * @param fieldsMetadata
 	 */
-	public void setFieldsMetadata(DataStoreMetadataField[] fieldsMetadata) {
+	public void setFieldsMetadata(IDataStoreMetadataField[] fieldsMetadata) {
 		this.fieldsMetadata = fieldsMetadata;
 	}
 

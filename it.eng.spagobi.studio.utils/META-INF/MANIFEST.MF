@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: it.eng.spagobi.studio.utils
-Bundle-SymbolicName: it.eng.spagobi.studio.utils; singleton:=true
+Bundle-SymbolicName: it.eng.spagobi.studio.utils;singleton:=true
 Bundle-Version: 3.0.0
 Bundle-Activator: it.eng.spagobi.studio.utils.Activator
 Require-Bundle: org.eclipse.ui,
@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.navigator.resources;bundle-version="3.4.202",
  org.eclipse.jface.text;bundle-version="3.6.1",
  org.eclipse.ui.forms;bundle-version="3.5.2",
- org.eclipse.ui.intro;bundle-version="3.4.0"
+ org.eclipse.ui.intro;bundle-version="3.4.0",
+ it.eng.spagobi.server.services.api;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/axis-1.4.jar,

@@ -2,8 +2,9 @@ package it.eng.spagobi.studio.utils.bo;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
+import it.eng.spagobi.server.services.api.bo.IDataSetParameter;
 
-public class DatasetParameter {
+public class DatasetParameter implements IDataSetParameter {
 
 	private java.lang.String name;
 

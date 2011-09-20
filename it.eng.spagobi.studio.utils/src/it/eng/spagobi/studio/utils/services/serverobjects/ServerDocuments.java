@@ -4,6 +4,8 @@ import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
+import it.eng.spagobi.server.services.api.bo.IDocument;
+import it.eng.spagobi.server.services.api.bo.ITemplate;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.DocumentParameter;
 import it.eng.spagobi.studio.utils.bo.Functionality;
@@ -23,7 +25,7 @@ public class ServerDocuments {
 	ProxyHandler proxyHandler = null;
 	
 	
-	public Integer saveNewDocument(Document newDocument, Template template, Integer functionalityId) throws RemoteException{
+	public Integer saveNewDocument(IDocument newDocument, ITemplate template, Integer functionalityId) throws RemoteException{
 		Integer returnCode = null;
 		SDKDocument sdkDocument = ServerObjectsTranslator.createSDKDocument(newDocument);
 		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
@@ -33,7 +35,7 @@ public class ServerDocuments {
 		return returnCode;
 	}
 
-	public void uploadTemplate(Integer id, Template template) throws RemoteException{
+	public void uploadTemplate(Integer id, ITemplate template) throws RemoteException{
 		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
 		if(proxyHandler.getDocumentsServiceProxy() != null)
 			proxyHandler.getDocumentsServiceProxy().uploadTemplate(id, sdkTemplate);
@@ -41,14 +43,14 @@ public class ServerDocuments {
 		return;
 	}
 	
-	public void uploadDatamartTemplate(Template template) throws RemoteException{
+	public void uploadDatamartTemplate(ITemplate template) throws RemoteException{
 		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
 		if(proxyHandler.getDocumentsServiceProxy() != null)
 			proxyHandler.getDocumentsServiceProxy().uploadDatamartTemplate(sdkTemplate);
 		return;
 	}
 
-	public void uploadDatamartModel(Template template) throws RemoteException{
+	public void uploadDatamartModel(ITemplate template) throws RemoteException{
 		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
 		if(proxyHandler.getDocumentsServiceProxy() != null)
 			proxyHandler.getDocumentsServiceProxy().uploadDatamartModel(sdkTemplate);

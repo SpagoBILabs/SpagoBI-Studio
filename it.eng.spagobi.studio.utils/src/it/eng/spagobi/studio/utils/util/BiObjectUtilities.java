@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 
 import it.eng.spagobi.commons.constants.SpagoBIConstants;
+import it.eng.spagobi.server.services.api.bo.IDataSet;
 import it.eng.spagobi.studio.utils.bo.DataSource;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.Document;
@@ -142,7 +143,7 @@ public class BiObjectUtilities {
 		}
 
 		// DAtaset Infomation field
-		Dataset dataSet=null;
+		IDataSet dataSet=null;
 		if(document.getDataSetId()!=null){
 			try{
 				dataSet=proxyServer.getServerDatasets().getDataSet(document.getDataSetId());
@@ -223,7 +224,7 @@ public class BiObjectUtilities {
 		return newFile;
 	}
 
-	public static IFile setFileDataSetMetaData(IFile newFile, Dataset dataset) throws CoreException{
+	public static IFile setFileDataSetMetaData(IFile newFile, IDataSet dataset) throws CoreException{
 		if(dataset!=null){
 			if(dataset.getId()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_ID, dataset.getId().toString());			

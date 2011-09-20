@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         id="studioProxy"
+         name="studioProxy"
+         point="it.eng.spagobi.server.services.api.dataset">
+         <client class="it.eng.spagobi.studio.utils.services.serverobjects.ServerDatasets"/>
+   </extension>
 
 
 </plugin>

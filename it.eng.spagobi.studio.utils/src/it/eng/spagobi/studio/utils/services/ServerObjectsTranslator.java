@@ -5,6 +5,10 @@ import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
+import it.eng.spagobi.server.services.api.bo.IDataSet;
+import it.eng.spagobi.server.services.api.bo.IDataSetParameter;
+import it.eng.spagobi.server.services.api.bo.IDocument;
+import it.eng.spagobi.server.services.api.bo.ITemplate;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.DatasetParameter;
 import it.eng.spagobi.studio.utils.bo.Document;
@@ -15,7 +19,7 @@ public class ServerObjectsTranslator {
 
 
 
-	static public SDKDocument createSDKDocument(Document doc){
+	static public SDKDocument createSDKDocument(IDocument doc){
 		SDKDocument sdkDocument = new SDKDocument();
 		sdkDocument.setDataSetId(doc.getDataSetId());
 		sdkDocument.setDataSourceId(doc.getDataSourceId());
@@ -29,7 +33,7 @@ public class ServerObjectsTranslator {
 		return sdkDocument;
 	}
 
-	static public SDKTemplate createSDKTemplate(Template temp){
+	static public SDKTemplate createSDKTemplate(ITemplate temp){
 		SDKTemplate sdkTemplate = new SDKTemplate();
 		sdkTemplate.setContent(temp.getContent());
 		sdkTemplate.setFileName(temp.getFileName());
@@ -37,7 +41,7 @@ public class ServerObjectsTranslator {
 		return sdkTemplate;
 	}
 
-	static public SDKDataSet createSDKDataSet(Dataset ds){
+	static public SDKDataSet createSDKDataSet(IDataSet ds){
 		SDKDataSet sdkDataset = new SDKDataSet();
 		sdkDataset.setId(ds.getId());
 		sdkDataset.setLabel(ds.getLabel());
@@ -55,11 +59,11 @@ public class ServerObjectsTranslator {
 		sdkDataset.setDatamarts(ds.getDatamarts());
 		
 		SDKDataSetParameter[] sdkDataSetParameters = null;
-		DatasetParameter[] parArray = ds.getParameters();
+		IDataSetParameter[] parArray = ds.getParameters();
 		if(parArray != null){
 			sdkDataSetParameters = new SDKDataSetParameter[parArray.length];
 			for (int i = 0; i < parArray.length; i++) {
-				DatasetParameter dsPar = parArray[i];
+				IDataSetParameter dsPar = parArray[i];
 				SDKDataSetParameter sdkPar = createSDKDataSetParameter(dsPar);
 				sdkDataSetParameters[i] = sdkPar;
 			}
@@ -69,7 +73,7 @@ public class ServerObjectsTranslator {
 		return sdkDataset;
 	}
 
-	static public SDKDataSetParameter createSDKDataSetParameter(DatasetParameter dsPar){
+	static public SDKDataSetParameter createSDKDataSetParameter(IDataSetParameter dsPar){
 		SDKDataSetParameter sdkDataSetParameter = new SDKDataSetParameter();
 		sdkDataSetParameter.setName(dsPar.getName());
 		sdkDataSetParameter.setType(dsPar.getType());
