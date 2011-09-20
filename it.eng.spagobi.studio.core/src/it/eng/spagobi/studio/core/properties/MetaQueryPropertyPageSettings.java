@@ -2,8 +2,6 @@ package it.eng.spagobi.studio.core.properties;
 
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
-import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;

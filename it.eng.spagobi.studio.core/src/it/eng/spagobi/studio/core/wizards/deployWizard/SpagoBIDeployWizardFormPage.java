@@ -1,5 +1,6 @@
 package it.eng.spagobi.studio.core.wizards.deployWizard;
 
+import it.eng.spagobi.server.services.api.bo.IDataSet;
 import it.eng.spagobi.studio.core.util.SdkSelectFolderTreeGenerator;
 import it.eng.spagobi.studio.utils.bo.DataSource;
 import it.eng.spagobi.studio.utils.bo.Dataset;
@@ -77,7 +78,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 	private ProgressMonitorPart monitor;
 	// Filter By type
 	Engine[] enginesList;
-	Dataset[] datasetList;		
+	IDataSet[] datasetList;		
 	DataSource[] datasourceList;		
 	Functionality functionality=null;
 
@@ -333,7 +334,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		// sort the items
 		String[] datasetLabels = new String[datasetList.length];
 		for (int i = 0; i < datasetLabels.length; i++) {
-			Dataset dataSet =datasetList[i];
+			IDataSet dataSet =datasetList[i];
 			datasetLabels[i] = dataSet.getLabel();
 			dataSetLabelIdMap.put(dataSet.getLabel(), dataSet.getId());
 		}

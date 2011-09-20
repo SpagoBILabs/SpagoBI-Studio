@@ -2,9 +2,8 @@ package it.eng.spagobi.studio.core.wizards.serverWizard;
 
 import it.eng.spagobi.studio.core.actions.NewServerAction;
 import it.eng.spagobi.studio.core.util.ImageConstants;
-import it.eng.spagobi.studio.utils.services.server.ServerHandler;
-import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.utils.bo.Server;
+import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;

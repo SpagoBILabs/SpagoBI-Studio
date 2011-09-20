@@ -22,7 +22,6 @@ package it.eng.spagobi.studio.core.views;
 
 import it.eng.spagobi.studio.core.util.ImageConstants;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlServerGenerator;
-import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.Iterator;

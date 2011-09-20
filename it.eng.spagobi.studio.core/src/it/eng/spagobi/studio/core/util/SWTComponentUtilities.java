@@ -1,6 +1,5 @@
 package it.eng.spagobi.studio.core.util;
 
-import it.eng.spagobi.studio.core.editors.ServerEditor;
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
 
 import org.eclipse.ui.IEditorPart;

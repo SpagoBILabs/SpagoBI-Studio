@@ -1,5 +1,6 @@
 package it.eng.spagobi.studio.core.services.server;
 
+import it.eng.spagobi.server.services.api.bo.IDataSet;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.utils.bo.DataSource;
 import it.eng.spagobi.studio.utils.bo.Dataset;
@@ -83,7 +84,7 @@ public class MetadataHandler {
 		// Recover DataSet
 
 		Integer dataSetId=document.getDataSetId();
-		Dataset dataSet=null;
+		IDataSet dataSet=null;
 		if(dataSetId!=null){
 			try{
 

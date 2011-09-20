@@ -1,6 +1,5 @@
 package it.eng.spagobi.studio.core.actions;
 
-import it.eng.spagobi.studio.birt.services.WizardLauncher;
 import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;

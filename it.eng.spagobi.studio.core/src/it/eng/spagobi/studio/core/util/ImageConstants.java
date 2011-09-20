@@ -1,7 +1,8 @@
 package it.eng.spagobi.studio.core.util;
 
 import it.eng.spagobi.studio.core.Activator;
-import it.eng.spagobi.studio.utils.util.*;
+import it.eng.spagobi.studio.utils.util.ImageDescriptorGatherer;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 

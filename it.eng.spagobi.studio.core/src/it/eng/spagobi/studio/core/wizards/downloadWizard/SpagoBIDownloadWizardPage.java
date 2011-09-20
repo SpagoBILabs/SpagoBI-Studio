@@ -3,11 +3,9 @@ package it.eng.spagobi.studio.core.wizards.downloadWizard;
 import it.eng.spagobi.studio.core.log.SpagoBILogger;
 import it.eng.spagobi.studio.core.util.SdkFunctionalityTreeGenerator;
 import it.eng.spagobi.studio.utils.bo.Functionality;
-import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
-import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 
 import java.lang.reflect.InvocationTargetException;
 

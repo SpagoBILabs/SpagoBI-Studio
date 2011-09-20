@@ -16,13 +16,9 @@ import it.eng.spagobi.studio.core.views.ResourceNavigator;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.WorkbenchWindow;
 
 
 /**

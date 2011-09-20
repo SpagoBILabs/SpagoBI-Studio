@@ -23,7 +23,6 @@ package it.eng.spagobi.studio.core.properties;
 import it.eng.spagobi.studio.core.util.ImageConstants;
 import it.eng.spagobi.studio.utils.util.ResourceNavigatorHandler;
 
-import org.eclipse.core.internal.resources.Container;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.wizard.ProgressMonitorPart;

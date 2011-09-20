@@ -1,6 +1,7 @@
 package it.eng.spagobi.studio.core.services.dataset;
 
 
+import it.eng.spagobi.server.services.api.bo.IDataSet;
 import it.eng.spagobi.studio.core.util.JSONReader;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.studio.utils.bo.Dataset;
@@ -91,7 +92,7 @@ public class DeployDatasetService {
 						SpagoBIServerObjectsFactory spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectname);
 
 						// check dataset still exists
-						Dataset ds=spagoBIServerObjects.getServerDatasets().getDataSet(idInteger);
+						IDataSet ds=spagoBIServerObjects.getServerDatasets().getDataSet(idInteger);
 						if(ds==null){
 							datasetException.setNoDocument(true);
 							logger.warn("Dataset no more present on server: with id "+idInteger);					

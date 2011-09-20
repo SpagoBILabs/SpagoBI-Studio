@@ -1,24 +1,10 @@
 package it.eng.spagobi.studio.core.startup;
 
-import it.eng.spagobi.studio.core.editors.ServerEditor;
-import it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective;
-
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PerspectiveAdapter;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.Perspective;
-import org.eclipse.ui.internal.WorkbenchPage;
-import org.eclipse.ui.internal.registry.IActionSetDescriptor;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

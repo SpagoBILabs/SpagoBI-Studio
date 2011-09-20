@@ -29,7 +29,6 @@ import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
 import it.eng.spagobi.studio.utils.exceptions.AlreadyPresentException;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
-import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.util.FileFinder;
