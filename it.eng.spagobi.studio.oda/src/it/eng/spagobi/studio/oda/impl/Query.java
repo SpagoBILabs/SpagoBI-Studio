@@ -27,6 +27,9 @@ import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
+import it.eng.spagobi.server.services.api.bo.IDataSet;
+import it.eng.spagobi.server.services.api.bo.IDataSetParameter;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.bo.DatasetParameter;
@@ -71,8 +74,8 @@ public class Query implements IQuery
 	
 	ServerDatasets dataSetServiceProxy;
 	Dataset dataSetMeta;
-	DatasetParameter[] dataSetParametersMeta;
-	DataStoreMetadata dataStoreMeta;
+	IDataSetParameter[] dataSetParametersMeta;
+	IDataStoreMetadata dataStoreMeta;
 	
 	private static Logger logger = LoggerFactory.getLogger(Query.class);
 	
@@ -100,7 +103,7 @@ public class Query implements IQuery
 			this.queryString = queryText;
 			
 			logger.debug("Retriving dataset list from spagobi server...");
-			Vector<Dataset> datasets = null;
+			Vector<IDataSet> datasets = null;
 			try {
 				datasets = dataSetServiceProxy.getAllDatasets();
 			} catch(Throwable t) {

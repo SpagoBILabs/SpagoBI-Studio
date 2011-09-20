@@ -8,6 +8,7 @@
 package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
+import it.eng.spagobi.server.services.api.bo.IDataSetParameter;
 import it.eng.spagobi.studio.utils.bo.DatasetParameter;
 
 import org.apache.axis.description.TypeDesc;
@@ -26,9 +27,9 @@ import org.eclipse.datatools.connectivity.oda.OdaException;
  */
 public class ParameterMetaData implements IParameterMetaData 
 {
-	DatasetParameter[] sdkParametersMeta;
+	IDataSetParameter[] sdkParametersMeta;
 	
-	public ParameterMetaData(DatasetParameter[] sdkParametersMeta) {
+	public ParameterMetaData(IDataSetParameter[] sdkParametersMeta) {
 		this.sdkParametersMeta = sdkParametersMeta;
 	}
 	/* 

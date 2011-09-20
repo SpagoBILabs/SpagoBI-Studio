@@ -8,6 +8,7 @@
 package it.eng.spagobi.studio.oda.impl;
 
 import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.tools.dataset.common.datastore.IDataStoreMetaData;
 
@@ -26,9 +27,9 @@ import org.eclipse.datatools.connectivity.oda.OdaException;
  */
 public class ResultSetMetaData implements IResultSetMetaData
 {
-	DataStoreMetadata dataStoreMeta;
+	IDataStoreMetadata dataStoreMeta;
 	
-	public ResultSetMetaData(DataStoreMetadata dataStoreMeta) {
+	public ResultSetMetaData(IDataStoreMetadata dataStoreMeta) {
 		
 		this.dataStoreMeta = dataStoreMeta;
 	}
