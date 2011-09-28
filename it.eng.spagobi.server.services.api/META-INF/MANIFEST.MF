@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SpagoBI Server API
+Bundle-SymbolicName: it.eng.spagobi.server.services.api;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: it.eng.spagobi.server.services.api.Activator
+Bundle-Vendor: Engineering
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: it.eng.spagobi.server.services.api,
+ it.eng.spagobi.server.services.api.bo,
+ it.eng.spagobi.server.services.api.exception
