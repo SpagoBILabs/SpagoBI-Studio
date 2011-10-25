@@ -43,10 +43,11 @@ public class ServerDocuments {
 		return;
 	}
 	
-	public void uploadDatamartTemplate(ITemplate template) throws RemoteException{
+	public void uploadDatamartTemplate(ITemplate template, ITemplate calculatedFields) throws RemoteException{
 		SDKTemplate sdkTemplate = ServerObjectsTranslator.createSDKTemplate(template);
+		SDKTemplate sdkCalculatedFields = ServerObjectsTranslator.createSDKTemplate(calculatedFields);
 		if(proxyHandler.getDocumentsServiceProxy() != null)
-			proxyHandler.getDocumentsServiceProxy().uploadDatamartTemplate(sdkTemplate);
+			proxyHandler.getDocumentsServiceProxy().uploadDatamartTemplate(sdkTemplate, sdkCalculatedFields);
 		return;
 	}
 
