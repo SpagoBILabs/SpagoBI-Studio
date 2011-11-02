@@ -18,6 +18,9 @@ import javax.activation.FileDataSource;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.eclipse.core.internal.resources.File;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -45,6 +48,8 @@ public class UploadDatamartTemplateService {
 		selection = _selection;	
 	}
 
+
+
 	public boolean datamartUpload(){
 		logger.debug("IN");
 
@@ -58,6 +63,9 @@ public class UploadDatamartTemplateService {
 
 		logger.debug("get datamart.jar of model file name "+fileSel.getName());
 
+		// refresh metadata_model folder
+		refreshModelFolder(fileSel);
+		
 		EmfXmiSerializer emfXmiSerializer = new EmfXmiSerializer();
 
 		Model root = null;
@@ -179,7 +187,7 @@ public class UploadDatamartTemplateService {
 					// create templates content
 					FileDataSource xmlDataSource=new FileDataSource(finalXmlFile);
 					DataHandler xmlDataHandler=new DataHandler(xmlDataSource);
-					
+
 					/* ----------- test code ---------	
 					InputStream is;
 					try {
@@ -193,8 +201,8 @@ public class UploadDatamartTemplateService {
 						e.printStackTrace();
 					}
 					----------- test code --------- */	
-					
-					
+
+
 					xmlCalcFieldsTemplate.setContent(xmlDataHandler);
 					logger.debug("built xml calculated fields with content data handler");
 				}
@@ -243,7 +251,7 @@ public class UploadDatamartTemplateService {
 			logger.error("error in uploading datamart",e1);
 			String detailMessage = e1.getTargetException() != null ? "\n\nDetail: "+e1.getTargetException().getMessage() : "";
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "error",
-			"Error in uploading datamart: check server definition is right, check server is avalaible and model file is not in use on server."+detailMessage);	
+					"Error in uploading datamart: check server definition is right, check server is avalaible and model file is not in use on server."+detailMessage);	
 			dialog.close();
 			return false;
 		}
@@ -284,6 +292,36 @@ public class UploadDatamartTemplateService {
 		return true;
 
 	}
+	
+	
+	
+	
+	void refreshModelFolder(File file){
+		logger.debug("IN");
+		// search for "Metadata_Model" folder to refresh
+		final String METADATA_MODEL_FOLDER = "Metadata_Model";
+
+		IContainer folder = file.getParent();
+
+		while(folder != null && !folder.getName().equals(METADATA_MODEL_FOLDER)){
+			folder = folder.getParent();	
+		}
+		
+		if(folder != null){
+			try {
+				folder.refreshLocal(IResource.DEPTH_INFINITE, null);
+			} catch (CoreException e) {
+				logger.error("Error in automatically refreshing model server, please do manual refresh on Metada_Model");			
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in automatically refreshing model server, please do manual refresh on Metada_Model");
+			}
+
+		}
+		logger.debug("OUT");
+
+	}
+	
+	
+	
 
 	public static byte[] getByteArrayFromInputStream(InputStream is) {
 		logger.debug("IN");
