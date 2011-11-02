@@ -39,7 +39,7 @@ public class UploadDatamartTemplateService {
 
 
 	public static final String DATAMART_JAR = "datamart.jar";
-	public static final String CALCULATED_FIELD = "cfields.xml";
+	public static final String CALCULATED_FIELD = "cfields_meta.xml";
 
 	public UploadDatamartTemplateService(ISelection _selection) {
 		selection = _selection;	
@@ -213,7 +213,9 @@ public class UploadDatamartTemplateService {
 
 				try {
 					spagoBIServerObjects.getServerDocuments().uploadDatamartTemplate(datamartTemplate, xmlCalcFieldsTemplate);
-				} catch (RemoteException e2) {
+				}
+
+				catch (RemoteException e2) {
 					logger.error("error in uploading datamart",e2);
 					throw new InvocationTargetException(e2);
 				}
@@ -237,6 +239,14 @@ public class UploadDatamartTemplateService {
 		try {
 			dialog.run(true, true, op);
 		} 
+		catch (InvocationTargetException e1) {
+			logger.error("error in uploading datamart",e1);
+			String detailMessage = e1.getTargetException() != null ? "\n\nDetail: "+e1.getTargetException().getMessage() : "";
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "error",
+			"Error in uploading datamart: check server definition is right, check server is avalaible and model file is not in use on server."+detailMessage);	
+			dialog.close();
+			return false;
+		}
 		catch (Exception e1) {
 			logger.error("error in uploading datamart",e1);		
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "error",
