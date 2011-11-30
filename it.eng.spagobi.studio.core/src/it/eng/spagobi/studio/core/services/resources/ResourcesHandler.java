@@ -72,7 +72,6 @@ public class ResourcesHandler {
 					        	if (nodeAttributes != null) {
 					        		//retrieve Metamodel Name
 					        		modelName = nodeAttributes.getNamedItem("name").getNodeValue();
-					        		System.out.println(modelName);
 					        	}
 						    }
 						    File mappingDirectory = new File(parentDirectory,modelName);

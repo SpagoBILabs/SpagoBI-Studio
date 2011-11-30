@@ -118,7 +118,7 @@ public class UploadDatamartTemplateService {
 		}
 		catch (Exception e) {
 			logger.error("Error in generating the datamart for model "+businessModel.getName(),e);
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in genertig datamart.ajr for model "+businessModel.getName());
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in generating datamart.jar for model "+businessModel.getName());
 			return false;
 		}
 		logger.debug("model datamart.jar created in "+tempDirPathId);
