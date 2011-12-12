@@ -15,6 +15,8 @@ import it.eng.spagobi.studio.core.services.modelTemplate.RestoreModelService;
 import it.eng.spagobi.studio.core.services.resources.ResourcesHandler;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
+import it.eng.spagobi.studio.core.util.SWTComponentUtilities;
+import it.eng.spagobi.studio.core.views.ResourceNavigator;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
@@ -76,9 +78,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		IStructuredSelection sel=(IStructuredSelection)currentContext.getSelection();
 
 		Object objSel = null; 
-		
+
 		//setSpagoBIProjectWizard(menu);
-		
+
 		// actions to be done on one single selection
 		if(sel.toList()!= null && sel.toList().size()<=1){
 			objSel = sel.toList().get(0);
@@ -128,9 +130,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			}
 		}
 
-		
+
 		List<IStructuredSelection> selList = sel.toList();
-		
+
 		if (!ResourceNavigatorHandler.isSelectedObjSystemFolder(selList)) // model has it's own delete		
 		{ // if area files of analysis hierarchy
 			logger.debug("Folder not system");
@@ -201,7 +203,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		chartACI.getAction().setText("Chart");
 		chartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", chartACI);	
-		
+
 		//high Chart
 		ActionContributionItem highChartACI = new ActionContributionItem(new Action()
 		{	public void run() {
@@ -213,7 +215,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		highChartACI.getAction().setText("High Chart");
 		highChartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", highChartACI);	
-		
+
 
 		//Dashboard
 		ActionContributionItem dashACI = new ActionContributionItem(new Action()
@@ -328,7 +330,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		modelACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_MODEL, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", modelACI);
 	}
-	
+
 	public void setDownloadModelWizard(IMenuManager menu){
 
 		ActionContributionItem modelACI = new ActionContributionItem(new Action()
@@ -375,6 +377,8 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
 			action.setSelection((IStructuredSelection)currentContext.getSelection());
 			action.run(this);
+// refresh navigator
+			SWTComponentUtilities.getNavigatorReference(ResourceNavigator.VIEW_ID);
 
 		}
 		});
@@ -444,7 +448,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_REFRESH, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
-	
+
 	public void setDeleteResourceWizard(IMenuManager menu){
 
 		ActionContributionItem delACI = new ActionContributionItem(new Action()
@@ -459,8 +463,8 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		menu.appendToGroup("group.edit", delACI);
 	}
 
-	
-	
+
+
 	public void setSpagoBIProjectWizard(IMenuManager menu){
 
 		ActionContributionItem delACI = new ActionContributionItem(new Action()
@@ -473,7 +477,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			// Open the wizard dialog
 			dialog.open();
 
-			
+
 		}
 		});
 		delACI.getAction().setText("SpagoBI Project");
@@ -485,19 +489,19 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	public void setRestoreModel(IMenuManager menu){
 
 		ActionContributionItem downACI = new ActionContributionItem(new Action()
-			{	public void run() {
-				logger.debug("Restore Model template");
-				RestoreModelService dts = new RestoreModelService(currentContext.getSelection()); 
-				dts.RestoreModelTemplate();
-			}
-			});
+		{	public void run() {
+			logger.debug("Restore Model template");
+			RestoreModelService dts = new RestoreModelService(currentContext.getSelection()); 
+			dts.RestoreModelTemplate();
+		}
+		});
 		downACI.getAction().setText("Restore model file");
 		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_ANALYSIS, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
 	}
 
 
-	
+
 
 
 }
