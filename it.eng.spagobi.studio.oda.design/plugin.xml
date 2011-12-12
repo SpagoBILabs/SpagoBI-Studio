@@ -13,6 +13,7 @@
             id="%oda.data.source.id">
       </newWizard>
    </extension>
+   
    <extension
          point="org.eclipse.datatools.connectivity.ui.connectionProfileImage">
       <profileImage
@@ -20,6 +21,7 @@
             profileID="%oda.data.source.id">
       </profileImage>
    </extension>
+   
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
@@ -37,10 +39,10 @@
          </filter>
       </page>
    </extension>
-   <extension
-         point="org.eclipse.datatools.connectivity.oda.design.ui.dataSource">
-      <dataSourceUI
-            id="%oda.data.source.id">
+   
+   <extension point="org.eclipse.datatools.connectivity.oda.design.ui.dataSource">
+      
+      <dataSourceUI id="%oda.data.source.id">
          <newDataSourceWizard
                pageClass="org.eclipse.datatools.connectivity.oda.design.ui.pages.impl.DefaultDataSourceWizardPage"
                includesProgressMonitor="false"
@@ -48,11 +50,12 @@
                windowTitle="%wizard.window.title">
          </newDataSourceWizard>
       </dataSourceUI>
+     
       <dataSetUI
             supportsOutParameters="false"
             supportsInParameters="true"
-            initialPageId="it.eng.spagobi.studio.oda.dataSet.page1"
-            id="it.eng.spagobi.studio.oda.dataSet">
+            initialPageId="spagobi.birt.oda.dataSet.page1"
+            id="spagobi.birt.oda.dataSet">
          <dataSetWizard
                class="org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizard"
                windowTitle="%wizard.data.set.window.title">
@@ -62,7 +65,7 @@
                icon="icons/datasetpage.ico"
                wizardPageClass="it.eng.spagobi.studio.oda.design.impl.SpagoBIDataSetWizardPage"
                path="/"
-               id="it.eng.spagobi.studio.oda.dataSet.page1">
+               id="spagobi.birt.oda.dataSet.page1">
          </dataSetPage>
       </dataSetUI>
    </extension>
