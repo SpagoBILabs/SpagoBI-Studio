@@ -110,6 +110,7 @@
       <plugin id="it.eng.spagobi.meta.oda"/>
       <plugin id="it.eng.spagobi.meta.oda.ui"/>
       <plugin id="it.eng.spagobi.meta.querybuilder"/>
+      <plugin id="it.eng.spagobi.meta.queryengine"/>
       <plugin id="it.eng.spagobi.server.services.api"/>
       <plugin id="it.eng.spagobi.studio.birt"/>
       <plugin id="it.eng.spagobi.studio.chart"/>
