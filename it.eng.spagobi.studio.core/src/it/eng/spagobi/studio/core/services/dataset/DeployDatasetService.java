@@ -111,7 +111,15 @@ public class DeployDatasetService {
 								// only the query may be modified by meta so it is the only refreshed
 								ds.setJsonQuery(adaptedQueryStrList);
 								datasetException.setNoDocument(false);
-								spagoBIServerObjects.getServerDatasets().saveDataSet(ds);							}
+								Integer dsId = spagoBIServerObjects.getServerDatasets().saveDataSet(ds);							
+								if(ds == null){
+									logger.error("Error while uploading dataset on server; check log on server");		
+									MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+											"Error on deploy",
+											"Error while uploading dataset; check server log to have details");	
+									
+								}
+							}
 							catch (Exception e) {
 								logger.error("error in reading JSON object, update failed", e);
 							}	

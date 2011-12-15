@@ -118,9 +118,9 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		try {
 			Integer returnCode=proxyServerObjects.getServerDatasets().saveDataSet(newDataset);
 			if(returnCode==null){
-				logger.error("Error during document deploy: Check that label is not already present");			
+				logger.error("Error during Data Set deploy: Check that label is not already present, otherwise check server log");			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error", "Error during file deploy: check that label is not already present");		
+						"Error", "Error during Data Set deploy: check that label is not already present, otherwise check server log for details");		
 				return false;
 			}
 			//			System.out.println(returnCode);
