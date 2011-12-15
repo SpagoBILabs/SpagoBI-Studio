@@ -120,6 +120,7 @@
       <plugin id="it.eng.spagobi.studio.highchart"/>
       <plugin id="it.eng.spagobi.studio.jasper"/>
       <plugin id="it.eng.spagobi.studio.oda"/>
+      <plugin id="it.eng.spagobi.studio.oda.design"/>
       <plugin id="it.eng.spagobi.studio.utils"/>
       <plugin id="java_cup.runtime"/>
       <plugin id="javax.activation"/>
@@ -1030,8 +1031,6 @@
       <plugin id="org.w3c.dom.smil"/>
       <plugin id="org.w3c.dom.svg"/>
       <plugin id="org.w3c.sac"/>
-      <plugin id="spagobi.birt.oda" fragment=""/>
-      <plugin id="spagobi.birt.oda.design"/>
    </plugins>
 
    <configurations>
