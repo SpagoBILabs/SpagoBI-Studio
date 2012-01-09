@@ -117,7 +117,7 @@ public class XmlServerGenerator {
 			active = server.isActive();
 		}
 		catch (Exception e) {
-			logger.error("error in setting server icon to active, put default none");
+			logger.error("error in setting server icon to active, put default none",e);
 			active=false;
 		}
 		logger.debug("OUT");
