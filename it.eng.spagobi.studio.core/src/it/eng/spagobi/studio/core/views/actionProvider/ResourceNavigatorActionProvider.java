@@ -179,7 +179,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New Birt Wizard");
 		}
 		});
-		birtACI.getAction().setText("Birt");
+		birtACI.getAction().setText("Report with Birt");
 		birtACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_BIRT, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", birtACI);
 		actions[0] = birtACI.getAction();
@@ -193,7 +193,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		}
 		});
 
-		jasperACI.getAction().setText("Jasper");
+		jasperACI.getAction().setText("Report with Jasper");
 		jasperACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_JASPER, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", jasperACI);	
 		actions[1] = jasperACI.getAction();
@@ -213,7 +213,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New Chart Wizard");
 		}
 		});
-		chartACI.getAction().setText("Chart");
+		chartACI.getAction().setText("Chart with JfreeChart");
 		chartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", chartACI);	
 		actions[0] = chartACI.getAction();
@@ -226,7 +226,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New HighChart Wizard");
 		}
 		});
-		highChartACI.getAction().setText("High Chart");
+		highChartACI.getAction().setText("Chart with HighChart");
 		highChartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", highChartACI);	
 		actions[1] = highChartACI.getAction();
@@ -243,7 +243,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New Dashboard Wizard");
 		}
 		});
-		dashACI.getAction().setText("Dashboard");
+		dashACI.getAction().setText("Dashboard basic component");
 		dashACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DASHBOARD, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", dashACI);	
 		actions[0] = dashACI.getAction();
@@ -261,7 +261,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New Document Composition Wizard");
 		}
 		});
-		dcACI.getAction().setText("Document Composition");
+		dcACI.getAction().setText("Composed document");
 		dcACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOC_COMP, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", dcACI);	
 		actions[0] = dcACI.getAction();
@@ -277,7 +277,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New Geo Wizard");
 		}
 		});
-		geoACI.getAction().setText("Geo");
+		geoACI.getAction().setText("GEO");
 		geoACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_GEO, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", geoACI);	
 		actions[0] = geoACI.getAction();
