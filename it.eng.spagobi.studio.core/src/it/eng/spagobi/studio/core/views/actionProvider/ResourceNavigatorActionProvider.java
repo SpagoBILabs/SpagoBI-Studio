@@ -17,6 +17,7 @@ import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
 import it.eng.spagobi.studio.core.util.SWTComponentUtilities;
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
+import it.eng.spagobi.studio.core.views.menu.SubmenuAction;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
@@ -36,8 +37,10 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -169,6 +172,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 	public void setNewDocumentWizard(IMenuManager menu){
 
+		IAction[] actions = new IAction[2];
 		ActionContributionItem birtACI = new ActionContributionItem(new Action()
 		{	public void run() {
 			SpagoBINewBirtReportWizard sbindw = new SpagoBINewBirtReportWizard();	
@@ -177,8 +181,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		});
 		birtACI.getAction().setText("Birt");
 		birtACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_BIRT, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", birtACI);
-
+		//menu.appendToGroup("group.new", birtACI);
+		actions[0] = birtACI.getAction();
+		
 		//Jasper
 		ActionContributionItem jasperACI = new ActionContributionItem(new Action()
 		{	public void run() {
@@ -190,8 +195,16 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 		jasperACI.getAction().setText("Jasper");
 		jasperACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_JASPER, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", jasperACI);	
+		//menu.appendToGroup("group.new", jasperACI);	
+		actions[1] = jasperACI.getAction();
+		
+		// Report group
+		SubmenuAction submenuReport = new SubmenuAction(actions, "Report", "Report", null, true); 
+		menu.appendToGroup("group.new", submenuReport);
+		
 
+		actions = new IAction[2];
+		
 		//Chart
 		ActionContributionItem chartACI = new ActionContributionItem(new Action()
 		{	public void run() {
@@ -202,8 +215,9 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		});
 		chartACI.getAction().setText("Chart");
 		chartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", chartACI);	
-
+		//menu.appendToGroup("group.new", chartACI);	
+		actions[0] = chartACI.getAction();
+		
 		//high Chart
 		ActionContributionItem highChartACI = new ActionContributionItem(new Action()
 		{	public void run() {
@@ -214,9 +228,13 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		});
 		highChartACI.getAction().setText("High Chart");
 		highChartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", highChartACI);	
+		//menu.appendToGroup("group.new", highChartACI);	
+		actions[1] = highChartACI.getAction();
+		
+		SubmenuAction submenuChart = new SubmenuAction(actions, "Chart", "Chart", null, true); 
+		menu.appendToGroup("group.new", submenuChart);
 
-
+		actions = new IAction[1];
 		//Dashboard
 		ActionContributionItem dashACI = new ActionContributionItem(new Action()
 		{	public void run() {
@@ -227,8 +245,14 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		});
 		dashACI.getAction().setText("Dashboard");
 		dashACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DASHBOARD, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", dashACI);	
+		//menu.appendToGroup("group.new", dashACI);	
+		actions[0] = dashACI.getAction();
+		SubmenuAction submenuDash = new SubmenuAction(actions, "RT Dashboard", "RT Dashboard", null, true); 
+		menu.appendToGroup("group.new", submenuDash);
+		
+		
 
+		actions = new IAction[1];
 		//Dc
 		ActionContributionItem dcACI = new ActionContributionItem(new Action()
 		{	public void run() {
@@ -239,8 +263,12 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		});
 		dcACI.getAction().setText("Document Composition");
 		dcACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOC_COMP, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", dcACI);	
-
+		//menu.appendToGroup("group.new", dcACI);	
+		actions[0] = dcACI.getAction();
+		SubmenuAction dcDash = new SubmenuAction(actions, "CockPit", "CockPit", null, true); 
+		menu.appendToGroup("group.new", dcDash);
+		
+		actions = new IAction[1];
 		//Geo
 		ActionContributionItem geoACI = new ActionContributionItem(new Action()
 		{	public void run() {
@@ -251,7 +279,10 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		});
 		geoACI.getAction().setText("Geo");
 		geoACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_GEO, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", geoACI);	
+		//menu.appendToGroup("group.new", geoACI);	
+		actions[0] = geoACI.getAction();
+		SubmenuAction geoDash = new SubmenuAction(actions, "Location Intelligence", "Location Intelligence", null, true); 
+		menu.appendToGroup("group.new", geoDash);
 	}
 
 
