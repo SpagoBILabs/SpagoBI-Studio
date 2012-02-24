@@ -86,4 +86,9 @@
 		<CONF>
 		</CONF>
 	</SCATTERCHART>
+	<SCATTERCHART name='markerscatter'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/markerscatter.xml'>
+		<CONF>
+		</CONF>
+	</SCATTERCHART>
 </SCATTERCHARTS>
