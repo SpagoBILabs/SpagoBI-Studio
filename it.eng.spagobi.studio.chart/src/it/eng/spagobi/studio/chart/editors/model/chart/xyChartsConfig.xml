@@ -51,7 +51,7 @@
 				<STYLE_INFO name="orientation" description="" type="COMBO"
 					values="horizontal,vertical" />
 			</STYLE>
-			<STYLE name="STYLE_VALUE_LABELS" description='STYLE FOR VALUE LABELS
+			<STYLE name="STYLE_LABELS" description='STYLE LABELS
 			'>  <!-- Style means font, size, column, name, color, orientation -->
 				<STYLE_INFO name="font" description="" type="COMBO"
 					values="helvetica,arial,times_new_roman" />
@@ -63,12 +63,26 @@
 		</STYLES>
 		<CONF>
 			<SECTION name="Parameters">
-				<PARAMETER name='category_label' description='x Axis label'
-					type='STRING' tooltip='label for categories' />
-				<PARAMETER name='value_label' description='y Axis label'
-					type='STRING' tooltip='label for values'/>
+				<PARAMETER name='x_label' description='x Axis label'
+					type='STRING' tooltip='label for x axis' />
+				<PARAMETER name='y_label' description='y Axis label'
+					type='STRING' tooltip='label for y axis'/>
+				<PARAMETER name='z_label' description='z Axis label'
+					type='STRING' tooltip='label for z axis'/>
 				<PARAMETER name='n_visualization' description='Number of visualization'
 					type='INTEGER' tooltip='number of visualizations'/>
+				<PARAMETER name='xrange_value_low' description='Low value for x range'
+					type='INTEGER' tooltip='Low value for x range'/>	
+				<PARAMETER name='xrange_value_high' description='High value for x range'
+					type='INTEGER' tooltip='High value for x range'/>	
+				<PARAMETER name='yrange_value_low' description='Low value for y range'
+					type='INTEGER' tooltip='Low value for y range'/>	
+				<PARAMETER name='yrange_value_high' description='High value for y range'
+					type='INTEGER' tooltip='High value for y range'/>			
+				<PARAMETER name='grid_width' description='Width of the grid'
+					type='INTEGER' tooltip='Width of the grid'/>									
+				<PARAMETER name='grid_height' description='Height of the grid'
+					type='INTEGER' tooltip='Height of the grid'/>									
 			</SECTION>
 		</CONF>
 	</XYCHART>
