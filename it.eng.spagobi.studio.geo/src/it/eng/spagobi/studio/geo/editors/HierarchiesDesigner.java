@@ -335,7 +335,7 @@ public class HierarchiesDesigner {
 				}
 			}
 		});	    
-		
+
 		hierarchiesGroup.redraw();
 		sectionClient.getParent().redraw();
 	}
@@ -363,7 +363,7 @@ public class HierarchiesDesigner {
 		cancel.setLayoutData (data);
 		cancel.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {
-//				System.out.println("User cancelled dialog");
+				//				System.out.println("User cancelled dialog");
 				dialog.close ();
 			}
 		});
@@ -468,7 +468,7 @@ public class HierarchiesDesigner {
 		cancel.setLayoutData (data);
 		cancel.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {
-//				System.out.println("User cancelled dialog");
+				//				System.out.println("User cancelled dialog");
 				dialog.close ();
 			}
 		});
@@ -619,9 +619,19 @@ public class HierarchiesDesigner {
 				newLevel.setColumnDesc(columnDesc);
 				newLevel.setFeatureName(feature);
 				if(level == null){
-					createNewLevel(hierarchiesTree, newLevel,  selectedItem, isDefault[0]);		        	
+					if(selectedItem.getParentItem() != null){ // should not happen because hierarchy node is root
+						createNewLevel(hierarchiesTree, newLevel,  selectedItem.getParentItem(), isDefault[0]);
+					}
+					else{ 
+						createNewLevel(hierarchiesTree, newLevel,  selectedItem, isDefault[0]);
+					}
 				}else{
+					if(selectedItem.getParentItem() != null){
+						updateLevel(hierarchiesTree, newLevel,  selectedItem.getParentItem(), level, isDefault[0]);
+				}
+				else{ //should not happen because level node is not root
 					updateLevel(hierarchiesTree, newLevel,  selectedItem, level, isDefault[0]);
+				}
 				}
 
 				dialog.close ();
@@ -638,7 +648,7 @@ public class HierarchiesDesigner {
 		final Combo textColumn = new Combo(dialog, SWT.SINGLE | SWT.READ_ONLY);
 
 
-		
+
 		String datasetLabel=editor.getSelectedDataset();
 		if(datasetLabel == null){
 
@@ -651,7 +661,7 @@ public class HierarchiesDesigner {
 		}
 		else{
 			Dataset dataset = editor.getDatasetInfos().get(datasetLabel);
-			
+
 			SpagoBIServerObjectsFactory sbso= null;
 
 			try{
@@ -660,9 +670,9 @@ public class HierarchiesDesigner {
 				logger.error("No active server found",e1);
 				return null;
 			}
-			
+
 			try{
-				
+
 				if(dataset.getId() != null){
 					dataStoreMetadata=sbso.getServerDatasets().getDataStoreMetadata(dataset.getId());
 				}
@@ -708,7 +718,7 @@ public class HierarchiesDesigner {
 			logger.error("No active server found",e1);
 			return null;
 		}
-		
+
 		try{
 			geoFeatures=sbso.getServerMaps().getAllFeatures();
 			if(geoFeatures==null){
