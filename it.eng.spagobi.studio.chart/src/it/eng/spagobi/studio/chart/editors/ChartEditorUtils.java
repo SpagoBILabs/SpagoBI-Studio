@@ -278,11 +278,23 @@ public class ChartEditorUtils {
 
 			if(aParameter.getValue()!=null && !aParameter.getValue().toString().equals("")){
 				//parameterNumberValueText.setText(aParameter.getValue().toString());
-
+				String valueToSet = null;
 				Double doubleVal=Double.valueOf(aParameter.getValue().toString());
 				String doubleString=doubleVal.toString();
-				doubleString=removeChar(doubleString, '.');
-				Integer fakeIntVal=Integer.valueOf(doubleString);
+				int indexPoint = doubleString.indexOf('.');
+				if(indexPoint != -1){
+					String intPart= doubleString.substring(0, indexPoint); 
+					String decimalPart= doubleString.substring(indexPoint+1, doubleString.length());
+					if(decimalPart.length() == 1){
+						decimalPart+="0";
+					}
+					valueToSet = intPart+decimalPart;
+				}
+				else{
+					valueToSet = doubleString;
+				}
+				//doubleString=removeChar(doubleString, '.');
+				Integer fakeIntVal=Integer.valueOf(valueToSet);
 				parFloatSpinner.setSelection(fakeIntVal);
 			}
 			//parFloatSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
