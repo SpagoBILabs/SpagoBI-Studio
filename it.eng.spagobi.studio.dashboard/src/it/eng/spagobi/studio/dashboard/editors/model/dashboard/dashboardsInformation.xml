@@ -76,7 +76,7 @@
 		<DATA>
 		</DATA>
 	</DASHBOARD>
-	<DASHBOARD type='Columns 3D' templatePath='it/eng/spagobi/studio/dashboard/resources/dashboard/columns3d.xml' movie='/dashboards/columns3d.lzx.swf' >
+<!--  <DASHBOARD type='Columns 3D' templatePath='it/eng/spagobi/studio/dashboard/resources/dashboard/columns3d.xml' movie='/dashboards/columns3d.lzx.swf' >
 		<CONF>
 			<PARAMETER name='paramWidth' description='Dashboard internal area width' type='NUMBER' />
 			<PARAMETER name='paramHeight' description='Dashboard internal area height' type='NUMBER' />
@@ -98,5 +98,5 @@
 		</CONF>
 		<DATA>
 		</DATA>
-	</DASHBOARD>
+	</DASHBOARD> -->	
 </DASHBOARDS>
