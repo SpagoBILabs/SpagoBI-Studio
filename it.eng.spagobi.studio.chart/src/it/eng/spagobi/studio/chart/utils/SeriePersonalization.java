@@ -27,13 +27,13 @@ public class SeriePersonalization {
 
 	String name;
 	String label;
-	String draw; // bar o line o line_no_shape
+	String draw; // bar o line o line_no_shapes
 	RGB color;
 	int scale=1;
 	
 	public static String BAR="bar";
 	public static String LINE="line";
-	public static String LINE_NO_SHAPE="line_no_shape";
+	public static String LINE_NO_SHAPES="line_no_shapes";
 	
 	
 	public SeriePersonalization() {

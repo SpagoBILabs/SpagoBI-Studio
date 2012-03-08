@@ -72,17 +72,17 @@
 				<PARAMETER name='n_visualization' description='Number of visualization'
 					type='INTEGER' tooltip='number of visualizations'/>
 				<PARAMETER name='xrange_value_low' description='Low value for x range'
-					type='INTEGER' tooltip='Low value for x range'/>	
+					type='INTEGER' tooltip='Low value for x range' defaultValue='1'/>	
 				<PARAMETER name='xrange_value_high' description='High value for x range'
-					type='INTEGER' tooltip='High value for x range'/>	
+					type='INTEGER' tooltip='High value for x range' defaultValue='100'/>	
 				<PARAMETER name='yrange_value_low' description='Low value for y range'
-					type='INTEGER' tooltip='Low value for y range'/>	
+					type='INTEGER' tooltip='Low value for y range' defaultValue='1'/>	
 				<PARAMETER name='yrange_value_high' description='High value for y range'
-					type='INTEGER' tooltip='High value for y range'/>			
+					type='INTEGER' tooltip='High value for y range' defaultValue='100'/>			
 				<PARAMETER name='grid_width' description='Width of the grid'
-					type='INTEGER' tooltip='Width of the grid'/>									
+					type='INTEGER' tooltip='Width of the grid' defaultValue='4'/>									
 				<PARAMETER name='grid_height' description='Height of the grid'
-					type='INTEGER' tooltip='Height of the grid'/>									
+					type='INTEGER' tooltip='Height of the grid' defaultValue='3'/>									
 			</SECTION>
 		</CONF>
 	</XYCHART>

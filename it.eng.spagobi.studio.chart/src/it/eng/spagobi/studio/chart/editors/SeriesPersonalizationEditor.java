@@ -314,7 +314,7 @@ public class SeriesPersonalizationEditor {
 		comboDraw=new Combo(group,  SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY);
 		comboDraw.add("bar");
 		comboDraw.add("line");
-		comboDraw.add("line_no_shape");
+		comboDraw.add("line_no_shapes");
 		comboDraw.select(0);
 		//comboDraw.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 		comboDraw.pack();
