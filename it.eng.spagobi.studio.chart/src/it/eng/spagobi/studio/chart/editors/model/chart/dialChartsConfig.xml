@@ -66,7 +66,7 @@
 				<PARAMETER name='orientation' description='Orientation'
 					type='COMBO' values='horizontal,vertical' tooltip='orientation of the chart' defaultValue='vertical'/>
 				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10'/>
-				<PARAMETER name='minortickcount' description='Minor tick count'
+				<PARAMETER name='minor_tick' description='Minor tick count'
 					type='FLOAT' tooltip='set the minor tick count' defaultValue='1.0'/>
 			</SECTION>
 		</CONF>
@@ -78,7 +78,7 @@
 				<PARAMETER name='orientation' description='Orientation'
 					type='COMBO' values='horizontal,vertical'  tooltip='orientation of the chart' defaultValue='vertical'/>
 				<PARAMETER name='increment' description='Increment' type='FLOAT' defaultValue='10.0'/>
-				<PARAMETER name='minortickcount' description='Minor tick count'
+				<PARAMETER name='minor_tick' description='Minor tick count'
 					type='FLOAT' tooltip='set the increment value' defaultValue='1'/>
 				<PARAMETER name='dialtextuse' description='Dial Text Use'
 					type='BOOLEAN' tooltip='set the dial text use' defaultValue='false'/>
@@ -92,7 +92,7 @@
 				<PARAMETER name='orientation' description='Orientation'
 					type='COMBO' values='horizontal,vertical' tooltip='orientation of the chart' />
 				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10.0'/>
-				<PARAMETER name='minortickcount' description='Minor tick count'
+				<PARAMETER name='minor_tick' description='Minor tick count'
 					type='FLOAT' defaultValue='1.0' />
 			</SECTION>
 		</CONF>
@@ -102,7 +102,7 @@
 		<CONF>
 			<SECTION>
 				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10.0'/>
-				<PARAMETER name='minortickcount' description='Minor tick count'
+				<PARAMETER name='minor_tick' description='Minor tick count'
 					type='FLOAT' tooltip='set the minor tick count' defaultValue='1.0'/>
 			</SECTION>
 		</CONF>
@@ -114,7 +114,7 @@
 				<PARAMETER name='orientation' description='Orientation'
 					type='COMBO' values='horizontal,vertical' tooltip='orientation of the chart' defaultValue='vertical'/>
 				<PARAMETER name='increment' description='Increment' type='FLOAT' tooltip='set the increment value' defaultValue='10.0'/>
-				<PARAMETER name='minortickcount' description='Minor tick count'
+				<PARAMETER name='minor_tick' description='Minor tick count'
 					type='FLOAT' tooltip='set the minor tick count' defaultValue='1.0'/>
 				<PARAMETER name='target' description='Target' type='FLOAT' tooltip='set the target' defaultValue='50.0'/>
 			</SECTION>
