@@ -56,12 +56,8 @@
 			<SECTION name="Parameters">
 				<PARAMETER name='x_label' description='Label for x' type='STRING' tooltip='Label for x axis'/>
 				<PARAMETER name='y_label' description='Label for y' type='STRING' tooltip='Label for y axis'/>
-				<PARAMETER name='view_filter' description='View the filter' type='BOOLEAN' tooltip='View the filter'/>
 				<PARAMETER name='column_sel' description='Choose a column to be selected' type='STRING' tooltip='Choose a particular serie to be selected'/>
 				<PARAMETER name='default_color' description='Default color' type='COLOR' tooltip='Default color'/>
-			</SECTION>
-			<SECTION name="slider">
-				<PARAMETER name='view_slider' description='View the slider' type='BOOLEAN' tooltip='View the slider'/>
 			</SECTION>
 		</CONF>
 	</CLUSTERCHART>
