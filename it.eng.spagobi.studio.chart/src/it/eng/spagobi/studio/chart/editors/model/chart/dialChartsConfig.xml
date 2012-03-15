@@ -51,12 +51,7 @@
 			</SECTION>
 			<SECTION name='legend'>
 				<PARAMETER name='legend' description='Legend' type='BOOLEAN' tooltip='draw legend?' defaultValue='true'/>
-			</SECTION>			
-			<SECTION name='multichart'>
-				<PARAMETER name='multichart' description='Multichart' type='BOOLEAN' tooltip='Is multichart?' defaultValue='false'/>
-				<PARAMETER name="orientation_multichart" description='Multichart Orientation' type='COMBO'
-					values='vertical,horizontal' tooltip='Multichart orientation' defaultValue='vertical'/>			
-			</SECTION>			
+			</SECTION>						
 		</CONF>
 	</DIALCHART>
 	<DIALCHART name='simpledial'
