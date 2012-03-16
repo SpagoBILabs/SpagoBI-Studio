@@ -17,7 +17,7 @@
 				<STYLE_INFO name="size" description="" type="INTEGER"
 					defaultValue='10' />
 				<STYLE_INFO name="color" description="" type="COLOR"
-					defaultValue='#FF0000' />
+					defaultValue='#FF0000'/>
 			</STYLE>
 			<STYLE name="STYLE_LABELS_DEFAULT" description='DEFAULT STYLE FOR LABELS' tooltip='choose a default style for labels'>  <!-- Style means font, size, column, name, color, orientation -->
 				<STYLE_INFO name="font" description="" type="COMBO"
@@ -51,6 +51,11 @@
 			</SECTION>
 			<SECTION name='legend'>
 				<PARAMETER name='legend' description='Legend' type='BOOLEAN' tooltip='draw legend?' defaultValue='true'/>
+			</SECTION>	
+			<SECTION name='multichart'>
+				<PARAMETER name='multichart' description='Multichart' type='BOOLEAN' tooltip='Is multichart?' defaultValue='false'/>
+				<PARAMETER name="orientation_multichart" description='Multichart Orientation' type='COMBO'
+					values='vertical,horizontal' tooltip='Multichart orientation' defaultValue='vertical'/>			
 			</SECTION>						
 		</CONF>
 	</DIALCHART>
