@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: it.eng.spagobi.studio.utils
 Bundle-SymbolicName: it.eng.spagobi.studio.utils;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 3.4.0
 Bundle-Activator: it.eng.spagobi.studio.utils.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/axis-1.4.jar,
- lib/sbiutils.jar,
+ lib/spagobi-utils-3.0.jar,
  .,
  lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
  lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar,
