@@ -10,6 +10,7 @@ import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -405,11 +406,11 @@ public class UploadDatamartTemplateService {
 	void refreshModelFolder(File file){
 		logger.debug("IN");
 		// search for "Metadata_Model" folder to refresh
-		final String METADATA_MODEL_FOLDER = "Metadata_Model";
+		//final String METADATA_MODEL_FOLDER = "Metadata_Model";
 
 		IContainer folder = file.getParent();
 
-		while(folder != null && !folder.getName().equals(METADATA_MODEL_FOLDER)){
+		while(folder != null && !folder.getName().equals(SpagoBIStudioConstants.FOLDER_METADATA_MODEL)){
 			folder = folder.getParent();	
 		}
 
