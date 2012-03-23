@@ -85,11 +85,11 @@ public class SpagoBIStudioConstants {
 	public static final String FOLDER_RESOURCE= "Resources";
 	public static final String FOLDER_SERVER = "Server";
 	public static final String FOLDER_DATA_SOURCE = "Data Source";
-	public static final String FOLDER_METADATA_MODEL = "Metadata_Model";
-	public static final String FOLDER_METADATA_MODEL_BCK = "Backup_Models";
-	public static final String FOLDER_DATASET = "DataSet";
-	public static final String FOLDER_ANALYSIS = "Sbi_Analysis";	
-	public static final String FOLDER_PRIVATE_DOCUMENTS = "Private Documents";
+	public static final String FOLDER_METADATA_MODEL = "Business Models";
+	public static final String FOLDER_METADATA_MODEL_BCK = "Backup Business Models";
+	public static final String FOLDER_DATASET = "Business Queries";
+	public static final String FOLDER_ANALYSIS = "Business Analysis";	
+	public static final String FOLDER_PRIVATE_DOCUMENTS = "Private Folders";
 	
 	// name of project folder icons 
 	public static final String FOLDER_ICON_RESOURCE= "resources.png";
@@ -199,6 +199,14 @@ public class SpagoBIStudioConstants {
 	// QBE VERSION
 	public static final String QBE_VERSION = "7";
 
+	
+	// CONFIG PROPERTIES
+	public static final String CONFIG_PROPERTY_FOLDER_BUSINESS_MODELS = "Folder_Business_Models";
+	public static final String CONFIG_PROPERTY_FOLDER_BUSINESS_ANALYSIS= "Folder_Business_Analysis";
+	public static final String CONFIG_PROPERTY_FOLDER_RESOURCES = "Folder_Resources";
+	public static final String CONFIG_PROPERTY_FOLDER_PRIVATE_FOLDERS= "Folder_Private_Folders";
+	public static final String CONFIG_PROPERTY_ANALYSIS_DOCUMENT= "AnalysisDocuments";
+	public static final String CONFIG_PROPERTY_FOLDER_BUSINESS_QUERIES= "Folder_Business_Queries";
 	
 	
 }
