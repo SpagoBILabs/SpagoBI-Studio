@@ -32,98 +32,160 @@ public class ResourcesHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(ResourcesHandler.class);
 
-
-	public boolean deleteResource(ISelection selection){
-		logger.debug("IN");
-		boolean toreturn = false;
-
-		IStructuredSelection sel=(IStructuredSelection)selection;
+	
+	
+	
+	public boolean deleteResources(ISelection selection){
 		
-		List<Object> list = sel.toList();
-		boolean delete = MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Delete Resource", "Confirm Deleting resource");
+		logger.debug("IN");
+		
+		IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+		List<Object> selectedObjects = structuredSelection.toList();
+		
+		boolean delete = MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Delete Resource", "Confirm deleting resource(s)");
 		if(delete){
-			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-				Object objSel = (Object) iterator.next();
+			for (Object selectedObject : selectedObjects) {
+				if(selectedObject instanceof IResource){
+					IResource res = (IResource) selectedObject;
+					deleteResource(res);
+				}
+			}
+		}
+		
+		logger.debug("OUT");
+		
+		return true;
+	}
+	
+	public boolean deleteResource(IResource resource) {
+		try{
+			if ((resource.getFileExtension()!= null ) && (resource.getFileExtension().equals("sbimodel"))){
+				deleteModelResource(resource);
+			} else {
+				resource.delete(true, null);
+				logger.debug("resource [" + resource.getName() + "] succesfully deleted ");
+			}
+		}
+		catch (Exception e) {
+			logger.error("Error in deleting the resource", e);	
+			MessageDialog.openError(
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()
+					, "Error", "Error in deleting the resource; try deleting it from resource navigato view");
+		}
+		
+		return true;
+	}
+	
+	public boolean deleteModelResource(IResource modelResource) {
+		try {
+	
+			String modelName = null;
+			try {
+				modelName = getModelName(modelResource);
+			} catch(Throwable t) {
+				logger.warn("Impossible to delete resources related to model stored in file [" + modelResource.getRawLocation().toFile() + "]");
+			}
+		    
+			modelResource.delete(true, null);
+			
+			if(modelName != null) {
+				deleteModelMappingFolder(modelResource, modelName);
+				deleteModelQueries(modelResource, modelName);	
+			}
+			
 
-				if(objSel instanceof IResource){
-					IResource res = (IResource) objSel;
-					try{
-						//case SbiModel(SpagoBI Meta)
-						if ((res.getFileExtension()!= null ) && (res.getFileExtension().equals("sbimodel"))){
-
-							File modelFile = res.getRawLocation().toFile();
-							File parentDirectory = res.getParent().getRawLocation().toFile();
-							
-							DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-							domFactory.setNamespaceAware(true); 
-							DocumentBuilder builder = domFactory.newDocumentBuilder();
-							Document doc = builder.parse(modelFile);
-						    XPath xpath = XPathFactory.newInstance().newXPath();
-						    
-						    XPathExpression expr = xpath.compile("//*[@name]");
-
-						    Object result = expr.evaluate(doc, XPathConstants.NODESET);
-						    NodeList nodes = (NodeList) result;
-						    
-						    String modelName=null;
-						    if  (nodes.getLength()>0) {
-						    	//get the first node (root) 
-						    	NamedNodeMap nodeAttributes = nodes.item(1).getAttributes();
-					        	if (nodeAttributes != null) {
-					        		//retrieve Metamodel Name
-					        		modelName = nodeAttributes.getNamedItem("name").getNodeValue();
-					        	}
-						    }
-						    File mappingDirectory = new File(parentDirectory,modelName);
-							
-						    /* Delete directory and files created for mapping */
-							
-						    //if (deleteMapping){
-							    if (deleteDir(mappingDirectory)){
-									res.getParent().refreshLocal(IResource.DEPTH_INFINITE, null);
-							    	logger.debug("Mapping directory of ["+modelName+"] removed");
-							    }
-							//}
-							    
-							/* Delete query files */
-							List<IResource> projectContents = getProjectContents(res.getProject()) ;
-							for (IResource resource : projectContents )  {
-								if ((resource.getFileExtension()!= null) && ( resource.getFileExtension().equals("metaquery"))){
-									String queryFileModelName = resource.getPersistentProperty(new QualifiedName("it.eng.spagobi.meta.editor.modelId", "modelId"));
-									if(queryFileModelName.equals(modelName)){
-										resource.delete(true, null);
-									}
-								}
-							}
-							    
-						    /* Delete .sbimodel file */
-							res.delete(true, null);
-							logger.debug("resource cancelled "+res.getName());
-						    
-						}
-						else {
-							res.delete(true, null);
-							logger.debug("resource cancelled "+res.getName());
-						}
-
+			logger.debug("resource cancelled " + modelResource.getName());
+		
+		} catch (Exception e) {
+			logger.error("Error in deleting the resource", e);	
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in deleting the resource; try deleting it from resource navigato view");
+		}
+		
+		return true;
+	}
+	
+	public void deleteModelQueries(IResource modelResource, String modelName) {
+		List<IResource> projectResources = getProjectResource(modelResource.getProject()) ;
+		for ( IResource projectResource : projectResources )  {
+			if ((projectResource.getFileExtension()!= null) && ( projectResource.getFileExtension().equals("metaquery"))){
 				
-					}
-					catch (Exception e) {
-						logger.error("Error in deleting the resource", e);	
-						MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error in deleting the resource; try deleting it from resource navigato view");
-						toreturn = false;
+				String queryFileModelName = null;
+				try {
+					queryFileModelName = projectResource.getPersistentProperty(new QualifiedName("it.eng.spagobi.meta.editor.modelId", "modelId"));
+				} catch (CoreException e) {
+					logger.warn("Impossible to read the value of property [modelId] from query ["+ projectResource.getName() + "]");
+				}
+				
+				if(modelName.equals(queryFileModelName)){
+					try {
+						projectResource.delete(true, null);
+					} catch (Throwable t) {
+						logger.warn("Impossible ro delete query ["+ projectResource.getName() + "]");
 					}
 				}
 			}
-			toreturn = true;
 		}
-		logger.debug("OUT");
-		return true;
-
-
 	}
 	
-	public List<IResource> getProjectContents(IProject project) {
+	public void deleteModelMappingFolder(IResource modelResource, String modelName) {
+		
+		File parentDirectory = modelResource.getParent().getRawLocation().toFile();
+		File mappingDirectory = new File(parentDirectory, modelName);
+	    if (deleteDir(mappingDirectory)){
+	    	logger.debug("Mapping folder of model [" + modelName + "] deleted succesfully");
+	    	try {
+	    		modelResource.getParent().refreshLocal(IResource.DEPTH_INFINITE, null);
+	    	} catch(Throwable t) {
+				logger.warn("Impossibe to refresh contents of folder [" + parentDirectory + "] after the deletion its subfolder [" + mappingDirectory + "] ");
+			}
+		    
+		} else  {
+			logger.warn("Impossible to delete mapping folder of model [" + modelName + "]");
+		}
+		
+	} 
+	
+	public String getModelName(IResource resources) {
+		File modelFile;
+		String modelName;
+		
+		logger.debug("IN");
+		
+		modelFile = null;
+		modelName = null;
+		try  {
+			modelFile = resources.getRawLocation().toFile();
+			
+			DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+			domFactory.setNamespaceAware(true); 
+			DocumentBuilder builder = domFactory.newDocumentBuilder();
+			Document doc = builder.parse(modelFile);
+		    
+			XPath xpath = XPathFactory.newInstance().newXPath();   
+		    XPathExpression expr = xpath.compile("//*[@name]");
+
+		    Object result = expr.evaluate(doc, XPathConstants.NODESET);
+		    NodeList nodes = (NodeList) result;
+			    
+		    if  (nodes.getLength()>0) {
+		    	//get the first node (root) 
+		    	NamedNodeMap nodeAttributes = nodes.item(1).getAttributes();
+	        	if (nodeAttributes != null) {
+	        		//retrieve Metamodel Name
+	        		modelName = nodeAttributes.getNamedItem("name").getNodeValue();
+	        	}
+		    }
+		    
+		    return modelName;
+		    
+		} catch(Throwable t) {
+			throw new RuntimeException("Impossible to read model name from file [" + modelFile + "]. Please check if it is a valid .sbimodel file");
+		} finally {
+			logger.debug("OUT");
+		}
+	}
+	
+	public List<IResource> getProjectResource(IProject project) {
 		List<IResource> projectContents = new ArrayList<IResource>();
 		try {
 			IResource[] projectMembers = project.members();

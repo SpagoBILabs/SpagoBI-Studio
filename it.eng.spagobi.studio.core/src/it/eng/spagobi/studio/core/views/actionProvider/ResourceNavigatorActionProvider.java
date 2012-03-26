@@ -486,7 +486,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		{	public void run() {
 			logger.debug("Delete action");
 			ResourcesHandler dts = new ResourcesHandler(); 
-			dts.deleteResource(currentContext.getSelection());
+			dts.deleteResources(currentContext.getSelection());
 		}
 		});
 		delACI.getAction().setText("Delete");
