@@ -205,9 +205,9 @@ public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 		try {
 			Integer returnCode=proxyServerObjects.getServerDocuments().saveNewDocument(newDocument, template, functionalityId);
 			if(returnCode==null){
-				SpagoBILogger.errorLog("Error during document deploy: Check that label is not already present", null);			
+				SpagoBILogger.errorLog("Error during document deploy: Check that label is not already present; if still cannot solve the problem check Server Log", null);			
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error", "Error during file deploy: label already present");		
+						"Error", "Error during file deploy: Check that label is not already present; if still cannot solve the problem check Server Log");		
 				return;
 			}
 			//			System.out.println(returnCode);
