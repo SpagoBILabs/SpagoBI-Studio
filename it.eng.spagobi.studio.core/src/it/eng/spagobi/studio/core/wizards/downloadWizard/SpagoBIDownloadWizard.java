@@ -272,41 +272,11 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		InputStream is=null;
 		//try{
 		Integer id=document.getId();
-		Template template=null;
+
 		SDKProxyFactory proxyFactory = null;
 		SpagoBIServerObjectsFactory spagoBIServerObjects = null;
-		try{
-			spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectName);
-			template = spagoBIServerObjects.getServerDocuments().downloadTemplate(id);
-		}
-		catch (NoActiveServerException e1) {
-			SpagoBILogger.errorLog("No active server found", e1);			
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "No active server found");	
-			return false;
-		}
-		catch (NullPointerException e) {
-			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
-			MessageDialog.openError(getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
-			return false;
-		}
-		catch (Exception e) {
-			logger.error("No comunication with SpagoBI server, could not retrieve template",e);
-			MessageDialog.openError(getShell(), "Error", "Could not get the template from server");	
-			return false;
-		}	
+		
 
-		if(template == null){
-			logger.error("Template download is null for documentId "+id+" and label "+document.getLabel());
-			return false;
-		}
-
-		String templateFileName=template.getFileName();
-		String previousExtension = null;
-		int index=templateFileName.indexOf('.');
-		if(index!=-1){
-			previousExtension=templateFileName.substring(index+1, templateFileName.length());
-		}
 
 		// Recover information field like dataSource, dataSet, engine names!
 
@@ -314,7 +284,14 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		//Get the parameters
 		String[] roles;
 		try{
+			spagoBIServerObjects = new SpagoBIServerObjectsFactory(projectName);
 			roles=spagoBIServerObjects.getServerDocuments().getCorrectRolesForExecution(id);
+		}
+		catch (NoActiveServerException e1) {
+			SpagoBILogger.errorLog("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return false;
 		}
 		catch (NullPointerException e) {
 			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
@@ -374,7 +351,7 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 
 		String type=document.getType();
 		String engineName=sdkEngine!=null?sdkEngine.getLabel(): null;
-		String extension=BiObjectUtilities.getFileExtension(getShell(), type, engineName, previousExtension);
+
 
 		// create the file in the selected directory
 		// get the folder selected 
@@ -390,7 +367,36 @@ public class SpagoBIDownloadWizard extends AbstractSpagoBIDocumentWizard  {
 		IPath pathFolder = folderSel.getProjectRelativePath(); 
 
 
+		
+		Template template=null;
+		try{
 
+			template = spagoBIServerObjects.getServerDocuments().downloadTemplate(id);
+		}
+		catch (NullPointerException e) {
+			logger.error("No comunication with server, check SpagoBi Server definition in preferences page",e);
+			MessageDialog.openError(getShell(), "Error", "No comunication with server, check SpagoBi Server definition in preferences page");	
+			return false;
+		}
+		catch (Exception e) {
+			logger.error("No comunication with SpagoBI server, could not retrieve template",e);
+			MessageDialog.openError(getShell(), "Error", "Could not get the template from server");	
+			return false;
+		}	
+
+		if(template == null){
+			logger.error("Template download is null for documentId "+id+" and label "+document.getLabel());
+			return false;
+		}
+
+		String templateFileName=template.getFileName();
+		String previousExtension = null;
+		int index=templateFileName.indexOf('.');
+		if(index!=-1){
+			previousExtension=templateFileName.substring(index+1, templateFileName.length());
+		}
+		
+		String extension=BiObjectUtilities.getFileExtension(getShell(), type, engineName, previousExtension);
 		// remove previous extensions only if a new Extension was found
 		String fileName="";
 		if(extension!=null){
