@@ -3,6 +3,7 @@ package it.eng.spagobi.studio.core.services.datamartTemplate;
 import it.eng.spagobi.meta.model.Model;
 import it.eng.spagobi.meta.model.business.BusinessModel;
 import it.eng.spagobi.meta.model.serializer.EmfXmiSerializer;
+import it.eng.spagobi.meta.querybuilder.model.ModelManager;
 import it.eng.spagobi.meta.querybuilder.ui.editor.SpagoBIDataSetEditor;
 import it.eng.spagobi.studio.core.util.ComboSelectionDialog;
 import it.eng.spagobi.studio.utils.bo.DataSource;
@@ -115,7 +116,9 @@ public class UploadDatamartTemplateService {
 		logger.debug("create model in temporary folder "+tempDirPathId);
 
 		try{
-			new SpagoBIDataSetEditor().generateMapping(businessModel, tempDirPathId, null);
+			ModelManager modelManager = new ModelManager( businessModel.getParentModel() );
+			modelManager.setMappingsFolder(new java.io.File(tempDirPathId));
+			modelManager.generateMapping((java.io.File)null);
 		}
 		catch (Exception e) {
 			logger.error("Error in generating the datamart for model "+businessModel.getName(),e);
