@@ -114,8 +114,8 @@ public class UploadDatamartTemplateService {
 
 		try{
 			ModelManager modelManager = new ModelManager( businessModel.getParentModel() );
-			//modelManager.setMappingsFolder(new java.io.File(tempDirPathId));
-			modelManager.generateMapping(new java.io.File(tempDirPathId));
+			modelManager.setMappingsFolder(new java.io.File(tempDirPathId));
+			modelManager.generateMapping(false);
 		}
 		catch (Exception e) {
 			logger.error("Error in generating the datamart for model "+businessModel.getName(),e);
