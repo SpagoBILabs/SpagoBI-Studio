@@ -4,7 +4,6 @@ import it.eng.spagobi.meta.model.Model;
 import it.eng.spagobi.meta.model.business.BusinessModel;
 import it.eng.spagobi.meta.model.serializer.EmfXmiSerializer;
 import it.eng.spagobi.meta.querybuilder.model.ModelManager;
-import it.eng.spagobi.meta.querybuilder.ui.editor.SpagoBIDataSetEditor;
 import it.eng.spagobi.studio.core.util.ComboSelectionDialog;
 import it.eng.spagobi.studio.utils.bo.DataSource;
 import it.eng.spagobi.studio.utils.bo.Document;
@@ -19,7 +18,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -36,7 +34,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.internal.theme.ComboDrawData;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -48,7 +45,7 @@ public class UploadDatamartTemplateService {
 	ISelection selection; 
 	private static Logger logger = LoggerFactory.getLogger(UploadDatamartTemplateService.class);
 	String projectname = null;
-	String modelname = null;
+	String modelFileName = null;
 
 	DataSource[] dataSources = null;
 	String userDataSource = null;
@@ -73,7 +70,7 @@ public class UploadDatamartTemplateService {
 		Object objSel = sel.toList().get(0);
 		File fileSel=(File)objSel;
 		projectname = fileSel.getProject().getName();
-		modelname = fileSel.getName();
+		modelFileName = fileSel.getName();
 
 		logger.debug("get datamart.jar of model file name "+fileSel.getName());
 
@@ -329,7 +326,7 @@ public class UploadDatamartTemplateService {
 	{
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-				monitor.beginTask("Deploying model files (datamart.jar and xmlFile for calculated fields " + modelname +")", IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Deploying model files (datamart.jar and xmlFile for calculated fields " + modelFileName +")", IProgressMonitor.UNKNOWN);
 
 				Template datamartTemplate = new Template();
 				Template modelTemplate = new Template();
@@ -345,7 +342,7 @@ public class UploadDatamartTemplateService {
 				logger.debug("built Datamart template with content data handler");
 
 				//defines properties for sbimodel file 
-				modelTemplate.setFileName(modelname);
+				modelTemplate.setFileName(modelFileName);
 				modelTemplate.setFolderName(businessModel.getName());
 
 
@@ -389,7 +386,7 @@ public class UploadDatamartTemplateService {
 				}
 
 				if(documentAlreadyPresent == false){
-					messageStatusDocument = "Detail: QBE Document with label "+modelname+ " added to server";
+					messageStatusDocument = "Detail: QBE Document with label "+businessModel.getName()+ " added to server";
 				}
 				monitor.done();
 				if (monitor.isCanceled())
