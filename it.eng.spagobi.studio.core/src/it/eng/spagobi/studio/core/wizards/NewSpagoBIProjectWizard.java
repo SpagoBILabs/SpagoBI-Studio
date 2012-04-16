@@ -1,9 +1,12 @@
 package it.eng.spagobi.studio.core.wizards;
 
 import it.eng.spagobi.studio.core.builder.SpagoBIStudioNature;
+import it.eng.spagobi.studio.core.util.Utilities;
+import it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -26,6 +29,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NewSpagoBIProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
 
@@ -34,7 +39,8 @@ public class NewSpagoBIProjectWizard extends Wizard implements INewWizard, IExec
 
 	public static String SPAGOBI_PROJECT_WIZARD_ID = "it.eng.spagobi.studio.core.wizards.newSpagoBIProjectWizard";
 
-	
+	private static Logger logger = LoggerFactory.getLogger(NewSpagoBIProjectWizard.class);
+
 	
 	public NewSpagoBIProjectWizard() {
 		super();
@@ -111,37 +117,70 @@ public class NewSpagoBIProjectWizard extends Wizard implements INewWizard, IExec
 	 */
 
 	protected void buildProjectStructure(IProgressMonitor monitor, IProject projectReference ) {
+		logger.debug("IN");
 		monitor.beginTask("Creating Project",50);
 		try{
 			monitor.subTask("Creating Project Directories ");
-
+			Properties properties = new Utilities().getStudioMetaProperties();	
+			
 			// create SpagoBI project structure
-			IFolder resourceFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_RESOURCE);
-			resourceFolder.create(false, true, monitor);
+			if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_RESOURCES)){
+				logger.debug("created "+SpagoBIStudioConstants.FOLDER_RESOURCE);
+				IFolder resourceFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_RESOURCE);
+				resourceFolder.create(false, true, monitor);
+				IFolder serverFolder = resourceFolder.getFolder(SpagoBIStudioConstants.FOLDER_SERVER);
+				serverFolder.create(false, true, monitor);
+			}
+			else{
+				logger.debug("not create "+SpagoBIStudioConstants.FOLDER_RESOURCE);
+			}
 
-			IFolder serverFolder = resourceFolder.getFolder(SpagoBIStudioConstants.FOLDER_SERVER);
-			serverFolder.create(false, true, monitor);
 
 //			IFolder datasourceFolder = resourceFolder.getFolder(SpagoBIStudioConstants.FOLDER_DATA_SOURCE);
 //			datasourceFolder.create(false, true, monitor);
+			if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_BUSINESS_MODELS)){
+				logger.debug("created "+SpagoBIStudioConstants.FOLDER_METADATA_MODEL);
+				IFolder metadataFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_METADATA_MODEL);
+				metadataFolder.create(false, true, monitor);
+			}
+			else{
+				logger.debug("not create "+SpagoBIStudioConstants.FOLDER_METADATA_MODEL);
+			}
 
-			IFolder metadataFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_METADATA_MODEL);
-			metadataFolder.create(false, true, monitor);
+			if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_BUSINESS_QUERIES)){
+				logger.debug("created "+SpagoBIStudioConstants.FOLDER_DATASET);
+				IFolder datasetFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_DATASET);
+				datasetFolder.create(false, true, monitor);
+			}
+			else{
+				logger.debug("not create "+SpagoBIStudioConstants.FOLDER_DATASET);
+			}
+
+			if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_BUSINESS_ANALYSIS)){		
+				logger.debug("created "+SpagoBIStudioConstants.FOLDER_ANALYSIS);
+				IFolder analysisFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_ANALYSIS);
+				analysisFolder.create(false, true, monitor);
+			}
+			else{
+				logger.debug("not create "+SpagoBIStudioConstants.FOLDER_ANALYSIS);
+			}
+
+			if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_PRIVATE_FOLDERS)){		
+				logger.debug("created "+SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS);
+				IFolder privateFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS);
+				privateFolder.create(false, true, monitor);
+			}
+			else{
+				logger.debug("not create "+SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS);
+			}
 			
-			IFolder datasetFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_DATASET);
-			datasetFolder.create(false, true, monitor);
-
-			IFolder analysisFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_ANALYSIS);
-			analysisFolder.create(false, true, monitor);
-
-			IFolder privateFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS);
-			privateFolder.create(false, true, monitor);
 			
 		} catch(CoreException x) {
 			reportError(x);
 		} finally {
 			monitor.done();
 		}
+		logger.debug("OUT");
 
 	}
 

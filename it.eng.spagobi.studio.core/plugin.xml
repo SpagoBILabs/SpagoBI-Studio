@@ -250,6 +250,7 @@
             tooltip="New SpagoBI Project">
       </action>
 
+<!--
  <action
         class="it.eng.spagobi.studio.core.actions.DocumentsWizardMenuAction"
         icon="icons/analysis.png"
@@ -259,7 +260,7 @@
         toolbarPath="Normal/additions"
         tooltip="Documents wizard"> 
       </action>
-
+-->
       <action
             class="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction"
             icon="icons/metadata.png"
