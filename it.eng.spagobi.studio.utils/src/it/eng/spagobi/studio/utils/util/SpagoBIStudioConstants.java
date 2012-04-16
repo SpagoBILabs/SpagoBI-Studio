@@ -44,18 +44,18 @@ public class SpagoBIStudioConstants {
 	
 	
 	// Engine Labels
-	public final static String DASHBOARD_ENGINE_LABEL="DashboardInternalEng";
-	public final static String CHART_ENGINE_LABEL="ChartInternalEng";
-	public final static String JASPER_REPORT_ENGINE_LABEL="JasperReportEngine";
-	public final static String BIRT_REPORT_ENGINE_LABEL="BirtEngine";
-	public final static String OLAP_ENGINE_LABEL="JPivotEngine";
-	public final static String ETL_ENGINE_LABEL="TALEND";
-	public final static String DOSSIER_ENGINE_LABEL="Dossier";
-	public final static String DATA_MINING_ENGINE_LABEL="WekaEngine";
-	public final static String QBE_ENGINE_LABEL="QbeEngine";
-	public final static String OFFICE_DOCUMENT_ENGINE_LABEL="OfficeInternalEng";
-	public final static String GEO_ENGINE_LABEL="GeoEngine";
-	public final static String DOCUMENT_COMPOSITION_ENGINE_LABEL="DocumentCompositionInternalEng";
+	public final static String DASHBOARD_ENGINE_LABEL="SpagoBIDashboardEng";
+	public final static String CHART_ENGINE_LABEL="SpagoBIJFreeChartEng";
+	public final static String JASPER_REPORT_ENGINE_LABEL="SpagoBIJasperReportE";
+	public final static String BIRT_REPORT_ENGINE_LABEL="SpagoBIBirtReportEng";
+	public final static String OLAP_ENGINE_LABEL="SpagoBIJPivotEngine";
+	public final static String ETL_ENGINE_LABEL="SpagoBITalendEngine";
+	public final static String DOSSIER_ENGINE_LABEL="SpagoBIDossierEngine";
+	public final static String DATA_MINING_ENGINE_LABEL="SpagoBIWekaEngine";
+	public final static String QBE_ENGINE_LABEL="SpagoBIQbeEngine";
+	public final static String OFFICE_DOCUMENT_ENGINE_LABEL="SpagoBIOfficeEngine";
+	public final static String GEO_ENGINE_LABEL="SpagoBIGeoEngine";
+	public final static String DOCUMENT_COMPOSITION_ENGINE_LABEL="SpagoBICompositeDocE";
 	
 	public final static int BIOBJECT_LABEL_LIMIT=20;
 	public final static int BIOBJECT_NAME_LIMIT=40;
