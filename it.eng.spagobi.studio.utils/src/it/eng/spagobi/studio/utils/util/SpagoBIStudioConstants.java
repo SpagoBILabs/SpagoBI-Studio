@@ -30,6 +30,7 @@ public class SpagoBIStudioConstants {
 	public final static String DASHBOARD_ENGINE_EXTENSION="sbidash";
 	public final static String CHART_ENGINE_EXTENSION="sbichart";
 	public final static String HIGHCHART_ENGINE_EXTENSION="sbihchart";
+	public final static String EXT_ENGINE_EXTENSION="sbiextchart";
 	public final static String JASPER_REPORT_ENGINE_EXTENSION="jrxml";
 	public final static String BIRT_REPORT_ENGINE_EXTENSION="rptdesign";
 	public final static String DOCUMENT_COMPOSITION_ENGINE_EXTENSION="sbidoccomp";
