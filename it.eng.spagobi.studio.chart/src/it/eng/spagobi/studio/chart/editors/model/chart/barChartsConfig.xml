@@ -180,7 +180,7 @@
 		<SERIES_LABELS />
 		<SERIES_ORDER_COLORS />				
 	</BARCHART>
-	<!-- <BARCHART name='stacked_bar_group'
+	 <BARCHART name='stacked_bar_group'
 		templatePath='it/eng/spagobi/studio/chart/resources/chart/stacked_bar_group.xml'>
 		<CONF>
 			<SECTION>
@@ -203,7 +203,6 @@
 		<SERIES_LABELS />
 		<SERIES_ORDER_COLORS />		
 	</BARCHART>
-	 -->
 	<BARCHART name='overlaid_barline'
 		templatePath='it/eng/spagobi/studio/chart/resources/chart/overlaid_barline.xml'>
 		<CONF>
