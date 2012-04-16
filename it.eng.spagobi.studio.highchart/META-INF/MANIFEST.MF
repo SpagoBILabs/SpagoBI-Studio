@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: it.eng.spagobi.studio.highcharts
 Bundle-SymbolicName: it.eng.spagobi.studio.highchart;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 3.4.0
 Bundle-Activator: it.eng.spagobi.studio.highchart.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
