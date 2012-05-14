@@ -22,12 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package it.eng.spagobi.studio.oda.impl;
 
-import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreFieldMetadata;
-import it.eng.spagobi.sdk.datasets.bo.SDKDataStoreMetadata;
 import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
 import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
-import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
-import it.eng.spagobi.studio.utils.bo.DataStoreMetadataField;
 import it.eng.spagobi.tools.dataset.common.datastore.IDataStore;
 import it.eng.spagobi.tools.dataset.common.datastore.IField;
 import it.eng.spagobi.tools.dataset.common.datastore.IRecord;
@@ -137,11 +133,7 @@ public class ResultSet implements IResultSet
 			throw (OdaException) new OdaException("Impossible to read row [" + getRow() + "]. The resultset contains [" + dataStore.getRecordsCount() + "] rows");
 		}
 		
-		IDataStoreMetadataField[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
-		IDataStoreMetadataField sdkFieldMeta = sdkFieldsMeta[index-1];
-		String fieldName = sdkFieldMeta.getName();
-		int fieldIndex = dataStore.getMetaData().getFieldIndex(fieldName);	
-		IField field = record.getFieldAt(fieldIndex);
+		IField field = record.getFieldAt(getFieldIndex(index));
         
 		return "" + field.getValue();
 	}
@@ -153,6 +145,24 @@ public class ResultSet implements IResultSet
 	    return getString( findColumn( columnName ) );
 	}
 
+	private int getFieldIndex( int index ){
+		IDataStoreMetadataField[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
+		IDataStoreMetadataField sdkFieldMeta = sdkFieldsMeta[index-1];
+		String fieldName = sdkFieldMeta.getName();
+		
+		
+		//String fieldName = dataStore.getMetaData().getFieldName(index);
+		int fieldIndex =-1;
+		for(int i=0; i< dataStore.getMetaData().getFieldCount();i++){
+			if(dataStore.getMetaData().getFieldName(i).equals(fieldName)){
+				fieldIndex = i;
+				break;
+			}
+		}
+		return fieldIndex;
+	}
+	
+	
 	/*
 	 * @see org.eclipse.datatools.connectivity.oda.IResultSet#getInt(int)
 	 */
@@ -163,11 +173,8 @@ public class ResultSet implements IResultSet
 			throw (OdaException) new OdaException("Impossible to read row [" + getRow() + "]. The resultset contains [" + dataStore.getRecordsCount() + "] rows");
 		}
 		
-		IDataStoreMetadataField[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
-		IDataStoreMetadataField sdkFieldMeta = sdkFieldsMeta[index-1];
-		String fieldName = sdkFieldMeta.getName();
-		int fieldIndex = dataStore.getMetaData().getFieldIndex(fieldName);	
-		IField field = record.getFieldAt(fieldIndex);
+		//int fieldIndex = dataStore.getMetaData().getFieldIndex(fieldName);	
+		IField field = record.getFieldAt(getFieldIndex(index));
 		
 		if(field == null){
 			throw (OdaException) new OdaException("Impossible to read column [" + (index-1) + "]. The resultset contains [" + dataStore.getMetaData().getFieldCount() + "] columns");
@@ -189,7 +196,18 @@ public class ResultSet implements IResultSet
 	public int getInt( String columnName ) throws OdaException {
 		int value = -1;
 		try {
-			value = getInt( findColumn( columnName ) );
+		
+			
+			//String fieldName = dataStore.getMetaData().getFieldName(index);
+			int fieldIndex =-1;
+			for(int i=0; i< dataStore.getMetaData().getFieldCount();i++){
+				if(dataStore.getMetaData().getFieldName(i).equals(columnName)){
+					fieldIndex = i;
+					break;
+				}
+			}
+			
+			value = getInt( fieldIndex);
 		} catch(Throwable t) {
 			throw (OdaException) new OdaException("Impossible to convert column [" + columnName +"] to integer").initCause(t);
 		}
@@ -366,22 +384,23 @@ public class ResultSet implements IResultSet
      */
     public int findColumn( String columnName ) throws OdaException
     {
-        // TODO replace with data source specific implementation
-        
-        // hard-coded for demo purpose
-        int columnId = 1;   // dummy column id
-        if( columnName == null || columnName.length() == 0 )
-            return columnId;
-        String lastChar = columnName.substring( columnName.length()-1, 1 );
-        try
-        {
-            columnId = Integer.parseInt( lastChar );
-        }
-        catch( NumberFormatException e )
-        {
-            // ignore, use dummy column id
-        }
-        return columnId;
+    	
+    	
+    	IDataStoreMetadataField[] sdkFieldsMeta = dataStoreMeta.getFieldsMetadata();
+    	IDataStoreMetadataField sdkFieldMeta;
+    		
+    		
+    		//String fieldName = dataStore.getMetaData().getFieldName(index);
+    	int fieldIndex =0;
+    	for(int i=0; i< sdkFieldsMeta.length;i++){
+    		sdkFieldMeta = sdkFieldsMeta[i];
+    		if(sdkFieldMeta.getName().equals(columnName)){
+    			fieldIndex = i;
+    			break;
+    		}
+    	}
+    	
+        return fieldIndex-1;
     }
     
 }
