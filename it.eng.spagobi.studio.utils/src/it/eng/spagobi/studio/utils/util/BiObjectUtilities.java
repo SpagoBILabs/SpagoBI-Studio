@@ -75,6 +75,9 @@ public class BiObjectUtilities {
 		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.HIGHCHART_ENGINE_EXTENSION)){
 			return SpagoBIConstants.DASH_TYPE_CODE;
 		}
+		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.EXT_ENGINE_EXTENSION)){
+			return SpagoBIConstants.CHART_TYPE_CODE;
+		}
 		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.GEO_ENGINE_EXTENSION)){
 			return SpagoBIConstants.MAP_TYPE_CODE;
 		}		
