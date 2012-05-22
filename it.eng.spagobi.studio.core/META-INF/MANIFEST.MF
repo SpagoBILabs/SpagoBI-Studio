@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SpagoBI Studio Core Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.core; singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 3.4.0
 Bundle-Activator: it.eng.spagobi.studio.core.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -70,6 +70,8 @@ Import-Package: it.eng.spagobi.meta.editor.multi.wizards,
  it.eng.spagobi.studio.documentcomposition.actions,
  it.eng.spagobi.studio.documentcomposition.services,
  it.eng.spagobi.studio.documentcomposition.wizards,
+ it.eng.spagobi.studio.extchart.wizard,
+ it.eng.spagobi.studio.extchart.wizard.pages,
  it.eng.spagobi.studio.geo.actions,
  it.eng.spagobi.studio.geo.services,
  it.eng.spagobi.studio.geo.wizards,

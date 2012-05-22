@@ -16,6 +16,7 @@ import it.eng.spagobi.studio.core.services.resources.ResourcesHandler;
 import it.eng.spagobi.studio.core.services.template.DeployTemplateService;
 import it.eng.spagobi.studio.core.services.template.RefreshTemplateService;
 import it.eng.spagobi.studio.core.util.SWTComponentUtilities;
+import it.eng.spagobi.studio.core.util.Utilities;
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
 import it.eng.spagobi.studio.core.views.menu.SubmenuAction;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
@@ -26,6 +27,7 @@ import it.eng.spagobi.studio.core.wizards.downloadWizard.SpagoBIDownloadWizard;
 import it.eng.spagobi.studio.core.wizards.serverWizard.NewServerWizard;
 import it.eng.spagobi.studio.dashboard.wizards.SpagoBINewDashboardWizard;
 import it.eng.spagobi.studio.documentcomposition.wizards.SpagoBIDocumentCompositionWizard;
+import it.eng.spagobi.studio.extchart.wizard.SpagoBINewExtChartWizard;
 import it.eng.spagobi.studio.geo.wizards.SpagoBIGEOWizard;
 import it.eng.spagobi.studio.highchart.wizard.SpagoBINewHighChartWizard;
 import it.eng.spagobi.studio.jasper.wizards.SpagoBINewJasperReportWizard;
@@ -34,10 +36,10 @@ import it.eng.spagobi.studio.utils.util.ResourceNavigatorHandler;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -70,6 +72,8 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 	/**
 	 *  Fill the context menu at folder selection, depending on the nature of the object selected
 	 */
+	
+	Properties properties = null;
 
 
 
@@ -95,15 +99,18 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			// if it is a folder of analysis hierarchy
 			if(currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_ANALYSIS_HIER)){
 				logger.debug("Folder Analysis");
-
-				setDownloadWizard(menu);
-				setNewDocumentWizard(menu);			
+				// only if studio version
+				if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_ANALYSIS_DOCUMENT)){
+					setDownloadWizard(menu);
+					setNewDocumentWizard(menu);	
+				}
 			}
 			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_ANALYSIS_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("File ANalysis");		
-
-				setDeployWizard(menu);			
-				setRefreshWizard(menu);			
+				if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_ANALYSIS_DOCUMENT)){
+					setDeployWizard(menu);			
+					setRefreshWizard(menu);			
+				}
 			}
 			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FOLDER_SERVER_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("Folder Server");
@@ -153,8 +160,8 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 
 	@Override
 	public void init(ICommonActionExtensionSite aSite) {
-		// TODO Auto-generated method stub
 		super.init(aSite);
+		properties = new Utilities().getStudioMetaProperties();	
 	}
 
 	@Override
@@ -203,7 +210,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		menu.appendToGroup("group.new", submenuReport);
 		
 
-		actions = new IAction[2];
+		actions = new IAction[3];
 		
 		//Chart
 		ActionContributionItem chartACI = new ActionContributionItem(new Action()
@@ -230,6 +237,20 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		highChartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
 		//menu.appendToGroup("group.new", highChartACI);	
 		actions[1] = highChartACI.getAction();
+		
+		//ext Chart
+		ActionContributionItem extChartACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("New ExtChart");
+			SpagoBINewExtChartWizard sbindw = new SpagoBINewExtChartWizard();	
+			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New ExtChart Wizard");
+		}
+		});
+		extChartACI.getAction().setText("Chart with ExtChart");
+		extChartACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
+		//menu.appendToGroup("group.new", highChartACI);	
+		actions[2] = extChartACI.getAction();
+		
 		
 		SubmenuAction submenuChart = new SubmenuAction(actions, "Chart", "Chart", null, true); 
 		menu.appendToGroup("group.new", submenuChart);
