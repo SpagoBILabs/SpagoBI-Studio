@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="MetaStudio" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="3.2.0" useFeatures="false" includeLaunchers="true">
+<product name="%productName" uid="Studio" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="3.4.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="eclipse_lg.gif"/>
@@ -15,7 +15,7 @@
 
    <launcherArgs>
       <programArgs>-consoleLog</programArgs>
-      <vmArgs>-Dosgi.requiredJavaVersion=1.6 -Xms40m -Xmx512m -XX:MaxPermSize=128m</vmArgs>
+      <vmArgs>-Dosgi.requiredJavaVersion=1.6 -Xms40m -Xmx512m -XX:MaxPermSize=256m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
@@ -117,6 +117,7 @@
       <plugin id="it.eng.spagobi.studio.core"/>
       <plugin id="it.eng.spagobi.studio.dashboard"/>
       <plugin id="it.eng.spagobi.studio.documentcomposition"/>
+      <plugin id="it.eng.spagobi.studio.extchart"/>
       <plugin id="it.eng.spagobi.studio.geo"/>
       <plugin id="it.eng.spagobi.studio.highchart"/>
       <plugin id="it.eng.spagobi.studio.jasper"/>
