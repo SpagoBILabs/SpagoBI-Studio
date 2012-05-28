@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="ExtChartEditor"
+            extensions="sbiextchart"
+            icon="icons/sample.gif"
+            contributorClass="it.eng.spagobi.studio.extchart.editors.ExtChartEditorContributor"
+            class="it.eng.spagobi.studio.extchart.editors.ExtChartEditor"
+            id="it.eng.spagobi.studio.extchart.editors.ExtChartEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="ExtChart Wizards"
+            id="it.eng.spagobi.studio.extchart">
+      </category>
+      <wizard
+            name="ExtChart file"
+            icon="icons/sample.gif"
+            category="it.eng.spagobi.studio.extchart"
+            class="it.eng.spagobi.studio.extchart.wizards.ExtChartWizard"
+            id="it.eng.spagobi.studio.extchart.wizards.ExtChartWizard">
+      </wizard>
+   </extension>
+
+</plugin>

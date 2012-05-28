@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Extchart
+Bundle-SymbolicName: it.eng.spagobi.studio.extchart; singleton:=true
+Bundle-Version: 3.4.0.qualifier
+Bundle-Activator: it.eng.spagobi.studio.extchart.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.core.resources,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.forms;bundle-version="3.5.2",
+ it.eng.spagobi.studio.utils;bundle-version="3.4.0",
+ it.eng.spagobi.server.services.api;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/org.slf4j.api_1.5.11.v20100519-1910.jar,
+ .,
+ lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
+ lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar,
+ lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
+ lib/xstream-1.3.1.jar,
+ lib/dom4j.jar
+Export-Package: it.eng.spagobi.studio.extchart.wizard,
+ it.eng.spagobi.studio.extchart.wizard.pages
