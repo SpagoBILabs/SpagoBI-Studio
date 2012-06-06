@@ -9,7 +9,8 @@ public class StyleTitle {
 	
 	private String color; //combo blue,yellow
 	private String fontWeight; //combo
-	private Integer fontSize;
+	//private Integer fontSize;
+	private String fontSize;
 	
 	public String getColor() {
 		return color;
@@ -23,10 +24,10 @@ public class StyleTitle {
 	public void setFontWeight(String fontWeight) {
 		this.fontWeight = fontWeight;
 	}
-	public Integer getFontSize() {
+	public String getFontSize() {
 		return fontSize;
 	}
-	public void setFontSize(Integer fontSize) {
+	public void setFontSize(String fontSize) {
 		this.fontSize = fontSize;
 	}
 	

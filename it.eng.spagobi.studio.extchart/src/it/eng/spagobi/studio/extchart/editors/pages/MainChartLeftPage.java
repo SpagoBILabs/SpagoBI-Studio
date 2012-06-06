@@ -7,6 +7,8 @@ import it.eng.spagobi.server.services.api.exception.MissingParValueException;
 import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.DraggedObject;
+import it.eng.spagobi.studio.extchart.editors.properties.title.SubTitleProperties;
+import it.eng.spagobi.studio.extchart.editors.properties.title.TitleProperties;
 import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 import it.eng.spagobi.studio.utils.bo.Dataset;
@@ -39,6 +41,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -109,7 +112,10 @@ public class MainChartLeftPage extends AbstractPage {
 		Button titleStyleButton = SWTUtils.drawButton(compositeProp, "Title Style");
 		titleStyleButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				//setFont();
+				TitleProperties titleStyle = new TitleProperties(extEditor, new Shell());
+				titleStyle.drawProperties();
+				titleStyle.drawButtons();
+				titleStyle.showPopup();	
 			}
 		});
 
@@ -127,8 +133,10 @@ public class MainChartLeftPage extends AbstractPage {
 		Button subTitleStyleButton = SWTUtils.drawButton(compositeProp, "SubTitle Style");
 		subTitleStyleButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				//setFont();
-			}
+				SubTitleProperties subTitleStyle = new SubTitleProperties(extEditor, new Shell());
+				subTitleStyle.drawProperties();
+				subTitleStyle.drawButtons();
+				subTitleStyle.showPopup();				}
 		});
 
 		String[] legendPosContent = new String[]{"", "bottom", "left", "right", "top"};
