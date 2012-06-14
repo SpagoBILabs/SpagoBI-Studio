@@ -44,18 +44,21 @@ public class PropertiesFactory {
 		if(type.equals(ExtChartConstants.EXT_CHART_TYPE_AREA))
 		{
 			toReturn = new AxesCategoryProperties(editor, comp); 
+			toReturn.setTitle("Define category Axe ");
 			toReturn.setAxes(axes);
 
 		}
 		else if(type.equals(ExtChartConstants.EXT_CHART_TYPE_BAR_AND_LINE)){
 			toReturn =new AxesCategoryProperties(editor, comp); 
-			toReturn.setTitle("Define category Axe propertiExtChartConstantseturn.setAxes(axes);");
+			toReturn.setTitle("Define category Axe ");
 			toReturn.setAxes(axes);
 
 		}
-//		else if(type.equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)){
-//			return new AxesGaugeProperties();
-//		}
+		else if(type.equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)){
+			toReturn =new AxesGaugeProperties(editor, comp); 
+			toReturn.setTitle("Define Gauge Axe");
+			toReturn.setAxes(axes);
+		}
 //		else if(type.equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
 //			return new AxesPieProperties();
 //		}

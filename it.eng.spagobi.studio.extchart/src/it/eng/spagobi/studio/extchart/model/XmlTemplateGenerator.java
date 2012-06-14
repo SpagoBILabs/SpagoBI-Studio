@@ -137,6 +137,15 @@ public class XmlTemplateGenerator {
 
 		xstream.useAttributeFor(Axes.class, Axes.MINIMUM);
 		xstream.aliasField(Axes.MINIMUM, Axes.class, Axes.MINIMUM);
+		
+		xstream.useAttributeFor(Axes.class, Axes.MAXIMUM);
+		xstream.aliasField(Axes.MAXIMUM, Axes.class, Axes.MAXIMUM);
+		
+		xstream.useAttributeFor(Axes.class, Axes.STEPS);
+		xstream.aliasField(Axes.STEPS, Axes.class, Axes.STEPS);
+		
+		xstream.useAttributeFor(Axes.class, Axes.MARGIN);
+		xstream.aliasField(Axes.MARGIN, Axes.class, Axes.MARGIN);		
 
 		xstream.useAttributeFor(Axes.class, Axes.POSITION);
 		xstream.aliasField(Axes.POSITION, Axes.class, Axes.POSITION);

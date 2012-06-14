@@ -2,6 +2,7 @@ package it.eng.spagobi.studio.extchart.editors.pages;
 
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.SeriesPanel;
+import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.SingleAxePanel;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.SingleSeriePanel;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.XAxePanel;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.YAxePanel;
@@ -32,6 +33,7 @@ public class MainChartRightPage extends AbstractPage {
 	XAxePanel bottomAxeBuilder;
 	SeriesPanel seriesBuilder;
 	SingleSeriePanel singleSeriesBuilder;
+	SingleAxePanel singleAxeBuilder;
 
 	ExtChartEditor editor;
 	ExtChart extChart;
@@ -59,7 +61,7 @@ public class MainChartRightPage extends AbstractPage {
 		Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 2);
 		//compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
 
-		if (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
+		if ((!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)) && (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)) ){
 		// get first numeric axe (left- bottom- right- top)
 		Axes leftAxe =   ExtChartUtils.getYAxe(extChart, 1);
 		logger.debug("left axe found : "+leftAxe != null ? "true" : "false");
@@ -76,7 +78,7 @@ public class MainChartRightPage extends AbstractPage {
 		rightAxeBuilder.setAxeType(ExtChartConstants.AXE_TYPE_NUMERIC);
 		rightAxeBuilder.drawAxeComposite();
 		}
-		if (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
+		if ((!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)) && (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE))){
 
 		seriesBuilder = new SeriesPanel(compositeProp, SWT.NULL, extChart.getSeriesList().getSeries());
 		seriesBuilder.setEditor(editor);
@@ -102,15 +104,26 @@ public class MainChartRightPage extends AbstractPage {
 			
 		}
 		// The x Axe; it is recognised in the chart by the type: for bar is category
-		if (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
-		Axes xAxe =   ExtChartUtils.getXAxe(extChart);
-		bottomAxeBuilder = new XAxePanel(compositeProp, SWT.NULL, xAxe);
-		bottomAxeBuilder.setEditor(editor);
-		bottomAxeBuilder.drawAxeComposite();
-		
+		if (extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)){
+			singleAxeBuilder = new SingleAxePanel(compositeProp, SWT.NULL, extChart.getAxesList().getAxes());
+			singleAxeBuilder.setEditor(editor);
+			singleAxeBuilder.drawSerieComposite();
+			
+			GridData gd = new GridData(GridData.FILL_BOTH);
+			gd.horizontalSpan = 2;
+			singleAxeBuilder.getContainer().setLayoutData(gd);
+			toolkit.createLabel(compositeProp, "");
 
-		toolkit.createLabel(compositeProp, "");
+		}else if (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
+			Axes xAxe =   ExtChartUtils.getXAxe(extChart);
+			bottomAxeBuilder = new XAxePanel(compositeProp, SWT.NULL, xAxe);
+			bottomAxeBuilder.setEditor(editor);
+			bottomAxeBuilder.drawAxeComposite();
+
+
+			toolkit.createLabel(compositeProp, "");
 		}
+		
 		sectionProp.setClient(compositeProp);	
 		logger.debug("OUT");
 	}
