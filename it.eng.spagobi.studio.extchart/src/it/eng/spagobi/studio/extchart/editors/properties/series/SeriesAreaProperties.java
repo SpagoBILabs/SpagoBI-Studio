@@ -35,7 +35,7 @@ public class SeriesAreaProperties  extends SeriesProperties{
 		toolkit.createLabel(dialog, "Donut (number or 'false'): ");
 		donutText = toolkit.createText(dialog, "default value", SWT.NULL);
 		if(serie.getDonut() != null){
-			donutText.setText(serie.getDonut());
+			donutText.setText(serie.getDonut().toString());
 		}
 		
 		logger.debug("Show in legend");
@@ -55,7 +55,7 @@ public class SeriesAreaProperties  extends SeriesProperties{
 		logger.debug("IN");
 		super.performOk();	
 		
-		serie.setDonut(donutText.getText());
+		serie.setDonut(Integer.parseInt(donutText.getText()));
 		logger.debug("donut " +donutText.getText());
 		
 		boolean selectionLegend = showInLegendButton.getSelection();

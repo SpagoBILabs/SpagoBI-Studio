@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <EXTCHARTS>
 <!-- 	<EXTCHART type='area' imagePath='it/eng/spagobi/studio/extchart/resources/images/areaExtChart.PNG' xAxeName = 'Category'  >
+	</EXTCHART> -->
+	<EXTCHART type='pie' imagePath='it/eng/spagobi/studio/extchart/resources/images/pieExtChart.PNG'  defaultSerieType = 'pie'>
 	</EXTCHART>
-	<EXTCHART type='pie' imagePath='it/eng/spagobi/studio/extchart/resources/images/lineExtChart.PNG'>
-	</EXTCHART>
-	<EXTCHART type='line' imagePath='it/eng/spagobi/studio/extchart/resources/images/splineExtChart.PNG' xAxeName = ''>
+<!--	<EXTCHART type='line' imagePath='it/eng/spagobi/studio/extchart/resources/images/splineExtChart.PNG' xAxeName = ''>
 	</EXTCHART> -->
 	<EXTCHART type='barAndLine' imagePath='it/eng/spagobi/studio/extchart/resources/images/areaSplineExtChart.PNG' xAxeName = 'Category' yAxeName = 'Numeric' defaultSerieType = 'bar'>
 	</EXTCHART>

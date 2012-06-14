@@ -4,16 +4,19 @@ public class Series {
 	
 	public static final String TYPE = "type";
 	public static final String AXIS = "axis";
-	public static final String SHOW_IN_LEGEND = "showInLegened";
-	public static final String FIELD = "xField";
+	public static final String SHOW_IN_LEGEND = "showInLegend";
+	//public static final String FIELD = "xField";
+	public static final String FIELD = "field";
 	public static final String X_FIELD = "xField";
 	public static final String Y_FIELD = "yField";
 	public static final String Y_FIELD_LIST = "yField_list";
 	public static final String DONUT = "donut";
 	public static final String STYLE = "style";
 	public static final String HIGHLIGHT = "highlight";
+	public static final String HIGHLIGHT_SEGMENT= "highlight";
 	public static final String STACKED = "stacked";
 	public static final String SMOOTH = "smooth";
+	public static final String FILL = "fill";
 	public static final String GUTTER = "gutter";
 	public static final String COLOR = "color";
 	public static final String SHOW_MARKERS = "showMarkers";
@@ -22,17 +25,19 @@ public class Series {
 	
 	private String type; // combo
 	private String axis; // combo
-	private Boolean showInLegened;
+	private Boolean showInLegend;
 	private String field; // combo on metadata editable
 	private String xField;
 	private String yField;
 	private String yFieldList;
 	private StyleSeries style;
 	private Tips tips;
-	private String donut;
+	private Highlight highlightSegments;
+	private Integer donut;
 	private Boolean highlight;
 	private Boolean stacked;
 	private Boolean smooth;
+	private Boolean fill;
 	private Integer gutter;
 	private String color;
 	private Boolean showMarkers;
@@ -61,10 +66,10 @@ public class Series {
 		this.axis = axis;
 	}
 	public Boolean getShowInLegened() {
-		return showInLegened;
+		return showInLegend;
 	}
 	public void setShowInLegened(Boolean showInLegened) {
-		this.showInLegened = showInLegened;
+		this.showInLegend = showInLegened;
 	}
 	public String getField() {
 		return field;
@@ -72,10 +77,10 @@ public class Series {
 	public void setField(String field) {
 		this.field = field;
 	}
-	public String getDonut() {
+	public Integer getDonut() {
 		return donut;
 	}
-	public void setDonut(String donut) {
+	public void setDonut(Integer donut) {
 		this.donut = donut;
 	}
 	public String getxField() {
@@ -151,6 +156,26 @@ public class Series {
 	}
 	public void setMarkerConfig(MarkerConfig markerConfig) {
 		this.markerConfig = markerConfig;
+	}
+
+	public Boolean getFill() {
+		return fill;
+	}
+
+	public void setFill(Boolean fill) {
+		this.fill = fill;
+	}
+	/**
+	 * @return the highlightSegment
+	 */
+	public Highlight getHighlightSegment() {
+		if( highlightSegments == null) return new Highlight();
+		return highlightSegments;	}
+	/**
+	 * @param highlightSegment the highlightSegment to set
+	 */
+	public void setHighlightSegment(Highlight highlightSegment) {
+		this.highlightSegments = highlightSegment;
 	}
 	
 	

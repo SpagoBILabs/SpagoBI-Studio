@@ -19,6 +19,7 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 	Button highlightButton; 
 	Button stackedButton;
 	Button smoothButton;
+	Button fillButton;
 
 	public SeriesBarAndLineProperties(ExtChartEditor editor, 
 			Shell comp) {
@@ -56,14 +57,20 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 
 		logger.debug("Stacked");
 		stackedButton = toolkit.createButton(dialog, "Stacked: ", SWT.CHECK);
-		if(serie.getHighlight() != null && serie.getHighlight().booleanValue() == true){
+		if(serie.getStacked() != null && serie.getStacked().booleanValue() == true){
 			stackedButton.setSelection(true);
 		}
 
 		logger.debug("Smooth");
-		smoothButton = toolkit.createButton(dialog, "Smooth: : ", SWT.CHECK);
-		if(serie.getHighlight() != null && serie.getSmooth().booleanValue() == true){
+		smoothButton = toolkit.createButton(dialog, "Smooth: ", SWT.CHECK);
+		if(serie.getSmooth() != null && serie.getSmooth().booleanValue() == true){
 			smoothButton.setSelection(true);
+		}
+		
+		logger.debug("Fill");
+		fillButton = toolkit.createButton(dialog, "Fill: ", SWT.CHECK);
+		if(serie.getFill() != null && serie.getFill().booleanValue() == true){
+			fillButton.setSelection(true);
 		}
 		
 		toolkit.createLabel(dialog, "");
@@ -99,6 +106,9 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 		logger.debug("smooth " +selectionSmooth);
 		
 
+		boolean selectionFill = fillButton.getSelection();
+		serie.setFill(selectionFill);
+		logger.debug("fill " +selectionFill);
 		
 		logger.debug("OUT");
 	}

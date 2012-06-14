@@ -121,4 +121,19 @@ public class LabelProperties extends PopupPropertiesDialog{
 		logger.debug("OUT");
 	}
 	
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialog.setSize(300, 200);
+		dialog.open ();
+		while (!dialog.isDisposed()) {
+		    if (!dialog.getDisplay().readAndDispatch()) {
+		    	dialog.getDisplay().sleep();
+		    }
+		}
+		logger.debug("OUT");
+
+	}	
+	
 }

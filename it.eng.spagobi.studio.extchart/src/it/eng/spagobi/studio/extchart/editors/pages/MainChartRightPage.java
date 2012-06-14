@@ -2,6 +2,7 @@ package it.eng.spagobi.studio.extchart.editors.pages;
 
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.SeriesPanel;
+import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.SingleSeriePanel;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.XAxePanel;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.YAxePanel;
 import it.eng.spagobi.studio.extchart.model.bo.Axes;
@@ -30,6 +31,7 @@ public class MainChartRightPage extends AbstractPage {
 	YAxePanel rightAxeBuilder;
 	XAxePanel bottomAxeBuilder;
 	SeriesPanel seriesBuilder;
+	SingleSeriePanel singleSeriesBuilder;
 
 	ExtChartEditor editor;
 	ExtChart extChart;
@@ -57,7 +59,7 @@ public class MainChartRightPage extends AbstractPage {
 		Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 2);
 		//compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
 
-
+		if (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
 		// get first numeric axe (left- bottom- right- top)
 		Axes leftAxe =   ExtChartUtils.getYAxe(extChart, 1);
 		logger.debug("left axe found : "+leftAxe != null ? "true" : "false");
@@ -73,6 +75,8 @@ public class MainChartRightPage extends AbstractPage {
 		rightAxeBuilder.setEditor(editor);
 		rightAxeBuilder.setAxeType(ExtChartConstants.AXE_TYPE_NUMERIC);
 		rightAxeBuilder.drawAxeComposite();
+		}
+		if (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
 
 		seriesBuilder = new SeriesPanel(compositeProp, SWT.NULL, extChart.getSeriesList().getSeries());
 		seriesBuilder.setEditor(editor);
@@ -83,15 +87,30 @@ public class MainChartRightPage extends AbstractPage {
 		seriesBuilder.getGroup().setLayoutData(gd);
 
 		toolkit.createLabel(compositeProp, "");
+		}
+		else {
+			singleSeriesBuilder = new SingleSeriePanel(compositeProp, SWT.NULL, extChart.getSeriesList().getSeries());
+			singleSeriesBuilder.setEditor(editor);
+			singleSeriesBuilder.drawSerieComposite();
+			
+			
+			GridData gd = new GridData(GridData.FILL_BOTH);
+			gd.horizontalSpan = 2;
+			singleSeriesBuilder.getContainer().setLayoutData(gd);
+			toolkit.createLabel(compositeProp, "");
 
+			
+		}
 		// The x Axe; it is recognised in the chart by the type: for bar is category
+		if (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)){
 		Axes xAxe =   ExtChartUtils.getXAxe(extChart);
 		bottomAxeBuilder = new XAxePanel(compositeProp, SWT.NULL, xAxe);
 		bottomAxeBuilder.setEditor(editor);
 		bottomAxeBuilder.drawAxeComposite();
+		
 
 		toolkit.createLabel(compositeProp, "");
-
+		}
 		sectionProp.setClient(compositeProp);	
 		logger.debug("OUT");
 	}

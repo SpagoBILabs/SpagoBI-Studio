@@ -108,5 +108,20 @@ public class TipsProperties extends PopupPropertiesDialog{
 	public void setLabelForText(String labelForText) {
 		this.labelForText = labelForText;
 	}
+	
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialog.setSize(300, 200);
+		dialog.open ();
+		while (!dialog.isDisposed()) {
+		    if (!dialog.getDisplay().readAndDispatch()) {
+		    	dialog.getDisplay().sleep();
+		    }
+		}
+		logger.debug("OUT");
+
+	}	
 
 }

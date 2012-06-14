@@ -95,7 +95,20 @@ public class MarkerConfigProperties extends PopupPropertiesDialog{
 		logger.debug("OUT");
 	}
 
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialog.setSize(100, 150);
+		dialog.open ();
+		while (!dialog.isDisposed()) {
+		    if (!dialog.getDisplay().readAndDispatch()) {
+		    	dialog.getDisplay().sleep();
+		    }
+		}
+		logger.debug("OUT");
 
+	}	
 
 
 }

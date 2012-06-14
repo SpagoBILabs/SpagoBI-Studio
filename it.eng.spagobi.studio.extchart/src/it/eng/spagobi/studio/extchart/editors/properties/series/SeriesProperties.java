@@ -1,9 +1,11 @@
 package it.eng.spagobi.studio.extchart.editors.properties.series;
 
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
+import it.eng.spagobi.studio.extchart.editors.properties.series.utils.HighlightProperties;
 import it.eng.spagobi.studio.extchart.editors.properties.series.utils.LabelProperties;
 import it.eng.spagobi.studio.extchart.editors.properties.series.utils.MarkerConfigProperties;
 import it.eng.spagobi.studio.extchart.editors.properties.series.utils.TipsProperties;
+import it.eng.spagobi.studio.extchart.model.bo.Highlight;
 import it.eng.spagobi.studio.extchart.model.bo.Label;
 import it.eng.spagobi.studio.extchart.model.bo.MarkerConfig;
 import it.eng.spagobi.studio.extchart.model.bo.Series;
@@ -19,6 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -40,11 +43,15 @@ public class SeriesProperties extends PopupPropertiesDialog{
 	Tips[] tipsHolder=  new Tips[1];
 	Label[] labelHolder= new Label[1];
 	MarkerConfig[] markerConfigHolder=  new MarkerConfig[1];
+	Highlight[] highlightHolder=  new Highlight[1];
+
 
 
 	Button useLabelCheck;
 	Button useTipsCheck;
 	Button usemarkerConfigCheck;
+	Button useHighlightSegmentCheck;
+
 
 	// SWT objects:
 	//	Text donutText;
@@ -63,6 +70,8 @@ public class SeriesProperties extends PopupPropertiesDialog{
 	boolean drawYField = false;
 	boolean drawYFieldList = false;
 	boolean drawMarkerConfig = false;
+	boolean drawHighlightSegment = false;
+	
 
 	/**
 	 * serie to be modified
@@ -80,47 +89,6 @@ public class SeriesProperties extends PopupPropertiesDialog{
 
 	public void drawProperties(){
 		logger.debug("IN");
-		//		GridLayout gridlayout = new GridLayout(2, true);
-		//		comp.setLayout(gridlayout);
-
-		// -----------------------------------------------
-
-		//		toolkit.createLabel(comp, "Type: ");
-		//		toolkit.createLabel(comp, serie.getType() != null ? serie.getType() : "");
-
-		// -----------------------------------------------
-		//		logger.debug("Donut");
-		//		toolkit.createLabel(comp, "Donut (number or 'false'): ");
-		//		donutText = toolkit.createText(comp, "default value", SWT.NULL);
-		//		if(serie.getDonut() != null){
-		//			donutText.setText(serie.getDonut());
-		//		}
-
-		// -----------------------------------------------
-
-		//		logger.debug("Smooth");
-		//		smoothButton = toolkit.createButton(comp, "Smooth: : ", SWT.CHECK);
-		//		if(serie.getHighlight() != null && serie.getSmooth().booleanValue() == true){
-		//			smoothButton.setSelection(true);
-		//		}
-
-
-
-
-
-		// -----------------------------------------------
-
-		//		logger.debug("Show in legend");
-		//		showInLegendButton = toolkit.createButton(comp, "Show In Legend", SWT.CHECK);
-		//		if(serie.getShowInLegened() != null && serie.getShowInLegened().booleanValue() == true){
-		//			showInLegendButton.setSelection(true);
-		//		}
-
-		// -----------------------------------------------
-
-		//		String[] axis = new String[]{"left", "top", "right", "bottom"};
-		//		axisCombo = SWTUtils.drawCombo(dialog, axis, serie.getAxis(), "Axis: ");
-
 
 		// -----------------------------------------------
 
@@ -143,8 +111,11 @@ public class SeriesProperties extends PopupPropertiesDialog{
 
 		// --------------------  Y FIELD LIST---------------------------
 		if(drawYFieldList){
-			toolkit.createLabel(dialog, "yFieldList: \n(overwrites \nwith multiple \nselection other \nfields settings).", SWT.NULL);
+			toolkit.createLabel(dialog, "yFieldList: \n(overwrites with multiple selection\n other fields settings).", SWT.NULL);
+			
 			GridData gd=new GridData(GridData.FILL_BOTH);
+			gd.grabExcessHorizontalSpace = true;
+
 			gd.horizontalSpan=2	;
 			fieldTable = new Table (dialog, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL);
 			fieldTable.setLinesVisible (true);
@@ -188,7 +159,9 @@ public class SeriesProperties extends PopupPropertiesDialog{
 			// for yField_list get a table
 		}
 		// TODO: unblock and let user change fields
-		fieldTable.setEnabled(false);
+		if (fieldTable != null){
+			fieldTable.setEnabled(false);			
+		}
 
 
 		// Check if define label
@@ -326,6 +299,51 @@ public class SeriesProperties extends PopupPropertiesDialog{
 			});
 		}
 
+		if(drawHighlightSegment){
+			logger.debug("highlight segment designer");
+			highlightHolder[0] = serie.getHighlightSegment();
+			useHighlightSegmentCheck = SWTUtils.drawCheck(dialog, serie.getHighlightSegment() != null, "Use Highlight Segment?");
+			final Button highlightSegmentButton = SWTUtils.drawButton(dialog, "Define Highlight Segment");
+
+			highlightSegmentButton.addListener(SWT.Selection, 
+					new Listener() {
+				public void handleEvent(Event event) {
+					logger.debug("Open highlight segment editor");
+					Highlight highlightToPass = highlightHolder[0] != null ? highlightHolder[0] : serieIns.getHighlightSegment();
+					HighlightProperties highlightProperties = new HighlightProperties(editor, highlightToPass, dialog, toPass);
+					highlightProperties.setTitle("Define Highlight Segment");
+					highlightProperties.drawProperties();
+					highlightProperties.drawButtons();
+					highlightProperties.showPopup();
+
+				}
+			}
+			);
+
+			if(serie.getHighlightSegment() != null && serie.getHighlightSegment().getSegment().getMargin()!= null) {
+				highlightSegmentButton.setEnabled(true);
+				useHighlightSegmentCheck.setSelection(true);
+			}
+			else {
+				highlightSegmentButton.setEnabled(false);
+				useHighlightSegmentCheck.setSelection(false);
+			}
+
+			useHighlightSegmentCheck.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					boolean selection = useHighlightSegmentCheck.getSelection();
+					if(selection == true){
+						highlightSegmentButton.setEnabled(true);
+					}
+					else{
+						// delete from serie the highlight segment
+						serie.setHighlightSegment(null);
+						highlightSegmentButton.setEnabled(false);
+
+					}
+				}
+			});
+		}		
 		opacitySpinner = SWTUtils.drawSpinner(dialog, serie.getStyle().getOpacity(), "Opacity: ");
 
 		logger.debug("OUT");
@@ -377,33 +395,48 @@ public class SeriesProperties extends PopupPropertiesDialog{
 			serie.setyFieldList(selections);
 			logger.debug("Yfield List " +selections);
 		}
+		if (useLabelCheck!= null){
+			if(useLabelCheck.getSelection() == true && labelHolder[0] != null){
+				logger.debug("save label");		
+				serie.setLabel(labelHolder[0]);
+			}
+			else{
+				logger.debug("delete label");		
+				serie.setLabel(null);
+			}		
+		}
+		if (usemarkerConfigCheck != null){
+			if(usemarkerConfigCheck.getSelection() == true && markerConfigHolder[0] != null){
+				logger.debug("save marker Config");		
+				serie.setMarkerConfig(markerConfigHolder[0]);
+			}
+			else{
+				logger.debug("delete marker Config");		
+				serie.setMarkerConfig(null);
+			}			
+		}
+		if (useHighlightSegmentCheck != null){
+			if(useHighlightSegmentCheck.getSelection() == true && highlightHolder[0] != null){
+				logger.debug("save highlight");		
+				serie.setHighlightSegment(highlightHolder[0]);
+			}
+			else{
+				logger.debug("delete marker Config");		
+				serie.setMarkerConfig(null);
+			}			
+		}
+		if (useTipsCheck != null){
+			if(useTipsCheck.getSelection() == true && tipsHolder[0] != null){
+				logger.debug("save Tips");		
+				serie.setTips(tipsHolder[0]);
+			}
+			else{
+				logger.debug("delete Tips");		
+				serie.setTips(null);
+			}			
+		}
 
-		if(useLabelCheck.getSelection() == true && labelHolder[0] != null){
-			logger.debug("save label");		
-			serie.setLabel(labelHolder[0]);
-		}
-		else{
-			logger.debug("delete label");		
-			serie.setLabel(null);
-		}
 
-		if(usemarkerConfigCheck.getSelection() == true && markerConfigHolder[0] != null){
-			logger.debug("save marker Config");		
-			serie.setMarkerConfig(markerConfigHolder[0]);
-		}
-		else{
-			logger.debug("delete marker Config");		
-			serie.setMarkerConfig(null);
-		}
-
-		if(useTipsCheck.getSelection() == true && tipsHolder[0] != null){
-			logger.debug("save Tips");		
-			serie.setTips(tipsHolder[0]);
-		}
-		else{
-			logger.debug("delete Tips");		
-			serie.setTips(null);
-		}
 
 
 		double opacityValue  = opacitySpinner.getSelection()/ Math.pow(10, opacitySpinner.getDigits());
@@ -504,7 +537,52 @@ public class SeriesProperties extends PopupPropertiesDialog{
 	}
 
 
+	/**
+	 * @return the drawHighlightSegment
+	 */
+	public boolean isDrawHighlightSegment() {
+		return drawHighlightSegment;
+	}
 
+
+	/**
+	 * @param drawHighlightSegment the drawHighlightSegment to set
+	 */
+	public void setDrawHighlightSegment(boolean drawHighlightSegment) {
+		this.drawHighlightSegment = drawHighlightSegment;
+	}
+
+
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialog.setSize(500, 500);
+		dialog.open ();
+		while (!dialog.isDisposed()) {
+		    if (!dialog.getDisplay().readAndDispatch()) {
+		    	dialog.getDisplay().sleep();
+		    }
+		}
+		logger.debug("OUT");
+
+	}
+
+
+	/**
+	 * @return the highlightHolder
+	 */
+	public Highlight[] getHighlightHolder() {
+		return highlightHolder;
+	}
+
+
+	/**
+	 * @param highlightHolder the highlightHolder to set
+	 */
+	public void setHighlightHolder(Highlight[] highlightHolder) {
+		this.highlightHolder = highlightHolder;
+	}
 
 
 

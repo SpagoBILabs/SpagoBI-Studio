@@ -208,10 +208,10 @@ public class XmlTemplateGenerator {
 		
 		// -------------------------------------------------------
 		
-		xstream.aliasField("HIGHLIGHT", Series.class, "Highlight");
+		//xstream.aliasField("HIGHLIGHT", Series.class, "Highlight");
 
-		xstream.useAttributeFor(Highlight.class, Highlight.SEGMENT);
-		xstream.aliasField(Highlight.SEGMENT, Highlight.class, Highlight.SEGMENT);
+		//xstream.useAttributeFor(Highlight.class, Highlight.SEGMENT);
+		//xstream.aliasField(Highlight.SEGMENT, Highlight.class, Highlight.SEGMENT);
 
 		// -------------------------------------------------------
 		
@@ -294,10 +294,10 @@ public class XmlTemplateGenerator {
 
 		// -------------------------------------------------------
 
-		xstream.aliasField("SEGMENT", Highlight.class, "segment");
+		//xstream.aliasField("SEGMENT", Highlight.class, "segment");
 
-		xstream.useAttributeFor(Segment.class, Segment.MARGIN);
-		xstream.aliasField(Segment.MARGIN, Segment.class, Segment.MARGIN);		
+		//xstream.useAttributeFor(Segment.class, Segment.MARGIN);
+		//xstream.aliasField(Segment.MARGIN, Segment.class, Segment.MARGIN);		
 
 		// -------------------------------------------------------
 		
@@ -335,6 +335,9 @@ public class XmlTemplateGenerator {
 
 		xstream.useAttributeFor(Series.class, Series.SMOOTH);
 		xstream.aliasField(Series.SMOOTH, Series.class, Series.SMOOTH);
+		
+		xstream.useAttributeFor(Series.class, Series.FILL);
+		xstream.aliasField(Series.FILL, Series.class, Series.FILL);
 		
 		xstream.useAttributeFor(Series.class, Series.GUTTER);
 		xstream.aliasField(Series.GUTTER, Series.class, Series.GUTTER);
@@ -393,7 +396,7 @@ public class XmlTemplateGenerator {
 		
 		// -------------------------------------------------------
 		
-		xstream.aliasField("SUB_TITLE", ExtChart.class, "subTitle");
+		xstream.aliasField("SUBTITLE", ExtChart.class, "subTitle");
 		
 		xstream.useAttributeFor(SubTitle.class, SubTitle.STYLE);
 		xstream.aliasField(SubTitle.STYLE, SubTitle.class, SubTitle.STYLE);	
@@ -420,6 +423,18 @@ public class XmlTemplateGenerator {
 		xstream.useAttributeFor(Tips.class, Tips.TEXT);
 		xstream.aliasField(Tips.TEXT, Tips.class, Tips.TEXT);	
 		
+		// -------------------------------------------------------
+
+
+		xstream.aliasField("HIGHLIGHT", Series.class, "highlightSegments");
+		xstream.useAttributeFor(Highlight.class, Highlight.SEGMENT);
+		xstream.aliasField(Highlight.SEGMENT, Highlight.class, Highlight.SEGMENT);
+		
+		xstream.aliasField("SEGMENT", Highlight.class, "segment");
+
+		
+		xstream.useAttributeFor(Segment.class, Segment.MARGIN);
+		xstream.aliasField(Segment.MARGIN, Segment.class, Segment.MARGIN);			
 
 
 		logger.debug("OUT");
