@@ -1,6 +1,7 @@
 package it.eng.spagobi.studio.extchart.editors;
 
 
+import it.eng.spagobi.studio.extchart.editors.pages.AdvancedChartPage;
 import it.eng.spagobi.studio.extchart.editors.pages.MainChartPage;
 import it.eng.spagobi.studio.extchart.model.XmlTemplateGenerator;
 import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
@@ -79,6 +80,7 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 	protected boolean isDirty = false;
 
 	private MainChartPage mainChartPage;
+	private AdvancedChartPage advancedChartPage;
 
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(ExtChartEditor.class);
 
@@ -113,6 +115,25 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 		setPageText(index, "Properties");
 		logger.debug("OUT");
 	}
+	
+	/**
+	 * Creates page 0 which contains general properties
+	 */
+
+	void createAdvancedPage() {
+		logger.debug("IN");
+
+		advancedChartPage= new AdvancedChartPage(getContainer(), SWT.NONE);
+		advancedChartPage.setEditor(this);
+		advancedChartPage.setExtChart(extChart);
+		advancedChartPage.setProjectName(projectname);
+
+		advancedChartPage.drawPage();
+
+		int index = addPage(advancedChartPage);
+		setPageText(index, "Advanced");
+		logger.debug("OUT");
+	}	
 
 
 
@@ -183,6 +204,7 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 //		createPage1();
 //		createPage2();
 		createMainPage();
+		createAdvancedPage();
 	}
 	/**
 	 * The <code>MultiPageEditorPart</code> implementation of this 
@@ -365,6 +387,20 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 
 	public void setMainChartPage(MainChartPage mainChartPage) {
 		this.mainChartPage = mainChartPage;
+	}
+
+	/**
+	 * @return the advancedChartPage
+	 */
+	public AdvancedChartPage getAdvancedChartPage() {
+		return advancedChartPage;
+	}
+
+	/**
+	 * @param advancedChartPage the advancedChartPage to set
+	 */
+	public void setAdvancedChartPage(AdvancedChartPage advancedChartPage) {
+		this.advancedChartPage = advancedChartPage;
 	}
 
 	public ExtChart getExtChart() {

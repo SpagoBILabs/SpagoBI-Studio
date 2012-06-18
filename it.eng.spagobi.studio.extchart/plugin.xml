@@ -7,7 +7,7 @@
       <editor
             name="ExtChartEditor"
             extensions="sbiextchart"
-            icon="icons/sample.gif"
+            icon="icons/objecticon_CHART.png"
             contributorClass="it.eng.spagobi.studio.extchart.editors.ExtChartEditorContributor"
             class="it.eng.spagobi.studio.extchart.editors.ExtChartEditor"
             id="it.eng.spagobi.studio.extchart.editors.ExtChartEditor">
@@ -21,7 +21,7 @@
       </category>
       <wizard
             name="ExtChart file"
-            icon="icons/sample.gif"
+            icon="icons/objecticon_CHART.png"
             category="it.eng.spagobi.studio.extchart"
             class="it.eng.spagobi.studio.extchart.wizards.ExtChartWizard"
             id="it.eng.spagobi.studio.extchart.wizards.ExtChartWizard">
