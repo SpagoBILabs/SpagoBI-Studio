@@ -34,7 +34,7 @@ public class AxesGaugeProperties extends AxesProperties {
 		minimumSpinner = SWTUtils.drawSpinner(dialog, axes.getMinimum(), "Minimum: ");
 		
 		//maximum
-		maximumSpinner = SWTUtils.drawSpinner(dialog, axes.getMaximum(), "Minimum: ");
+		maximumSpinner = SWTUtils.drawSpinner(dialog, axes.getMaximum(), "Maximum: ");
 
 		//steps
 		stepsSpinner = SWTUtils.drawSpinner(dialog, axes.getSteps(), "Steps: ");

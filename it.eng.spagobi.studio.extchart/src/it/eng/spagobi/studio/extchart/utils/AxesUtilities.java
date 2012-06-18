@@ -54,28 +54,30 @@ public class AxesUtilities {
 		Vector<Axes> axes =extChart.getAxesList().getAxes();
 		for (Iterator iterator = axes.iterator(); iterator.hasNext();) {
 			Axes axes2 = (Axes) iterator.next();
-			if(axes2.getType().equalsIgnoreCase("Numeric")){
-				String position = axes2.getPosition();
-				if(position.equalsIgnoreCase("left")) {
-					String fieldsList = getStringFromSet(leftSet);
-					logger.debug("Numeric axe on position "+position+ " set fields  ");
-					axes2.setFields_list(fieldsList);
-				}
-				else if(position.equalsIgnoreCase("right")) {
-					String fieldsList = getStringFromSet(rightSet);
-					logger.debug("Numeric axe on position "+position+ " set fields  ");
-					axes2.setFields_list(fieldsList);
-				}
-				else if(position.equalsIgnoreCase("top")) {
-					String fieldsList = getStringFromSet(topSet);
-					logger.debug("Numeric axe on position "+position+ " set fields  ");
-					axes2.setFields_list(fieldsList);
-				}
-				else if(position.equalsIgnoreCase("bottom")) {
-					String fieldsList = getStringFromSet(bottomSet);
-					logger.debug("Numeric axe on position "+position+ " set fields  ");
-					axes2.setFields_list(fieldsList);
-				}
+			if (axes2.getType()!=null){
+				if(axes2.getType().equalsIgnoreCase("Numeric")){
+					String position = axes2.getPosition();
+					if(position.equalsIgnoreCase("left")) {
+						String fieldsList = getStringFromSet(leftSet);
+						logger.debug("Numeric axe on position "+position+ " set fields  ");
+						axes2.setFields_list(fieldsList);
+					}
+					else if(position.equalsIgnoreCase("right")) {
+						String fieldsList = getStringFromSet(rightSet);
+						logger.debug("Numeric axe on position "+position+ " set fields  ");
+						axes2.setFields_list(fieldsList);
+					}
+					else if(position.equalsIgnoreCase("top")) {
+						String fieldsList = getStringFromSet(topSet);
+						logger.debug("Numeric axe on position "+position+ " set fields  ");
+						axes2.setFields_list(fieldsList);
+					}
+					else if(position.equalsIgnoreCase("bottom")) {
+						String fieldsList = getStringFromSet(bottomSet);
+						logger.debug("Numeric axe on position "+position+ " set fields  ");
+						axes2.setFields_list(fieldsList);
+					}
+				}				
 			}
 
 		}

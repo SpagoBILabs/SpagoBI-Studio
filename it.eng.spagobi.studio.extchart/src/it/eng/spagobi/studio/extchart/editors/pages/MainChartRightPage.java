@@ -107,7 +107,7 @@ public class MainChartRightPage extends AbstractPage {
 		if (extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)){
 			singleAxeBuilder = new SingleAxePanel(compositeProp, SWT.NULL, extChart.getAxesList().getAxes());
 			singleAxeBuilder.setEditor(editor);
-			singleAxeBuilder.drawSerieComposite();
+			singleAxeBuilder.drawAxeComposite();
 			
 			GridData gd = new GridData(GridData.FILL_BOTH);
 			gd.horizontalSpan = 2;

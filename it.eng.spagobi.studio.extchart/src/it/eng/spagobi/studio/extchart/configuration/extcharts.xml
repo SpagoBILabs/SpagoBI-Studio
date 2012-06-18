@@ -8,7 +8,7 @@
 	</EXTCHART> -->
 	<EXTCHART type='barAndLine' imagePath='it/eng/spagobi/studio/extchart/resources/images/areaSplineExtChart.PNG' xAxeName = 'Category' yAxeName = 'Numeric' defaultSerieType = 'bar'>
 	</EXTCHART>
-	<EXTCHART type='gauge' imagePath='it/eng/spagobi/studio/extchart/resources/images/gaugeExtChart.PNG' xAxeName = 'gauge' >
+	<EXTCHART type='gauge' imagePath='it/eng/spagobi/studio/extchart/resources/images/gaugeExtChart.PNG' defaultSerieType = 'gauge'>
 	</EXTCHART>
 	<!-- <EXTCHART type='scatter' imagePath='it/eng/spagobi/studio/extchart/resources/images/barExtChart.PNG'>
 	</EXTCHART>

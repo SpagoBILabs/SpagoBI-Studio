@@ -64,23 +64,17 @@ public class SingleAxePanel {
 		if (axes.size() >0 ){
 			newAxe = axes.get(0);
 		} else {
-			newAxe= new Axes();		
+			newAxe = new Axes();		
 		}
 		
 	}
 
 
-	public void drawSerieComposite(){
+	public void drawAxeComposite(){
 		logger.debug("IN");
 
 		ExtChart extChart = editor.getExtChart();
-		try {
-			chartType = ExtChartUtils.getSerieTypeFromChartType(extChart.getType());
-		} catch (Exception e) {
-			logger.warn("could not find default serie type, check congfiguration");
-			return;
-		}
-		newAxe.setType(chartType);
+
 		if (extChart.getAxesList().getAxes().isEmpty()){
 			extChart.getAxesList().getAxes().add(newAxe);
 		}

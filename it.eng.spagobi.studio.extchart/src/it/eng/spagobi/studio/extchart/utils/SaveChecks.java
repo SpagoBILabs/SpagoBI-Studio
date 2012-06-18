@@ -37,7 +37,7 @@ public class SaveChecks {
 				logger.warn("Serie not found");
 				warningMessage += "Serie not defined: customize it in order to choose serie field\n";
 			} else {
-				if ( (extChart.getSeriesList().getSeries().get(0).getType() == null) || (extChart.getSeriesList().getSeries().get(0).getType().isEmpty()) )
+				if ( (extChart.getSeriesList().getSeries().get(0).getField() == null) || (extChart.getSeriesList().getSeries().get(0).getField().isEmpty()) )
 					{ 
 					logger.warn("Serie not found");
 					warningMessage += "Serie not defined: customize it in order to choose serie field\n";					

@@ -29,22 +29,30 @@ public class SeriesGaugeProperties extends SeriesProperties {
 		super.drawProperties();
 	
 		logger.debug("Donut");
-		/*
-		toolkit.createLabel(dialog, "Donut (number or 'false'): ");
-		donutText = toolkit.createText(dialog, "default value", SWT.NULL);
-		if(serie.getDonut() != null){
-			donutText.setText(serie.getDonut().toString());
-		}
-		*/
 		donutSpinner = SWTUtils.drawSpinner(dialog, serie.getDonut(), "Donut: ");
 	
 		logger.debug("OUT");
 	}
 
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialog.setSize(200, 250);
+		dialog.open ();
+		while (!dialog.isDisposed()) {
+		    if (!dialog.getDisplay().readAndDispatch()) {
+		    	dialog.getDisplay().sleep();
+		    }
+		}
+		logger.debug("OUT");
+
+	}
 	
 	public void performOk(){
 		logger.debug("IN");
 		super.performOk();	
+		serie.setType("gauge");
 		int valDonut = donutSpinner.getSelection();
 		if (valDonut > 0 ){
 			serie.setDonut(valDonut);			
