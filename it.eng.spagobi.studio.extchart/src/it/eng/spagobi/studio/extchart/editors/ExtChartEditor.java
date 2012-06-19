@@ -122,12 +122,11 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 
 	void createAdvancedPage() {
 		logger.debug("IN");
-
+		
 		advancedChartPage= new AdvancedChartPage(getContainer(), SWT.NONE);
 		advancedChartPage.setEditor(this);
 		advancedChartPage.setExtChart(extChart);
 		advancedChartPage.setProjectName(projectname);
-
 		advancedChartPage.drawPage();
 
 		int index = addPage(advancedChartPage);
