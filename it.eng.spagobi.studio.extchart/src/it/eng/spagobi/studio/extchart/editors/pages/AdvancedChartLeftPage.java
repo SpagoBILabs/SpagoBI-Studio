@@ -135,7 +135,9 @@ public class AdvancedChartLeftPage extends AbstractPage {
 			currentWidthValue = ""; 
 		}
 		final Text widthText = toolkit.createText(compositeProp,currentWidthValue, SWT.BORDER);
-		widthText.setLayoutData(new GridData(SWT.NONE));
+		GridData gd_widthText = new GridData(SWT.NONE);
+		gd_widthText.widthHint = 100;
+		widthText.setLayoutData(gd_widthText);
 		widthText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent event) {
 				extEditor.setIsDirty(true);
@@ -153,7 +155,9 @@ public class AdvancedChartLeftPage extends AbstractPage {
 			currentHeightValue = ""; 
 		}
 		final Text heightText = toolkit.createText(compositeProp, currentHeightValue, SWT.BORDER);
-		heightText.setLayoutData(new GridData(SWT.NONE));
+		GridData gd_heightText = new GridData(SWT.NONE);
+		gd_heightText.widthHint = 100;
+		heightText.setLayoutData(gd_heightText);
 		heightText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent event) {
 				extEditor.setIsDirty(true);
@@ -164,7 +168,13 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		
 		//Animate
 		Label AnimateLabel= toolkit.createLabel(compositeProp, "Animate: ");
-		final Button useAnimateCheck = SWTUtils.drawCheck(compositeProp, extChart.getAnimate() != null, "");
+		Boolean currentAnimateValue;
+		if (extChart.getAnimate() != null){
+			currentAnimateValue = extChart.getAnimate();
+		} else {
+			currentAnimateValue = false;
+		}
+		final Button useAnimateCheck = SWTUtils.drawCheck(compositeProp,currentAnimateValue, "");
 		useAnimateCheck.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				extEditor.setIsDirty(true);
@@ -181,7 +191,13 @@ public class AdvancedChartLeftPage extends AbstractPage {
 
 		//Shadow
 		Label shadowLabel= toolkit.createLabel(compositeProp, "Shadow: ");
-		final Button useShadowCheck = SWTUtils.drawCheck(compositeProp, extChart.getShadow() != null, "");
+		Boolean currentShadowValue;
+		if (extChart.getShadow() != null){
+			currentShadowValue = extChart.getShadow();
+		} else {
+			currentShadowValue = false;
+		}
+		final Button useShadowCheck = SWTUtils.drawCheck(compositeProp, currentShadowValue, "");
 		useShadowCheck.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				extEditor.setIsDirty(true);
@@ -207,7 +223,9 @@ public class AdvancedChartLeftPage extends AbstractPage {
 			currentRefreshTimeValue = ""; 
 		}
 		final Text refreshTimeText = toolkit.createText(compositeProp,currentRefreshTimeValue, SWT.BORDER);
-		refreshTimeText.setLayoutData(new GridData(SWT.NONE));
+		GridData gd_refreshTimeText = new GridData(SWT.NONE);
+		gd_refreshTimeText.widthHint = 100;
+		refreshTimeText.setLayoutData(gd_refreshTimeText);
 		refreshTimeText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent event) {
 				extEditor.setIsDirty(true);
@@ -217,8 +235,38 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		});
 		
 		
-		widthLabel= toolkit.createLabel(compositeProp, "");
+		toolkit.createLabel(compositeProp, "");
+		toolkit.createLabel(compositeProp, "");
 
+		
+		//Colors
+
+		Label lblColors = new Label(compositeProp, SWT.NONE);
+		lblColors.setText("Colors (HEX) separated by comma:");
+		toolkit.createLabel(compositeProp, "");
+		toolkit.createLabel(compositeProp, "");
+
+		String currentColorsValue;
+		if (extChart.getColors() != null){
+			currentColorsValue = extChart.getColors().getColor();
+		} else {
+			currentColorsValue = ""; 
+		}
+		final Text textColors = toolkit.createText(compositeProp,currentColorsValue, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.WRAP);
+		GridData gd_textColors = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_textColors.heightHint = 50;
+		textColors.setLayoutData(gd_textColors);
+		textColors.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent event) {
+				extEditor.setIsDirty(true);
+				String colorsValue = textColors.getText();
+				extChart.getColors().setColor(colorsValue);
+			}
+		});
+		
+		
+		
+		//Important: set section Client
 		sectionProp.setClient(compositeProp);
 		logger.debug("OUT");
 	}
@@ -341,7 +389,13 @@ public class AdvancedChartLeftPage extends AbstractPage {
 				createButtons(tableParameters, item, newParam, paramTableItemContent);
 				editor.setIsDirty(true);
 				tableParameters.redraw();
-
+				
+				//clean input texts
+				textParameterName.setText("");
+				comboType.deselectAll();
+				comboType.clearSelection();
+				textValue.setText("");
+				
 			}
 		});
 		buttonAdd.setText("Add");
@@ -375,9 +429,6 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		tblclmnDelete.setWidth(59);
 		tblclmnDelete.setText("Delete");
 		
-		tableParameters.redraw();
-		compositeTable.redraw();
-		
 		//Populate table
 		params = extChart.getDrill().getParamList().getParams();
 		for (Iterator iterator = params.iterator(); iterator.hasNext();) {
@@ -394,7 +445,9 @@ public class AdvancedChartLeftPage extends AbstractPage {
 			item.setText(VALUE, param.getValue() != null ? param.getValue() : "");
 
 		}
-
+		
+		tableParameters.redraw();
+		compositeTable.redraw();
 	}
 	
 	void createButtons(final Table tableParameters, final TableItem item, final Param param, ParamTableItemContent paramTableItemContent){
@@ -431,6 +484,8 @@ public class AdvancedChartLeftPage extends AbstractPage {
 				ParamList paramList = drill.getParamList();
 				paramList.getParams().remove(param);
 				drill.setParamList(paramList);
+				tableParameters.redraw();
+				tableParameters.getParent().redraw();
 
 				logger.debug("row removed");
 
