@@ -73,7 +73,8 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 			fillButton.setSelection(true);
 		}
 		
-		toolkit.createLabel(dialog, "");
+		toolkit.createLabel(dialog, " ");
+		toolkit.createLabel(dialog, " ");
 
 		
 		logger.debug("OUT");

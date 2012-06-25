@@ -6,7 +6,7 @@
 	</EXTCHART>
 <!--	<EXTCHART type='line' imagePath='it/eng/spagobi/studio/extchart/resources/images/splineExtChart.PNG' xAxeName = ''>
 	</EXTCHART> -->
-	<EXTCHART type='barAndLine' imagePath='it/eng/spagobi/studio/extchart/resources/images/areaSplineExtChart.PNG' xAxeName = 'Category' yAxeName = 'Numeric' defaultSerieType = 'bar'>
+	<EXTCHART type='barAndLine' imagePath='it/eng/spagobi/studio/extchart/resources/images/lineExtChart.PNG' xAxeName = 'Category' yAxeName = 'Numeric' defaultSerieType = 'bar'>
 	</EXTCHART>
 	<EXTCHART type='gauge' imagePath='it/eng/spagobi/studio/extchart/resources/images/gaugeExtChart.PNG' defaultSerieType = 'gauge'>
 	</EXTCHART>

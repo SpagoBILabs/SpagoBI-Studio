@@ -80,6 +80,8 @@ public class LabelProperties extends PopupPropertiesDialog{
 			}
 		});	
 		
+		toolkit.createLabel(dialog, "");
+		
 		
 		logger.debug("OUT");
 	}

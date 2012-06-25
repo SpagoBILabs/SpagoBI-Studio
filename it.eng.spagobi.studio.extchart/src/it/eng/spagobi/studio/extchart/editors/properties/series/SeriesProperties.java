@@ -401,8 +401,10 @@ public class SeriesProperties extends PopupPropertiesDialog{
 				serie.setLabel(labelHolder[0]);
 			}
 			else{
-				logger.debug("delete label");		
-				serie.setLabel(null);
+				if(useLabelCheck.getSelection() == false){
+					logger.debug("delete label");	
+					serie.setLabel(null);
+				}
 			}		
 		}
 		if (usemarkerConfigCheck != null){
@@ -411,8 +413,10 @@ public class SeriesProperties extends PopupPropertiesDialog{
 				serie.setMarkerConfig(markerConfigHolder[0]);
 			}
 			else{
-				logger.debug("delete marker Config");		
-				serie.setMarkerConfig(null);
+				if (usemarkerConfigCheck.getSelection() == false){
+					logger.debug("delete marker Config");		
+					serie.setMarkerConfig(null);					
+				}
 			}			
 		}
 		if (useHighlightSegmentCheck != null){
@@ -431,8 +435,10 @@ public class SeriesProperties extends PopupPropertiesDialog{
 				serie.setTips(tipsHolder[0]);
 			}
 			else{
-				logger.debug("delete Tips");		
-				serie.setTips(null);
+				if (useTipsCheck.getSelection() == false){
+					logger.debug("delete Tips");		
+					serie.setTips(null);
+				}
 			}			
 		}
 
