@@ -101,28 +101,31 @@
              
 
 
- <viewerActionBinding
-            viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
-         <includes>
+	<viewerActionBinding
+    	viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator" >
+        
+        <includes>
             <actionExtension pattern="org.eclipse.ui.navigator.resources.*" />  
             <actionExtension pattern="org.eclipse.ui.navigator.*" />  
-		<actionExtension pattern="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider" /> 
+			<actionExtension pattern="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider" /> 
              
-         </includes>
+        </includes>
         <excludes>
                 <actionExtension pattern="org.eclipse.team.*" />
         </excludes>  
-       </viewerActionBinding> 
-       <viewerContentBinding 
-            viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
-          <includes>
-       	      <contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />		       	      
-	  	   <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/>
-        <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/> 
-        <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
-          </includes>
+       	
+	</viewerActionBinding> 
+       	
+    <viewerContentBinding 
+		viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
+        <includes>
+       		<contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />		       	      
+	  	   	<contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/>
+        	<contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/> 
+        	<contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
+       </includes>
         
-       </viewerContentBinding>
+    </viewerContentBinding>
 
        
    </extension>
