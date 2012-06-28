@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="Studio" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="3.4.0" useFeatures="false" includeLaunchers="true">
+<product name="%productName" uid="Studio" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="3.5.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="eclipse_lg.gif"/>
@@ -79,9 +79,11 @@
       <plugin id="com.teradata.datatools.help"/>
       <plugin id="com.teradata.datatools.javabean"/>
       <plugin id="com.teradata.datatools.jxsp"/>
+      <plugin id="com.teradata.datatools.logback.slf4j" fragment="true"/>
       <plugin id="com.teradata.datatools.mdswsclient"/>
       <plugin id="com.teradata.datatools.modelbase.teradata"/>
       <plugin id="com.teradata.datatools.preferences"/>
+      <plugin id="com.teradata.datatools.slf4j"/>
       <plugin id="com.teradata.datatools.sqldev.dialogs"/>
       <plugin id="com.teradata.datatools.sqldev.history"/>
       <plugin id="com.teradata.datatools.sqldev.models"/>
@@ -761,6 +763,7 @@
       <plugin id="org.eclipse.pde.ua.ui"/>
       <plugin id="org.eclipse.pde.ui"/>
       <plugin id="org.eclipse.pde.ui.templates"/>
+      <plugin id="org.eclipse.persistence.jpa.equinox.weaving" fragment="true"/>
       <plugin id="org.eclipse.platform"/>
       <plugin id="org.eclipse.platform.doc.user"/>
       <plugin id="org.eclipse.rcp"/>
