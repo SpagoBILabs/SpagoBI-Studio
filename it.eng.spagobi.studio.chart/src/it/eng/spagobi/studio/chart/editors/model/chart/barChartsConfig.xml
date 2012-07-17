@@ -73,11 +73,11 @@
 				<PARAMETER name='filter_categories' description='Filter categories'
 					type='BOOLEAN' defaultValue='true' tooltip='Choose if Filter categories'/>
 				<PARAMETER name='filter_cat_groups' description='Filter Categories Groups'
-					type='BOOLEAN' defaultValue='true' tooltip='Choose if Filter categories groups'/>
+					type='BOOLEAN' defaultValue='false' tooltip='Choose if Filter categories groups'/>
 				<PARAMETER name='filter_series' description='Filter series'
-					type='BOOLEAN' defaultValue='true' tooltip='Choose if filter series'/>
+					type='BOOLEAN' defaultValue='false' tooltip='Choose if filter series'/>
 				<PARAMETER name='filter_series_buttons' description='Show filter series buttons (if filter series selected)'
-					type='BOOLEAN' defaultValue='true' tooltip='Show filter series buttons (if select serie)'/>
+					type='BOOLEAN' defaultValue='false' tooltip='Show filter series buttons (if select serie)'/>
 				<PARAMETER name='n_cat_visualization' description='Number of categories to view'
 					type='INTEGER' defaultValue='5' tooltip='Number of categories to view'/>
 				<PARAMETER name='dynamic_n_visualization'
