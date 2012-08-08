@@ -31,6 +31,7 @@ import java.util.Vector;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceAdapter;
@@ -42,11 +43,14 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -68,6 +72,7 @@ public class MainChartLeftPage extends AbstractPage {
 
 	Composite generalPropertiesComposite;
 	Composite dataComposite;
+	Composite composite;
 
 	ExtChartEditor editor;
 	ExtChart extChart;
@@ -83,11 +88,29 @@ public class MainChartLeftPage extends AbstractPage {
 	
 	public MainChartLeftPage(Composite parent, int style) {
 		super(parent, style);
-		setLayout(new FillLayout(SWT.VERTICAL));
+		Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE); 
+		setBackground(white);
+		setLayout(new GridLayout(1, false));
 	}
 
 	public void drawPage(){
 		logger.debug("IN");
+		
+		ScrolledComposite scrollComp = new ScrolledComposite(this, SWT.H_SCROLL |   
+				  SWT.V_SCROLL );
+		
+		scrollComp.setLayout(new GridLayout(1, false));
+		scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		composite = new Composite(scrollComp, SWT.NONE);
+		Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE); 
+		composite.setBackground(white);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setSize(400,400);
+		scrollComp.setContent(composite);
+		scrollComp.setExpandHorizontal(true);
+		scrollComp.setExpandVertical(true);
+		scrollComp.setMinSize(composite.computeSize(400, 400));
+		
 		drawPropertiesSection();
 		drawDatasetSection();
 
@@ -97,13 +120,17 @@ public class MainChartLeftPage extends AbstractPage {
 	public void drawPropertiesSection(){
 		logger.debug("IN");
 		FormToolkit toolkit = SWTUtils.createFormToolkit(getParent());
-		Section sectionProp = SWTUtils.createSection(this);
+
+		
+		
+		Section sectionProp = toolkit.createSection(composite,  Section.TWISTIE | Section.TITLE_BAR);
+		sectionProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		sectionProp.setText("Chart Properties");
 		sectionProp.setDescription("Below you see some chart general informations");
 		sectionProp.setExpanded(true);
 
 		Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 3);
-		compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
+		compositeProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		final ExtChartEditor extEditor = editor;
 		
@@ -177,13 +204,20 @@ public class MainChartLeftPage extends AbstractPage {
 	public void drawDatasetSection(){
 		logger.debug("IN");
 		FormToolkit toolkit = SWTUtils.createFormToolkit(getParent());
-		Section sectionProp = SWTUtils.createSection(this);
+		Section sectionProp = toolkit.createSection(composite,  Section.TWISTIE | Section.TITLE_BAR);
+		sectionProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
 		sectionProp.setText("Chart Dataset");
 		sectionProp.setDescription("Choose dataset");
 		sectionProp.setExpanded(true);
+		
 
+
+		//Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 3);
+		//compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
 		Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 3);
-		compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
+		compositeProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
 
 		Combo datasetCombo = createDatasetCombo(compositeProp);
 		createDatasetMetadataTable(compositeProp, datasetCombo);
@@ -213,7 +247,7 @@ public class MainChartLeftPage extends AbstractPage {
 		dataOrder.horizontalSpan = 2;
 		datasetMetadataTable.setLayoutData(dataOrder);
 		
-		String[] titles = { "                     Column name                     ",
+		String[] titles = { "Column name                     ",
 		"               Type               "};
 		
 		for (int i = 0; i < titles.length; i++) {

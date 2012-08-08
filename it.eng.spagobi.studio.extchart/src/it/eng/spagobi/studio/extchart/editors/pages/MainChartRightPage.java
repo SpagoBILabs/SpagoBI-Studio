@@ -22,9 +22,13 @@ import it.eng.spagobi.studio.extchart.utils.ExtChartUtils;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -52,14 +56,35 @@ public class MainChartRightPage extends AbstractPage {
 
 	public MainChartRightPage(Composite parent, int style) {
 		super(parent, style);
-		setLayout(new FillLayout(SWT.HORIZONTAL));
-
+		//setLayout(new FillLayout(SWT.HORIZONTAL));
+		Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE); 
+		setBackground(white);
+		setLayout(new GridLayout(1, false));
+		
 	}
 
 	public void drawPage(){
 		logger.debug("IN");
 		FormToolkit toolkit = SWTUtils.createFormToolkit(getParent());
-		Section sectionProp = SWTUtils.createSection(this);
+		//Section sectionProp = SWTUtils.createSection(this);
+		ScrolledComposite scrollComp = new ScrolledComposite(this, SWT.H_SCROLL |   
+				  SWT.V_SCROLL );
+		
+		scrollComp.setLayout(new GridLayout(1, false));
+		scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		Composite composite = new Composite(scrollComp, SWT.NONE);
+		Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE); 
+		composite.setBackground(white);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setSize(400,400);
+		scrollComp.setContent(composite);
+		scrollComp.setExpandHorizontal(true);
+		scrollComp.setExpandVertical(true);
+		scrollComp.setMinSize(composite.computeSize(400, 400));
+		
+		
+		Section sectionProp = toolkit.createSection(composite,  Section.TWISTIE | Section.TITLE_BAR );
+		sectionProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		sectionProp.setText("Chart Measures and Axes");
 		sectionProp.setDescription("");
 		sectionProp.setExpanded(true);
@@ -67,8 +92,11 @@ public class MainChartRightPage extends AbstractPage {
 
 		// find the first y Axe
 
+		
 		Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 2);
-		//compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
+		compositeProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
 
 		if ((!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)) && (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)) ){
 		// get first numeric axe (left- bottom- right- top)
