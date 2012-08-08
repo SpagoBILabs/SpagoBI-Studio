@@ -29,7 +29,9 @@ import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
 import it.eng.spagobi.studio.extchart.model.bo.StyleSubTitle;
 import it.eng.spagobi.studio.extchart.model.bo.StyleTitle;
+import it.eng.spagobi.studio.extchart.utils.ColorButton;
 import it.eng.spagobi.studio.extchart.utils.PopupPropertiesDialog;
+import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
 
 /**
@@ -46,6 +48,8 @@ public class SubTitleProperties extends PopupPropertiesDialog {
 	private Combo fontWeightCombo;
 	String fontWeight;
 	StyleSubTitle styleSubTitle;
+	ColorButton colorButton;
+	String colorSelected;
 
 
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(SubTitleProperties.class);
@@ -76,20 +80,23 @@ public class SubTitleProperties extends PopupPropertiesDialog {
 		dialog.setText("Subtitle Style Properties");
 
 		container.setLayout(new GridLayout(2, false));
-		Label lblColorhex = new Label(container, SWT.NONE);
-		lblColorhex.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblColorhex.setText("Color (HEX) :");
+
 		
-		colorTxt = new Text(container, SWT.BORDER);
-		if (chart.getSubTitle().getStyle().getColor() != null){
-			colorTxt.setText(chart.getSubTitle().getStyle().getColor());			
+		//check if there is a previously definied color
+		if (chart.getSubTitle()!=null && chart.getSubTitle().getStyle() != null && chart.getSubTitle().getStyle().getColor() != null) {
+			colorSelected = chart.getSubTitle().getStyle().getColor();
 		}
-		else {
-			colorTxt.setText("#000000");
-		}
+		
+		colorButton = SWTUtils.drawColorButton(toolkit, dialog, 
+				chart.getSubTitle()!=null && chart.getSubTitle().getStyle() != null && chart.getSubTitle().getStyle().getColor() != null ? chart.getSubTitle().getStyle().getColor() : "#000000"
+				, "Color: ");
+		colorButton.getColorButton().addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				colorSelected =  colorButton.handleSelctionEvent(colorButton.getColorLabel().getShell());
+			}
+		});	
 		GridData gd_colorTxt = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_colorTxt.widthHint = 200;
-		colorTxt.setLayoutData(gd_colorTxt);
 		
 		Label lblFontWeight = new Label(container, SWT.NONE);
 		lblFontWeight.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -152,7 +159,7 @@ public class SubTitleProperties extends PopupPropertiesDialog {
 		logger.debug("IN");
 		editor.setIsDirty(true);
 
-		chart.getSubTitle().getStyle().setColor(colorTxt.getText());
+		chart.getSubTitle().getStyle().setColor(colorSelected);
 		chart.getSubTitle().getStyle().setFontWeight(fontWeightCombo.getText());
 		chart.getSubTitle().getStyle().setFontSize(fontSizeTxt.getText());
 

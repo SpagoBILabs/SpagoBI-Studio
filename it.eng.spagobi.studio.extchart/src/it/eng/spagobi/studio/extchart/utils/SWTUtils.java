@@ -389,7 +389,13 @@ public class SWTUtils {
 		final Label colorLabel = new Label(composite, SWT.BORDER);
 		colorLabel.setText("colorami");
 		Button 	colorButton = new Button(composite, SWT.PUSH);
-		final Color color = new org.eclipse.swt.graphics.Color(composite.getDisplay(), new RGB(255,255,255));
+		
+		final Color color;
+		if (colorString !=null){
+			color = new org.eclipse.swt.graphics.Color(composite.getDisplay(), convertHexadecimalToRGB(colorString) );
+		} else {
+			color = new org.eclipse.swt.graphics.Color(composite.getDisplay(), new RGB(255,255,255));
+		}
 		GridLayout colorGd = new GridLayout();
 		colorGd.numColumns = 2;
 		colorGd.marginHeight = 0;
