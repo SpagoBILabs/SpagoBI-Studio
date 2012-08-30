@@ -11,14 +11,19 @@ package it.eng.spagobi.studio.extchart.utils;
 
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -26,7 +31,9 @@ import org.slf4j.LoggerFactory;
 
 public class PopupPropertiesDialog {
 
-	protected Shell dialog;
+	protected Shell dialogMain;
+	protected Composite dialog;
+	protected Composite dialogDescription;
 	protected FormToolkit toolkit;
 	protected ExtChartEditor editor;
 	String title;
@@ -35,9 +42,19 @@ public class PopupPropertiesDialog {
 	
 	public PopupPropertiesDialog(ExtChartEditor editor, Shell composite) {
 		super();
-		dialog = new Shell (composite.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		GridLayout gridLayout = new GridLayout(2, true);
-		dialog.setLayout(gridLayout);
+		dialogMain = new Shell (composite.getDisplay(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		//GridLayout gridLayout = new GridLayout(1, true);
+		//dialogMain.setLayout(gridLayout);
+		dialogMain.setLayout(new GridLayout(1, false));
+		
+		dialogDescription = new Composite(dialogMain,SWT.NONE);
+		dialogDescription.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+		dialogDescription.setLayout(new GridLayout(1, false));
+
+		dialog = new Composite(dialogMain,SWT.NONE);
+		dialog.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, true, 1, 1));
+		dialog.setLayout(new GridLayout(2, false));
+
 	
 	}
 
@@ -56,24 +73,24 @@ public class PopupPropertiesDialog {
 
 	public void setTitle(String title) {
 		this.title = title;
-		dialog.setText(title);
+		dialogMain.setText(title);
 	}
 
 
 	public void showPopup(){
 		logger.debug("IN");
-		Monitor primary = dialog.getDisplay().getPrimaryMonitor ();
+		Monitor primary = dialogMain.getDisplay().getPrimaryMonitor ();
 		Rectangle bounds = primary.getBounds ();
-		Rectangle rect = dialog.getBounds ();
+		Rectangle rect = dialogMain.getBounds ();
 		int x = bounds.x + (bounds.width - rect.width) / 2;
 		int y = bounds.y + (bounds.height - rect.height) / 2;
-		dialog.setLocation (x, y);
+		dialogMain.setLocation (x, y);
 		
 		//dialog.pack ();
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");
@@ -82,26 +99,37 @@ public class PopupPropertiesDialog {
 	
 	public void drawButtons(){
 		logger.debug("IN");
-		Button ok = new Button (dialog, SWT.PUSH);
+		/*
+		Composite compButton = new Composite(dialogMain,SWT.NONE);
+		GridLayout gridLayoutComp = new GridLayout(2, false);
+		compButton.setLayout(gridLayoutComp);
+		*/
+		Composite compButton = new Composite(dialogMain, SWT.NONE);
+		compButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		compButton.setLayout(new GridLayout(2, false));
+
+
+		Button ok = new Button (compButton, SWT.PUSH);
 		ok.setText ("   OK   ");
 		ok.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {
 				System.out.println("salva");
 				performOk();
-				((Shell)dialog).close ();
+				((Shell)dialogMain).close ();
 			}
 		});
-		ok.setLayoutData(new GridData(GridData.END));
+		ok.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
-		Button cancel = new Button (dialog, SWT.PUSH);
+
+		Button cancel = new Button (compButton, SWT.PUSH);
 		cancel.setText ("Cancel");
 		cancel.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {
 				System.out.println("Cancella");
-				((Shell)dialog).close ();
+				((Shell)dialogMain).close ();
 			}
 		});	
-		cancel.setLayoutData(new GridData(GridData.BEGINNING));
+		cancel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		logger.debug("OUT");
 	}
@@ -121,13 +149,15 @@ public class PopupPropertiesDialog {
 
 
 	public Shell getDialog() {
-		return dialog;
+		return dialogMain;
 	}
 
 
 	public void setDialog(Shell dialog) {
-		this.dialog = dialog;
+		this.dialogMain = dialog;
 	}
+
+	
 
 
 }

@@ -11,12 +11,17 @@ package it.eng.spagobi.studio.extchart.editors.pages;
 
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
+import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +44,7 @@ public class MainChartPage extends AbstractPage {
 
 	public void drawPage(){
 		logger.debug("IN");
-
+		
 		leftPage = new MainChartLeftPage(this, SWT.NULL);
 		leftPage.setEditor(editor);
 		leftPage.setExtChart(extChart);

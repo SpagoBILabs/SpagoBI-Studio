@@ -12,6 +12,10 @@ package it.eng.spagobi.studio.extchart.editors.properties.axes;
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.slf4j.LoggerFactory;
@@ -28,16 +32,22 @@ public class AxesGaugeProperties extends AxesProperties {
 	 */
 	public AxesGaugeProperties(ExtChartEditor editor, Shell comp) {
 		super(editor, comp);
-		dialog.setSize(300,250);
 	}
 	
 	public void drawProperties(){
 		logger.debug("IN");
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
+
 		super.drawProperties();
-		toolkit.createLabel(dialog, "Type: ");
-		toolkit.createLabel(dialog, "Gauge");
-		toolkit.createLabel(dialog, "Position: ");
-		toolkit.createLabel(dialog, "Gauge");
+		Label type = toolkit.createLabel(dialog, "Type: ");
+		type.setBackground(defaultBackground);
+		Label gauge = toolkit.createLabel(dialog, "Gauge");
+		gauge.setBackground(defaultBackground);
+		Label position = toolkit.createLabel(dialog, "Position: ");
+		position.setBackground(defaultBackground);
+		Label gauge_two = toolkit.createLabel(dialog, "Gauge");
+		gauge_two.setBackground(defaultBackground);
+
 
 		//minimum
 		minimumSpinner = SWTUtils.drawSpinner(dialog, axes.getMinimum(), "Minimum: ");
@@ -87,6 +97,21 @@ public class AxesGaugeProperties extends AxesProperties {
 		logger.debug("margin: " + valMargin);
 		
 		logger.debug("OUT");
+	}
+	
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialogMain.setSize(250, 250);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
+		    }
+		}
+		logger.debug("OUT");
+
 	}
 
 }

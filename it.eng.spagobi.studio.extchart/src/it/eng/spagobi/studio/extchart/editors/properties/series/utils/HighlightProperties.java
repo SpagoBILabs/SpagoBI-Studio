@@ -91,11 +91,11 @@ public class HighlightProperties extends PopupPropertiesDialog{
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialog.setSize(200, 100);
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.setSize(200, 150);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");

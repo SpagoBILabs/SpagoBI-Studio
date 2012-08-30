@@ -29,6 +29,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -66,6 +67,10 @@ public class MainChartRightPage extends AbstractPage {
 	public void drawPage(){
 		logger.debug("IN");
 		FormToolkit toolkit = SWTUtils.createFormToolkit(getParent());
+		Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE); 
+
+
+		
 		//Section sectionProp = SWTUtils.createSection(this);
 		ScrolledComposite scrollComp = new ScrolledComposite(this, SWT.H_SCROLL |   
 				  SWT.V_SCROLL );
@@ -73,15 +78,20 @@ public class MainChartRightPage extends AbstractPage {
 		scrollComp.setLayout(new GridLayout(1, false));
 		scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		Composite composite = new Composite(scrollComp, SWT.NONE);
-		Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE); 
 		composite.setBackground(white);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setSize(400,400);
+		
 		scrollComp.setContent(composite);
 		scrollComp.setExpandHorizontal(true);
 		scrollComp.setExpandVertical(true);
 		scrollComp.setMinSize(composite.computeSize(400, 400));
 		
+		Composite descriptionSection = new Composite(composite,SWT.NULL);
+		descriptionSection.setLayout(new GridLayout(1, false));
+		descriptionSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		Label descriptionLabel= toolkit.createLabel(descriptionSection, "");
+		descriptionSection.setBackground(white);
 		
 		Section sectionProp = toolkit.createSection(composite,  Section.TWISTIE | Section.TITLE_BAR );
 		sectionProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -91,11 +101,9 @@ public class MainChartRightPage extends AbstractPage {
 
 
 		// find the first y Axe
-
 		
 		Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 2);
 		compositeProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
 		compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
 
 		if ((!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)) && (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)) ){

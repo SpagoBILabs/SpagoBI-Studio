@@ -13,7 +13,11 @@ import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.slf4j.LoggerFactory;
@@ -38,8 +42,23 @@ public class SeriesPieProperties  extends SeriesProperties{
 	
 	public void drawProperties(){
 		logger.debug("IN");
-		toolkit.createLabel(dialog, "Type: ");
-		toolkit.createLabel(dialog, "pie");
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
+		Label description = toolkit.createLabel(dialogDescription, "Select series information, what field of the dataset \ndo you want to use for drawing the pie? ", SWT.NULL);
+		description.setBackground(defaultBackground);
+		/*
+		GridData gd=new GridData(GridData.FILL_BOTH);
+		gd.grabExcessHorizontalSpace = true;
+
+		gd.horizontalSpan=2	;
+		
+		description.setLayoutData(gd);
+		*/
+		
+		Label type = toolkit.createLabel(dialog, "Type: ");
+		type.setBackground(defaultBackground);
+		Label pie = toolkit.createLabel(dialog, "pie");
+		pie.setBackground(defaultBackground);
+		
 		serie.setType("pie");
 		super.drawProperties();
 		
@@ -51,6 +70,7 @@ public class SeriesPieProperties  extends SeriesProperties{
 
 		logger.debug("Show in legend");
 		showLegendButton = toolkit.createButton(dialog, "Show in legend: ", SWT.CHECK);
+		showLegendButton.setBackground(defaultBackground);
 		if(serie.getShowInLegened() != null && serie.getShowInLegened().booleanValue() == true){
 			showLegendButton.setSelection(true);
 		}
@@ -64,11 +84,11 @@ public class SeriesPieProperties  extends SeriesProperties{
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialog.setSize(450, 300);
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.setSize(380, 350);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");

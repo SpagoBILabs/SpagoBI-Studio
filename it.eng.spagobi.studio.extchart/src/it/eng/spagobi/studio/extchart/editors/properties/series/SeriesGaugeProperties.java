@@ -13,6 +13,9 @@ import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
@@ -32,8 +35,13 @@ public class SeriesGaugeProperties extends SeriesProperties {
 
 	public void drawProperties(){
 		logger.debug("IN");
-		toolkit.createLabel(dialog, "Type: ");
-		toolkit.createLabel(dialog, "gauge");
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
+		Label description = toolkit.createLabel(dialogDescription, "Select series information, what field of the dataset \ndo you want to use for drawing the gauge? ", SWT.NULL);
+		description.setBackground(defaultBackground);
+		Label type = toolkit.createLabel(dialog, "Type: ");
+		type.setBackground(defaultBackground);
+		Label gauge = toolkit.createLabel(dialog, "gauge");
+		gauge.setBackground(defaultBackground);
 		serie.setType("gauge");
 		super.drawProperties();
 	
@@ -47,11 +55,11 @@ public class SeriesGaugeProperties extends SeriesProperties {
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialog.setSize(200, 250);
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.setSize(320, 300);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");

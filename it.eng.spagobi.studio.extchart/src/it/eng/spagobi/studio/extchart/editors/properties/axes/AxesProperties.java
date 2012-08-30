@@ -16,8 +16,12 @@ import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
 import it.eng.spagobi.studio.extchart.utils.PopupPropertiesDialog;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -43,12 +47,14 @@ public class AxesProperties extends PopupPropertiesDialog{
 
 	public void drawProperties(){
 		logger.debug("IN");
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
 
 		super.drawProperties();
-
+		Label titleLable = toolkit.createLabel(dialog, "Title: ");
+		titleLable.setBackground(defaultBackground);
 		titleText = SWTUtils.drawText(toolkit, dialog, 
 				axes != null && axes.getTitle() != null ? axes.getTitle() : null
-						, "Title: ");
+						, null);
 		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		logger.debug("OUT");

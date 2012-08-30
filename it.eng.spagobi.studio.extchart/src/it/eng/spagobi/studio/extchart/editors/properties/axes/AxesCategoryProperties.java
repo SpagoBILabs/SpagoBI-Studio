@@ -15,9 +15,13 @@ import it.eng.spagobi.studio.extchart.model.bo.Series;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 import it.eng.spagobi.studio.extchart.utils.SerieTableItemContent;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.LoggerFactory;
@@ -34,12 +38,12 @@ public class AxesCategoryProperties  extends AxesProperties{
 	public AxesCategoryProperties(ExtChartEditor editor, 
 			Shell comp) {
 		super(editor, comp);
-		dialog.setSize(300, 250);
 
 	}
 
 	public void drawProperties(){
 		logger.debug("IN");
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
 
 		toolkit.createLabel(dialog, "");
 		toolkit.createLabel(dialog, "");
@@ -51,8 +55,9 @@ public class AxesCategoryProperties  extends AxesProperties{
 
 		super.drawProperties();
 
-		toolkit.createLabel(dialog, "Grid: ");
-
+		Label grid = toolkit.createLabel(dialog, "Grid: ");
+		grid.setBackground(defaultBackground);
+		
 		gridButton = SWTUtils.drawCheck(dialog, 
 				axes != null && axes.getGrid() != null ? axes.getGrid() : false
 						, "");
@@ -108,6 +113,21 @@ public class AxesCategoryProperties  extends AxesProperties{
 		// update the title in XPanel
 		editor.getMainChartPage().getRightPage().getBottomAxeBuilder().getTitleLabel().setText(titleText.getText());
 		
+		logger.debug("OUT");
+
+	}
+	
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialogMain.setSize(300, 220);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
+		    }
+		}
 		logger.debug("OUT");
 
 	}

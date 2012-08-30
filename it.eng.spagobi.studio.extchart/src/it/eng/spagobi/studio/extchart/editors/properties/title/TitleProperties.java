@@ -75,9 +75,9 @@ public class TitleProperties extends PopupPropertiesDialog {
 		Rectangle rect = dialog.getBounds ();
 		int x = bounds.x + (bounds.width - rect.width) / 2;
 		int y = bounds.y + (bounds.height - rect.height) / 2;
-		dialog.setLocation (x, y);
+		dialogMain.setLocation (x, y);
 		
-		dialog.setText("Title Style Properties");
+		dialogMain.setText("Title Style Properties");
 
 		container.setLayout(new GridLayout(2, false));
 
@@ -142,11 +142,11 @@ public class TitleProperties extends PopupPropertiesDialog {
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialog.setSize(300, 200);
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.setSize(300, 200);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");

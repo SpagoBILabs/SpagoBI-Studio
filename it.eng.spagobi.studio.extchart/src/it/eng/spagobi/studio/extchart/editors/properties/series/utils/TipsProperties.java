@@ -16,10 +16,13 @@ import it.eng.spagobi.studio.extchart.model.bo.Tips;
 import it.eng.spagobi.studio.extchart.utils.PopupPropertiesDialog;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
@@ -49,14 +52,16 @@ public class TipsProperties extends PopupPropertiesDialog{
 
 	public void drawProperties(){
 		logger.debug("IN");
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
 
 		logger.debug("track mouse");
 		
-		toolkit.createLabel(dialog, "");
-		
+		org.eclipse.swt.widgets.Label trackLabel =toolkit.createLabel(dialog, "Track Mouse: ");
+		trackLabel.setBackground(defaultBackground);
+
 		trackMouseButton = SWTUtils.drawCheck(dialog, 
 				tips.getTrackMouse() != null ? tips.getTrackMouse() : null
-						, "Track Mouse: ");
+						, null);
 
 
 		widthSpinner =SWTUtils.drawSpinner(dialog, 
@@ -66,10 +71,15 @@ public class TipsProperties extends PopupPropertiesDialog{
 		heightSpinner =SWTUtils.drawSpinner(dialog, 
 				tips.getHeight() != null ? tips.getHeight() : null
 						, "Height: ");
-		
+		org.eclipse.swt.widgets.Label textHelp = toolkit.createLabel(dialog, "Text: ");
+		textHelp.setBackground(defaultBackground);
 		textText = SWTUtils.drawText(toolkit, dialog, 
 				tips.getText() != null ? tips.getText() : null
-				, labelForText);
+				, null);
+		
+		org.eclipse.swt.widgets.Label description = toolkit.createLabel(dialogDescription, labelForText, SWT.NULL);
+		description.setBackground(defaultBackground);
+
 	
 		logger.debug("OUT");
 	}
@@ -122,11 +132,11 @@ public class TipsProperties extends PopupPropertiesDialog{
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialog.setSize(300, 200);
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.setSize(310, 250);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");

@@ -24,6 +24,8 @@ import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,12 +55,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -119,7 +123,36 @@ public class MainChartLeftPage extends AbstractPage {
 
 	public void drawPropertiesSection(){
 		logger.debug("IN");
+		
 		FormToolkit toolkit = SWTUtils.createFormToolkit(getParent());
+		Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE); 
+
+		Composite descriptionSection = new Composite(composite,SWT.NULL);
+		descriptionSection.setLayout(new GridLayout(1, false));
+		descriptionSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		Link wikiLink = new Link(descriptionSection,SWT.NULL);
+		wikiLink.setText("You can find information about how you can use this designer on the <a href=\"http://wiki.spagobi.org/xwiki/bin/view/Main/\">SpagoBI Wiki</a>");
+		descriptionSection.setBackground(white);
+		wikiLink.setBackground(white);
+		wikiLink.addSelectionListener(new SelectionAdapter(){
+	        @Override
+	        public void widgetSelected(SelectionEvent e) {
+	               logger.debug("You have selected: "+e.text);
+	               try {
+	                //  Open default external browser 
+	                PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(e.text));
+	              } 
+	             catch (PartInitException ex) {
+	                // TODO Auto-generated catch block
+	                 ex.printStackTrace();
+	            } 
+	            catch (MalformedURLException ex) {
+	                // TODO Auto-generated catch block
+	                ex.printStackTrace();
+	            }
+	        }
+	    });
+
 
 		
 		

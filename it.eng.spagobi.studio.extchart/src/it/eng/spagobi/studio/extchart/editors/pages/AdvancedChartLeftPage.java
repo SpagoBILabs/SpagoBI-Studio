@@ -23,6 +23,7 @@ import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
 import it.eng.spagobi.studio.extchart.model.bo.Param;
 import it.eng.spagobi.studio.extchart.model.bo.ParamList;
 import it.eng.spagobi.studio.extchart.model.bo.Series;
+import it.eng.spagobi.studio.extchart.utils.ColorButton;
 import it.eng.spagobi.studio.extchart.utils.ImageDescriptors;
 import it.eng.spagobi.studio.extchart.utils.ParamTableItemContent;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
@@ -50,7 +51,9 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -59,6 +62,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -86,11 +90,21 @@ public class AdvancedChartLeftPage extends AbstractPage {
 	private Text textParameterName;
 	private Text textValue;
 	private Table tableParameters;
+	private Table colorsTable;
+
 	private Combo comboType;
 	Drill drill;
+	ColorButton colorButton;
+	String colorSelected;
+	String currentColorsValue;
+
+
 
 	Vector<Param> params;
+	Vector<String> themeColors;
 	HashMap<Integer, Button> deleteButtons;
+	
+
 	
 	public final static int NAME=0;
 	public final static int TYPE=1;
@@ -106,11 +120,11 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.VERTICAL));
 
-
 	}
 
 	public void drawPage(){
 		logger.debug("IN");
+		colorSelected = "#000000";
 		Composite mainComposite = new Composite(this, SWT.NONE);
 		mainComposite.setLayout(new FillLayout(SWT.VERTICAL));
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -130,8 +144,12 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		sectionProp.setDescription("Below you see some chart advanced informations");
 		sectionProp.setExpanded(true);
 
-		Composite compositeProp = SWTUtils.createGridCompositeOnSection(sectionProp, 4);
-		compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(SWT.NONE, null, null));
+		Composite compositeMain = SWTUtils.createGridCompositeOnSection(sectionProp, 2);
+		compositeMain.setLayoutData(SWTUtils.makeGridDataLayout(SWT.NONE, null, null));
+		
+		Composite compositeProp = new Composite(compositeMain, SWT.NONE);
+		compositeProp.setLayout(new GridLayout(4, false));
+		compositeProp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
 
 		final ExtChartEditor extEditor = editor;
 		
@@ -244,39 +262,174 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		});
 		
 		
-		toolkit.createLabel(compositeProp, "");
-		toolkit.createLabel(compositeProp, "");
+		//toolkit.createLabel(compositeProp, "");
+		//toolkit.createLabel(compositeProp, "");
 
 		
 		//Colors
+		Composite compositeMainColors = new Composite(compositeMain, SWT.NONE);
+		compositeMainColors.setLayout(new GridLayout(1, false));
+		compositeMainColors.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
+		
+		Composite compositeColors = new Composite(compositeMainColors, SWT.NONE);
+		compositeColors.setLayout(new GridLayout(4, false));
+		compositeColors.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, true));
 
-		Label lblColors = new Label(compositeProp, SWT.NONE);
-		lblColors.setText("Colors (HEX) separated by comma:");
-		toolkit.createLabel(compositeProp, "");
-		toolkit.createLabel(compositeProp, "");
+		Label lblColors = new Label(compositeColors, SWT.NONE);
+		lblColors.setText("Colors template: ");
 
-		String currentColorsValue;
-		if (extChart.getColors() != null){
-			currentColorsValue = extChart.getColors().getColor();
-		} else {
-			currentColorsValue = ""; 
-		}
-		final Text textColors = toolkit.createText(compositeProp,currentColorsValue, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.WRAP);
-		GridData gd_textColors = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_textColors.heightHint = 50;
-		textColors.setLayoutData(gd_textColors);
-		textColors.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent event) {
-				extEditor.setIsDirty(true);
-				String colorsValue = textColors.getText();
-				extChart.getColors().setColor(colorsValue);
+
+		themeColors = new Vector<String>();
+
+
+		Composite compositeColorSelector = new Composite(compositeColors, SWT.NONE);
+		compositeColorSelector.setLayout(new GridLayout(2, false));
+		compositeColorSelector.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+
+		//Color selection palette
+		colorButton = SWTUtils.drawColorButton(toolkit, compositeColorSelector, 
+				colorSelected != null ? colorSelected : "#000000"
+				, "Color: ");
+		colorButton.getColorButton().addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				colorSelected =  colorButton.handleSelctionEvent(colorButton.getColorLabel().getShell());
+			}
+		});	
+		
+	
+		//Button for adding colors
+		Button buttonAdd = new Button(compositeColors, SWT.NONE);
+		buttonAdd.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+
+		buttonAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final TableItem item = new TableItem (colorsTable, SWT.NONE);
+				
+				//set data to item and model
+				item.setData(colorSelected);
+				themeColors.add(colorSelected);
+				//convert themeColors to single string with comma separated values
+				currentColorsValue = vectorToString(themeColors);
+				//modify the extChart object
+				extChart.getColors().setColor(currentColorsValue);
+
+				//
+				//Color Label
+				TableEditor tableEditor = new TableEditor(colorsTable);
+				final Label colorLabel = new Label (colorsTable,SWT.NONE);
+				colorLabel.setText("                 ");
+				
+				Color color = colorLabel.getBackground();
+				color.dispose();
+				RGB rgbcolor = SWTUtils.convertHexadecimalToRGB(colorSelected);
+				Color newColor = new Color(colorsTable.getShell().getDisplay(), rgbcolor);
+				colorLabel.setBackground(newColor);
+				
+				colorLabel.pack();
+				
+				
+				tableEditor.minimumWidth = colorLabel.getSize().x;
+				tableEditor.horizontalAlignment = SWT.LEFT;
+				tableEditor.setEditor(colorLabel, item, 0);
+				
+				//Delete button
+				TableEditor tableEditor_two = new TableEditor(colorsTable);
+				Image deleteImage = ImageDescriptors.getEraseIcon().createImage();
+				final  Button buttonDel = new Button(colorsTable, SWT.PUSH);
+				buttonDel.setImage(deleteImage);
+				buttonDel.pack();
+				
+				buttonDel.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(Event event) {
+						//delete table item
+						editor.setIsDirty(true);
+
+						int index = colorsTable.indexOf(item);
+						logger.debug("remove row"+item.getText(NAME)+ " at index "+index);
+						colorsTable.remove(index);
+						//delete from model
+						themeColors.remove(index);
+						//convert themeColors to single string with comma separated values
+						currentColorsValue = vectorToString(themeColors);
+						//modify the extChart object
+						extChart.getColors().setColor(currentColorsValue);
+
+						buttonDel.dispose();
+						colorLabel.dispose();
+						colorsTable.redraw();
+						colorsTable.getParent().redraw();
+
+						logger.debug("row removed");
+
+					}
+
+				}
+				);
+				tableEditor_two.minimumWidth = buttonDel.getSize().x;
+				tableEditor_two.horizontalAlignment = SWT.LEFT;
+				tableEditor_two.setEditor(buttonDel, item, 1);
+				//
+				
+				editor.setIsDirty(true);
+				colorsTable.redraw();
 			}
 		});
 		
+		Composite compositeAddButton = new Composite(compositeColors, SWT.NONE);
+		compositeAddButton.setLayout(new GridLayout(1, false));
+		compositeAddButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+		
+		buttonAdd.setText("Add this color");
+		toolkit.createLabel(compositeAddButton, "");
+
+
+		
+		//Table colors
+		colorsTable = new Table (compositeMainColors, SWT.SINGLE | SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		colorsTable.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+
+		colorsTable.setLinesVisible (true);
+		colorsTable.setHeaderVisible (true);
+
+		GridData dataOrder = new GridData(SWT.FILL, SWT.FILL, false, true);
+		dataOrder.heightHint = 90;
+		dataOrder.widthHint=200;
+		colorsTable.setLayoutData(dataOrder);
+		
+		TableColumn column = new TableColumn (colorsTable, SWT.NONE);
+		column.setText ("Color");
+		column.setWidth(127);
+		column = new TableColumn (colorsTable, SWT.NONE);
+		column.setText ("Delete");
+		column.setWidth(60);
+		
+		
+		if (extChart.getColors() != null){
+			currentColorsValue = extChart.getColors().getColor();
+			String[] existingColors = currentColorsValue.split(",");
+			
+			for (String colorValue:existingColors) {
+				TableItem item = new TableItem (colorsTable, SWT.NONE);
+
+				//set data to item and model
+				item.setData(colorValue);
+				themeColors.add(colorValue);
+				createColorItem(colorsTable,item,colorValue);
+			}
+			//convert themeColors to single string with comma separated values
+			//currentColorsValue = vectorToString(themeColors);
+
+		} else {
+			currentColorsValue = ""; 
+		}
+
+		
+
 		
 		
 		//Important: set section Client
-		sectionProp.setClient(compositeProp);
+		sectionProp.setClient(compositeMain);
 		logger.debug("OUT");
 	}
 	
@@ -459,7 +612,7 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		compositeTable.redraw();
 	}
 	
-	void createButtons(final Table tableParameters, final TableItem item, final Param param, ParamTableItemContent paramTableItemContent){
+	private void createButtons(final Table tableParameters, final TableItem item, final Param param, ParamTableItemContent paramTableItemContent){
 		logger.debug("IN");
 
 		// delete
@@ -505,8 +658,81 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		logger.debug("OUT");
 
 	}
-	
 
+	private void createColorItem(final Table colorsParameters, final TableItem item, String hexColor){
+		//Color Label
+		TableEditor tableEditor = new TableEditor(colorsTable);
+		final Label colorLabel = new Label (colorsTable,SWT.NONE);
+		colorLabel.setText("                 ");
+		
+		Color color = colorLabel.getBackground();
+		color.dispose();
+		RGB rgbcolor = SWTUtils.convertHexadecimalToRGB(hexColor);
+		Color newColor = new Color(colorsTable.getShell().getDisplay(), rgbcolor);
+		colorLabel.setBackground(newColor);
+		
+		colorLabel.pack();
+		
+		
+		tableEditor.minimumWidth = colorLabel.getSize().x;
+		tableEditor.horizontalAlignment = SWT.LEFT;
+		tableEditor.setEditor(colorLabel, item, 0);
+		
+		//Delete button
+		TableEditor tableEditor_two = new TableEditor(colorsTable);
+		Image deleteImage = ImageDescriptors.getEraseIcon().createImage();
+		final  Button buttonDel = new Button(colorsTable, SWT.PUSH);
+		buttonDel.setImage(deleteImage);
+		buttonDel.pack();
+		
+		buttonDel.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event event) {
+				//delete table item
+				editor.setIsDirty(true);
+
+				int index = colorsTable.indexOf(item);
+				logger.debug("remove row"+item.getText(NAME)+ " at index "+index);
+				colorsTable.remove(index);
+				//delete from model
+				themeColors.remove(index);
+				//convert themeColors to single string with comma separated values
+				currentColorsValue = vectorToString(themeColors);
+				//modify the extChart object
+				extChart.getColors().setColor(currentColorsValue);
+
+				buttonDel.dispose();
+				colorLabel.dispose();
+				colorsTable.redraw();
+				colorsTable.getParent().redraw();
+
+				logger.debug("row removed");
+
+			}
+
+		}
+		);
+		tableEditor_two.minimumWidth = buttonDel.getSize().x;
+		tableEditor_two.horizontalAlignment = SWT.LEFT;
+		tableEditor_two.setEditor(buttonDel, item, 1);
+	}
+
+	public String vectorToString(Vector<String> v){
+		StringBuilder builder = new StringBuilder();
+
+	    if(v == null || v.size() == 0) {
+	        return null;
+	    }
+
+	    for (String str : v) {
+	        builder.append(str).append(",");
+	    }
+
+	    builder.delete(builder.length() - ",".length(), builder.length());
+	    
+	    return builder.toString();
+
+	}
+	
 	public ExtChartEditor getEditor() {
 		return editor;
 	}

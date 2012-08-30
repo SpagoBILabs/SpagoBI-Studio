@@ -114,11 +114,13 @@ public class SeriesProperties extends PopupPropertiesDialog{
 
 
 		// ---------------------------- Y FIELD -------------------
+		/*
 		if(drawYField)
 			yFieldCombo = SWTUtils.drawCombo(dialog, metadatas, serie.getyField(), "yField: ");
-
+		 */
 
 		// --------------------  Y FIELD LIST---------------------------
+		/*
 		if(drawYFieldList){
 			toolkit.createLabel(dialog, "yFieldList: \n(overwrites with multiple selection\n other fields settings).", SWT.NULL);
 			
@@ -171,6 +173,7 @@ public class SeriesProperties extends PopupPropertiesDialog{
 		if (fieldTable != null){
 			fieldTable.setEnabled(false);			
 		}
+		*/
 
 
 		// Check if define label
@@ -184,7 +187,7 @@ public class SeriesProperties extends PopupPropertiesDialog{
 			public void handleEvent(Event event) {
 				logger.debug("Open label editor");
 				Label labelToPass = labelHolder[0] != null ? labelHolder[0] : serieIns.getLabel();
-				LabelProperties labelProperties = new LabelProperties(editor, labelToPass, dialog, toPass);
+				LabelProperties labelProperties = new LabelProperties(editor, labelToPass, dialogMain, toPass);
 				labelProperties.drawProperties();
 				labelProperties.drawButtons();
 				labelProperties.showPopup();
@@ -227,9 +230,9 @@ public class SeriesProperties extends PopupPropertiesDialog{
 			public void handleEvent(Event event) {
 				logger.debug("Open Tips editor");
 				Tips tipsToPass = tipsHolder[0] != null ? tipsHolder[0] : serieIns.getTips();
-				TipsProperties tipsProperties = new TipsProperties(editor, tipsToPass, dialog, toPass);
+				TipsProperties tipsProperties = new TipsProperties(editor, tipsToPass, dialogMain, toPass);
 				tipsProperties.setTitle("Define tips");
-				tipsProperties.setLabelForText("Text:\n {CATEGORY} for category \n {SERIE} for serie");
+				tipsProperties.setLabelForText("In Text field:\nIf you want to insert category name write {CATEGORY} \nIf you want to insert serie name write {SERIE} ");
 				tipsProperties.drawProperties();
 				tipsProperties.drawButtons();
 				tipsProperties.showPopup();
@@ -273,7 +276,7 @@ public class SeriesProperties extends PopupPropertiesDialog{
 				public void handleEvent(Event event) {
 					logger.debug("Open markerConfig editor");
 					MarkerConfig markerConfigToPass = markerConfigHolder[0] != null ? markerConfigHolder[0] : serieIns.getMarkerConfig();
-					MarkerConfigProperties markerConfigProperties = new MarkerConfigProperties(editor, markerConfigToPass, dialog, toPass);
+					MarkerConfigProperties markerConfigProperties = new MarkerConfigProperties(editor, markerConfigToPass, dialogMain, toPass);
 					markerConfigProperties.setTitle("Define Marker Config");
 					markerConfigProperties.drawProperties();
 					markerConfigProperties.drawButtons();
@@ -319,7 +322,7 @@ public class SeriesProperties extends PopupPropertiesDialog{
 				public void handleEvent(Event event) {
 					logger.debug("Open highlight segment editor");
 					Highlight highlightToPass = highlightHolder[0] != null ? highlightHolder[0] : serieIns.getHighlightSegment();
-					HighlightProperties highlightProperties = new HighlightProperties(editor, highlightToPass, dialog, toPass);
+					HighlightProperties highlightProperties = new HighlightProperties(editor, highlightToPass, dialogMain, toPass);
 					highlightProperties.setTitle("Define Highlight Segment");
 					highlightProperties.drawProperties();
 					highlightProperties.drawButtons();
@@ -572,11 +575,11 @@ public class SeriesProperties extends PopupPropertiesDialog{
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialog.setSize(500, 500);
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.setSize(500, 500);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");

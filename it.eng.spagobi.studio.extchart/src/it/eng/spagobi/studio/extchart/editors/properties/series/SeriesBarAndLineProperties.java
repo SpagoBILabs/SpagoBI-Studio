@@ -13,8 +13,11 @@ import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.slf4j.LoggerFactory;
@@ -43,7 +46,9 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 
 	public void drawProperties(){
 		logger.debug("IN");
-
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
+		Label description = toolkit.createLabel(dialogDescription, "Select series information, what type of chart do you want to draw? ", SWT.NULL);
+		description.setBackground(defaultBackground);
 
 		String[] types = new String[]{"bar", "column", "line"};
 		typeCombo = SWTUtils.drawCombo(dialog, types, serie.getType(), "Type: ");
@@ -61,6 +66,7 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 		if(serie.getHighlight() != null && serie.getHighlight().booleanValue() == true){
 			highlightButton.setSelection(true);
 		}
+		highlightButton.setBackground(defaultBackground);
 		
 		// -----------------------------------------------
 
@@ -69,23 +75,28 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 		if(serie.getStacked() != null && serie.getStacked().booleanValue() == true){
 			stackedButton.setSelection(true);
 		}
+		stackedButton.setBackground(defaultBackground);
+
 
 		logger.debug("Smooth");
 		smoothButton = toolkit.createButton(dialog, "Smooth: ", SWT.CHECK);
 		if(serie.getSmooth() != null && serie.getSmooth().booleanValue() == true){
 			smoothButton.setSelection(true);
 		}
+		smoothButton.setBackground(defaultBackground);
+
 		
 		logger.debug("Fill");
 		fillButton = toolkit.createButton(dialog, "Fill: ", SWT.CHECK);
 		if(serie.getFill() != null && serie.getFill().booleanValue() == true){
 			fillButton.setSelection(true);
 		}
-		
-		toolkit.createLabel(dialog, " ");
-		toolkit.createLabel(dialog, " ");
+		fillButton.setBackground(defaultBackground);
 
-		
+		Label empty = toolkit.createLabel(dialog, " ");
+		Label empty_two = toolkit.createLabel(dialog, " ");
+		empty.setBackground(defaultBackground);
+		empty_two.setBackground(defaultBackground);
 		logger.debug("OUT");
 	}
 
@@ -122,5 +133,20 @@ public class SeriesBarAndLineProperties extends SeriesProperties {
 		
 		logger.debug("OUT");
 	}
+	
+	//overwrite
+	public void showPopup(){
+		logger.debug("IN");
+		
+		dialogMain.setSize(380, 350);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
+		    }
+		}
+		logger.debug("OUT");
+
+	}	
 
 }

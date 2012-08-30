@@ -75,9 +75,9 @@ public class SubTitleProperties extends PopupPropertiesDialog {
 		Rectangle rect = dialog.getBounds ();
 		int x = bounds.x + (bounds.width - rect.width) / 2;
 		int y = bounds.y + (bounds.height - rect.height) / 2;
-		dialog.setLocation (x, y);
+		dialogMain.setLocation (x, y);
 		
-		dialog.setText("Subtitle Style Properties");
+		dialogMain.setText("Subtitle Style Properties");
 
 		container.setLayout(new GridLayout(2, false));
 
@@ -99,7 +99,7 @@ public class SubTitleProperties extends PopupPropertiesDialog {
 		gd_colorTxt.widthHint = 200;
 		
 		Label lblFontWeight = new Label(container, SWT.NONE);
-		lblFontWeight.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFontWeight.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		lblFontWeight.setText("Font Weight :");
 		
 		fontWeightCombo = new Combo(container, SWT.READ_ONLY);
@@ -122,7 +122,7 @@ public class SubTitleProperties extends PopupPropertiesDialog {
 		fontWeightCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Label lblFontSize = new Label(container, SWT.NONE);
-		lblFontSize.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFontSize.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		lblFontSize.setText("Font Size : ");
 		
 		fontSizeTxt = new Text(container, SWT.BORDER);
@@ -142,11 +142,11 @@ public class SubTitleProperties extends PopupPropertiesDialog {
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialog.setSize(300, 200);
-		dialog.open ();
-		while (!dialog.isDisposed()) {
-		    if (!dialog.getDisplay().readAndDispatch()) {
-		    	dialog.getDisplay().sleep();
+		dialogMain.setSize(300, 200);
+		dialogMain.open ();
+		while (!dialogMain.isDisposed()) {
+		    if (!dialogMain.getDisplay().readAndDispatch()) {
+		    	dialogMain.getDisplay().sleep();
 		    }
 		}
 		logger.debug("OUT");
