@@ -375,6 +375,19 @@ public class MainChartLeftPage extends AbstractPage {
 				// clean all other entities if dataset has changed: series and axes
 				getEditor().getMainChartPage().getRightPage().getSeriesBuilder().deleteAllSeries();
 				extChart.getAxesList().setAxes(null);
+				//reset UI components to reflect the cleaning
+				if (getEditor().getMainChartPage().getRightPage().getRightAxeBuilder() != null &&
+						getEditor().getMainChartPage().getRightPage().getLeftAxeBuilder()!= null )
+				{
+				    getEditor().getMainChartPage().getRightPage().getRightAxeBuilder().clearAll();
+					getEditor().getMainChartPage().getRightPage().getLeftAxeBuilder().clearAll();
+				}
+				//populate xAxe Field Combo
+				if(getEditor().getMainChartPage().getRightPage().getBottomAxeBuilder() != null){
+					getEditor().getMainChartPage().getRightPage().getBottomAxeBuilder().clearAll();
+					getEditor().getMainChartPage().getRightPage().getBottomAxeBuilder().refreshFieldCombo();
+				}
+
 
 				
 				

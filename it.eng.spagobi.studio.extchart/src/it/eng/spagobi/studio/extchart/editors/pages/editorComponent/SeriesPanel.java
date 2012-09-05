@@ -197,7 +197,6 @@ public class SeriesPanel {
 
 
 		logger.debug("fix table height");
-		//seriesTable.setSize(200,400);
 		//		if (group.getLayout() == null) { // <---
 		//			seriesTable.setSize(200,300);
 		//		} else {

@@ -9,22 +9,31 @@
 **/
 package it.eng.spagobi.studio.extchart.editors.pages.editorComponent;
 
+import java.util.Vector;
+
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.editors.properties.PropertiesFactory;
 import it.eng.spagobi.studio.extchart.editors.properties.axes.AxesProperties;
 import it.eng.spagobi.studio.extchart.model.bo.Axes;
+import it.eng.spagobi.studio.extchart.model.bo.AxesList;
 import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
 import it.eng.spagobi.studio.extchart.utils.ExtChartUtils;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.slf4j.LoggerFactory;
 
@@ -42,11 +51,14 @@ public class YAxePanel{
 	Label titleLabel;
 	Button customAxeButton;
 	String axeType;
+	Text titleText;
+	Button gridButton;
 	
 
 	public YAxePanel(Composite parent, int style, Axes axe, String _axeType) {
 		group = new Group(parent, style);
 		group.setLayout(SWTUtils.makeGridLayout(2));
+		group.setText("Y Axe");
 		this.axe = axe;
 		this.axeType = axeType;
 	}
@@ -86,7 +98,10 @@ public class YAxePanel{
 						axe = new Axes();
 						axe.setPosition(position);
 						axe.setType(axesType);
-						editor.getExtChart().getAxesList().getAxes().add(axe);
+						AxesList axesList = editor.getExtChart().getAxesList();
+						Vector<Axes> axis = axesList.getAxes();
+						axis.add(axe);
+						editor.getExtChart().setAxesList(axesList);
 					}
 					else{
 						logger.debug("modify previously defined");
@@ -105,8 +120,8 @@ public class YAxePanel{
 
 
 
-		Label whatIsLabel= toolkit.createLabel(group, "Y Axe:");
-		titleLabel = toolkit.createLabel(group, "No title set");
+		//Label whatIsLabel= toolkit.createLabel(group, "Y Axe:");
+		//titleLabel = toolkit.createLabel(group, "No title set");
 
 		toolkit.createLabel(group, "Type: ");
 		toolkit.createLabel(group, "Numeric");
@@ -115,6 +130,7 @@ public class YAxePanel{
 		GridData gd=new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan=2	;
 
+		/*
 		customAxeButton = SWTUtils.drawButton(group, "Customize");
 		final YAxePanel thisPanel = this;
 		customAxeButton.addSelectionListener(new SelectionAdapter() {
@@ -139,7 +155,44 @@ public class YAxePanel{
 			}
 		});
 		customAxeButton.setLayoutData(gd);
+		*/
 		
+		
+		Color defaultBackground = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND); 
+
+		Label titleLable = toolkit.createLabel(group, "Title: ");
+		titleText = SWTUtils.drawText(toolkit, group, 
+				axe != null && axe.getTitle() != null ? axe.getTitle() : null
+						, null);
+		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		titleText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent event) {
+				editor.setIsDirty(true);
+				String titleValue = titleText.getText();
+				axe.setTitle(titleValue);
+			}
+		});
+		
+		Label grid = toolkit.createLabel(group, "Grid: ");
+		
+		gridButton = SWTUtils.drawCheck(group, 
+				axe != null && axe.getGrid() != null ? axe.getGrid() : false
+						, "");
+		gridButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+				Boolean track = gridButton.getSelection();
+				axe.setGrid(track);		
+				logger.debug("grid: "+track);
+			}
+		});
+		
+		
+		ExtChart chart = editor.getExtChart();
+		Axes yAxes = ExtChartUtils.getYAxe(chart);
+		if(yAxes != null) logger.debug("found an y Axe in position "+yAxes);
+		 
 		
 		// if position is not set do not enable other widgets
 		boolean  enable = true;
@@ -176,13 +229,21 @@ public class YAxePanel{
 	}
 
 	public void enableAxe(){
-		customAxeButton.setEnabled(true);
-		titleLabel.setEnabled(true);
+		//customAxeButton.setEnabled(true);
+		//titleLabel.setEnabled(true);
+		
+		titleText.setEnabled(true);
+		gridButton.setEnabled(true);
+		
 	}
 
 	public void disableAxe(){
-		customAxeButton.setEnabled(false);
-		titleLabel.setEnabled(false);
+		//customAxeButton.setEnabled(false);
+		//titleLabel.setEnabled(false);
+		
+		titleText.setEnabled(false);
+		gridButton.setEnabled(false);
+		
 
 	}
 
@@ -208,6 +269,28 @@ public class YAxePanel{
 
 	public void setAxeType(String axeType) {
 		this.axeType = axeType;
+	}
+	
+	//reset UI components to initial status
+	public void clearAll(){
+		if(titleText.isEnabled()){
+			titleText.clearSelection();
+			titleText.setText("");
+			titleText.update();
+			titleText.isEnabled();
+		}
+		if (gridButton.isEnabled()){
+			gridButton.setSelection(false);
+		}
+		if (positionCombo.isEnabled()){
+			positionCombo.clearSelection();
+			positionCombo.deselectAll();
+		}
+		
+		//reset also model object
+		axe=null;
+
+		disableAxe();
 	}
 
 

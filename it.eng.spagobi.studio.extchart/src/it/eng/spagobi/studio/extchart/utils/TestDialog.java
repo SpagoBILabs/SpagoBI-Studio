@@ -33,6 +33,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
@@ -84,6 +86,15 @@ public class TestDialog extends Dialog {
 		
 		Button button_5 = new Button(composite_1, SWT.NONE);
 		button_5.setText("New Button");
+		
+		Button button_6 = new Button(composite_1, SWT.CHECK);
+		button_6.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		button_6.setText("Check Button");
+		new Label(composite_1, SWT.NONE);
 		
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));

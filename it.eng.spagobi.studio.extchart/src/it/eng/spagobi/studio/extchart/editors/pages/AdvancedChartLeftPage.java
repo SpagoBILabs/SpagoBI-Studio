@@ -405,7 +405,7 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		column.setWidth(60);
 		
 		
-		if (extChart.getColors() != null){
+		if (extChart.getColors().getColor() != null){
 			currentColorsValue = extChart.getColors().getColor();
 			String[] existingColors = currentColorsValue.split(",");
 			

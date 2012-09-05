@@ -80,12 +80,12 @@ public class MainChartRightPage extends AbstractPage {
 		Composite composite = new Composite(scrollComp, SWT.NONE);
 		composite.setBackground(white);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setSize(400,400);
+		composite.setSize(400,500);
 		
 		scrollComp.setContent(composite);
 		scrollComp.setExpandHorizontal(true);
 		scrollComp.setExpandVertical(true);
-		scrollComp.setMinSize(composite.computeSize(400, 400));
+		scrollComp.setMinSize(composite.computeSize(400, 500));
 		
 		Composite descriptionSection = new Composite(composite,SWT.NULL);
 		descriptionSection.setLayout(new GridLayout(1, false));
@@ -107,10 +107,14 @@ public class MainChartRightPage extends AbstractPage {
 		compositeProp.setLayoutData(SWTUtils.makeGridDataLayout(GridData.FILL_BOTH, null, null));
 
 		if ((!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_PIE)) && (!extChart.getType().equals(ExtChartConstants.EXT_CHART_TYPE_GAUGE)) ){
+		Composite compositeYAxes = new Composite(compositeProp, SWT.NONE);
+		compositeYAxes.setLayout(new GridLayout(2,false));
+		compositeYAxes.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+			
 		// get first numeric axe (left- bottom- right- top)
 		Axes leftAxe =   ExtChartUtils.getYAxe(extChart, 1);
 		logger.debug("left axe found : "+leftAxe != null ? "true" : "false");
-		leftAxeBuilder = new YAxePanel(compositeProp, SWT.NULL, leftAxe, ExtChartConstants.AXE_TYPE_NUMERIC);
+		leftAxeBuilder = new YAxePanel(compositeYAxes, SWT.NULL, leftAxe, ExtChartConstants.AXE_TYPE_NUMERIC);
 		leftAxeBuilder.setEditor(editor);
 		leftAxeBuilder.setAxeType(ExtChartConstants.AXE_TYPE_NUMERIC);
 		leftAxeBuilder.drawAxeComposite();
@@ -118,7 +122,7 @@ public class MainChartRightPage extends AbstractPage {
 		// get first numeric axe (left- bottom- right- top)
 		Axes rightAxe=   ExtChartUtils.getYAxe(extChart, 2);
 		logger.debug("right axe found : "+rightAxe != null ? "true" : "false");
-		rightAxeBuilder = new YAxePanel(compositeProp, SWT.NULL, rightAxe, ExtChartConstants.AXE_TYPE_NUMERIC);
+		rightAxeBuilder = new YAxePanel(compositeYAxes, SWT.NULL, rightAxe, ExtChartConstants.AXE_TYPE_NUMERIC);
 		rightAxeBuilder.setEditor(editor);
 		rightAxeBuilder.setAxeType(ExtChartConstants.AXE_TYPE_NUMERIC);
 		rightAxeBuilder.drawAxeComposite();
@@ -133,7 +137,7 @@ public class MainChartRightPage extends AbstractPage {
 		gd.horizontalSpan = 2;
 		seriesBuilder.getGroup().setLayoutData(gd);
 
-		toolkit.createLabel(compositeProp, "");
+		//toolkit.createLabel(compositeProp, "");
 		}
 		else {
 			singleSeriesBuilder = new SingleSeriePanel(compositeProp, SWT.NULL, extChart.getSeriesList().getSeries());

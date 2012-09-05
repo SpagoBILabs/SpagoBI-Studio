@@ -174,6 +174,7 @@ public class SeriesProperties extends PopupPropertiesDialog{
 			fieldTable.setEnabled(false);			
 		}
 		*/
+	
 
 
 		// Check if define label
@@ -393,8 +394,9 @@ public class SeriesProperties extends PopupPropertiesDialog{
 			serie.setyField(valueY);
 			logger.debug("Yfield " +valueY);
 		}
-
+		/*
 		if(drawYFieldList){
+			
 			TableItem[] items = fieldTable.getSelection();
 			String selections ="";
 			for (int i = 0; i < items.length; i++) {
@@ -403,10 +405,13 @@ public class SeriesProperties extends PopupPropertiesDialog{
 				if(i <items.length-1){
 					selections += ",";
 				}
+				
 			}
 			serie.setyFieldList(selections);
 			logger.debug("Yfield List " +selections);
+			
 		}
+	*/
 		if (useLabelCheck!= null){
 			if(useLabelCheck.getSelection() == true && labelHolder[0] != null){
 				logger.debug("save label");		
