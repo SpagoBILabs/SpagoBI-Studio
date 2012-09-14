@@ -116,6 +116,7 @@ public class SpagoBIStudioConstants {
 
 	public static QualifiedName DATASET_ID = new QualifiedName("it.eng.spagobi.sdk.dataset.id", "Identifier");
 	public static QualifiedName DATASET_LABEL = new QualifiedName("it.eng.spagobi.sdk.dataset.label", "Label");
+	public static QualifiedName DATASET_LABEL_INSIDE = new QualifiedName("it.eng.spagobi.sdk.dataset.labelInside", "Label");
 	public static QualifiedName DATASET_NAME = new QualifiedName("it.eng.spagobi.sdk.dataset.name", "Name");
 	public static QualifiedName DATASET_DESCRIPTION = new QualifiedName("it.eng.spagobi.sdk.dataset.description", "Description");
 	public static QualifiedName DATASET_DATAMARTS = new QualifiedName("it.eng.spagobi.sdk.dataset.datamarts", "Datamarts");
