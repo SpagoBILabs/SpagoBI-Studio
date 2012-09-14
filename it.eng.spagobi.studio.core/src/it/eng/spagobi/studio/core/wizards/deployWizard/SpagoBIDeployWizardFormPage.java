@@ -90,6 +90,8 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 	IDataSet[] datasetList;		
 	DataSource[] datasourceList;		
 	Functionality functionality=null;
+	
+	String insideLabelDataset = null;
 
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployWizardFormPage.class);
 
@@ -338,25 +340,44 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		// Select dataset
 		new Label(left, SWT.NONE).setText("Dataset");
 		dataSetCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
+		String labelDatasetInside = null;
+		try{
+			labelDatasetInside = fileSelected.getPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL_INSIDE);
+		}
+		catch (Exception e) {
+			logger.warn("error in reading dataset sppecified inside template: go on anyway");
+		}
 
-		dataSetLabelIdMap=new HashMap<String, Integer>();
-		// sort the items
 		String[] datasetLabels = new String[datasetList.length];
+		dataSetLabelIdMap=new HashMap<String, Integer>();
 		for (int i = 0; i < datasetLabels.length; i++) {
 			IDataSet dataSet =datasetList[i];
 			datasetLabels[i] = dataSet.getLabel();
 			dataSetLabelIdMap.put(dataSet.getLabel(), dataSet.getId());
 		}
-		Arrays.sort(datasetLabels);
-		dataSetCombo.setItems(datasetLabels);
-		//		for (SDKDataSet dataSet : datasetList) {
-		//			dataSetCombo.add(dataSet.getLabel());
-		//			dataSetLabelIdMap.put(dataSet.getLabel(), dataSet.getId());
-		//		}
+		
+		if(labelDatasetInside == null || labelDatasetInside.equalsIgnoreCase("")){
+
+			// sort the items
+
+			Arrays.sort(datasetLabels);
+			dataSetCombo.setItems(datasetLabels);
+			//		for (SDKDataSet dataSet : datasetList) {
+			//			dataSetCombo.add(dataSet.getLabel());
+			//			dataSetLabelIdMap.put(dataSet.getLabel(), dataSet.getId());
+			//		}
 
 
-		dataSetCombo.setEnabled(false);
-
+			dataSetCombo.setEnabled(false);
+		}
+		else{
+			insideLabelDataset = labelDatasetInside;
+			String[] insideLabel = new String[]{labelDatasetInside};
+			dataSetCombo.setItems(insideLabel);
+			int indexOfLabel = dataSetCombo.indexOf(labelDatasetInside);
+			dataSetCombo.select(indexOfLabel);
+			dataSetCombo.setEnabled(false);
+			}
 
 		// Select datasource
 		new Label(left, SWT.NONE).setText("Datasource");
@@ -654,4 +675,15 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		this.dataSourceLabelIdMap = dataSourceLabelIdMap;
 	}
 
+
+	public String getInsideLabelDataset() {
+		return insideLabelDataset;
+	}
+
+
+	public void setInsideLabelDataset(String insideLabelDataset) {
+		this.insideLabelDataset = insideLabelDataset;
+	}
+
+	
 }

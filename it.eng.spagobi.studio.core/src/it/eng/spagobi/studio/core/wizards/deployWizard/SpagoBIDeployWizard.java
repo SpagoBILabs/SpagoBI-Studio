@@ -180,7 +180,8 @@ public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 				newDocument.setEngineId(engineId);		
 			}
 		}
-
+		String labelINsideDataset = formPage.getInsideLabelDataset();
+		
 		if(labelDataSet!=null){
 			Integer dataSetId=formPage.getDataSetLabelIdMap().get(labelDataSet);
 			if(dataSetId!=null){
