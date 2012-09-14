@@ -17,6 +17,7 @@ import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 import it.eng.spagobi.studio.extchart.utils.SaveChecks;
 import it.eng.spagobi.studio.utils.exceptions.SavingEditorException;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -243,6 +244,8 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 			byte[] bytes = newContent.getBytes();
 			bais = new ByteArrayInputStream(bytes);
 			file.setContents(bais, IFile.FORCE, null);
+						
+			setDatasetMetadata(file, extChart);
 
 		} 
 		catch (SavingEditorException e) {
@@ -272,6 +275,26 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 		firePropertyChange(PROP_DIRTY);
 	}
 
+	
+	public void setDatasetMetadata(IFile file, ExtChart extChart){
+		logger.debug("IN");
+		String label = extChart.getDataset().getLabel();
+		try{
+			if(label != null){
+				file.setPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL_INSIDE, label);
+				logger.debug("Set dataset with label "+label);
+			}
+			else{
+				file.setPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL_INSIDE, "");
+			}
+		}
+		catch (CoreException e) {
+			logger.error("Could not set dataset metadat property, go on anyway");
+		}
+
+		logger.debug("OUT");
+	}
+	
 	/**
 	 * Saves the multi-page editor's document as another file.
 	 * Also updates the text for page 0's tab, and updates this multi-page editor's input
