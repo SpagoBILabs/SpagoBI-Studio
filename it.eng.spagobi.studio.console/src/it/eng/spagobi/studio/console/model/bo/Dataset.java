@@ -21,50 +21,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+
+import java.util.Vector;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
-	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
+public class Dataset {
+	private Vector<DatasetElement> datasets;
+
 	/**
-	 * @return the dataset
+	 * @return the datasets
 	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
-	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public Vector<DatasetElement> getDatasets() {
+		return datasets;
 	}
 
+	/**
+	 * @param datasets the datasets to set
+	 */
+	public void setDatasets(Vector<DatasetElement> datasets) {
+		this.datasets = datasets;
+	}
 }

@@ -21,50 +21,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import java.util.Vector;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class WidgetConfigElementMultiLeds extends WidgetConfigElement {
+	private StyleMultiLeds style;
+	private Vector<Field> fields;
+
+
+	/**
+	 * @return the style
+	 */
+	public StyleMultiLeds getStyle() {
+		return style;
+	}
+
+	/**
+	 * @param style the style to set
+	 */
+	public void setStyle(StyleMultiLeds style) {
+		this.style = style;
+	}
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
 	/**
-	 * @return the dataset
+	 * @return the fields
 	 */
-	public Dataset getDataset() {
-		return dataset;
+	public Vector<Field> getFields() {
+		return fields;
 	}
 	/**
-	 * @param dataset the dataset to set
+	 * @param fields the fields to set
 	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public void setFields(Vector<Field> fields) {
+		this.fields = fields;
 	}
 
 }

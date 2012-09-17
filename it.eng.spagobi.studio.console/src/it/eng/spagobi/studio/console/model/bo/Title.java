@@ -25,46 +25,21 @@ package it.eng.spagobi.studio.console.model.bo;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
-	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
+public class Title {
+	private boolean visible;
+
 	/**
-	 * @return the dataset
+	 * @return the visible
 	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
-	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public boolean isVisible() {
+		return visible;
 	}
 
+	/**
+	 * @param visible the visible to set
+	 */
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	
 }

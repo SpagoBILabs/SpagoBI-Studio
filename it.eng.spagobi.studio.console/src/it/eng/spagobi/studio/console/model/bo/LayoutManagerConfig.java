@@ -21,50 +21,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import java.util.Vector;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class LayoutManagerConfig {
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
+	private String layout;
+	private int columnNumber;
+	private Vector<String> columnWidths;
+	
 	/**
-	 * @return the dataset
+	 * @return the layout
 	 */
-	public Dataset getDataset() {
-		return dataset;
+	public String getLayout() {
+		return layout;
 	}
 	/**
-	 * @param dataset the dataset to set
+	 * @param layout the layout to set
 	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
+	public void setLayout(String layout) {
+		this.layout = layout;
 	}
 	/**
-	 * @return the summaryPanel
+	 * @return the columnNumber
 	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
+	public int getColumnNumber() {
+		return columnNumber;
 	}
 	/**
-	 * @param summaryPanel the summaryPanel to set
+	 * @param columnNumber the columnNumber to set
 	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
+	public void setColumnNumber(int columnNumber) {
+		this.columnNumber = columnNumber;
 	}
 	/**
-	 * @return the detailPanel
+	 * @return the columnWidths
 	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
+	public Vector<String> getColumnWidths() {
+		return columnWidths;
 	}
 	/**
-	 * @param detailPanel the detailPanel to set
+	 * @param columnWidths the columnWidths to set
 	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public void setColumnWidths(Vector<String> columnWidths) {
+		this.columnWidths = columnWidths;
 	}
+	
 
 }

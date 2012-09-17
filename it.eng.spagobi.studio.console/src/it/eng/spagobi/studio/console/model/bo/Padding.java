@@ -25,46 +25,59 @@ package it.eng.spagobi.studio.console.model.bo;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class Padding {
+	private int top;
+	private int right;
+	private int bottom;
+	private int left;
+	/**
+	 * @return the top
+	 */
+	public int getTop() {
+		return top;
+	}
+	/**
+	 * @param top the top to set
+	 */
+	public void setTop(int top) {
+		this.top = top;
+	}
+	/**
+	 * @return the right
+	 */
+	public int getRight() {
+		return right;
+	}
+	/**
+	 * @param right the right to set
+	 */
+	public void setRight(int right) {
+		this.right = right;
+	}
+	/**
+	 * @return the bottom
+	 */
+	public int getBottom() {
+		return bottom;
+	}
+	/**
+	 * @param bottom the bottom to set
+	 */
+	public void setBottom(int bottom) {
+		this.bottom = bottom;
+	}
+	/**
+	 * @return the left
+	 */
+	public int getLeft() {
+		return left;
+	}
+	/**
+	 * @param left the left to set
+	 */
+	public void setLeft(int left) {
+		this.left = left;
+	}
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
-	/**
-	 * @return the dataset
-	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
-	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
-	}
 
 }

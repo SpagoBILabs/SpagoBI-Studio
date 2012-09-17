@@ -25,46 +25,46 @@ package it.eng.spagobi.studio.console.model.bo;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class Value {
+	private String align;
+	private String valign;
+	private Font font;
+	/**
+	 * @return the align
+	 */
+	public String getAlign() {
+		return align;
+	}
+	/**
+	 * @param align the align to set
+	 */
+	public void setAlign(String align) {
+		this.align = align;
+	}
+	/**
+	 * @return the valign
+	 */
+	public String getValign() {
+		return valign;
+	}
+	/**
+	 * @param valign the valign to set
+	 */
+	public void setValign(String valign) {
+		this.valign = valign;
+	}
+	/**
+	 * @return the font
+	 */
+	public Font getFont() {
+		return font;
+	}
+	/**
+	 * @param font the font to set
+	 */
+	public void setFont(Font font) {
+		this.font = font;
+	}
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
-	/**
-	 * @return the dataset
-	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
-	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
-	}
-
+	
 }

@@ -21,50 +21,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import java.util.Vector;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
-	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
+public class StyleMultiLeds {
+	private Border border;
+	private Title title;
+	private Padding padding;
+	private Gauge gauge;
 	/**
-	 * @return the dataset
+	 * @return the border
 	 */
-	public Dataset getDataset() {
-		return dataset;
+	public Border getBorder() {
+		return border;
 	}
 	/**
-	 * @param dataset the dataset to set
+	 * @param border the border to set
 	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
+	public void setBorder(Border border) {
+		this.border = border;
 	}
 	/**
-	 * @return the summaryPanel
+	 * @return the title
 	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
+	public Title getTitle() {
+		return title;
 	}
 	/**
-	 * @param summaryPanel the summaryPanel to set
+	 * @param title the title to set
 	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
+	public void setTitle(Title title) {
+		this.title = title;
 	}
 	/**
-	 * @return the detailPanel
+	 * @return the padding
 	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
+	public Padding getPadding() {
+		return padding;
 	}
 	/**
-	 * @param detailPanel the detailPanel to set
+	 * @param padding the padding to set
 	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public void setPadding(Padding padding) {
+		this.padding = padding;
+	}
+	/**
+	 * @return the gauge
+	 */
+	public Gauge getGauge() {
+		return gauge;
+	}
+	/**
+	 * @param gauge the gauge to set
+	 */
+	public void setGauge(Gauge gauge) {
+		this.gauge = gauge;
 	}
 
+	
 }

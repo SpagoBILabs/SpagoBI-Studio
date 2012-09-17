@@ -25,46 +25,45 @@ package it.eng.spagobi.studio.console.model.bo;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class StyleSemaphore {
+	private TitleSemaphore title;
+	private Header header;
+	private HeaderValue headerValue;
+	/**
+	 * @return the title
+	 */
+	public TitleSemaphore getTitle() {
+		return title;
+	}
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(TitleSemaphore title) {
+		this.title = title;
+	}
+	/**
+	 * @return the header
+	 */
+	public Header getHeader() {
+		return header;
+	}
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(Header header) {
+		this.header = header;
+	}
+	/**
+	 * @return the headerValue
+	 */
+	public HeaderValue getHeaderValue() {
+		return headerValue;
+	}
+	/**
+	 * @param headerValue the headerValue to set
+	 */
+	public void setHeaderValue(HeaderValue headerValue) {
+		this.headerValue = headerValue;
+	}
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
-	/**
-	 * @return the dataset
-	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
-	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
-	}
-
 }

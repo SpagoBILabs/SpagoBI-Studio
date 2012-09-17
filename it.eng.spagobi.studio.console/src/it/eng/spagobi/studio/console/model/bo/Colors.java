@@ -25,46 +25,47 @@ package it.eng.spagobi.studio.console.model.bo;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
-	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
-	/**
-	 * @return the dataset
-	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
-	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
-	}
+public class Colors {
 
+	private String firstInterval;
+	private String secondInterval;
+	private String thirdInterval;
+	/**
+	 * @return the firstInterval
+	 */
+	public String getFirstInterval() {
+		return firstInterval;
+	}
+	/**
+	 * @param firstInterval the firstInterval to set
+	 */
+	public void setFirstInterval(String firstInterval) {
+		this.firstInterval = firstInterval;
+	}
+	/**
+	 * @return the secondInterval
+	 */
+	public String getSecondInterval() {
+		return secondInterval;
+	}
+	/**
+	 * @param secondInterval the secondInterval to set
+	 */
+	public void setSecondInterval(String secondInterval) {
+		this.secondInterval = secondInterval;
+	}
+	/**
+	 * @return the thirdInterval
+	 */
+	public String getThirdInterval() {
+		return thirdInterval;
+	}
+	/**
+	 * @param thirdInterval the thirdInterval to set
+	 */
+	public void setThirdInterval(String thirdInterval) {
+		this.thirdInterval = thirdInterval;
+	}
+	
+	
 }

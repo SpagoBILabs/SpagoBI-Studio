@@ -2,14 +2,23 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SpagoBI Studio Console Designer
 Bundle-SymbolicName: it.eng.spagobi.studio.console; singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 3.5.0.qualifier
 Bundle-Activator: it.eng.spagobi.studio.console.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.core.resources,
  org.eclipse.ui.editors,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ it.eng.spagobi.studio.utils;bundle-version="3.4.0",
+ it.eng.spagobi.server.services.api;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.slf4j
+Bundle-ClassPath: lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
+ lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar,
+ lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
+ lib/org.slf4j.api_1.5.11.v20100519-1910.jar,
+ .
+Export-Package: it.eng.spagobi.studio.console.wizard,
+ it.eng.spagobi.studio.console.wizard.pages

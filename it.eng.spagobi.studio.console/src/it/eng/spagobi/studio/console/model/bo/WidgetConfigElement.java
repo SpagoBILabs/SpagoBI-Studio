@@ -25,46 +25,37 @@ package it.eng.spagobi.studio.console.model.bo;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class WidgetConfigElement {
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
+	private String type;
+	private String title;
+	
+	//add Styles in future
+	
+	
 	/**
-	 * @return the dataset
+	 * @return the type
 	 */
-	public Dataset getDataset() {
-		return dataset;
+	public String getType() {
+		return type;
 	}
 	/**
-	 * @param dataset the dataset to set
+	 * @param type the type to set
 	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
+	public void setType(String type) {
+		this.type = type;
 	}
 	/**
-	 * @return the summaryPanel
+	 * @return the title
 	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
+	public String getTitle() {
+		return title;
 	}
 	/**
-	 * @param summaryPanel the summaryPanel to set
+	 * @param title the title to set
 	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

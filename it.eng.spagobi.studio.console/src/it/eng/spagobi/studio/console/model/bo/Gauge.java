@@ -25,46 +25,73 @@ package it.eng.spagobi.studio.console.model.bo;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class Gauge {
+	private Padding padding;
+	private Colors colors;
+	private Led led;
+	private TitleGauge title;
+	private Value value;
+	/**
+	 * @return the padding
+	 */
+	public Padding getPadding() {
+		return padding;
+	}
+	/**
+	 * @param padding the padding to set
+	 */
+	public void setPadding(Padding padding) {
+		this.padding = padding;
+	}
+	/**
+	 * @return the colors
+	 */
+	public Colors getColors() {
+		return colors;
+	}
+	/**
+	 * @param colors the colors to set
+	 */
+	public void setColors(Colors colors) {
+		this.colors = colors;
+	}
+	/**
+	 * @return the led
+	 */
+	public Led getLed() {
+		return led;
+	}
+	/**
+	 * @param led the led to set
+	 */
+	public void setLed(Led led) {
+		this.led = led;
+	}
+	/**
+	 * @return the title
+	 */
+	public TitleGauge getTitle() {
+		return title;
+	}
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(TitleGauge title) {
+		this.title = title;
+	}
+	/**
+	 * @return the value
+	 */
+	public Value getValue() {
+		return value;
+	}
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(Value value) {
+		this.value = value;
+	}
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
-	/**
-	 * @return the dataset
-	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
-	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
-	}
-	/**
-	 * @return the summaryPanel
-	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
-	}
-	/**
-	 * @param summaryPanel the summaryPanel to set
-	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
-	}
-	/**
-	 * @return the detailPanel
-	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
-	}
-	/**
-	 * @param detailPanel the detailPanel to set
-	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
-	}
+	
 
 }

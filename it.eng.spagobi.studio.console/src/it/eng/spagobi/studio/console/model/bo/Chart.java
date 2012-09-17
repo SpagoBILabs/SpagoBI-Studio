@@ -21,50 +21,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import java.util.Vector;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class ConsoleTemplateModel {
+public class Chart {
 	
-	private Dataset dataset;
-	private SummaryPanel summaryPanel;
-	private DetailPanel detailPanel;
+	private String dataset;
+	private int width;
+	private int height;
+	private Vector<WidgetConfigElement> widgetConfig;
 	/**
 	 * @return the dataset
 	 */
-	public Dataset getDataset() {
+	public String getDataset() {
 		return dataset;
 	}
 	/**
 	 * @param dataset the dataset to set
 	 */
-	public void setDataset(Dataset dataset) {
+	public void setDataset(String dataset) {
 		this.dataset = dataset;
 	}
 	/**
-	 * @return the summaryPanel
+	 * @return the width
 	 */
-	public SummaryPanel getSummaryPanel() {
-		return summaryPanel;
+	public int getWidth() {
+		return width;
 	}
 	/**
-	 * @param summaryPanel the summaryPanel to set
+	 * @param width the width to set
 	 */
-	public void setSummaryPanel(SummaryPanel summaryPanel) {
-		this.summaryPanel = summaryPanel;
+	public void setWidth(int width) {
+		this.width = width;
 	}
 	/**
-	 * @return the detailPanel
+	 * @return the height
 	 */
-	public DetailPanel getDetailPanel() {
-		return detailPanel;
+	public int getHeight() {
+		return height;
 	}
 	/**
-	 * @param detailPanel the detailPanel to set
+	 * @param height the height to set
 	 */
-	public void setDetailPanel(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public void setHeight(int height) {
+		this.height = height;
 	}
+	/**
+	 * @return the widgetConfig
+	 */
+	public Vector<WidgetConfigElement> getWidgetConfig() {
+		return widgetConfig;
+	}
+	/**
+	 * @param widgetConfig the widgetConfig to set
+	 */
+	public void setWidgetConfig(Vector<WidgetConfigElement> widgetConfig) {
+		this.widgetConfig = widgetConfig;
+	}
+	
 
 }
