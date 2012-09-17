@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="SpagoBI Studio Console Designer "
+            extensions="console"
+            icon="icons/sample.gif"
+            contributorClass="it.eng.spagobi.studio.console.editors.ConsoleEditorContributor"
+            class="it.eng.spagobi.studio.console.editors.ConsoleEditor"
+            id="it.eng.spagobi.studio.console.editors.ConsoleEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Console Wizards"
+            id="it.eng.spagobi.studio.console">
+      </category>
+      <wizard
+            name="Console Editor file"
+            icon="icons/sample.gif"
+            category="it.eng.spagobi.studio.console"
+            class="it.eng.spagobi.studio.console.wizards.NewConsoleWizard"
+            id="it.eng.spagobi.studio.console.wizards.NewConsoleWizard">
+      </wizard>
+   </extension>
+
+</plugin>
