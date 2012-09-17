@@ -26,7 +26,7 @@ Bundle-ClassPath: .,
  lib/logback/org.slf4j.api_1.5.11.v20100519-1910.jar,
  lib/commons-logging-api-1.1.jar,
  lib/log4j-1.2.9.jar,
- lib/json.jar,
+ lib/sbi.utils.json-3.5.1.jar,
  lib/jackson-annotations-2.0.2.jar,
  lib/jackson-core-2.0.2.jar,
  lib/jackson-databind-2.0.2.jar
