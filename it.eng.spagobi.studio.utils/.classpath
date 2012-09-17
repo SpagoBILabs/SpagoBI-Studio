@@ -23,7 +23,7 @@
 	<classpathentry kind="lib" path="lib/mail-1.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/saaj.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="lib/json.jar"/>
+	<classpathentry kind="lib" path="lib/sbi.utils.json-3.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/spagobi-utils-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.0.2.jar"/>
