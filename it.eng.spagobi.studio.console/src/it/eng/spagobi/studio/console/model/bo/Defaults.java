@@ -21,28 +21,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
-import java.util.Vector;
-
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
-
+public class Defaults {
+	private String operator;
+	private String operand;
 	/**
-	 * @return the pages
+	 * @return the operator
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public String getOperator() {
+		return operator;
 	}
-
 	/**
-	 * @param pages the pages to set
+	 * @param operator the operator to set
 	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+	/**
+	 * @return the operand
+	 */
+	public String getOperand() {
+		return operand;
+	}
+	/**
+	 * @param operand the operand to set
+	 */
+	public void setOperand(String operand) {
+		this.operand = operand;
 	}
 	
 }

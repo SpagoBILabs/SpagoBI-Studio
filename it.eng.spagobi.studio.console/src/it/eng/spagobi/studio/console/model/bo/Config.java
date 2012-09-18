@@ -21,28 +21,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
-import java.util.Vector;
-
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
-
+public class Config {
+	private String target;
+	private DocumentConfig document;
 	/**
-	 * @return the pages
+	 * @return the target
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public String getTarget() {
+		return target;
 	}
-
 	/**
-	 * @param pages the pages to set
+	 * @param target the target to set
 	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
+	public void setTarget(String target) {
+		this.target = target;
 	}
+	/**
+	 * @return the document
+	 */
+	public DocumentConfig getDocument() {
+		return document;
+	}
+	/**
+	 * @param document the document to set
+	 */
+	public void setDocument(DocumentConfig document) {
+		this.document = document;
+	}
+	
 	
 }

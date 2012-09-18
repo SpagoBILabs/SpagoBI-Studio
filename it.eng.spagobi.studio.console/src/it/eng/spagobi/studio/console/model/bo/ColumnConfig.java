@@ -21,28 +21,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
-import java.util.Vector;
-
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
-
+public class ColumnConfig {
+	private int width;
+	private String header;
+	private String type;
+	private String headerType;
 	/**
-	 * @return the pages
+	 * @return the width
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public int getWidth() {
+		return width;
 	}
-
 	/**
-	 * @param pages the pages to set
+	 * @param width the width to set
 	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
+	public void setWidth(int width) {
+		this.width = width;
 	}
+	/**
+	 * @return the header
+	 */
+	public String getHeader() {
+		return header;
+	}
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(String header) {
+		this.header = header;
+	}
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+	/**
+	 * @return the headerType
+	 */
+	public String getHeaderType() {
+		return headerType;
+	}
+	/**
+	 * @param headerType the headerType to set
+	 */
+	public void setHeaderType(String headerType) {
+		this.headerType = headerType;
+	}
+	
+	
 	
 }

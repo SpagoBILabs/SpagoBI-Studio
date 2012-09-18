@@ -21,28 +21,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
-import java.util.Vector;
-
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
-
+public class InlineChartBar extends InlineChart {
+	private String column;
+	private String color;
+	private int totValue;
 	/**
-	 * @return the pages
+	 * @return the column
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public String getColumn() {
+		return column;
 	}
-
 	/**
-	 * @param pages the pages to set
+	 * @param column the column to set
 	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
+	public void setColumn(String column) {
+		this.column = column;
+	}
+	/**
+	 * @return the color
+	 */
+	public String getColor() {
+		return color;
+	}
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(String color) {
+		this.color = color;
+	}
+	/**
+	 * @return the totValue
+	 */
+	public int getTotValue() {
+		return totValue;
+	}
+	/**
+	 * @param totValue the totValue to set
+	 */
+	public void setTotValue(int totValue) {
+		this.totValue = totValue;
 	}
 	
 }

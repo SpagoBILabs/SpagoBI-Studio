@@ -27,22 +27,22 @@ import java.util.Vector;
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
+public class NavigationBar {
+	private Vector<DocumentNavigationBar> documents;
 
 	/**
-	 * @return the pages
+	 * @return the documents
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public Vector<DocumentNavigationBar> getDocuments() {
+		return documents;
 	}
 
 	/**
-	 * @param pages the pages to set
+	 * @param documents the documents to set
 	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
+	public void setDocuments(Vector<DocumentNavigationBar> documents) {
+		this.documents = documents;
 	}
 	
+
 }

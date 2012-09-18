@@ -21,28 +21,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
-import java.util.Vector;
-
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
-
+public class DynamicParameter {
+	private String key;
+	private String value;
+	private String scope;
 	/**
-	 * @return the pages
+	 * @return the key
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public String getKey() {
+		return key;
+	}
+	/**
+	 * @param key the key to set
+	 */
+	public void setKey(String key) {
+		this.key = key;
+	}
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
+	/**
+	 * @return the scope
+	 */
+	public String getScope() {
+		return scope;
+	}
+	/**
+	 * @param scope the scope to set
+	 */
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 
-	/**
-	 * @param pages the pages to set
-	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
-	}
-	
 }

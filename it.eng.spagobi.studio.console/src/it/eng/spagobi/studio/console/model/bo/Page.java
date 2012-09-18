@@ -21,28 +21,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
-import java.util.Vector;
-
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
-
+public class Page {
+	private String title;
+	private String msg;
+	private NavigationBar navigationBar;
+	private TablePage table;
 	/**
-	 * @return the pages
+	 * @return the title
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public String getTitle() {
+		return title;
 	}
-
 	/**
-	 * @param pages the pages to set
+	 * @param title the title to set
 	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	/**
+	 * @return the msg
+	 */
+	public String getMsg() {
+		return msg;
+	}
+	/**
+	 * @param msg the msg to set
+	 */
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	/**
+	 * @return the navigationBar
+	 */
+	public NavigationBar getNavigationBar() {
+		return navigationBar;
+	}
+	/**
+	 * @param navigationBar the navigationBar to set
+	 */
+	public void setNavigationBar(NavigationBar navigationBar) {
+		this.navigationBar = navigationBar;
+	}
+	/**
+	 * @return the table
+	 */
+	public TablePage getTable() {
+		return table;
+	}
+	/**
+	 * @param table the table to set
+	 */
+	public void setTable(TablePage table) {
+		this.table = table;
 	}
 	
+	
+
 }

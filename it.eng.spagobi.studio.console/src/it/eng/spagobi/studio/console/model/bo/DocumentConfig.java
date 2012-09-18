@@ -21,28 +21,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import java.util.Map;
 import java.util.Vector;
 
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class DetailPanel {
-
-	private Vector<Page> pages;
-
+public class DocumentConfig {
+	private String label;
+	private Map<String,String> staticParams;
+	private Vector<DynamicParameter> dynamicParams;
 	/**
-	 * @return the pages
+	 * @return the label
 	 */
-	public Vector<Page> getPages() {
-		return pages;
+	public String getLabel() {
+		return label;
 	}
-
 	/**
-	 * @param pages the pages to set
+	 * @param label the label to set
 	 */
-	public void setPages(Vector<Page> pages) {
-		this.pages = pages;
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	/**
+	 * @return the staticParams
+	 */
+	public Map<String, String> getStaticParams() {
+		return staticParams;
+	}
+	/**
+	 * @param staticParams the staticParams to set
+	 */
+	public void setStaticParams(Map<String, String> staticParams) {
+		this.staticParams = staticParams;
+	}
+	/**
+	 * @return the dynamicParams
+	 */
+	public Vector<DynamicParameter> getDynamicParams() {
+		return dynamicParams;
+	}
+	/**
+	 * @param dynamicParams the dynamicParams to set
+	 */
+	public void setDynamicParams(Vector<DynamicParameter> dynamicParams) {
+		this.dynamicParams = dynamicParams;
 	}
 	
 }
