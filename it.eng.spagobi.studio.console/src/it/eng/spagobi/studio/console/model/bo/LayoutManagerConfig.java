@@ -61,6 +61,8 @@ public class LayoutManagerConfig {
 	 * @return the columnWidths
 	 */
 	public Vector<String> getColumnWidths() {
+		if(columnWidths == null) columnWidths = new Vector<String>();
+
 		return columnWidths;
 	}
 	/**

@@ -88,6 +88,27 @@ public class JsonTemplateGenerator {
 
 		example.getDataset().add(dataset_one);
 		example.getDataset().add(dataset_two);
+		
+		SummaryPanel summaryPanel = new SummaryPanel();
+		example.setSummaryPanel(summaryPanel);
+		
+		LayoutManagerConfig layoutManagerConfig = new LayoutManagerConfig();
+		summaryPanel.setLayoutConfig(layoutManagerConfig);
+		
+		layoutManagerConfig.getColumnWidths().add(".25");
+		layoutManagerConfig.getColumnWidths().add(".25");
+		layoutManagerConfig.getColumnWidths().add(".25");
+		layoutManagerConfig.getColumnWidths().add(".25");
+
+		
+		
+		Chart chart = new Chart();
+		Chart chart_two = new Chart();
+
+		summaryPanel.getCharts().add(chart);
+		summaryPanel.getCharts().add(chart_two);
+
+		
 
 		try {
 			System.out.println(transformToJson(example));

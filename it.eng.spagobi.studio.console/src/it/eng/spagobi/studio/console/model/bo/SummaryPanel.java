@@ -101,6 +101,8 @@ public class SummaryPanel {
 	 * @return the charts
 	 */
 	public Vector<Chart> getCharts() {
+		if(charts == null) charts = new Vector<Chart>();
+
 		return charts;
 	}
 	/**
