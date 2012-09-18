@@ -21,26 +21,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+
+import java.util.Vector;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
 public class ConsoleTemplateModel {
 	
-	private Dataset dataset;
+	private Vector<DatasetElement> dataset;
 	private SummaryPanel summaryPanel;
 	private DetailPanel detailPanel;
-	/**
-	 * @return the dataset
-	 */
-	public Dataset getDataset() {
-		return dataset;
-	}
+
 	/**
 	 * @param dataset the dataset to set
 	 */
-	public void setDataset(Dataset dataset) {
+	public void setDataset(Vector<DatasetElement> dataset) {
 		this.dataset = dataset;
+	}
+	/**
+	 * @return the dataset
+	 */
+	public Vector<DatasetElement> getDataset() {
+		if(dataset == null) dataset = new Vector<DatasetElement>();
+		return dataset;
 	}
 	/**
 	 * @return the summaryPanel
