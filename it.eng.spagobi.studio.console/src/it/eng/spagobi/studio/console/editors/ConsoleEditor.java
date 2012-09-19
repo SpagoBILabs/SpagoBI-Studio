@@ -5,19 +5,25 @@ import it.eng.spagobi.studio.console.editors.pages.DatasetPage;
 import it.eng.spagobi.studio.console.editors.pages.DetailPanelPage;
 import it.eng.spagobi.studio.console.editors.pages.SummaryPanelPage;
 import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
+import it.eng.spagobi.studio.console.model.bo.JsonTemplateGenerator;
+import it.eng.spagobi.studio.utils.exceptions.SavingEditorException;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.StringTokenizer;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,11 +52,15 @@ public class ConsoleEditor extends MultiPageEditorPart implements IResourceChang
 	protected ConsoleTemplateModel consoleTemplateModel = null;
 	
 	String projectname = null;
+	protected boolean isDirty = false;
+
+	IFile file;
 
 	
 	private DatasetPage datasetPage;
 	private SummaryPanelPage summaryPanelPage;
 	private DetailPanelPage detailPanelPage;
+	
 
 	/**
 	 * Creates a multi-page editor example.
@@ -126,7 +136,54 @@ public class ConsoleEditor extends MultiPageEditorPart implements IResourceChang
 	 * Saves the multi-page editor's document.
 	 */
 	public void doSave(IProgressMonitor monitor) {
-		getEditor(0).doSave(monitor);
+		logger.debug("IN");
+		
+		// checks on chart before saving
+		//SaveChecks saveChecks =new SaveChecks();
+		//saveChecks.checksBeforeSave(extChart, this);
+		
+		ByteArrayInputStream bais = null;
+		// reload file
+		try {
+			FileEditorInput fei = (FileEditorInput) getEditorInput();
+			IFile file = fei.getFile();
+			String newContent =  JsonTemplateGenerator.transformToJson(consoleTemplateModel);
+			byte[] bytes = newContent.getBytes();
+			bais = new ByteArrayInputStream(bytes);
+			file.setContents(bais, IFile.FORCE, null);
+						
+
+		} 
+		catch (SavingEditorException e) {
+			logger.error("Error while Saving console template: \n reason is "+e.getSavingMessage(),e);
+			MessageDialog.openWarning(datasetPage.getShell(), "Cannot save chart:", e.getSavingMessage());
+		}
+		catch (Exception e2) {
+			logger.error("Error while Saving Console Template File",e2);
+			MessageDialog.openError(datasetPage.getShell(), "Error during saving", e2.getMessage());
+		}
+
+		finally { 
+			if (bais != null)
+				try {
+					bais.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		setIsDirty(false);
+		logger.debug("OUT");
+	}
+
+	public void setIsDirty(boolean isDirty) {
+		this.isDirty = isDirty;
+		firePropertyChange(PROP_DIRTY);
+	}
+	
+	@Override
+	public boolean isDirty() {
+		return isDirty;
 	}
 	/**
 	 * Saves the multi-page editor's document as another file.
@@ -150,31 +207,95 @@ public class ConsoleEditor extends MultiPageEditorPart implements IResourceChang
 	 * The <code>MultiPageEditorExample</code> implementation of this method
 	 * checks that the input is an instance of <code>IFileEditorInput</code>.
 	 */
-	public void init(IEditorSite site, IEditorInput editorInput)
+	public void init(IEditorSite site, IEditorInput input)
 		throws PartInitException {
-		if (!(editorInput instanceof IFileEditorInput))
-			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
-		super.init(site, editorInput);
+		this.setPartName(input.getName());
+		logger.debug("Start Editor Initialization");		
+		FileEditorInput fei = (FileEditorInput) input;
+		file = fei.getFile();
+		projectname = file.getProject().getName();
+
+		try {
+			// Create the model of the Console Template that will store informations
+			consoleTemplateModel = JsonTemplateGenerator.readJson(file); 
+
+		} catch (Exception e) {
+			logger.error("Error during template reading "+e.getMessage(),e);
+			MessageDialog.openError(site.getShell(), "Error", "Error during template reading "+e.getMessage());
+			return;
+		}
+
+		setInput(input);
+		setSite(site);
 	}
 	/* (non-Javadoc)
 	 * Method declared on IEditorPart.
 	 */
 	public boolean isSaveAsAllowed() {
-		return true;
+		return false;
 	}
-	/**
-	 * Calculates the contents of page 2 when the it is activated.
-	 */
-	protected void pageChange(int newPageIndex) {
-		super.pageChange(newPageIndex);
-		if (newPageIndex == 2) {
-		}
-	}
+
 	/**
 	 * Closes all project files on project close.
 	 */
 	public void resourceChanged(final IResourceChangeEvent event){
 
+	}
+
+	/**
+	 * @return the consoleTemplateModel
+	 */
+	public ConsoleTemplateModel getConsoleTemplateModel() {
+		return consoleTemplateModel;
+	}
+
+	/**
+	 * @param consoleTemplateModel the consoleTemplateModel to set
+	 */
+	public void setConsoleTemplateModel(ConsoleTemplateModel consoleTemplateModel) {
+		this.consoleTemplateModel = consoleTemplateModel;
+	}
+
+	/**
+	 * @return the datasetPage
+	 */
+	public DatasetPage getDatasetPage() {
+		return datasetPage;
+	}
+
+	/**
+	 * @param datasetPage the datasetPage to set
+	 */
+	public void setDatasetPage(DatasetPage datasetPage) {
+		this.datasetPage = datasetPage;
+	}
+
+	/**
+	 * @return the summaryPanelPage
+	 */
+	public SummaryPanelPage getSummaryPanelPage() {
+		return summaryPanelPage;
+	}
+
+	/**
+	 * @param summaryPanelPage the summaryPanelPage to set
+	 */
+	public void setSummaryPanelPage(SummaryPanelPage summaryPanelPage) {
+		this.summaryPanelPage = summaryPanelPage;
+	}
+
+	/**
+	 * @return the detailPanelPage
+	 */
+	public DetailPanelPage getDetailPanelPage() {
+		return detailPanelPage;
+	}
+
+	/**
+	 * @param detailPanelPage the detailPanelPage to set
+	 */
+	public void setDetailPanelPage(DetailPanelPage detailPanelPage) {
+		this.detailPanelPage = detailPanelPage;
 	}
 
 

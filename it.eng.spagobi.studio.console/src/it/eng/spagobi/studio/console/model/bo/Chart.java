@@ -32,7 +32,7 @@ public class Chart {
 	private String dataset;
 	private int width;
 	private int height;
-	private Vector<WidgetConfigElement> widgetConfig;
+	private WidgetConfigElement widgetConfig;
 	/**
 	 * @return the dataset
 	 */
@@ -72,15 +72,16 @@ public class Chart {
 	/**
 	 * @return the widgetConfig
 	 */
-	public Vector<WidgetConfigElement> getWidgetConfig() {
+	public WidgetConfigElement getWidgetConfig() {
 		return widgetConfig;
 	}
 	/**
 	 * @param widgetConfig the widgetConfig to set
 	 */
-	public void setWidgetConfig(Vector<WidgetConfigElement> widgetConfig) {
+	public void setWidgetConfig(WidgetConfigElement widgetConfig) {
 		this.widgetConfig = widgetConfig;
 	}
+
 	
 
 }

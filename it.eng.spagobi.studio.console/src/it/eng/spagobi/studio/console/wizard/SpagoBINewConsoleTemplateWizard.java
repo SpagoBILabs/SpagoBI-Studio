@@ -11,6 +11,15 @@ package it.eng.spagobi.studio.console.wizard;
 
 
 import it.eng.spagobi.studio.console.Activator;
+import it.eng.spagobi.studio.console.model.bo.Chart;
+import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
+import it.eng.spagobi.studio.console.model.bo.DatasetElement;
+import it.eng.spagobi.studio.console.model.bo.JsonTemplateGenerator;
+import it.eng.spagobi.studio.console.model.bo.LayoutManagerConfig;
+import it.eng.spagobi.studio.console.model.bo.SummaryPanel;
+import it.eng.spagobi.studio.console.model.bo.WidgetConfigElement;
+import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementLiveLine;
+import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementSemaphore;
 import it.eng.spagobi.studio.console.wizard.pages.NewConsoleTemplateWizardPage;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 import it.eng.spagobi.studio.utils.wizard.AbstractSpagoBIDocumentWizard;
@@ -96,18 +105,13 @@ public class SpagoBINewConsoleTemplateWizard extends AbstractSpagoBIDocumentWiza
 		IPath pathFolder = folderSel.getProjectRelativePath();
 		IPath pathNewFile = pathFolder.append(chartFileName + "." + SpagoBIStudioConstants.CONSOLE_TEMPLATE_EXTENSION);
 		IFile newFile = project.getFile(pathNewFile);
-		//Parte di serializzazione del template su file
-
-		/*
+		//Serialize template on file
 		try {
-			
-			ExtChart extChart = new ExtChart();
-			extChart.setType(typeSelected);
-			String toWrite = XmlTemplateGenerator.transformToXml(extChart);			
+			ConsoleTemplateModel consoleTemplateModel = new ConsoleTemplateModel();
+			String toWrite = JsonTemplateGenerator.transformToJson(consoleTemplateModel);
 			byte[] bytes=toWrite.getBytes();
 			InputStream inputStream=new ByteArrayInputStream(bytes);
 			newFile.create(inputStream, true, null);
-			
 		} catch (CoreException e1) {
 			logger.error("Error while creating file", e1);
 			MessageDialog.openError(newConsoleTemplateWizardPage.getShell(), 
@@ -119,7 +123,7 @@ public class SpagoBINewConsoleTemplateWizard extends AbstractSpagoBIDocumentWiza
 			MessageDialog.openError(newConsoleTemplateWizardPage.getShell(), 
 					"Error", "Error in reading the template");
 			return false;			
-		}*/
+		}
 
 
 		IWorkbench wb = PlatformUI.getWorkbench();
@@ -141,7 +145,7 @@ public class SpagoBINewConsoleTemplateWizard extends AbstractSpagoBIDocumentWiza
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("New Chart template creation");
+		setWindowTitle("New Console template creation");
 		this.workbench = workbench;
 		this.selection = selection;
 	}
@@ -149,7 +153,7 @@ public class SpagoBINewConsoleTemplateWizard extends AbstractSpagoBIDocumentWiza
 	public void addPages() {
 		logger.debug("IN");
 		super.addPages();
-		newConsoleTemplateWizardPage = new NewConsoleTemplateWizardPage(workbench, "New Ext Chart");
+		newConsoleTemplateWizardPage = new NewConsoleTemplateWizardPage(workbench, "New Console Template");
 		addPage(newConsoleTemplateWizardPage);
 
 		if(calledFromMenu == true){

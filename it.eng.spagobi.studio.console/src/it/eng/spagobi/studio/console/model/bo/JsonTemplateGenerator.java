@@ -82,6 +82,7 @@ public class JsonTemplateGenerator {
 	
 	//Only for testing
 	public static void main(String[] args) {
+		//Example fake model
 		ConsoleTemplateModel example = new ConsoleTemplateModel();
 		DatasetElement dataset_one = new DatasetElement();
 		DatasetElement dataset_two = new DatasetElement();
@@ -104,6 +105,12 @@ public class JsonTemplateGenerator {
 		
 		Chart chart = new Chart();
 		Chart chart_two = new Chart();
+		
+		WidgetConfigElement widget_one = new WidgetConfigElementLiveLine();
+		chart.setWidgetConfig(widget_one);
+		
+		WidgetConfigElement widget_two = new WidgetConfigElementSemaphore();
+		chart_two.setWidgetConfig(widget_two);
 
 		summaryPanel.getCharts().add(chart);
 		summaryPanel.getCharts().add(chart_two);

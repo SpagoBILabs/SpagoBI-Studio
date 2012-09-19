@@ -87,6 +87,8 @@ public class WidgetConfigElementLiveLine extends WidgetConfigElement {
 	 * @return the domainValues
 	 */
 	public Vector<Integer> getDomainValues() {
+		if(domainValues == null) domainValues = new Vector<Integer>();
+
 		return domainValues;
 	}
 	/**
@@ -99,6 +101,8 @@ public class WidgetConfigElementLiveLine extends WidgetConfigElement {
 	 * @return the fields
 	 */
 	public Vector<String> getFields() {
+		if(fields == null) fields = new Vector<String>();
+
 		return fields;
 	}
 	/**
