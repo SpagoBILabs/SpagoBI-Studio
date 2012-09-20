@@ -72,8 +72,14 @@ public class DatasetPage extends AbstractPage {
 	
 	private Vector<DatasetElement> datasets;
 	
-	public static final int COLUMN_NAME = 0;
-	public static final int COLUMN_TYPE = 1;
+	public static final int COLUMN_ID = 0;
+	public static final int COLUMN_LABEL = 1;
+	public static final int COLUMN_REFRESH_TIME = 2;
+	public static final int COLUMN_ROWS_LIMIT = 3;
+	public static final int COLUMN_MEMORY_PAGINATION = 4;
+
+
+
 
 	/**
 	 * @param parent
@@ -96,9 +102,9 @@ public class DatasetPage extends AbstractPage {
 		groupSelection.setLayout(new GridLayout(4, false));
 		groupSelection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
-		Label lblDatasetToVisualize = new Label(groupSelection, SWT.NONE);
-		lblDatasetToVisualize.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblDatasetToVisualize.setText("Dataset to visualize: ");
+		Label lblDatasetToSelect = new Label(groupSelection, SWT.NONE);
+		lblDatasetToSelect.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblDatasetToSelect.setText("Dataset to select: ");
 		
 		//Dataset combo
 		comboDatasets = new Combo(groupSelection, SWT.READ_ONLY);
@@ -141,7 +147,7 @@ public class DatasetPage extends AbstractPage {
 		groupDatasetTable.setText("Datasets added");
 		groupDatasetTable.setLayout(new GridLayout(1, false));
 		groupDatasetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		//TODO: Check for previously defined Dataset to show in the Table
+
 		
 		Composite compositeButtons = new Composite(groupDatasetTable, SWT.NONE);
 		compositeButtons.setLayout(new GridLayout(2, false));
@@ -181,25 +187,67 @@ public class DatasetPage extends AbstractPage {
 		
 		Button btnRemove = new Button(compositeButtons, SWT.NONE);
 		btnRemove.setText("Remove");
+		btnRemove.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				if (table.getSelectionIndex() != -1){
+					int index = table.getSelectionIndex();
+					//remove Table Item (GUI)
+					table.remove(index);					
+					//remove from set of datasets
+					datasets.remove(index);
+					
+					table.redraw();
+					
+					editor.setIsDirty(true);
+				}
+			}
+		});
 		
 		table = new Table(groupDatasetTable, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		TableColumn tblclmnType = new TableColumn(table, SWT.NONE);
-		tblclmnType.setWidth(229);
-		tblclmnType.setText("Name");
+		TableColumn tblclmnId = new TableColumn(table, SWT.NONE);
+		tblclmnId.setWidth(229);
+		tblclmnId.setText("Id");
 		
-		TableColumn tblclmnType_1 = new TableColumn(table, SWT.NONE);
-		tblclmnType_1.setWidth(178);
-		tblclmnType_1.setText("Type");		
+		TableColumn tblclmnLabel = new TableColumn(table, SWT.NONE);
+		tblclmnLabel.setWidth(178);
+		tblclmnLabel.setText("Label");	
+		
+		TableColumn tblclmnRefreshTime = new TableColumn(table, SWT.NONE);
+		tblclmnRefreshTime.setWidth(178);
+		tblclmnRefreshTime.setText("Refresh Time");	
+		
+		TableColumn tblclmnRowsLimit = new TableColumn(table, SWT.NONE);
+		tblclmnRowsLimit.setWidth(178);
+		tblclmnRowsLimit.setText("Rows Limit");	
+		
+		TableColumn tblclmnMemoryPagination = new TableColumn(table, SWT.NONE);
+		tblclmnMemoryPagination.setWidth(178);
+		tblclmnMemoryPagination.setText("Memory Pagination");	
+		
+		//Check for previously defined Dataset to show in the Table
+		populateDatasetTable();
+	}
+	
+	public void populateDatasetTable(){
+		if (!datasets.isEmpty())		{
+			for (DatasetElement datasetElement:datasets){
+				addTableItem(datasetElement);
+			}
+		}
 	}
 	
 	public void addTableItem(DatasetElement datasetElement){
 		TableItem item = new TableItem(table, SWT.NONE);
-		item.setText(COLUMN_NAME, datasetElement.getId());
-		item.setText(COLUMN_TYPE, datasetElement.getLabel());
+		item.setText(COLUMN_ID, datasetElement.getId());
+		item.setText(COLUMN_LABEL, datasetElement.getLabel());
+		item.setText(COLUMN_REFRESH_TIME, String.valueOf(datasetElement.getRefreshTime()));
+		item.setText(COLUMN_ROWS_LIMIT, String.valueOf(datasetElement.getRowsLimit()));
+		item.setText(COLUMN_MEMORY_PAGINATION, String.valueOf(datasetElement.isMemoryPagination()));
+
 		table.redraw();
 
 	}
