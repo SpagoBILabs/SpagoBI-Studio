@@ -21,16 +21,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
+
 public class DatasetElement {
 	
 	private String id;
 	private String label;
+	//do not serialize properties with default value
+	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int refreshTime;
-	private boolean memoryPagination;
+	private boolean memoryPagination = true;
+	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int rowsLimit;
 	/**
 	 * @return the id
