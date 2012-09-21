@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FontDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
@@ -297,6 +298,17 @@ public class ConsoleEditor extends MultiPageEditorPart implements IResourceChang
 	public void setDetailPanelPage(DetailPanelPage detailPanelPage) {
 		this.detailPanelPage = detailPanelPage;
 	}
+	@Override
+	protected void pageChange(int newPageIndex) {
+		super.pageChange(newPageIndex);
+		if (newPageIndex == 2){
+			//Update DatasetCombo in DetailPanelPage in case new Dataset added in DatasetPage
+			detailPanelPage.populateDatasetCombo();
+			detailPanelPage.populateDatasetLabelCombo();
+
+		}
+
+    }
 
 
 }

@@ -21,9 +21,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.editors.pages;
 
-import it.eng.spagobi.studio.console.editors.ConsoleEditor;
-import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 
+import it.eng.spagobi.server.services.api.bo.IDataSet;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
+import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
+import it.eng.spagobi.server.services.api.exception.MissingParValueException;
+import it.eng.spagobi.server.services.api.exception.NoServerException;
+import it.eng.spagobi.studio.console.editors.ConsoleEditor;
+import it.eng.spagobi.studio.console.model.bo.ColumnConfig;
+import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
+import it.eng.spagobi.studio.console.model.bo.DatasetElement;
+import it.eng.spagobi.studio.console.model.bo.DetailPanel;
+import it.eng.spagobi.studio.console.model.bo.Page;
+import it.eng.spagobi.studio.console.model.bo.TablePage;
+import it.eng.spagobi.studio.utils.bo.Dataset;
+import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.SWT;
@@ -31,12 +50,17 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.ui.PlatformUI;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
@@ -50,12 +74,24 @@ public class DetailPanelPage extends AbstractPage {
 	private Text text_1;
 	private Text text_2;
 	private Table table;
+	private Table tableColumns;
+	private Combo comboDataset;
+	private Combo comboDatasetLabel;
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(DetailPanelPage.class);
+	
+	private Page firstPage;
+	
+	public static final int COLUMN_NAME = 0;
+	public static final int COLUMN_HEADER = 1;
+
 	/**
 	 * @param parent
 	 * @param style
 	 */
 	public DetailPanelPage(Composite parent, int style) {
 		super(parent, style);
+	}
+	public void drawPage(){		
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(this, SWT.NONE);
@@ -64,8 +100,93 @@ public class DetailPanelPage extends AbstractPage {
 		Group grpPageDetail = new Group(mainComposite, SWT.NONE);
 		grpPageDetail.setText("Page Detail");
 		grpPageDetail.setLayout(new GridLayout(1, false));
-		grpPageDetail.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpPageDetail.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
+		Group grpTable = new Group(grpPageDetail, SWT.NONE);
+		grpTable.setText("Table");
+		grpTable.setLayout(new GridLayout(1, false));
+		grpTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		Composite compositeTable = new Composite(grpTable, SWT.NONE);
+		compositeTable.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		compositeTable.setBounds(0, 0, 408, 61);
+		compositeTable.setLayout(new GridLayout(4, false));
+		
+		Label lblDatasetSelection = new Label(compositeTable, SWT.NONE);
+		lblDatasetSelection.setSize(93, 15);
+		lblDatasetSelection.setText("Dataset Selection:");
+		
+		comboDataset = new Combo(compositeTable, SWT.READ_ONLY);
+		comboDataset.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+
+				int index = comboDataset.getSelectionIndex();
+				String dsLabel = comboDataset.getItem(index);
+				firstPage.getTable().setDataset(dsLabel);
+				
+				populateColumnsTable(dsLabel);
+			}
+		});
+		comboDataset.setSize(111, 23);
+		
+		Label lblDatasetlabels = new Label(compositeTable, SWT.NONE);
+		lblDatasetlabels.setSize(78, 15);
+		lblDatasetlabels.setText("Dataset Labels:");
+		
+		comboDatasetLabel = new Combo(compositeTable, SWT.READ_ONLY);
+		comboDatasetLabel.setSize(91, 23);
+		comboDatasetLabel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+
+				int index = comboDatasetLabel.getSelectionIndex();
+				String dsLabel = comboDatasetLabel.getItem(index);
+				firstPage.getTable().setDatasetLabels(dsLabel);
+				
+			}
+		});
+		
+		Label lblColumnId = new Label(compositeTable, SWT.NONE);
+		lblColumnId.setSize(60, 15);
+		lblColumnId.setText("Column ID:");
+		
+		Combo comboColumnID = new Combo(compositeTable, SWT.READ_ONLY);
+		comboColumnID.setSize(111, 23);
+		
+		Group grpColumnConfig = new Group(grpTable, SWT.NONE);
+		grpColumnConfig.setText("Column Config");
+		grpColumnConfig.setLayout(new GridLayout(1, false));
+		grpColumnConfig.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpColumnConfig.setBounds(0, 0, 70, 82);
+		
+		tableColumns = new Table(grpColumnConfig, SWT.BORDER | SWT.FULL_SELECTION);
+		tableColumns.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tableColumns.setHeaderVisible(true);
+		tableColumns.setLinesVisible(true);
+		
+		TableColumn tblclmnColumnName = new TableColumn(tableColumns, SWT.NONE);
+		tblclmnColumnName.setWidth(100);
+		tblclmnColumnName.setText("Column Name");
+		
+		TableColumn tblclmnHeader = new TableColumn(tableColumns, SWT.NONE);
+		tblclmnHeader.setWidth(55);
+		tblclmnHeader.setText("Header");
+		
+		TableColumn tblclmnWidth = new TableColumn(tableColumns, SWT.NONE);
+		tblclmnWidth.setWidth(51);
+		tblclmnWidth.setText("Width");
+		
+		TableColumn tblclmnHeaderType = new TableColumn(tableColumns, SWT.NONE);
+		tblclmnHeaderType.setWidth(86);
+		tblclmnHeaderType.setText("Header Type");
+		
+		TableColumn tblclmnType = new TableColumn(tableColumns, SWT.NONE);
+		tblclmnType.setWidth(66);
+		tblclmnType.setText("Type");
+		/*
 		Group grpNavigationBar = new Group(grpPageDetail, SWT.NONE);
 		grpNavigationBar.setText("Navigation Bar");
 		grpNavigationBar.setLayout(new GridLayout(1, false));
@@ -126,11 +247,167 @@ public class DetailPanelPage extends AbstractPage {
 		TableColumn tblclmnLabel = new TableColumn(table, SWT.NONE);
 		tblclmnLabel.setWidth(100);
 		tblclmnLabel.setText("Label");
-		// TODO Auto-generated constructor stub
+		*/		
+		
+		//check for previously defined pages or create one
+		
+		if (consoleTemplateModel.getDetailPanel() == null){
+			DetailPanel detailPanel = new DetailPanel();
+			consoleTemplateModel.setDetailPanel(detailPanel);
+		}
+		
+		Vector<Page> pages = consoleTemplateModel.getDetailPanel().getPages();
+		if (!pages.isEmpty()){
+			firstPage = pages.get(0);
+		} else {
+			Page newPage = new Page();
+			newPage.setTitle("Page title");
+			TablePage newTable = new TablePage();
+			newPage.setTable(newTable);
+			consoleTemplateModel.getDetailPanel().getPages().add(newPage);
+			firstPage = newPage;
+	
+		}
+
+		
+		populateDatasetCombo();
+		populateDatasetLabelCombo();
 	}
-	public void drawPage(){
+	
+	public void populateDatasetCombo(){
+		comboDataset.removeAll();
+		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+		if (!datasets.isEmpty() ){
+			for (DatasetElement datasetElement:datasets){
+				comboDataset.add(datasetElement.getLabel());
+			}
+		}
+	}
+	
+	public void populateDatasetLabelCombo(){
+		comboDatasetLabel.removeAll();
+		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+		if (!datasets.isEmpty() ){
+			for (DatasetElement datasetElement:datasets){
+				comboDatasetLabel.add(datasetElement.getLabel());
+			}
+		}
+	}
+	
+	public void populateColumnsTable(String dsLabel){
+		//tableColumns.clearAll();
+
+		TableItem[] childrens = tableColumns.getItems();
+		for (int i=0; i<childrens.length;i++){
+			childrens[i].dispose();
+		}
+		tableColumns.clearAll();
+
+		tableColumns.redraw();
+
+		Map<String,ColumnConfig> columnConfigSet = firstPage.getTable().getColumnConfig();
+		
+		//Check this if correct (for example when opening an existing template)
+		columnConfigSet.clear();
+		
+		IDataStoreMetadata dataStoreMetadata = retrieveDatasetMetadata(dsLabel);
+		if (dataStoreMetadata != null){
+			for (int i = 0; i < dataStoreMetadata.getFieldsMetadata().length; i++) {
+				IDataStoreMetadataField dsmf = dataStoreMetadata.getFieldsMetadata()[i];
+				//create Table Columns in object Model
+				ColumnConfig column = new ColumnConfig();
+				column.setHeader(dsmf.getName());
+				columnConfigSet.put(dsmf.getName(), column);
+				//add Table Item to Columns Table (GUI)
+				createTableItem(dsmf.getName(),column);
+			}
+		}
+	}
+	
+	public void createTableItem(String columnName, ColumnConfig column ){
+		TableItem item = new TableItem(tableColumns, SWT.NONE);
+		item.setText(COLUMN_NAME, columnName);
+		item.setText(COLUMN_HEADER, column.getHeader());
+
+		tableColumns.redraw();
 		
 	}
+	
+	private IDataStoreMetadata retrieveDatasetMetadata(String dsLabel) {
+		logger.debug("IN");
+		try {
+			logger.debug("retrieve metadata for dataset with label "+dsLabel);
+			SpagoBIServerObjectsFactory sbso= null;
+
+			try{
+				sbso =new SpagoBIServerObjectsFactory(projectName);
+			}catch (NoActiveServerException e1) {
+				logger.error("No active server found",e1);
+				return null;
+			}
+			
+			// get the dataset
+			HashMap<String, it.eng.spagobi.studio.utils.bo.Dataset> datasetInfos;
+			datasetInfos = retrieveDatasetList();
+
+			it.eng.spagobi.studio.utils.bo.Dataset dataset = datasetInfos.get(dsLabel);
+			
+			IDataStoreMetadata dataStoreMetadata = sbso.getServerDatasets().getDataStoreMetadata(dataset.getId());
+			HashMap<String, IDataStoreMetadata> datasetMetadataInfos;
+
+			
+			if (dataStoreMetadata != null) {
+				return dataStoreMetadata;
+			} else {
+				logger.warn("Dataset returned no metadata");
+				MessageDialog.openWarning(this.getShell(), "Warning", "Dataset with label = " + dsLabel + " returned no metadata: test it on server to have metadata avalaible");
+			}
+		} catch (MissingParValueException e2) {
+			logger.error("Could not execute dataset with label = "+ dsLabel + " due to parameter lack: execute dataset test in server to retrieve metadata", e2);
+			MessageDialog.openError(this.getShell(), "Error",
+					"Could not execute dataset with label = "+dsLabel+ " due to parameter lack: execute dataset test in server to retrieve metadata");
+		} catch (NoServerException e1) {
+			logger.error("Error No comunciation with server retrieving dataset with label = "+ dsLabel + " metadata", e1);
+			MessageDialog.openError(this.getShell(), "Error", "No comunciation with server retrieving dataset with label = "+ dsLabel + " metadata");
+		}
+		logger.debug("OUT");
+		return null;
+
+
+	}	
+	
+	public HashMap<String, it.eng.spagobi.studio.utils.bo.Dataset> retrieveDatasetList(){
+		logger.debug("IN");
+		HashMap<String, it.eng.spagobi.studio.utils.bo.Dataset> datasetInfosPar = null;
+		try{
+			SpagoBIServerObjectsFactory proxyServerObjects = null;
+			proxyServerObjects = new SpagoBIServerObjectsFactory(projectName);
+			//IDataSet[] dataSets = proxyServerObjects.getServerDatasets().getDataSetList();
+			Vector<IDataSet> datasetVector = proxyServerObjects.getServerDatasets().getAllDatasets();
+			datasetInfosPar = new HashMap<String, it.eng.spagobi.studio.utils.bo.Dataset>();
+			for (Iterator iterator = datasetVector.iterator(); iterator.hasNext();) {
+				it.eng.spagobi.studio.utils.bo.Dataset dataset = (it.eng.spagobi.studio.utils.bo.Dataset) iterator.next();
+				datasetInfosPar.put(dataset.getLabel(), dataset);
+			}
+			logger.debug("Retrieved "+datasetInfosPar.size()+" datasets");
+		}
+		catch (NoActiveServerException e1) {
+			logger.error("No active server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "No active server found");	
+			return null;
+		}
+		catch (Exception e1) {
+			logger.error("Not working server found", e1);			
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Error", "Not working server found");	
+			return null;
+		}
+		logger.debug("OUT");
+		return datasetInfosPar;
+	}
+	
+	
 	public ConsoleEditor getEditor() {
 		return editor;
 	}

@@ -21,45 +21,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.editors.pages;
 
-import it.eng.spagobi.studio.console.editors.ConsoleEditor;
-import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
-public class SummaryPanelPage extends AbstractPage {
-	private ConsoleEditor editor;
-	private String projectName;
-	private ConsoleTemplateModel consoleTemplateModel;
+public class TestUI extends Composite {
 	private Text textHeight;
 	private Table tableWidgets;
-	private Text textColumnNumber;
-	private Text textColumnsWidth;
-	
-	
+	private Text text;
+	private Text text_1;
 	/**
+	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public SummaryPanelPage(Composite parent, int style) {
+	public TestUI(Composite parent, int style) {
 		super(parent, style);
-
-	}
-	public void drawPage(){
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(this, SWT.NONE);
@@ -113,15 +103,15 @@ public class SummaryPanelPage extends AbstractPage {
 		lblNumOfColumns.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblNumOfColumns.setText("Num. of columns:");
 		
-		textColumnNumber = new Text(groupLayoutType, SWT.BORDER);
-		textColumnNumber.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		text = new Text(groupLayoutType, SWT.BORDER);
+		text.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblColumnsWidths = new Label(groupLayoutType, SWT.NONE);
 		lblColumnsWidths.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblColumnsWidths.setText("Columns Widths:");
 		
-		textColumnsWidth = new Text(groupLayoutType, SWT.BORDER);
-		textColumnsWidth.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		text_1 = new Text(groupLayoutType, SWT.BORDER);
+		text_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		new Label(grpLayoutProperties, SWT.NONE);
 		
 		Group grpWidgets = new Group(mainComposite, SWT.NONE);
@@ -155,39 +145,10 @@ public class SummaryPanelPage extends AbstractPage {
 		tblclmnDataset.setWidth(156);
 		tblclmnDataset.setText("Dataset");		
 	}
-	public ConsoleEditor getEditor() {
-		return editor;
+
+	@Override
+	protected void checkSubclass() {
+		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setEditor(ConsoleEditor editor) {
-		this.editor = editor;
-	}
-
-	/**
-	 * @return the projectName
-	 */
-	public String getProjectName() {
-		return projectName;
-	}
-
-	/**
-	 * @param projectName the projectName to set
-	 */
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	/**
-	 * @return the consoleTemplateModel
-	 */
-	public ConsoleTemplateModel getConsoleTemplateModel() {
-		return consoleTemplateModel;
-	}
-
-	/**
-	 * @param consoleTemplateModel the consoleTemplateModel to set
-	 */
-	public void setConsoleTemplateModel(ConsoleTemplateModel consoleTemplateModel) {
-		this.consoleTemplateModel = consoleTemplateModel;
-	}
 }

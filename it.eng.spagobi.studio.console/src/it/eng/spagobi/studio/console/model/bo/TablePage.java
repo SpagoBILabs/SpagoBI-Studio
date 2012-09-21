@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -76,6 +77,7 @@ public class TablePage {
 	 * @return the columnConfig
 	 */
 	public Map<String, ColumnConfig> getColumnConfig() {
+		if(columnConfig == null) columnConfig = new HashMap<String,ColumnConfig>();
 		return columnConfig;
 	}
 	/**

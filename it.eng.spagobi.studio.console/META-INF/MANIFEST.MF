@@ -22,6 +22,7 @@ Bundle-ClassPath: lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
  .,
  lib/jackson-annotations-2.0.2.jar,
  lib/jackson-core-2.0.2.jar,
- lib/jackson-databind-2.0.2.jar
+ lib/jackson-databind-2.0.2.jar,
+ swt-grouplayout.jar
 Export-Package: it.eng.spagobi.studio.console.wizard,
  it.eng.spagobi.studio.console.wizard.pages

@@ -35,6 +35,7 @@ public class DetailPanel {
 	 * @return the pages
 	 */
 	public Vector<Page> getPages() {
+		if(pages == null) pages = new Vector<Page>();
 		return pages;
 	}
 
