@@ -92,12 +92,13 @@ public class HighlightProperties extends PopupPropertiesDialog{
 		logger.debug("IN");
 		
 		dialogMain.setSize(200, 150);
-		dialogMain.open ();
-		while (!dialogMain.isDisposed()) {
-		    if (!dialogMain.getDisplay().readAndDispatch()) {
-		    	dialogMain.getDisplay().sleep();
-		    }
-		}
+		super.showPopup();
+//		dialogMain.open ();
+//		while (!dialogMain.isDisposed()) {
+//		    if (!dialogMain.getDisplay().readAndDispatch()) {
+//		    	dialogMain.getDisplay().sleep();
+//		    }
+//		}
 		logger.debug("OUT");
 
 	}	

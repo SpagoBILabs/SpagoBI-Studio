@@ -85,12 +85,13 @@ public class SeriesPieProperties  extends SeriesProperties{
 		logger.debug("IN");
 		
 		dialogMain.setSize(380, 350);
-		dialogMain.open ();
-		while (!dialogMain.isDisposed()) {
-		    if (!dialogMain.getDisplay().readAndDispatch()) {
-		    	dialogMain.getDisplay().sleep();
-		    }
-		}
+		super.showPopup();
+//		dialogMain.open ();
+//		while (!dialogMain.isDisposed()) {
+//		    if (!dialogMain.getDisplay().readAndDispatch()) {
+//		    	dialogMain.getDisplay().sleep();
+//		    }
+//		}
 		logger.debug("OUT");
 
 	}

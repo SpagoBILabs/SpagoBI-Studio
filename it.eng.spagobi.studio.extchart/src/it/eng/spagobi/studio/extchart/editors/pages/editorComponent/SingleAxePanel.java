@@ -70,6 +70,7 @@ public class SingleAxePanel {
 		container = new Composite(parent,SWT.NONE);
 		container.setLayout(SWTUtils.makeGridLayout(1));
 		
+		
 		if (axes.size() >0 ){
 			newAxe = axes.get(0);
 		} else {
@@ -87,6 +88,7 @@ public class SingleAxePanel {
 		if (extChart.getAxesList().getAxes().isEmpty()){
 			extChart.getAxesList().getAxes().add(newAxe);
 		}
+		
 		
 		Group grpAxeProperties = new Group(container, SWT.NONE);
 
@@ -112,6 +114,7 @@ public class SingleAxePanel {
 				axesProperties.setTitle("Define axe properties: ");
 				axesProperties.drawProperties();
 				axesProperties.drawButtons();
+				axesProperties.getDialog().setSize(250, 300);
 				axesProperties.showPopup();	
 			}
 

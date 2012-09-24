@@ -106,12 +106,13 @@ public class AxesNumericProperties  extends AxesProperties{
 		logger.debug("IN");
 		
 		dialogMain.setSize(200, 200);
-		dialogMain.open ();
-		while (!dialogMain.isDisposed()) {
-		    if (!dialogMain.getDisplay().readAndDispatch()) {
-		    	dialogMain.getDisplay().sleep();
-		    }
-		}
+		super.showPopup();
+//		dialogMain.open ();
+//		while (!dialogMain.isDisposed()) {
+//		    if (!dialogMain.getDisplay().readAndDispatch()) {
+//		    	dialogMain.getDisplay().sleep();
+//		    }
+//		}
 		logger.debug("OUT");
 
 	}

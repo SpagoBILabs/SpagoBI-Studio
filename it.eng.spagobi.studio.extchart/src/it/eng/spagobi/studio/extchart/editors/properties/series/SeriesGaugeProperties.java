@@ -56,12 +56,13 @@ public class SeriesGaugeProperties extends SeriesProperties {
 		logger.debug("IN");
 		
 		dialogMain.setSize(320, 300);
-		dialogMain.open ();
-		while (!dialogMain.isDisposed()) {
-		    if (!dialogMain.getDisplay().readAndDispatch()) {
-		    	dialogMain.getDisplay().sleep();
-		    }
-		}
+		super.showPopup();
+//		dialogMain.open ();
+//		while (!dialogMain.isDisposed()) {
+//		    if (!dialogMain.getDisplay().readAndDispatch()) {
+//		    	dialogMain.getDisplay().sleep();
+//		    }
+//		}
 		logger.debug("OUT");
 
 	}

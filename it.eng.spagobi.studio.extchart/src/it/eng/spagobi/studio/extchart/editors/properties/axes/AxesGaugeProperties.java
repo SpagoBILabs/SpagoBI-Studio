@@ -103,13 +103,15 @@ public class AxesGaugeProperties extends AxesProperties {
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialogMain.setSize(250, 250);
-		dialogMain.open ();
-		while (!dialogMain.isDisposed()) {
-		    if (!dialogMain.getDisplay().readAndDispatch()) {
-		    	dialogMain.getDisplay().sleep();
-		    }
-		}
+		dialogMain.setSize(300, 350);
+
+		super.showPopup();
+		//		dialogMain.open ();
+//		while (!dialogMain.isDisposed()) {
+//		    if (!dialogMain.getDisplay().readAndDispatch()) {
+//		    	dialogMain.getDisplay().sleep();
+//		    }
+//		}
 		logger.debug("OUT");
 
 	}

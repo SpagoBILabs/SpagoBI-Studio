@@ -21,6 +21,7 @@ import it.eng.spagobi.studio.extchart.utils.ImageDescriptors;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 import it.eng.spagobi.studio.extchart.utils.SerieTableItemContent;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
@@ -39,6 +40,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -137,59 +139,71 @@ public class SeriesPanel {
 			}
 			public void drop(DropTargetEvent event) {
 				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
-					// Get the dropped data
+					// Get the dropped data aaa
 					ExtChart extChart = editor.getExtChart();
 					DropTarget target = (DropTarget) event.widget;
 					Table table = (Table) target.getControl();
 					String data = (String) event.data;
 					logger.debug("recieved from drop "+data);
 					DraggedObject draggedObject = DraggedObject.fromString(data);
+					
+					
+					// check there are only numeric type
+					boolean onlyNumeric  = checkOnlyNumeric(draggedObject, group.getDisplay());
 
-					Series newSerie= new Series();
-					// map dragged info to serie, if single raw ask user if is x or y information, if multiple put to fieldList 
-					if(draggedObject.getSize() > 0){
-						logger.debug("More field selected: put field List");
-						newSerie.setyFieldList(draggedObject.toFieldString());
+					if(onlyNumeric){
+						Series newSerie= new Series();
+						// map dragged info to serie, if single raw ask user if is x or y information, if multiple put to fieldList 
+						if(draggedObject.getSize() > 0){
+							logger.debug("More field selected: put field List");
+							newSerie.setyFieldList(draggedObject.toFieldString());
+						}
+						else{
+							// ask user if it is an x or y information
+							//						String val = draggedObject.getFirstElement();
+							//						new FieldXYPopup(seriesTable.getDisplay(), newSerie, val).drawXYPopup();						
+						}
+
+						logger.debug("update model adding new Serie");
+
+						Axes xAxe = ExtChartUtils.getXAxe(extChart);
+						newSerie.setxField(xAxe != null && xAxe.getFields() != null ? xAxe.getFields() : "");
+
+						String serieType = null;
+						try{
+							serieType = ExtChartUtils.getSerieTypeFromChartType(extChart.getType());
+							logger.debug("Serie type default for chart type is "+serieType);
+						}
+						catch (Exception e) {
+							logger.warn("could not find default serie type, check congfiguration");
+							return;
+						}
+						newSerie.setType(serieType);
+
+						extChart.getSeriesList().getSeries().add(newSerie);
+
+						logger.debug("update table");
+						// Create a new item in the table to hold the dropped data
+						TableItem item = new TableItem(table, SWT.NONE);
+
+						SerieTableItemContent serieTableItemContent = new SerieTableItemContent();
+						serieTableItemContent.setSerie(newSerie);
+
+						item.setData(serieTableItemContent);
+						//item.setText(new String[] { data });
+						//item.setText(INFO, data);
+						item.setText(INFO, draggedObject.toFieldString());
+						item.setText(CAT_AXE, newSerie.getxField() != null ? newSerie.getxField() : "");
+
+
+						createButtons(table, item, newSerie, serieTableItemContent);
+						editor.setIsDirty(true);
+					
 					}
 					else{
-						// ask user if it is an x or y information
-						//						String val = draggedObject.getFirstElement();
-						//						new FieldXYPopup(seriesTable.getDisplay(), newSerie, val).drawXYPopup();						
+						logger.debug("Series not added");
 					}
-
-					logger.debug("update model adding new Serie");
-
-					Axes xAxe = ExtChartUtils.getXAxe(extChart);
-					newSerie.setxField(xAxe != null && xAxe.getFields() != null ? xAxe.getFields() : "");
-
-					String serieType = null;
-					try{
-						serieType = ExtChartUtils.getSerieTypeFromChartType(extChart.getType());
-						logger.debug("Serie type default for chart type is "+serieType);
-					}
-					catch (Exception e) {
-						logger.warn("could not find default serie type, check congfiguration");
-						return;
-					}
-					newSerie.setType(serieType);
-
-					extChart.getSeriesList().getSeries().add(newSerie);
-
-					logger.debug("update table");
-					// Create a new item in the table to hold the dropped data
-					TableItem item = new TableItem(table, SWT.NONE);
-
-					SerieTableItemContent serieTableItemContent = new SerieTableItemContent();
-					serieTableItemContent.setSerie(newSerie);
-
-					item.setData(serieTableItemContent);
-					//item.setText(new String[] { data });
-					item.setText(INFO, data);
-					item.setText(CAT_AXE, newSerie.getxField() != null ? newSerie.getxField() : "");
-
-
-					createButtons(table, item, newSerie, serieTableItemContent);
-					editor.setIsDirty(true);
+					
 					table.redraw();
 				}
 			}
@@ -210,6 +224,42 @@ public class SeriesPanel {
 
 	}
 
+	/**
+	 *  Check only numric types can be dropped on serie
+	 */
+	boolean checkOnlyNumeric(DraggedObject draggedObject, Display display){
+		logger.debug("IN");
+		boolean onlyNumeric = true;
+		for (Iterator iterator = draggedObject.getIndexTypeSelected().keySet().iterator(); iterator.hasNext();) {
+			Integer key = (Integer) iterator.next();
+			System.out.println(Double.class.getName());
+			String type = draggedObject.getIndexTypeSelected().get(key);
+			if(type.equalsIgnoreCase(Double.class.getName())
+			||
+			type.equalsIgnoreCase(Integer.class.getName())
+			||
+			type.equalsIgnoreCase(Float.class.getName())
+			||
+			type.equalsIgnoreCase(Long.class.getName())
+			||
+			type.equalsIgnoreCase(Short.class.getName())
+			||
+			type.equalsIgnoreCase(BigDecimal.class.getName())
+			)
+			{
+				logger.debug("Numeric type: "+type);
+			}
+			else{
+				logger.debug("found also not numeric type "+type);
+				onlyNumeric = false;
+				MessageDialog.openWarning(display.getActiveShell(), "Warning", "Column of type "+type+" cannot be a serie: only numeric types");
+				break;
+			}		
+		}
+		logger.debug("OUT");
+		return onlyNumeric;
+	}
+	
 
 	void createButtons(final Table seriesTable, final TableItem item, final Series serie, SerieTableItemContent serieTableItemContent){
 		logger.debug("IN");
@@ -272,6 +322,7 @@ public class SeriesPanel {
 				seriesProperties.setTitle("Define serie properties: ");
 				seriesProperties.drawProperties();
 				seriesProperties.drawButtons();
+				seriesProperties.getDialog().setSize(300,500);
 				seriesProperties.showPopup();	
 			}
 

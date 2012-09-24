@@ -20,11 +20,14 @@ import org.slf4j.LoggerFactory;
 public class DraggedObject implements Serializable{
 
 	Map<Integer, String> indexNameSelected;
+	Map<Integer, String> indexTypeSelected;
+
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(DraggedObject.class);
 
 	public DraggedObject() {
 		super();
 		indexNameSelected = new HashMap<Integer, String>();
+		indexTypeSelected = new HashMap<Integer, String>();
 	}
 
 	public Map<Integer, String> getIndexNameSelected() {
@@ -33,6 +36,14 @@ public class DraggedObject implements Serializable{
 
 	public void setIndexNameSelected(Map<Integer, String> indexNameSelected) {
 		this.indexNameSelected = indexNameSelected;
+	}
+	
+	public Map<Integer, String> getIndexTypeSelected() {
+		return indexTypeSelected;
+	}
+
+	public void setIndexTypeSelected(Map<Integer, String> indexTypeSelected) {
+		this.indexTypeSelected = indexTypeSelected;
 	}
 
 	@Override
@@ -43,7 +54,8 @@ public class DraggedObject implements Serializable{
 		for (Iterator iterator = indexNameSelected.keySet().iterator(); iterator.hasNext();) {
 			Integer index = (Integer) iterator.next();
 			String name = indexNameSelected.get(index);
-			buffer+=index+","+name;
+			String type = indexTypeSelected.get(index);
+			buffer+=index+","+name+","+type;
 			if(iterator.hasNext()) 
 				buffer+=",";
 		}
@@ -64,13 +76,34 @@ public class DraggedObject implements Serializable{
 			Integer index = Integer.valueOf(indexS);
 			i++;
 			String name = splits[i];
+			i++;
+			String type = splits[i];
+
 			toReturn.getIndexNameSelected().put(index, name);
+			toReturn.getIndexTypeSelected().put(index, type);
 		}		
 		logger.debug("OUT");
 		return toReturn;
 	}
 	
 	public String toFieldString(){
+		logger.debug("IN");
+		String buffer="";
+
+		for (Iterator iterator = indexNameSelected.keySet().iterator(); iterator.hasNext();) {
+			Integer index = (Integer) iterator.next();
+			String name = indexNameSelected.get(index);
+			buffer+=name;
+			if(iterator.hasNext()) 
+				buffer+=",";
+		}
+		logger.debug("Field list is "+buffer);
+		logger.debug("OUT");
+		return buffer;
+	}
+	
+	
+	public String toAllFieldsString(){
 		logger.debug("IN");
 		String buffer="";
 

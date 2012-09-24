@@ -13,13 +13,16 @@ public class Legend {
 
 	public static final String POSITION = "position";
 	
-	String position;
+	String position="";
 
 	public String getPosition() {
 		return position;
 	}
 
 	public void setPosition(String position) {
+		if(position == null){
+			position = "";
+		}
 		this.position = position;
 	}
 

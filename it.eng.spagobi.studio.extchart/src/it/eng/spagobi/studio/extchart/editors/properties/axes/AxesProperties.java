@@ -61,6 +61,7 @@ public class AxesProperties extends PopupPropertiesDialog{
 	};
 
 
+	
 
 	public void performOk(){
 		logger.debug("IN");

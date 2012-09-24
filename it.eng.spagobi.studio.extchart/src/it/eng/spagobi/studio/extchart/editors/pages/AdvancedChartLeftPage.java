@@ -9,48 +9,26 @@
 **/
 package it.eng.spagobi.studio.extchart.editors.pages;
 
-import it.eng.spagobi.server.services.api.bo.IDataSet;
-import it.eng.spagobi.server.services.api.bo.IDataStoreMetadata;
-import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
-import it.eng.spagobi.server.services.api.exception.MissingParValueException;
-import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
-import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.DraggedObject;
-import it.eng.spagobi.studio.extchart.editors.properties.title.SubTitleProperties;
-import it.eng.spagobi.studio.extchart.editors.properties.title.TitleProperties;
 import it.eng.spagobi.studio.extchart.model.bo.Drill;
 import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
 import it.eng.spagobi.studio.extchart.model.bo.Param;
 import it.eng.spagobi.studio.extchart.model.bo.ParamList;
-import it.eng.spagobi.studio.extchart.model.bo.Series;
 import it.eng.spagobi.studio.extchart.utils.ColorButton;
 import it.eng.spagobi.studio.extchart.utils.ImageDescriptors;
 import it.eng.spagobi.studio.extchart.utils.ParamTableItemContent;
 import it.eng.spagobi.studio.extchart.utils.SWTUtils;
-import it.eng.spagobi.studio.extchart.utils.SerieTableItemContent;
-import it.eng.spagobi.studio.utils.bo.Dataset;
-import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
-import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSource;
-import org.eclipse.swt.dnd.DragSourceAdapter;
-import org.eclipse.swt.dnd.DragSourceEvent;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
@@ -62,19 +40,13 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapData;
-import org.eclipse.ui.forms.widgets.TableWrapLayout;
-import org.eclipse.ui.part.EditorPart;
 import org.slf4j.LoggerFactory;
 
 public class AdvancedChartLeftPage extends AbstractPage {
@@ -154,7 +126,7 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		final ExtChartEditor extEditor = editor;
 		
 		//Width
-		Label widthLabel= toolkit.createLabel(compositeProp, "Width:");
+		Label widthLabel= toolkit.createLabel(compositeProp, "Width (px):");
 		String currentWidthValue;
 		if (extChart.getWidth() != null){
 			currentWidthValue = extChart.getWidth().toString();
@@ -174,7 +146,7 @@ public class AdvancedChartLeftPage extends AbstractPage {
 		});
 
 		//Height
-		Label heightLabel= toolkit.createLabel(compositeProp, "Height:");
+		Label heightLabel= toolkit.createLabel(compositeProp, "Height (px):");
 		String currentHeightValue;
 		if (extChart.getHeight() != null){
 			currentHeightValue = extChart.getHeight().toString();
@@ -257,7 +229,12 @@ public class AdvancedChartLeftPage extends AbstractPage {
 			public void modifyText(ModifyEvent event) {
 				extEditor.setIsDirty(true);
 				String refreshTimeValue = refreshTimeText.getText();
-				extChart.setRefreshTime(Integer.parseInt(refreshTimeValue));
+				if(refreshTimeValue.equals("")){
+					extChart.setRefreshTime(null);
+				}
+				else{
+					extChart.setRefreshTime(Integer.parseInt(refreshTimeValue));
+				}
 			}
 		});
 		

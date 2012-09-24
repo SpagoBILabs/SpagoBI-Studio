@@ -189,6 +189,7 @@ public class SeriesProperties extends PopupPropertiesDialog{
 				logger.debug("Open label editor");
 				Label labelToPass = labelHolder[0] != null ? labelHolder[0] : serieIns.getLabel();
 				LabelProperties labelProperties = new LabelProperties(editor, labelToPass, dialogMain, toPass);
+				labelProperties.setTitle("Define label: ");
 				labelProperties.drawProperties();
 				labelProperties.drawButtons();
 				labelProperties.showPopup();
@@ -576,20 +577,6 @@ public class SeriesProperties extends PopupPropertiesDialog{
 	}
 
 
-	//overwrite
-	public void showPopup(){
-		logger.debug("IN");
-		
-		dialogMain.setSize(500, 500);
-		dialogMain.open ();
-		while (!dialogMain.isDisposed()) {
-		    if (!dialogMain.getDisplay().readAndDispatch()) {
-		    	dialogMain.getDisplay().sleep();
-		    }
-		}
-		logger.debug("OUT");
-
-	}
 
 
 	/**

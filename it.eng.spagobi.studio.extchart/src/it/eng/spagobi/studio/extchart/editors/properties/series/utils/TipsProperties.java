@@ -66,11 +66,11 @@ public class TipsProperties extends PopupPropertiesDialog{
 
 		widthSpinner =SWTUtils.drawSpinner(dialog, 
 				tips.getWidth() != null ? tips.getWidth() : null
-						, "Width: ");
+						, "Width (px): ");
 
 		heightSpinner =SWTUtils.drawSpinner(dialog, 
 				tips.getHeight() != null ? tips.getHeight() : null
-						, "Height: ");
+						, "Height (px): ");
 		org.eclipse.swt.widgets.Label textHelp = toolkit.createLabel(dialog, "Text: ");
 		textHelp.setBackground(defaultBackground);
 		textText = SWTUtils.drawText(toolkit, dialog, 
@@ -132,13 +132,14 @@ public class TipsProperties extends PopupPropertiesDialog{
 	public void showPopup(){
 		logger.debug("IN");
 		
-		dialogMain.setSize(310, 250);
-		dialogMain.open ();
-		while (!dialogMain.isDisposed()) {
-		    if (!dialogMain.getDisplay().readAndDispatch()) {
-		    	dialogMain.getDisplay().sleep();
-		    }
-		}
+		dialogMain.setSize(350, 300);
+super.showPopup();
+		//		dialogMain.open ();
+//		while (!dialogMain.isDisposed()) {
+//		    if (!dialogMain.getDisplay().readAndDispatch()) {
+//		    	dialogMain.getDisplay().sleep();
+//		    }
+//		}
 		logger.debug("OUT");
 
 	}	

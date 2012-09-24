@@ -16,6 +16,7 @@ import it.eng.spagobi.server.services.api.exception.MissingParValueException;
 import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.extchart.editors.ExtChartEditor;
 import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.DraggedObject;
+import it.eng.spagobi.studio.extchart.editors.pages.editorComponent.SeriesPanel;
 import it.eng.spagobi.studio.extchart.editors.properties.title.SubTitleProperties;
 import it.eng.spagobi.studio.extchart.editors.properties.title.TitleProperties;
 import it.eng.spagobi.studio.extchart.model.bo.ExtChart;
@@ -307,6 +308,7 @@ public class MainChartLeftPage extends AbstractPage {
 		        	int index = indices[i];
 		        	TableItem selItem = table.getItem(index);
 		        	draggedObject.getIndexNameSelected().put(index, selItem.getText(COLUMN_NAME));
+		        	draggedObject.getIndexTypeSelected().put(index, selItem.getText(COLUMN_TYPE));
 		        }
 		        StringBuffer buff = new StringBuffer(draggedObject.toString());
 
@@ -373,7 +375,9 @@ public class MainChartLeftPage extends AbstractPage {
 				extChart.getDataset().setLabel(selectedDatasetLabel);
 
 				// clean all other entities if dataset has changed: series and axes
-				getEditor().getMainChartPage().getRightPage().getSeriesBuilder().deleteAllSeries();
+				SeriesPanel serieBuilder = getEditor().getMainChartPage().getRightPage().getSeriesBuilder();
+				if(serieBuilder != null)				
+					serieBuilder.deleteAllSeries();
 				extChart.getAxesList().setAxes(null);
 				//reset UI components to reflect the cleaning
 				if (getEditor().getMainChartPage().getRightPage().getRightAxeBuilder() != null &&
@@ -528,8 +532,8 @@ public class MainChartLeftPage extends AbstractPage {
 				MessageDialog.openWarning(container.getShell(), "Warning", "Dataset with label = " + dsLabel + " returned no metadata: test it on server to have metadata avalaible");
 			}
 		} catch (MissingParValueException e2) {
-			logger.error("Could not execute dataset with label = "+ dsLabel + " due to parameter lack: execute dataset test in server to retrieve metadata", e2);
-			MessageDialog.openError(container.getShell(), "Error",
+			logger.warn("Could not execute dataset with label = "+ dsLabel + " due to parameter lack: execute dataset test in server to retrieve metadata", e2);
+			MessageDialog.openWarning(container.getShell(), "Warning",
 					"Could not execute dataset with label = "+dsLabel+ " due to parameter lack: execute dataset test in server to retrieve metadata");
 		} catch (NoServerException e1) {
 			logger.error("Error No comunciation with server retrieving dataset with label = "+ dsLabel + " metadata", e1);

@@ -118,6 +118,7 @@ public class SingleSeriePanel {
 				seriesProperties.setTitle("Define serie properties: ");
 				seriesProperties.drawProperties();
 				seriesProperties.drawButtons();
+				seriesProperties.getDialog().setSize(400,300);
 				seriesProperties.showPopup();	
 			}
 
