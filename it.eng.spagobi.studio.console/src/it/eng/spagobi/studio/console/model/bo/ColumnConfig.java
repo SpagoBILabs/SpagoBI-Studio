@@ -21,11 +21,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
 public class ColumnConfig {
+	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int width;
 	private String header;
 	private String type;

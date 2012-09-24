@@ -21,8 +21,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.editors.pages;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -32,6 +34,7 @@ import it.eng.spagobi.server.services.api.bo.IDataStoreMetadataField;
 import it.eng.spagobi.server.services.api.exception.MissingParValueException;
 import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.console.editors.ConsoleEditor;
+import it.eng.spagobi.studio.console.editors.internal.DetailPanelPageTableRow;
 import it.eng.spagobi.studio.console.model.bo.ColumnConfig;
 import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
 import it.eng.spagobi.studio.console.model.bo.DatasetElement;
@@ -43,6 +46,7 @@ import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.SWT;
@@ -51,11 +55,17 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
@@ -77,12 +87,21 @@ public class DetailPanelPage extends AbstractPage {
 	private Table tableColumns;
 	private Combo comboDataset;
 	private Combo comboDatasetLabel;
+	private Combo comboColumnId;
+	private List<DetailPanelPageTableRow> detailPanelPageTableRows;
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(DetailPanelPage.class);
+	private TableItem selectedRow;
 	
 	private Page firstPage;
 	
 	public static final int COLUMN_NAME = 0;
 	public static final int COLUMN_HEADER = 1;
+	public static final int COLUMN_HEADER_TYPE = 2;
+	public static final int COLUMN_TYPE = 3;
+	public static final int COLUMN_WIDTH = 4;
+
+
+
 
 	/**
 	 * @param parent
@@ -92,6 +111,7 @@ public class DetailPanelPage extends AbstractPage {
 		super(parent, style);
 	}
 	public void drawPage(){		
+		detailPanelPageTableRows = new ArrayList<DetailPanelPageTableRow>();
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(this, SWT.NONE);
@@ -127,6 +147,9 @@ public class DetailPanelPage extends AbstractPage {
 				firstPage.getTable().setDataset(dsLabel);
 				
 				populateColumnsTable(dsLabel);
+				//Populate columnId combo
+				populateColumnIdCombo(dsLabel);
+
 			}
 		});
 		comboDataset.setSize(111, 23);
@@ -153,8 +176,19 @@ public class DetailPanelPage extends AbstractPage {
 		lblColumnId.setSize(60, 15);
 		lblColumnId.setText("Column ID:");
 		
-		Combo comboColumnID = new Combo(compositeTable, SWT.READ_ONLY);
-		comboColumnID.setSize(111, 23);
+		comboColumnId = new Combo(compositeTable, SWT.READ_ONLY);
+		comboColumnId.setSize(111, 23);
+		comboColumnId.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+
+				int index = comboColumnId.getSelectionIndex();
+				String columnId = comboColumnId.getItem(index);
+				firstPage.getTable().setColumnId(columnId);
+				
+			}
+		});
 		
 		Group grpColumnConfig = new Group(grpTable, SWT.NONE);
 		grpColumnConfig.setText("Column Config");
@@ -172,12 +206,8 @@ public class DetailPanelPage extends AbstractPage {
 		tblclmnColumnName.setText("Column Name");
 		
 		TableColumn tblclmnHeader = new TableColumn(tableColumns, SWT.NONE);
-		tblclmnHeader.setWidth(55);
+		tblclmnHeader.setWidth(100);
 		tblclmnHeader.setText("Header");
-		
-		TableColumn tblclmnWidth = new TableColumn(tableColumns, SWT.NONE);
-		tblclmnWidth.setWidth(51);
-		tblclmnWidth.setText("Width");
 		
 		TableColumn tblclmnHeaderType = new TableColumn(tableColumns, SWT.NONE);
 		tblclmnHeaderType.setWidth(86);
@@ -186,6 +216,12 @@ public class DetailPanelPage extends AbstractPage {
 		TableColumn tblclmnType = new TableColumn(tableColumns, SWT.NONE);
 		tblclmnType.setWidth(66);
 		tblclmnType.setText("Type");
+		
+		TableColumn tblclmnWidth = new TableColumn(tableColumns, SWT.NONE);
+		tblclmnWidth.setWidth(51);
+		tblclmnWidth.setText("Width");
+
+
 		/*
 		Group grpNavigationBar = new Group(grpPageDetail, SWT.NONE);
 		grpNavigationBar.setText("Navigation Bar");
@@ -274,6 +310,20 @@ public class DetailPanelPage extends AbstractPage {
 		populateDatasetLabelCombo();
 	}
 	
+	public void populateColumnIdCombo(String datasetLabel){
+		comboColumnId.removeAll();
+		firstPage.getTable().setColumnId(null);
+
+		IDataStoreMetadata dataStoreMetadata = retrieveDatasetMetadata(datasetLabel);
+		if (dataStoreMetadata != null){
+			for (int i = 0; i < dataStoreMetadata.getFieldsMetadata().length; i++) {
+				IDataStoreMetadataField dsmf = dataStoreMetadata.getFieldsMetadata()[i];
+				//create Table Columns in object Model				
+				comboColumnId.add(dsmf.getName());
+			}
+		}
+	}
+	
 	public void populateDatasetCombo(){
 		comboDataset.removeAll();
 		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
@@ -286,6 +336,8 @@ public class DetailPanelPage extends AbstractPage {
 	
 	public void populateDatasetLabelCombo(){
 		comboDatasetLabel.removeAll();
+		firstPage.getTable().setDatasetLabels(null);
+
 		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
 		if (!datasets.isEmpty() ){
 			for (DatasetElement datasetElement:datasets){
@@ -296,10 +348,10 @@ public class DetailPanelPage extends AbstractPage {
 	
 	public void populateColumnsTable(String dsLabel){
 		//tableColumns.clearAll();
+		//First, clean all UI elements in the table
 
-		TableItem[] childrens = tableColumns.getItems();
-		for (int i=0; i<childrens.length;i++){
-			childrens[i].dispose();
+		for (DetailPanelPageTableRow detailPanelPageTableRow:detailPanelPageTableRows){
+			detailPanelPageTableRow.disposeRowElements();	
 		}
 		tableColumns.clearAll();
 
@@ -307,7 +359,7 @@ public class DetailPanelPage extends AbstractPage {
 
 		Map<String,ColumnConfig> columnConfigSet = firstPage.getTable().getColumnConfig();
 		
-		//Check this if correct (for example when opening an existing template)
+		//TODO:Check this if correct (for example when opening an existing template)
 		columnConfigSet.clear();
 		
 		IDataStoreMetadata dataStoreMetadata = retrieveDatasetMetadata(dsLabel);
@@ -319,16 +371,90 @@ public class DetailPanelPage extends AbstractPage {
 				column.setHeader(dsmf.getName());
 				columnConfigSet.put(dsmf.getName(), column);
 				//add Table Item to Columns Table (GUI)
-				createTableItem(dsmf.getName(),column);
+				createTableItem(dsmf.getName(),column);				
 			}
 		}
 	}
 	
 	public void createTableItem(String columnName, ColumnConfig column ){
-		TableItem item = new TableItem(tableColumns, SWT.NONE);
+		final TableItem item = new TableItem(tableColumns, SWT.NONE);
+		item.setData(column);
+		//set Column name
 		item.setText(COLUMN_NAME, columnName);
-		item.setText(COLUMN_HEADER, column.getHeader());
+		
+		//create Cell Editor Text Header
+		TableEditor editor_header = new TableEditor(tableColumns);
+		final Text textHeader = new Text(tableColumns, SWT.NONE);
+		textHeader.setText(column.getHeader());
 
+		textHeader.setText(column.getHeader());
+		editor_header.grabHorizontal = true;
+		
+		textHeader.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				editor.setIsDirty(true);
+				if (item != null){
+					ColumnConfig columnConfig = (ColumnConfig)item.getData();
+					columnConfig.setHeader(textHeader.getText());
+				}
+			}
+		});
+		
+		editor_header.setEditor(textHeader,item, COLUMN_HEADER);
+
+		//create Cell Editor Combo Header Type
+		TableEditor editor_headerType = new TableEditor(tableColumns);
+		final CCombo comboHeaderType = new CCombo(tableColumns, SWT.READ_ONLY);
+		comboHeaderType.add("static");
+		comboHeaderType.add("dataset");
+		comboHeaderType.add("i18N");
+		comboHeaderType.add("datasetI18N");
+		editor_headerType.grabHorizontal = true;
+		comboHeaderType.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+				ColumnConfig columnConfig = (ColumnConfig)item.getData();
+				columnConfig.setHeaderType(comboHeaderType.getText());
+			}
+		});
+		editor_headerType.setEditor(comboHeaderType,item, COLUMN_HEADER_TYPE);
+		
+		//create Cell Editor Combo Type
+		TableEditor editor_type = new TableEditor(tableColumns);
+		final CCombo comboType = new CCombo(tableColumns, SWT.READ_ONLY);
+		comboType.add("string");
+		comboType.add("int");
+		comboType.add("date");
+		comboType.add("timestamp");
+		editor_type.grabHorizontal = true;
+		comboType.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+				ColumnConfig columnConfig = (ColumnConfig)item.getData();
+				columnConfig.setType(comboType.getText());
+			}
+		});
+		editor_type.setEditor(comboType,item, COLUMN_TYPE);		
+		//create Cell Editor Text Width
+		TableEditor editor_width = new TableEditor(tableColumns);
+		final Text textWidth = new Text(tableColumns, SWT.NONE);
+		editor_width.grabHorizontal = true;
+		textWidth.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				editor.setIsDirty(true);
+				if (item != null){
+					ColumnConfig columnConfig = (ColumnConfig)item.getData();
+					columnConfig.setWidth(Integer.parseInt(textWidth.getText()));
+				}
+			}
+		});
+		editor_width.setEditor(textWidth,item, COLUMN_WIDTH);			
+		
+		//create internal object with UI elements of this item
+		DetailPanelPageTableRow detailPanelPageTableRow = new DetailPanelPageTableRow(item,textHeader,comboHeaderType,comboType,textWidth);
+		detailPanelPageTableRows.add(detailPanelPageTableRow);
 		tableColumns.redraw();
 		
 	}
