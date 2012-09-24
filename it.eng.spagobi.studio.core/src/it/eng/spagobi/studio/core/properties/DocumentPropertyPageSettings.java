@@ -9,12 +9,12 @@
 **/
 package it.eng.spagobi.studio.core.properties;
 
-import it.eng.spagobi.studio.core.services.server.MetadataHandler;
 import it.eng.spagobi.studio.utils.bo.DocumentParameter;
 import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.bo.xmlMapping.XmlParametersMapping;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
+import it.eng.spagobi.studio.utils.services.metadata.MetadataHandler;
 import it.eng.spagobi.studio.utils.services.server.ServerHandler;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 

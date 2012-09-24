@@ -16,9 +16,9 @@ Require-Bundle: org.eclipse.core.runtime,
  it.eng.spagobi.meta.editor,
  org.eclipse.ui.intro,
  org.eclipse.ui.navigator.resources,
- it.eng.spagobi.studio.utils,
  it.eng.spagobi.server.services.api,
- it.eng.spagobi.meta.querybuilder
+ it.eng.spagobi.meta.querybuilder,
+ it.eng.spagobi.studio.utils;bundle-version="3.5.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
