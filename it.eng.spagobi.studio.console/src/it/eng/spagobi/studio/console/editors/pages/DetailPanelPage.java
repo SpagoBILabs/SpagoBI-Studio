@@ -143,12 +143,25 @@ public class DetailPanelPage extends AbstractPage {
 				editor.setIsDirty(true);
 
 				int index = comboDataset.getSelectionIndex();
-				String dsLabel = comboDataset.getItem(index);
-				firstPage.getTable().setDataset(dsLabel);
+				String dsId = comboDataset.getItem(index);
+				String dsLabel = null;
 				
-				populateColumnsTable(dsLabel);
-				//Populate columnId combo
-				populateColumnIdCombo(dsLabel);
+				firstPage.getTable().setDataset(dsId);
+				Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+				if (!datasets.isEmpty() ){
+					for (DatasetElement datasetElement:datasets){
+						if (datasetElement.getId().equals(dsId)){
+							dsLabel = datasetElement.getLabel();
+						}
+					}
+				}
+				
+				if (dsLabel != null){
+					populateColumnsTable(dsLabel);
+					//Populate columnId combo
+					populateColumnIdCombo(dsLabel);					
+				}
+
 
 			}
 		});
@@ -166,8 +179,11 @@ public class DetailPanelPage extends AbstractPage {
 				editor.setIsDirty(true);
 
 				int index = comboDatasetLabel.getSelectionIndex();
-				String dsLabel = comboDatasetLabel.getItem(index);
-				firstPage.getTable().setDatasetLabels(dsLabel);
+				String dsId = comboDatasetLabel.getItem(index);
+
+				if (dsId != null){
+					firstPage.getTable().setDatasetLabels(dsId);
+				}
 				
 			}
 		});
@@ -308,6 +324,52 @@ public class DetailPanelPage extends AbstractPage {
 		
 		populateDatasetCombo();
 		populateDatasetLabelCombo();
+		
+		//populate ColumnId combo if dataset already selected
+		if (firstPage.getTable().getDataset() != null){
+			int index = comboDataset.getSelectionIndex();
+			String dsId = comboDataset.getItem(index);
+			String dsLabel = null;
+
+			Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+			if (!datasets.isEmpty() ){
+				for (DatasetElement datasetElement:datasets){
+					if (datasetElement.getId().equals(dsId)){
+						dsLabel = datasetElement.getLabel();
+					}
+				}
+				String columnId = null;
+				if (firstPage != null){
+					if(firstPage.getTable() != null){
+						if(firstPage.getTable().getColumnId() != null){
+							columnId = firstPage.getTable().getColumnId();
+						}
+					}
+				}
+				populateColumnIdCombo(dsLabel);
+
+				if (columnId != null){
+					String[] comboItems = comboColumnId.getItems();
+					for(int i=0; i<comboItems.length;i++){
+						if (comboItems[i].equals(columnId)){
+							comboColumnId.select(i);
+							break;
+						}
+					}
+				}
+
+			}
+		}
+		
+		//populate tableColumns if found already existing objects
+		Map<String,ColumnConfig> columnConfigSet = firstPage.getTable().getColumnConfig();
+		if (!columnConfigSet.isEmpty()){
+			for(Map.Entry<String,ColumnConfig> entry:columnConfigSet.entrySet()  ){
+				createTableItem(entry.getKey(),entry.getValue());				
+			}
+
+		}
+		
 	}
 	
 	public void populateColumnIdCombo(String datasetLabel){
@@ -322,6 +384,23 @@ public class DetailPanelPage extends AbstractPage {
 				comboColumnId.add(dsmf.getName());
 			}
 		}
+		//check previously defined ColumnId in detailPanel Page
+		/*
+		if (firstPage != null){
+			if(firstPage.getTable() != null){
+				if(firstPage.getTable().getColumnId() != null){
+					String columnId = firstPage.getTable().getColumnId();
+					String[] comboItems = comboColumnId.getItems();
+					for(int i=0; i<comboItems.length;i++){
+						if (comboItems[i].equals(columnId)){
+							comboColumnId.select(i);
+							break;
+						}
+					}
+				}
+			}
+		}
+		*/
 	}
 	
 	public void populateDatasetCombo(){
@@ -329,25 +408,57 @@ public class DetailPanelPage extends AbstractPage {
 		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
 		if (!datasets.isEmpty() ){
 			for (DatasetElement datasetElement:datasets){
-				comboDataset.add(datasetElement.getLabel());
+				comboDataset.add(datasetElement.getId());
 			}
 		}
+		
+		//check previously defined Dataset in detailPanel Page
+		if (firstPage != null){
+			if(firstPage.getTable() != null){
+				if(firstPage.getTable().getDataset() != null){
+					String datasetName = firstPage.getTable().getDataset();
+					String[] comboItems = comboDataset.getItems();
+					for(int i=0; i<comboItems.length;i++){
+						if (comboItems[i].equals(datasetName)){
+							comboDataset.select(i);
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	public void populateDatasetLabelCombo(){
 		comboDatasetLabel.removeAll();
-		firstPage.getTable().setDatasetLabels(null);
+		//firstPage.getTable().setDatasetLabels(null);
 
 		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
 		if (!datasets.isEmpty() ){
 			for (DatasetElement datasetElement:datasets){
-				comboDatasetLabel.add(datasetElement.getLabel());
+				comboDatasetLabel.add(datasetElement.getId());
+			}
+		}
+		
+		//check previously defined Dataset in detailPanel Page
+		if (firstPage != null){
+			if(firstPage.getTable() != null){
+				if(firstPage.getTable().getDatasetLabels() != null){
+					String datasetLabelName = firstPage.getTable().getDatasetLabels();
+					String[] comboItems = comboDatasetLabel.getItems();
+					for(int i=0; i<comboItems.length;i++){
+						if (comboItems[i].equals(datasetLabelName)){
+							comboDatasetLabel.select(i);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
 	
 	public void populateColumnsTable(String dsLabel){
-		//tableColumns.clearAll();
 		//First, clean all UI elements in the table
 
 		for (DetailPanelPageTableRow detailPanelPageTableRow:detailPanelPageTableRows){
@@ -410,6 +521,11 @@ public class DetailPanelPage extends AbstractPage {
 		comboHeaderType.add("i18N");
 		comboHeaderType.add("datasetI18N");
 		editor_headerType.grabHorizontal = true;
+		//check previously defined objects
+		if(column.getHeaderType() != null){
+			selectCComboElement(comboHeaderType,column.getHeaderType());
+		}
+		
 		comboHeaderType.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -428,6 +544,10 @@ public class DetailPanelPage extends AbstractPage {
 		comboType.add("date");
 		comboType.add("timestamp");
 		editor_type.grabHorizontal = true;
+		//check previously defined objects
+		if(column.getType() != null){
+			selectCComboElement(comboType,column.getType());
+		}
 		comboType.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -441,6 +561,10 @@ public class DetailPanelPage extends AbstractPage {
 		TableEditor editor_width = new TableEditor(tableColumns);
 		final Text textWidth = new Text(tableColumns, SWT.NONE);
 		editor_width.grabHorizontal = true;
+		if(column.getWidth() != 0){
+			textWidth.setText(String.valueOf(column.getWidth()));
+		}
+			
 		textWidth.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent arg0) {
 				editor.setIsDirty(true);
@@ -531,6 +655,16 @@ public class DetailPanelPage extends AbstractPage {
 		}
 		logger.debug("OUT");
 		return datasetInfosPar;
+	}
+	
+	public void selectCComboElement(CCombo combo, String element){
+		String[] items = combo.getItems();
+		for (int i=0; i<items.length; i++){
+			if (items[i].equals(element)){
+				combo.select(i);
+				break;
+			}
+		}
 	}
 	
 	
