@@ -142,7 +142,7 @@ public class ResultSet implements IResultSet
 		//String fieldName = dataStore.getMetaData().getFieldName(index);
 		int fieldIndex =-1;
 		for(int i=0; i< dataStore.getMetaData().getFieldCount();i++){
-			if(dataStore.getMetaData().getFieldName(i).equals(fieldName)){
+			if(dataStore.getMetaData().getFieldAlias(i).equals(fieldName)){
 				fieldIndex = i;
 				break;
 			}
