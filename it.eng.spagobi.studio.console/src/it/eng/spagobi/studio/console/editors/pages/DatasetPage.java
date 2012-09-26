@@ -87,11 +87,11 @@ public class DatasetPage extends AbstractPage {
 	 */
 	public DatasetPage(Composite parent, int style) {
 		super(parent, style);
+
 	}
 	
 	public void drawPage(){
 		datasets = consoleTemplateModel.getDataset();
-
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(this, SWT.NONE);
@@ -143,18 +143,8 @@ public class DatasetPage extends AbstractPage {
 		txtRowsLimit = new Text(groupSelection, SWT.BORDER);
 		txtRowsLimit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
-		Group groupDatasetTable = new Group(mainComposite, SWT.NONE);
-		groupDatasetTable.setText("Datasets added");
-		groupDatasetTable.setLayout(new GridLayout(1, false));
-		groupDatasetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-		
-		Composite compositeButtons = new Composite(groupDatasetTable, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(2, false));
-		compositeButtons.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false, 1, 1));
-		
-		Button btnAdd = new Button(compositeButtons, SWT.NONE);
-		btnAdd.setText("Add");
+		Button btnAdd = new Button(groupSelection, SWT.NONE);
+		btnAdd.setText(" Add Dataset");
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				if ( (comboDatasets.getSelectionIndex()!= -1 ) && (!textId.getText().isEmpty()) ){
@@ -184,9 +174,22 @@ public class DatasetPage extends AbstractPage {
 				}
 			}
 		});
+		new Label(groupSelection, SWT.NONE);
+		new Label(groupSelection, SWT.NONE);
+		new Label(groupSelection, SWT.NONE);
+		
+		Group groupDatasetTable = new Group(mainComposite, SWT.NONE);
+		groupDatasetTable.setText("Datasets added");
+		groupDatasetTable.setLayout(new GridLayout(1, false));
+		groupDatasetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		
+		Composite compositeButtons = new Composite(groupDatasetTable, SWT.NONE);
+		compositeButtons.setLayout(new GridLayout(1, false));
+		compositeButtons.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false, 1, 1));
 		
 		Button btnRemove = new Button(compositeButtons, SWT.NONE);
-		btnRemove.setText("Remove");
+		btnRemove.setText("Remove Dataset");
 		btnRemove.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				if (table.getSelectionIndex() != -1){
@@ -230,6 +233,7 @@ public class DatasetPage extends AbstractPage {
 		
 		//Check for previously defined Dataset to show in the Table
 		populateDatasetTable();
+
 	}
 	
 	public void populateDatasetTable(){

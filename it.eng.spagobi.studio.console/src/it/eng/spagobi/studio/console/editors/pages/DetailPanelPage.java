@@ -99,6 +99,8 @@ public class DetailPanelPage extends AbstractPage {
 	public static final int COLUMN_HEADER_TYPE = 2;
 	public static final int COLUMN_TYPE = 3;
 	public static final int COLUMN_WIDTH = 4;
+	private Text textTitle;
+	private boolean previousTitleFound;
 
 
 
@@ -109,6 +111,7 @@ public class DetailPanelPage extends AbstractPage {
 	 */
 	public DetailPanelPage(Composite parent, int style) {
 		super(parent, style);
+
 	}
 	public void drawPage(){		
 		detailPanelPageTableRows = new ArrayList<DetailPanelPageTableRow>();
@@ -121,6 +124,33 @@ public class DetailPanelPage extends AbstractPage {
 		grpPageDetail.setText("Page Detail");
 		grpPageDetail.setLayout(new GridLayout(1, false));
 		grpPageDetail.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		Composite compositeTitle = new Composite(grpPageDetail, SWT.NONE);
+		compositeTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		compositeTitle.setLayout(new GridLayout(2, false));
+		
+		Label lblTitle = new Label(compositeTitle, SWT.NONE);
+		lblTitle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblTitle.setText("Title");
+		
+		textTitle = new Text(compositeTitle, SWT.BORDER);
+		textTitle.setText("Page Title");
+
+		textTitle.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				if (firstPage != null){
+					if (previousTitleFound){
+						previousTitleFound = false;
+					} else {
+						editor.setIsDirty(true);
+					}
+					firstPage.setTitle(textTitle.getText());				
+				}
+			}
+		});
+		GridData gd_textTitle = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_textTitle.widthHint = 119;
+		textTitle.setLayoutData(gd_textTitle);
 		
 		Group grpTable = new Group(grpPageDetail, SWT.NONE);
 		grpTable.setText("Table");
@@ -311,9 +341,14 @@ public class DetailPanelPage extends AbstractPage {
 		Vector<Page> pages = consoleTemplateModel.getDetailPanel().getPages();
 		if (!pages.isEmpty()){
 			firstPage = pages.get(0);
+			previousTitleFound = true;
+			textTitle.setText(firstPage.getTitle());
 		} else {
 			Page newPage = new Page();
-			newPage.setTitle("Page title");
+			//newPage.setTitle("Page title");
+			if (textTitle.getText() != null){
+				newPage.setTitle(textTitle.getText());				
+			}
 			TablePage newTable = new TablePage();
 			newPage.setTable(newTable);
 			consoleTemplateModel.getDetailPanel().getPages().add(newPage);
