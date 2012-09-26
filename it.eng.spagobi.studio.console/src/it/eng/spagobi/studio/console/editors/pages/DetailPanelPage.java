@@ -419,23 +419,6 @@ public class DetailPanelPage extends AbstractPage {
 				comboColumnId.add(dsmf.getName());
 			}
 		}
-		//check previously defined ColumnId in detailPanel Page
-		/*
-		if (firstPage != null){
-			if(firstPage.getTable() != null){
-				if(firstPage.getTable().getColumnId() != null){
-					String columnId = firstPage.getTable().getColumnId();
-					String[] comboItems = comboColumnId.getItems();
-					for(int i=0; i<comboItems.length;i++){
-						if (comboItems[i].equals(columnId)){
-							comboColumnId.select(i);
-							break;
-						}
-					}
-				}
-			}
-		}
-		*/
 	}
 	
 	public void populateDatasetCombo(){
@@ -559,6 +542,10 @@ public class DetailPanelPage extends AbstractPage {
 		//check previously defined objects
 		if(column.getHeaderType() != null){
 			selectCComboElement(comboHeaderType,column.getHeaderType());
+		} else {
+			//default value is static
+			comboHeaderType.select(0);
+			column.setHeaderType("static");
 		}
 		
 		comboHeaderType.addSelectionListener(new SelectionAdapter() {
@@ -582,6 +569,10 @@ public class DetailPanelPage extends AbstractPage {
 		//check previously defined objects
 		if(column.getType() != null){
 			selectCComboElement(comboType,column.getType());
+		}  else {
+			//default value is string
+			comboType.select(0);
+			column.setType("string");
 		}
 		comboType.addSelectionListener(new SelectionAdapter() {
 			@Override

@@ -154,6 +154,8 @@ public class SummaryPanelPage extends AbstractPage {
 		TableColumn tblclmnDataset = new TableColumn(tableWidgets, SWT.NONE);
 		tblclmnDataset.setWidth(156);
 		tblclmnDataset.setText("Dataset");		
+		
+		
 	}
 	public ConsoleEditor getEditor() {
 		return editor;
