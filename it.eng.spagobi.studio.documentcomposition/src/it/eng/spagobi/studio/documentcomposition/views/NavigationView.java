@@ -488,6 +488,13 @@ public class NavigationView extends ViewPart {
 	public void cleanParameters(){
 		table.removeAll();
 	}
+	public Composite getClient() {
+		return client;
+	}
+	public void setClient(Composite client) {
+		this.client = client;
+	}
 
+	
 
 }

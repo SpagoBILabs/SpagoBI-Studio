@@ -67,7 +67,7 @@ public class Document {
 		return id;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.id= id;
 	}
 	
 	/** crate a new document: populate wth parameters taken from file metadata
@@ -116,7 +116,9 @@ public class Document {
 //				parameters.getParameter().add(par);
 //			}
 //		}
-		this.id = metadataDocument.getIdMetadataDocument();
+//		this.idLabel = metadataDocument.getIdMetadataDocument();
+		this.id = metadataDocument.getLabel();
+
 	}	
 
 
@@ -126,7 +128,7 @@ public class Document {
 	public boolean containsParameter(String urlName){
 		boolean toRet = false;
 		
-		for (Iterator iterator = getParameters().getParameter().iterator(); iterator.hasNext() && !toRet;) {
+		for (Iterator iterator	 = getParameters().getParameter().iterator(); iterator.hasNext() && !toRet;) {
 			Parameter par = (Parameter) iterator.next();
 			if(par.getSbiParLabel().equals(urlName)){
 				toRet = true;

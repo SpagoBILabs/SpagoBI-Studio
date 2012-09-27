@@ -161,8 +161,15 @@ public class Designer {
 			docContainer.setTitle(metadataDocument!=null ? metadataDocument.getLabel() : "NoDocument");
 			if(metadataDocument!=null){
 				docContainer.getDocumentContained().setMetadataDocument(metadataDocument);
-				metadataDocument.setIdMetadataDocument(id+"_"+metadataDocument.getLabel());
-				document.setId(id+"_"+metadataDocument.getLabel());
+				//metadataDocument.setIdMetadataDocument(id+"_"+metadataDocument.getLabel());
+				metadataDocument.setLabel(metadataDocument.getLabel());
+				
+				//document.setId(id+"_"+metadataDocument.getLabel());
+				document.setId(metadataDocument.getLabel());
+				if(docContainer.getDocumentContained()!= null){
+					DocumentContained docContained = docContainer.getDocumentContained();
+					docContained.setDocumentLabel(metadataDocument!=null ? metadataDocument.getLabel() : null);
+				}
 			}
 			docContainer.getDocumentContained().viewDocumentMetadata(metadataDocument);
 		}
@@ -304,7 +311,7 @@ public class Designer {
 						IViewPart viewPart=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PROPERTIES_VIEW_ID);
 						if(viewPart!=null)((DocumentPropertiesView)viewPart).setVisible(false);
 						IViewPart viewPart2=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PARAMETERS_VIEW_ID);
-						if(viewPart2!=null)((DocumentParametersView)viewPart2).setVisible(false);
+						if(viewPart2!=null)((DocumentParametersView)viewPart2).setTableVisible(false);
 
 					}
 					break;

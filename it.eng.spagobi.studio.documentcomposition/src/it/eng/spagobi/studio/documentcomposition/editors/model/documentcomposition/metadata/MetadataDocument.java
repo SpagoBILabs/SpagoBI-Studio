@@ -27,7 +27,7 @@ import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
 
 public class MetadataDocument {
 
-	private String idMetadataDocument;
+	//private String idMetadataDocument;
 	private Integer id;
 	private String name;
 	private String label;
@@ -203,12 +203,12 @@ public class MetadataDocument {
 
 
 	}
-	public String getIdMetadataDocument() {
-		return idMetadataDocument;
-	}
-	public void setIdMetadataDocument(String idMetadataDocument) {
-		this.idMetadataDocument = idMetadataDocument;
-	}
+//	public String getIdMetadataDocument() {
+//		return idMetadataDocument;
+//	}
+//	public void setIdMetadataDocument(String idMetadataDocument) {
+//		this.idMetadataDocument = idMetadataDocument;
+//	}
 	public String getEngineId() {
 		return engineId;
 	}

@@ -42,12 +42,64 @@ public class MetadataDocumentComposition {
 		this.metadataDocuments = metadataDocuments;
 	}
 
+	public boolean substituteMetadataDocument(MetadataDocument metadataDocument){
+		logger.debug("IN");
+		boolean found = false;
+		
+		for (int i = 0; i < metadataDocuments.size(); i++) {
+			MetadataDocument iterMetaDocument = metadataDocuments.get(i);
+
+			if(iterMetaDocument.getLabel().equals(metadataDocument.getLabel())){
+				metadataDocuments.set(i, null);
+				metadataDocuments.set(i, metadataDocument);
+				found = true;
+			}
+		}
+		logger.debug("OUT");
+		return found;
+
+	}
+	
+
+		
+	
+	public MetadataDocument findMetadataDocument(String label){
+		logger.debug("IN");
+		MetadataDocument toReturn = null;
+
+		for (int i = 0; i < metadataDocuments.size(); i++) {
+			MetadataDocument iterMetaDocument = metadataDocuments.get(i);
+
+			if(iterMetaDocument.getLabel().equals(label)){
+				toReturn = iterMetaDocument;
+			}
+		}
+		logger.debug("OUT");
+		return toReturn;
+
+	}
+	
+	
+	public boolean removeMetadataDocumentByLabel(MetadataDocument _metadataDocument){
+		boolean found=false;
+		for (Iterator iterator = metadataDocuments.iterator(); iterator.hasNext() && found==false;) {
+			MetadataDocument metaDocument = (MetadataDocument) iterator.next();
+			if(metaDocument.getLabel().equals(_metadataDocument.getLabel())){
+				metadataDocuments.remove(metaDocument);
+				found=true;
+			}
+		}
+		return found;
+	}
+	
+	
+	
 
 	public boolean removeMetadataDocument(MetadataDocument _metadataDocument){
 		boolean found=false;
 		for (Iterator iterator = metadataDocuments.iterator(); iterator.hasNext() && found==false;) {
 			MetadataDocument metaDocument = (MetadataDocument) iterator.next();
-			if(metaDocument.getIdMetadataDocument().equals(_metadataDocument.getIdMetadataDocument())){
+			if(metaDocument.getLabel().equals(_metadataDocument.getLabel())){
 				metadataDocuments.remove(metaDocument);
 				found=true;
 			}
@@ -56,7 +108,14 @@ public class MetadataDocumentComposition {
 	}
 
 	public void addMetadataDocument(MetadataDocument _metadataDocument){
-		metadataDocuments.add(_metadataDocument);
+		logger.debug("IN");
+		if(findMetadataDocument(_metadataDocument.getLabel())!= null){
+			this.substituteMetadataDocument(_metadataDocument);
+		}
+		else{
+			metadataDocuments.add(_metadataDocument);
+		}
+		logger.debug("OUT");
 	}
 
 	public boolean isMadeWithStudio(){

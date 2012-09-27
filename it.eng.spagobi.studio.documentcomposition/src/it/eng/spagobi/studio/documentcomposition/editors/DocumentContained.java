@@ -12,6 +12,7 @@ package it.eng.spagobi.studio.documentcomposition.editors;
 
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataBO;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
+import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocumentComposition;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
 import it.eng.spagobi.studio.documentcomposition.util.SpagoBIDocCompCostants;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
@@ -34,7 +35,9 @@ import org.slf4j.LoggerFactory;
 public class DocumentContained {
 
 	Group group;	
-	MetadataDocument metadataDocument;	
+	String documentLabel;
+//	MetadataDocument metadataDocument;	
+
 	Image image=null;
 	Image whiteImage=null;
 	Image scaledImage=null;
@@ -87,8 +90,11 @@ public class DocumentContained {
 		logger.debug("IN");
 		try{
 			int i=0;
+			
+			MetadataDocumentComposition metadataDocumentComposition = (new MetadataBO()).getMetadataDocumentComposition();
+			
 			String id=file.getPersistentProperty(SpagoBIStudioConstants.DOCUMENT_ID);
-			if(metadataDocument!=null){
+			if(documentLabel!=null){
 				MessageDialog.openWarning(group.getShell(), 
 						"Warning", "Container has already Document in!");
 				logger.debug("OUT false");
@@ -100,13 +106,15 @@ public class DocumentContained {
 				logger.debug("OUT false");
 				return false;
 			}
-			else{			
+			else{		// new document	
 				i++;
 
 				String localFileName=file.getName();
 				IPath ia=file.getFullPath();
 				//String localFileName=ia.toString();
-				metadataDocument=new MetadataDocument(file);				
+				MetadataDocument metadataDocument=new MetadataDocument(file);				
+
+				
 				// check the document not alredy exist
 				if(metadataDocument!=null){
 					boolean contained=designer.isDocumentContained(idContainer, metadataDocument.getLabel());
@@ -117,9 +125,13 @@ public class DocumentContained {
 						return false;
 					}
 				}
-
-				metadataDocument.setIdMetadataDocument(idContainer+"_"+metadataDocument.getLabel());
+				documentLabel = metadataDocument.getLabel();
+				
+				
+				//metadataDocument.setIdMetadataDocument(idContainer+"_"+metadataDocument.getLabel());
+				
 				metadataDocument.setLocalFileName(localFileName);
+				// add new MetadataDocumetn to list
 				(new MetadataBO()).getMetadataDocumentComposition().addMetadataDocument(metadataDocument);
 				logger.debug("OUT");
 				return viewDocumentMetadata(metadataDocument);
@@ -284,11 +296,16 @@ public class DocumentContained {
 				//
 				//					e2.printStackTrace();
 				//				}
+				if(scaledImage != null){
+					System.out.println("scaled "+scaledImage);
+					e.gc.drawImage(scaledImage,20,20);
+					System.out.println("nature "+natureImage);
 
-				e.gc.drawImage(scaledImage,20,20);
-				e.gc.drawImage(natureImage,(int)((containerWidth-originalWidth)/2),(int)((containerHeight-originalHeight)/2));
+					e.gc.drawImage(natureImage,(int)((containerWidth-originalWidth)/2),(int)((containerHeight-originalHeight)/2));
+					image.dispose();
 
-				image.dispose();
+				}
+				//}
 				//				e.gc.drawImage(image, 20, 30);
 				//				image.dispose();
 			}
@@ -302,14 +319,14 @@ public class DocumentContained {
 
 
 
-	public MetadataDocument getMetadataDocument() {
-		return metadataDocument;
-	}
-
-
-	public void setMetadataDocument(MetadataDocument metadataDocument) {
-		this.metadataDocument = metadataDocument;
-	}
+//	public MetadataDocument getMetadataDocument() {
+//		return metadataDocument;
+//	}
+//
+//
+//	public void setMetadataDocument(MetadataDocument metadataDocument) {
+//		this.metadataDocument = metadataDocument;
+//	}
 
 
 	public Group getGroup() {
@@ -352,5 +369,29 @@ public class DocumentContained {
 	}
 
 
+	public String getDocumentLabel() {
+		return documentLabel;
+	}
+
+
+	public void setDocumentLabel(String documentLabel) {
+		this.documentLabel = documentLabel;
+	}
+
+	
+	
+	public MetadataDocument getMetadataDocument() {
+		MetadataDocument toReturn;
+		final MetadataDocumentComposition metadataDocumentComposition = (new MetadataBO()).getMetadataDocumentComposition();
+		toReturn = metadataDocumentComposition.findMetadataDocument(getDocumentLabel());	
+		return toReturn;
+	}
+
+
+	public void setMetadataDocument(MetadataDocument metadataDocument) {
+		MetadataDocument toReturn;
+		final MetadataDocumentComposition metadataDocumentComposition = (new MetadataBO()).getMetadataDocumentComposition();
+		metadataDocumentComposition.addMetadataDocument(metadataDocument);	
+	}
 
 }

@@ -147,7 +147,7 @@ public class DocContainer {
 					//System.out.println(designer.getEditor().isDirty);
 
 					// Reload navigations view (Really need???)
-					if(documentContained.getMetadataDocument()!=null){
+					if(documentContained.getDocumentLabel()!=null){
 						designer.reloadNavigationView();
 					}
 
@@ -165,10 +165,10 @@ public class DocContainer {
 							documentContained.getGroup().setSize(setWidth, setHeight);
 							reloadStyleDocumentProperties();
 							// Update Model if present document
-							if(documentContained.getMetadataDocument()!=null){
+							if(documentContained.getDocumentLabel()!=null){
 								(new ModelBO()).updateModelModifyDocument(documentContained.getMetadataDocument(), calculateTemplateStyle(false));
 							}
-							if(documentContained!=null && documentContained.getMetadataDocument()!=null){
+							if(documentContained!=null && documentContained.getDocumentLabel()!=null){
 								documentContained.drawImage();
 							}
 							designer.setCurrentSelection(Integer.valueOf(-1));
@@ -239,7 +239,7 @@ public class DocContainer {
 							if(doesIntersect==false && doesExceed==false){
 								composite.setSize(nuova_larghezza, nuova_altezza);
 								// Update model if present document
-								if(documentContained.getMetadataDocument()!=null){
+								if(documentContained.getDocumentLabel()!=null){
 									(new ModelBO()).updateModelModifyDocument(documentContained.getMetadataDocument(), calculateTemplateStyle(false));
 								}
 								designer.getEditor().setIsDirty(true);
@@ -259,7 +259,7 @@ public class DocContainer {
 								if(doesIntersect==false && doesExceed==false){
 									composite.setLocation(newX, newY);
 									// Update model if document is present!
-									if(documentContained.getMetadataDocument()!=null){
+									if(documentContained.getDocumentLabel()!=null){
 										(new ModelBO()).updateModelModifyDocument(documentContained.getMetadataDocument(), calculateTemplateStyle(false));
 									}
 									designer.getEditor().setIsDirty(true);								
@@ -365,10 +365,11 @@ public class DocContainer {
 						String title=designer.getContainers().get(idSel).getDocumentContained().getGroup().getText();
 
 						// delete document 
-						if(documentContained.getMetadataDocument()!=null){  // has a doc associated???
+						if(documentContained.getDocumentLabel()!=null){  // has a doc associated???
 							(new ModelBO()).deleteDocumentFromModel(documentContained.getMetadataDocument());
 							// delete metadata document
 							(new MetadataBO()).getMetadataDocumentComposition().removeMetadataDocument(documentContained.getMetadataDocument());
+							documentContained.setDocumentLabel(null);
 						}
 						else{
 							designer.getEditor().setIsDirty(true);
@@ -387,7 +388,10 @@ public class DocContainer {
 						DocContainer docContainer=designer.getContainers().get(idSel);
 						//docContainer.setDocumentContained(null);
 						docContainer.setTitle("");
-						docContainer.getDocumentContained().setMetadataDocument(null);
+						//docContainer.getDocumentContained().setMetadataDocument(null);
+//						docContainer.getDocumentContained().setMetadataDocument(null);
+						docContainer.getDocumentContained().setDocumentLabel(null);
+						
 						docContainer.getDocumentContained().getScaledImage().dispose();
 						docContainer.getDocumentContained().setImage(null);
 						docContainer.getDocumentContained().setScaledImage(null);
@@ -397,7 +401,7 @@ public class DocContainer {
 						IViewPart viewPart=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PROPERTIES_VIEW_ID);
 						if(viewPart!=null)((DocumentPropertiesView)viewPart).setVisible(false);
 						IViewPart viewPart2=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PARAMETERS_VIEW_ID);
-						if(viewPart2!=null)((DocumentParametersView)viewPart2).setVisible(false);						
+						if(viewPart2!=null)((DocumentParametersView)viewPart2).setTableVisible(false);						
 						designer.getMainComposite().layout();
 						designer.getMainComposite().redraw();
 						//						designer.getMainComposite().pack();
@@ -413,10 +417,11 @@ public class DocContainer {
 						String title=designer.getContainers().get(idSel).getDocumentContained().getGroup().getText();
 
 						// delete document 
-						if(documentContained.getMetadataDocument()!=null){  // has a doc associated???
+						if(documentContained.getDocumentLabel()!=null){  // has a doc associated???
 							(new ModelBO()).deleteDocumentFromModel(documentContained.getMetadataDocument());
 							// delete metadata document
 							(new MetadataBO()).getMetadataDocumentComposition().removeMetadataDocument(documentContained.getMetadataDocument());
+						documentContained.setDocumentLabel(null);
 						}
 						designer.getEditor().setIsDirty(true);
 						designer.setCurrentSelection(-1);
@@ -426,7 +431,7 @@ public class DocContainer {
 						IViewPart viewPart=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PROPERTIES_VIEW_ID);
 						if(viewPart!=null)((DocumentPropertiesView)viewPart).setVisible(false);
 						IViewPart viewPart2=DocCompUtilities.getViewReference(DocCompUtilities.DOCUMENT_PARAMETERS_VIEW_ID);
-						if(viewPart2!=null)((DocumentParametersView)viewPart2).setVisible(false);						
+						if(viewPart2!=null)((DocumentParametersView)viewPart2).setTableVisible(false);						
 						designer.getMainComposite().layout();
 						designer.getMainComposite().redraw();
 						//						designer.getMainComposite().pack();
@@ -554,11 +559,11 @@ public class DocContainer {
 				}
 				if(doTransfer==true){
 					// Select the component!
-					if(documentContained.getMetadataDocument()!=null)
+					if(documentContained.getDocumentLabel()!=null)
 						reloadDocumentPropertiesView(idContainer.toString());
 					reloadStyleDocumentProperties();
 					// Reload navigations view (Really need???)
-					if(documentContained.getMetadataDocument()!=null){
+					if(documentContained.getDocumentLabel()!=null){
 						designer.reloadNavigationView();
 					}
 					designer.setState(Designer.SELECTION);

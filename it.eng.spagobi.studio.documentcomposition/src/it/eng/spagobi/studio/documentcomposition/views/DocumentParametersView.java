@@ -19,6 +19,7 @@ import it.eng.spagobi.studio.documentcomposition.editors.model.documentcompositi
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataDocument;
 import it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition.metadata.MetadataParameter;
 import it.eng.spagobi.studio.documentcomposition.util.DocCompUtilities;
+import it.eng.spagobi.studio.documentcomposition.util.DocumentsContainedHandler;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,8 +38,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -100,6 +104,9 @@ logger.debug("IN");
 		layout.marginHeight = 2;
 		client.setLayout(layout);
 
+		Button buttonRefresh=new Button(client, SWT.PUSH);
+		buttonRefresh.setText("Refresh Metadata on active server");
+		buttonRefresh.addListener(SWT.Selection, getMetadataResfreshListener(client));
 
 		table = new Table (client, SWT.MULTI | SWT.BORDER
 				| SWT.FULL_SELECTION | SWT.CHECK);
@@ -274,7 +281,7 @@ logger.debug("IN");
 		toolkit.paintBordersFor(client);
 		section.setClient(client);
 		viewSelectedProperties();
-		setVisible(false);
+		setTableVisible(false);
 		logger.debug("OUT");
 
 	}
@@ -336,11 +343,22 @@ logger.debug("IN");
 		}
 		client.layout();
 		client.redraw();
-		setVisible(true);
+		setTableVisible(true);
 		logger.debug("OUT");
 
 	}
 
+	
+	public Listener getMetadataResfreshListener(final Composite client){
+		logger.debug("IN");
+		Listener refreshListener = new Listener() {
+			public void handleEvent(Event event) {
+				new DocumentsContainedHandler().refreshMetadataOfContainedDocuments(client);
+			}
+		};
+		logger.debug("OUT");
+		return refreshListener;
+	}
 
 
 
@@ -419,11 +437,11 @@ logger.debug("IN");
 	}
 
 
-	public void setVisible(boolean visible){
-		client.setVisible(visible);
+	public void setTableVisible(boolean visible){
+		table.setVisible(visible);
 	}
-	public boolean isVisible(){
-		return client.isVisible();
+	public boolean isTableVisible(){
+		return table.isVisible();
 	}
 
 
