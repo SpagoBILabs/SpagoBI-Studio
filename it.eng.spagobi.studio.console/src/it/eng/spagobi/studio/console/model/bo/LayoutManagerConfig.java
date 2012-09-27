@@ -23,6 +23,8 @@ package it.eng.spagobi.studio.console.model.bo;
 
 import java.util.Vector;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
@@ -30,6 +32,7 @@ import java.util.Vector;
 public class LayoutManagerConfig {
 	
 	private String layout;
+	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int columnNumber;
 	private Vector<String> columnWidths;
 	

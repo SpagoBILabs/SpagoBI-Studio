@@ -23,6 +23,8 @@ package it.eng.spagobi.studio.console.model.bo;
 
 import java.util.Vector;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
@@ -34,6 +36,7 @@ public class SummaryPanel {
 	private boolean collassable;
 	private boolean collapsed;
 	private boolean hidden;
+	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int height;
 	private LayoutManagerConfig layoutConfig;
 	private Vector<Chart> charts;

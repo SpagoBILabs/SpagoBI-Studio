@@ -21,10 +21,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.editors.pages;
 
+import java.util.Vector;
+
 import it.eng.spagobi.studio.console.editors.ConsoleEditor;
 import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
+import it.eng.spagobi.studio.console.model.bo.LayoutManagerConfig;
+import it.eng.spagobi.studio.console.model.bo.SummaryPanel;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -49,6 +57,9 @@ public class SummaryPanelPage extends AbstractPage {
 	private Table tableWidgets;
 	private Text textColumnNumber;
 	private Text textColumnsWidth;
+	private Combo comboCollapsed;
+	private Combo comboCollasable;
+	private Combo comboHidden;
 	
 	
 	/**
@@ -77,25 +88,88 @@ public class SummaryPanelPage extends AbstractPage {
 		lblCollapsed.setSize(55, 15);
 		lblCollapsed.setText("Collapsed:");
 		
-		Combo comboCollapsed = new Combo(compositeGeneralProperties, SWT.READ_ONLY);
+		comboCollapsed = new Combo(compositeGeneralProperties, SWT.READ_ONLY);
 		comboCollapsed.setSize(53, 23);
 		comboCollapsed.setItems(new String[] {"true", "false"});
+		//Check if previous created object is found
+		if (consoleTemplateModel.getSummaryPanel() != null){
+			boolean value = consoleTemplateModel.getSummaryPanel().isCollapsed();
+			String[] items = comboCollapsed.getItems();
+			for (int i=0; i<items.length ;i++){
+				if(items[i].equals(String.valueOf(value))){
+					comboCollapsed.select(i);
+					break;
+				}
+			}
+		}	
+		comboCollapsed.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+				SummaryPanel summaryPanel = getSummaryPanel();
+				boolean isCollapsed = Boolean.parseBoolean(comboCollapsed.getItem(comboCollapsed.getSelectionIndex()));
+				summaryPanel.setCollapsed(isCollapsed);
+				
+			}
+		});
 		
 		Label lblCollasable = new Label(compositeGeneralProperties, SWT.NONE);
 		lblCollasable.setSize(57, 15);
 		lblCollasable.setText("Collasable:");
 		
-		Combo comboCollasable = new Combo(compositeGeneralProperties, SWT.READ_ONLY);
+		comboCollasable = new Combo(compositeGeneralProperties, SWT.READ_ONLY);
 		comboCollasable.setSize(76, 23);
 		comboCollasable.setItems(new String[] {"true", "false"});
+		//Check if previous created object is found
+		if (consoleTemplateModel.getSummaryPanel() != null){
+			boolean value = consoleTemplateModel.getSummaryPanel().isCollassable();
+			String[] items = comboCollasable.getItems();
+			for (int i=0; i<items.length ;i++){
+				if(items[i].equals(String.valueOf(value))){
+					comboCollasable.select(i);
+					break;
+				}
+			}
+		}		
+		comboCollasable.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+				SummaryPanel summaryPanel = getSummaryPanel();
+				boolean isCollasable = Boolean.parseBoolean(comboCollasable.getItem(comboCollasable.getSelectionIndex()));
+				summaryPanel.setCollassable(isCollasable);
+				
+			}
+		});
 		
 		Label lblHidden = new Label(compositeGeneralProperties, SWT.NONE);
 		lblHidden.setSize(42, 15);
 		lblHidden.setText("Hidden:");
 		
-		Combo comboHidden = new Combo(compositeGeneralProperties, SWT.READ_ONLY);
+		comboHidden = new Combo(compositeGeneralProperties, SWT.READ_ONLY);
 		comboHidden.setSize(53, 23);
 		comboHidden.setItems(new String[] {"true", "false"});
+		//Check if previous created object is found
+		if (consoleTemplateModel.getSummaryPanel() != null){
+			boolean value = consoleTemplateModel.getSummaryPanel().isHidden();
+			String[] items = comboHidden.getItems();
+			for (int i=0; i<items.length ;i++){
+				if(items[i].equals(String.valueOf(value))){
+					comboHidden.select(i);
+					break;
+				}
+			}
+		}	
+		comboHidden.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+				SummaryPanel summaryPanel = getSummaryPanel();
+				boolean isHidden = Boolean.parseBoolean(comboHidden.getItem(comboHidden.getSelectionIndex()));
+				summaryPanel.setHidden(isHidden);
+				
+			}
+		});
 		
 		Label lblHeight = new Label(compositeGeneralProperties, SWT.NONE);
 		lblHeight.setSize(39, 15);
@@ -103,6 +177,21 @@ public class SummaryPanelPage extends AbstractPage {
 		
 		textHeight = new Text(compositeGeneralProperties, SWT.BORDER);
 		textHeight.setSize(76, 21);
+		//Check if previous created object is found
+		if (consoleTemplateModel.getSummaryPanel() != null){
+			String value = String.valueOf(consoleTemplateModel.getSummaryPanel().getHeight());
+			if (consoleTemplateModel.getSummaryPanel().getHeight() != 0){
+				textHeight.setText(value);				
+			}
+		}	
+		textHeight.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				editor.setIsDirty(true);
+				SummaryPanel summaryPanel = getSummaryPanel();
+				int heightValue =  Integer.parseInt(textHeight.getText());
+				summaryPanel.setHeight(heightValue);				
+			}
+		});
 		
 		Group groupLayoutType = new Group(grpLayoutProperties, SWT.NONE);
 		groupLayoutType.setText("Column Layout");
@@ -115,6 +204,31 @@ public class SummaryPanelPage extends AbstractPage {
 		
 		textColumnNumber = new Text(groupLayoutType, SWT.BORDER);
 		textColumnNumber.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		//Check if previous created object is found
+		if (consoleTemplateModel.getSummaryPanel() != null){
+			int value = consoleTemplateModel.getSummaryPanel().getLayoutConfig().getColumnNumber();
+			String columnNumber = String.valueOf(value);
+			if (value != 0){
+				textColumnNumber.setText(columnNumber);				
+			}
+		}	
+		textColumnNumber.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				editor.setIsDirty(true);
+				SummaryPanel summaryPanel = getSummaryPanel();
+				LayoutManagerConfig layoutManagerConfig = summaryPanel.getLayoutConfig();
+				int columnNumber =  Integer.parseInt(textColumnNumber.getText());
+				layoutManagerConfig.setColumnNumber(columnNumber);	
+				//update also columnsWidth if necessary 
+				if (!textColumnsWidth.getText().isEmpty()){
+					//add columns width element to the object model
+					if (columnNumber >= 0){
+						editor.setIsDirty(true);
+						insertColumnsWidth(columnNumber,textColumnsWidth.getText());
+					}	
+				}
+			}
+		});
 		
 		Label lblColumnsWidths = new Label(groupLayoutType, SWT.NONE);
 		lblColumnsWidths.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -122,6 +236,28 @@ public class SummaryPanelPage extends AbstractPage {
 		
 		textColumnsWidth = new Text(groupLayoutType, SWT.BORDER);
 		textColumnsWidth.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		//Check if previous created object is found
+		if (consoleTemplateModel.getSummaryPanel() != null){
+			if (!consoleTemplateModel.getSummaryPanel().getLayoutConfig().getColumnWidths().isEmpty()){
+				//get first element in ColumnWidths
+				String columnWidth = consoleTemplateModel.getSummaryPanel().getLayoutConfig().getColumnWidths().get(0);		
+				textColumnsWidth.setText(columnWidth);
+			}
+		}	
+		textColumnsWidth.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				String columnsWidth = textColumnsWidth.getText();
+				if (!columnsWidth.isEmpty()){
+					int columnNumber =  Integer.parseInt(textColumnNumber.getText());
+					//add columns width element to the object model
+					if (columnNumber >= 0){
+						editor.setIsDirty(true);
+						insertColumnsWidth(columnNumber,columnsWidth);
+					}						
+				}
+		
+			}
+		});
 		new Label(grpLayoutProperties, SWT.NONE);
 		
 		Group grpWidgets = new Group(mainComposite, SWT.NONE);
@@ -156,7 +292,47 @@ public class SummaryPanelPage extends AbstractPage {
 		tblclmnDataset.setText("Dataset");		
 		
 		
+		//-----------------------
+
+
+		
+		
 	}
+	//create n elements of columnsWidth in layoutManagerConfig object.
+	//columnNumber must be >= 0
+	public void insertColumnsWidth(int columnNumber,String columnsWidth){
+		SummaryPanel summaryPanel = getSummaryPanel();
+		LayoutManagerConfig layoutManagerConfig = summaryPanel.getLayoutConfig();
+		if (layoutManagerConfig != null){
+			Vector<String> columnWidths = layoutManagerConfig.getColumnWidths();
+			columnWidths.clear();
+			for (int i=0; i<columnNumber; i++){
+				columnWidths.add(columnsWidth);
+			}
+		}
+	}
+
+	
+	//create a SummaryPanel or return existing one
+	public SummaryPanel getSummaryPanel(){
+		SummaryPanel summaryPanel = consoleTemplateModel.getSummaryPanel();
+		//check for previously defined Summary panel or create one
+		if (summaryPanel != null){
+			return summaryPanel;
+		} else {
+			//create a new SummaryPanel
+			summaryPanel = new SummaryPanel();
+			//create also LayoutManagerConfig (with layout set to column by default)
+			LayoutManagerConfig layoutManagerConfig = new LayoutManagerConfig();
+			layoutManagerConfig.setLayout("column");
+			summaryPanel.setLayoutConfig(layoutManagerConfig);
+			consoleTemplateModel.setSummaryPanel(summaryPanel);
+
+		}
+		return summaryPanel;
+	}
+	
+	
 	public ConsoleEditor getEditor() {
 		return editor;
 	}
