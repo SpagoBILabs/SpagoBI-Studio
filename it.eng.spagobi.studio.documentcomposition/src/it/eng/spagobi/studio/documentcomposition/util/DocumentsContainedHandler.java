@@ -1,3 +1,12 @@
+/**
+ SpagoBI, the Open Source Business Intelligence suite
+
+ Copyright (C) 2012 Engineering Ingegneria Informatica S.p.A. - SpagoBI Competency Center
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+**/
 package it.eng.spagobi.studio.documentcomposition.util;
 
 import it.eng.spagobi.studio.documentcomposition.Activator;
@@ -53,7 +62,10 @@ public class DocumentsContainedHandler {
 		final NoDocumentException noDocumentException=new NoDocumentException();
 		final NoActiveServerException noActiveServerException=new NoActiveServerException();
 
-
+/**
+ *  Refresh of metadata of all documents contained in composite document
+ */
+		
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Refreshing ", IProgressMonitor.UNKNOWN);
@@ -66,9 +78,12 @@ public class DocumentsContainedHandler {
 						return;
 					}
 					String label = null;
+					
+					// run all contained documents
 					for (Iterator iterator = documents.iterator(); iterator.hasNext();) {
 						Document document = (Document) iterator.next();
-
+						logger.debug("document eith label "+document.getSbiObjLabel());
+						
 						noDocumentException.setDocumentLabel(null);
 						
 						String localFileName = document.getLocalFileName();
@@ -93,8 +108,10 @@ public class DocumentsContainedHandler {
 
 								metadataHandler.refreshMetadata(fileToGet, noDocumentException, noActiveServerException);
 								// after refreshing there is to update the object
+								logger.debug("update current object MetadataDocument");
 								final MetadataDocument metadataDocument= refreshObject(document,fileToGet);
 								// refresh also graphical view
+								logger.debug("refresh graphic");
 								if(metadataDocument != null){
 									logger.debug("metadata object refreshed");
 
@@ -218,93 +235,4 @@ public class DocumentsContainedHandler {
 	}	
 	
 }
-			
-			
-
-
-
-
-		
-
-//		if(documentId==null){
-//		logger.error("Cannot retrieve metadata cause no document is associated");
-//		MessageDialog.openWarning(container.getShell(), "Warning", "No document is associated: cannot retrieve metadata");
-//	}
-//	else{
-//		final NoDocumentException noDocumentException=new NoDocumentException();
-//		final NoActiveServerException noActiveServerException=new NoActiveServerException();
-//
-//		IRunnableWithProgress op = new IRunnableWithProgress() {			
-//			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-//				monitor.beginTask("Refreshing ", IProgressMonitor.UNKNOWN);
-//				try {
-//					new MetadataHandler().refreshMetadata(fileSel, noDocumentException, noActiveServerException);
-//				} catch (Exception e) {
-//					logger.error("Error in monitor retieving metadata ",e);
-//					MessageDialog.openError(container.getShell(), "Exception", "Exception");
-//				}
-//			}			
-//		};
-//		ProgressMonitorDialog dialog=new ProgressMonitorDialog(container.getShell());		
-//		try {
-//			dialog.run(true, true, op);
-//		} catch (InvocationTargetException e1) {
-//			logger.error("No comunication with SpagoBI server: could not refresh metadata", e1);
-//			dialog.close();
-//			MessageDialog.openError(container.getShell(), "Error", "No comunication with server: Could not refresh metadata");	
-//			return;
-//		} catch (InterruptedException e1) {
-//			logger.error("No comunication with SpagoBI server: could not refresh metadata", e1);
-//			dialog.close();
-//			MessageDialog.openError(container.getShell(), "Error", "No comunication with server: Could not refresh metadata");	
-//			return;	
-//		}	
-//
-//		dialog.close();
-//
-//		if(noActiveServerException.isNoServer()){
-//			logger.error("No Server is defined active");			
-//			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-//					"Error refresh", "No Server is defined active");	
-//			return;
-//		}
-//		if(noDocumentException.isNoDocument()){
-//			logger.error("Document not retrieved; check it is still on server and you have enough permission to reach it");			
-//			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-//					"Error", "Document not retrieved; check it is still on server and you have enough permission to reach it");	
-//			return;
-//		}
-//
-//		try{
-//			// fill current values
-//			fillValues();
-//		}
-//		catch (Exception e) {
-//			MessageDialog.openError(container.getShell(), "Error", "Error while retrieving metadata informations from file");
-//			logger.error("Error in retrieving metadata informations from file", e);
-//			return;
-//		}
-//
-//		MessageDialog.openInformation(container.getShell(), "Information", "Metadata refreshed");
-//	}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
