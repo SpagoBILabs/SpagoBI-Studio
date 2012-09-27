@@ -13,6 +13,8 @@ public class NoDocumentException extends Exception{
 
 	boolean noDocument=false;
 	
+	String documentLabel;
+	
 	public NoDocumentException() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -28,6 +30,14 @@ public class NoDocumentException extends Exception{
 
 	public void setNoDocument(boolean noDocument) {
 		this.noDocument = noDocument;
+	}
+
+	public String getDocumentLabel() {
+		return documentLabel;
+	}
+
+	public void setDocumentLabel(String documentLabel) {
+		this.documentLabel = documentLabel;
 	}
 
 	
