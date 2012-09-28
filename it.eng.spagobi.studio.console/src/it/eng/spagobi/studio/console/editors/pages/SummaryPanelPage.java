@@ -23,6 +23,7 @@ package it.eng.spagobi.studio.console.editors.pages;
 
 import java.util.Vector;
 
+import it.eng.spagobi.studio.console.dialogs.LiveLinesSettingsDialog;
 import it.eng.spagobi.studio.console.editors.ConsoleEditor;
 import it.eng.spagobi.studio.console.model.bo.Chart;
 import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
@@ -30,8 +31,10 @@ import it.eng.spagobi.studio.console.model.bo.DatasetElement;
 import it.eng.spagobi.studio.console.model.bo.LayoutManagerConfig;
 import it.eng.spagobi.studio.console.model.bo.SummaryPanel;
 import it.eng.spagobi.studio.console.model.bo.WidgetConfigElement;
+import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementLiveLine;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
@@ -457,6 +460,18 @@ public class SummaryPanelPage extends AbstractPage {
 					MessageDialog.openWarning(new Shell(), "Warning", "No Widget Type Select, please select a type."); 
 				} else {
 					if (comboType.getText().equals("chart.sbi.livelines")){
+						LiveLinesSettingsDialog dialog = new LiveLinesSettingsDialog(new Shell());
+						dialog.create();
+						if (dialog.open() == Window.OK) {
+							WidgetConfigElementLiveLine widgetConfigElementLiveLine = dialog.getWidgetConfigElementLiveLine();
+							//replace generic WidgetConfigElement object with specific WidgetConfigElementLiveLine
+							Chart itemChart = (Chart)item.getData();
+							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							widgetConfigElementLiveLine = (WidgetConfigElementLiveLine) copyGenericProperties(widgetConfigElement,widgetConfigElementLiveLine);
+							itemChart.setWidgetConfig(widgetConfigElementLiveLine);
+
+
+						} 
 						
 					} else if (comboType.getText().equals("chart.sbi.multileds")){
 						
@@ -476,6 +491,16 @@ public class SummaryPanelPage extends AbstractPage {
 		tableWidgets.redraw();
 		
 
+	}
+	
+	public WidgetConfigElement copyGenericProperties(WidgetConfigElement oldObject, WidgetConfigElement newObject ){
+		String title = oldObject.getTitle();
+		String type = oldObject.getType();
+		
+		newObject.setTitle(title);
+		newObject.setType(type);
+		
+		return newObject;
 	}
 	
 	public void populateDatasetLabelCombo(CCombo comboDatasetLabel){
