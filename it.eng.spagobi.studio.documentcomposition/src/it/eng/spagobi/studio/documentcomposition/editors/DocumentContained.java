@@ -297,9 +297,9 @@ public class DocumentContained {
 				//					e2.printStackTrace();
 				//				}
 				if(scaledImage != null){
-					System.out.println("scaled "+scaledImage);
+					//System.out.println("scaled "+scaledImage);
 					e.gc.drawImage(scaledImage,20,20);
-					System.out.println("nature "+natureImage);
+					//System.out.println("nature "+natureImage);
 
 					e.gc.drawImage(natureImage,(int)((containerWidth-originalWidth)/2),(int)((containerHeight-originalHeight)/2));
 					image.dispose();
