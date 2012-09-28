@@ -448,7 +448,7 @@ public class XmlTemplateGenerator {
 			axesUtilities.updateCategoryFields(extChart);
 					
 			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("_", "_");
-			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+			XStream xstream = new XStream(new DomDriver("ISO-8859-15", replacer)); 
 			xstream.setMode(XStream.NO_REFERENCES);
 			setAlias(xstream);	
 			String xml = xstream.toXML(bean);
@@ -458,7 +458,7 @@ public class XmlTemplateGenerator {
 /** populate the ExtChart Object from template*/
 		public static ExtChart readXml(IFile file) throws CoreException{
 			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("grfthscv", "_");
-			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+			XStream xstream = new XStream(new DomDriver("ISO-8859-15", replacer)); 
 			setAlias(xstream);	
 			ExtChart objFromXml = (ExtChart)xstream.fromXML(file.getContents());
 			return objFromXml;
