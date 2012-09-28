@@ -488,7 +488,6 @@ public class DetailPanelPage extends AbstractPage {
 
 		Map<String,ColumnConfig> columnConfigSet = firstPage.getTable().getColumnConfig();
 		
-		//TODO:Check this if correct (for example when opening an existing template)
 		columnConfigSet.clear();
 		
 		IDataStoreMetadata dataStoreMetadata = retrieveDatasetMetadata(dsLabel);
@@ -516,7 +515,6 @@ public class DetailPanelPage extends AbstractPage {
 		final Text textHeader = new Text(tableColumns, SWT.NONE);
 		textHeader.setText(column.getHeader());
 
-		textHeader.setText(column.getHeader());
 		editor_header.grabHorizontal = true;
 		
 		textHeader.addModifyListener(new ModifyListener() {

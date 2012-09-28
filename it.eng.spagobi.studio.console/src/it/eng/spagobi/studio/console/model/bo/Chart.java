@@ -23,6 +23,8 @@ package it.eng.spagobi.studio.console.model.bo;
 
 import java.util.Vector;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
@@ -30,7 +32,9 @@ import java.util.Vector;
 public class Chart {
 	
 	private String dataset;
+	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int width;
+	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int height;
 	private WidgetConfigElement widgetConfig;
 	/**
