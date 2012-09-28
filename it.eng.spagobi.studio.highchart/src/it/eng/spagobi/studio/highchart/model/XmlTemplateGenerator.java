@@ -900,7 +900,9 @@ public class XmlTemplateGenerator {
 
 
 			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("_", "_");
-			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+			//XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+			XStream xstream = new XStream(new DomDriver("ISO-8859-15", replacer)); 
+			
 			xstream.setMode(XStream.NO_REFERENCES);
 			setAlias(xstream);	
 			String xml = xstream.toXML(bean);
@@ -910,7 +912,9 @@ public class XmlTemplateGenerator {
 /** populate the HighChart Object from template*/
 		public static HighChart readXml(IFile file) throws CoreException{
 			XmlFriendlyReplacer replacer = new XmlFriendlyReplacer("grfthscv", "_");
-			XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+			//XStream xstream = new XStream(new DomDriver("UTF-8", replacer)); 
+			XStream xstream = new XStream(new DomDriver("ISO-8859-15", replacer)); 
+
 			setAlias(xstream);	
 			HighChart objFromXml = (HighChart)xstream.fromXML(file.getContents());
 			return objFromXml;
