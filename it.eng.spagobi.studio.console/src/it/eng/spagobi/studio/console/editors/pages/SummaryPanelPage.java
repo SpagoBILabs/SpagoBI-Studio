@@ -21,10 +21,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.editors.pages;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import it.eng.spagobi.studio.console.dialogs.LiveLinesSettingsDialog;
 import it.eng.spagobi.studio.console.editors.ConsoleEditor;
+import it.eng.spagobi.studio.console.editors.internal.SummaryPanelPageTableRow;
 import it.eng.spagobi.studio.console.model.bo.Chart;
 import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
 import it.eng.spagobi.studio.console.model.bo.DatasetElement;
@@ -78,6 +81,8 @@ public class SummaryPanelPage extends AbstractPage {
 	public static final int COLUMN_HEIGHT = 3;
 	public static final int COLUMN_TYPE = 4;
 	public static final int COLUMN_DEFINE_WIDGET_BUTTON = 5;
+	
+	private List<SummaryPanelPageTableRow> summaryPanelPageTableRows;
 
 	
 	
@@ -90,6 +95,7 @@ public class SummaryPanelPage extends AbstractPage {
 
 	}
 	public void drawPage(){
+		summaryPanelPageTableRows = new ArrayList<SummaryPanelPageTableRow>();
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(this, SWT.NONE);
@@ -294,13 +300,35 @@ public class SummaryPanelPage extends AbstractPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				editor.setIsDirty(true);
-				createTableWidgetItem();
+				createTableWidgetItem(null);
 			}
 		});
 		
 		
 		Button btnRemoveWidget = new Button(composite, SWT.NONE);
 		btnRemoveWidget.setText("Remove Widget");
+		btnRemoveWidget.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//remove table widget item from UI and from model
+				if (tableWidgets.getSelectionIndex() != -1){
+					editor.setIsDirty(true);
+					//remove widget item from UI
+					int index = tableWidgets.getSelectionIndex();
+					summaryPanelPageTableRows.get(index).disposeRowElements();
+					
+					//remove widget from model
+					if (consoleTemplateModel.getSummaryPanel() != null){
+						if (!consoleTemplateModel.getSummaryPanel().getCharts().isEmpty()){
+							
+							consoleTemplateModel.getSummaryPanel().getCharts().remove(index);
+						}
+					}
+					
+					tableWidgets.redraw();
+				}
+			}
+		});
 		
 		Label lblCurrentWidgets = new Label(grpWidgets, SWT.NONE);
 		lblCurrentWidgets.setText("Current Widgets");
@@ -336,21 +364,65 @@ public class SummaryPanelPage extends AbstractPage {
 		
 		
 		//-----------------------
-
+		
+		//Check for previously created Widget Items and populate the table
+		if (consoleTemplateModel.getSummaryPanel() != null){
+			if (!consoleTemplateModel.getSummaryPanel().getCharts().isEmpty()){
+				populateWidgetTable(consoleTemplateModel.getSummaryPanel().getCharts());
+			}
+		}
 
 		
 		
 	}
 	
-	public void createTableWidgetItem(){
+	//populate the WidgetTable with the passed charts as argument
+	public void populateWidgetTable(Vector<Chart> charts){
+		for (Chart chart:charts){
+			//create empty widget row
+			SummaryPanelPageTableRow summaryPanelPageTableRow = createTableWidgetItem(chart);			
+			//populate each column of the row with the existing value found
+			
+			//Text Title column
+			Text textTitle = summaryPanelPageTableRow.getTextTitle();
+			String titleValue = chart.getWidgetConfig().getTitle();
+			textTitle.setText(titleValue);
+			//Combo Dataset column
+			CCombo comboDataset = summaryPanelPageTableRow.getComboDataset();
+			String datasetValue = chart.getDataset();
+			selectCComboElement(comboDataset,datasetValue);
+			//Text Width column
+			Text textWidth = summaryPanelPageTableRow.getTextWidth();
+			String widthValue = String.valueOf(chart.getWidth());
+			textWidth.setText(widthValue);			
+			//Text Height column
+			Text textHeight = summaryPanelPageTableRow.getTextHeight();
+			String heightValue = String.valueOf(chart.getHeight());;
+			textHeight.setText(heightValue);	
+			//Combo Type colum
+			CCombo comboWidgetType = summaryPanelPageTableRow.getComboWidgetType();
+			String widgetTypeValue = chart.getWidgetConfig().getType();
+			selectCComboElement(comboWidgetType,widgetTypeValue);
+
+		}
+		tableWidgets.redraw();
+	}
+	
+	public SummaryPanelPageTableRow createTableWidgetItem(Chart existingChart){
 		final TableItem item = new TableItem(tableWidgets, SWT.NONE);
 		//create a new Chart object model and add to the Summary panel
-		Chart newChart = new Chart();
-		//generic WidgetConfigElement only used as placeholder, will be transformed to a specific type
-		WidgetConfigElement genericWidgetConfigElement = new WidgetConfigElement();
-		newChart.setWidgetConfig(genericWidgetConfigElement);
-		getSummaryPanel().getCharts().add(newChart);
-		item.setData(newChart);
+		if (existingChart == null){
+			Chart newChart = new Chart();
+			//generic WidgetConfigElement only used as placeholder, will be transformed to a specific type
+			WidgetConfigElement genericWidgetConfigElement = new WidgetConfigElement();
+			newChart.setWidgetConfig(genericWidgetConfigElement);
+			getSummaryPanel().getCharts().add(newChart);
+			item.setData(newChart);
+		} else {
+			item.setData(existingChart);			
+		}
+			
+
 		
 		
 		//create Cell Editor Text Title
@@ -488,8 +560,14 @@ public class SummaryPanelPage extends AbstractPage {
 
 		
 		//---------
-		tableWidgets.redraw();
 		
+		//create internal object with UI elements of this item
+		SummaryPanelPageTableRow summaryPanelPageTableRow = new SummaryPanelPageTableRow(item,textTitle,comboDataset,textWidth,textHeight,comboType,buttonDefineWidget);
+		summaryPanelPageTableRows.add(summaryPanelPageTableRow);
+		
+		tableWidgets.redraw();
+		return summaryPanelPageTableRow;
+
 
 	}
 	

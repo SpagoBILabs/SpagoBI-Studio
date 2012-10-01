@@ -21,10 +21,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
  * @author Marco Cortella (marco.cortella@eng.it)
  *
  */
+@JsonTypeInfo(use=JsonTypeInfo.Id.MINIMAL_CLASS , include=JsonTypeInfo.As.PROPERTY, property="@class")
 public class WidgetConfigElement {
 	
 	private String type;
