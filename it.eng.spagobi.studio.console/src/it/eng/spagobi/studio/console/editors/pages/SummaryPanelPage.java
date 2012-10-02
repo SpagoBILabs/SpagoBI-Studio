@@ -423,6 +423,9 @@ public class SummaryPanelPage extends AbstractPage {
 			selectCComboElement(comboWidgetType,widgetTypeValue);
 
 		}
+		//editor is not dirty
+		editor.setIsDirty(false);
+
 		tableWidgets.redraw();
 	}
 	
