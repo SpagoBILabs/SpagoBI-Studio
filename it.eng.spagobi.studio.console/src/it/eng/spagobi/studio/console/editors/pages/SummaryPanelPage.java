@@ -45,6 +45,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -52,6 +54,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -81,6 +85,8 @@ public class SummaryPanelPage extends AbstractPage {
 	public static final int COLUMN_HEIGHT = 3;
 	public static final int COLUMN_TYPE = 4;
 	public static final int COLUMN_DEFINE_WIDGET_BUTTON = 5;
+	public static final int COLUMN_REMOVE_WIDGET_BUTTON = 6;
+
 	
 	private List<SummaryPanelPageTableRow> summaryPanelPageTableRows;
 
@@ -304,7 +310,7 @@ public class SummaryPanelPage extends AbstractPage {
 			}
 		});
 		
-		
+		/*
 		Button btnRemoveWidget = new Button(composite, SWT.NONE);
 		btnRemoveWidget.setText("Remove Widget");
 		btnRemoveWidget.addSelectionListener(new SelectionAdapter() {
@@ -329,6 +335,7 @@ public class SummaryPanelPage extends AbstractPage {
 				}
 			}
 		});
+		*/
 		
 		Label lblCurrentWidgets = new Label(grpWidgets, SWT.NONE);
 		lblCurrentWidgets.setText("Current Widgets");
@@ -337,6 +344,13 @@ public class SummaryPanelPage extends AbstractPage {
 		tableWidgets.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableWidgets.setHeaderVisible(true);
 		tableWidgets.setLinesVisible(true);
+		tableWidgets.addListener(SWT.MouseDown, new Listener() {
+			public void handleEvent(Event event) {
+				Rectangle clientArea = tableWidgets.getClientArea();
+				Point pt = new Point(event.x, event.y);
+				int index = tableWidgets.getTopIndex(); 
+			}
+			}); 
 		
 		TableColumn tblclmnWidgetTitle = new TableColumn(tableWidgets, SWT.NONE);
 		tblclmnWidgetTitle.setWidth(100);
@@ -361,6 +375,10 @@ public class SummaryPanelPage extends AbstractPage {
 		TableColumn tblclmnButtonDefine = new TableColumn(tableWidgets, SWT.NONE);
 		tblclmnButtonDefine.setWidth(100);
 		tblclmnButtonDefine.setText("Define Widget");	
+		
+		TableColumn tblclmnSelectItem = new TableColumn(tableWidgets, SWT.NONE);
+		tblclmnSelectItem.setWidth(100);
+		tblclmnSelectItem.setText("Remove widget");
 		
 		
 		//-----------------------
@@ -546,28 +564,82 @@ public class SummaryPanelPage extends AbstractPage {
 						} 
 						
 					} else if (comboType.getText().equals("chart.sbi.multileds")){
+						//TODO
 						
 					} else if (comboType.getText().equals("chart.sbi.speedometer")){
-						
+						//TODO
+
 					} else if (comboType.getText().equals("chart.sbi.semaphore")){
-						
+						//TODO
+
 					} 
 				}
 				
 			}
 		});
 		editor_button.setEditor(buttonDefineWidget,item, COLUMN_DEFINE_WIDGET_BUTTON);
+		
+		//create Cell Editor Button Remove Widget
+		TableEditor editor_button_remove = new TableEditor(tableWidgets);
+		final Button buttonRemoveWidget = new Button(tableWidgets, SWT.NONE);
+		buttonRemoveWidget.setText("Remove Widget");
+		editor_button_remove.grabHorizontal = true;
+		buttonRemoveWidget.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editor.setIsDirty(true);
+				//find item in summaryPanelPageTableRows
+				int index = findItemInSummaryPanelPageTableRows(summaryPanelPageTableRows,item);
+				if (index >= 0){
+					//remove widget item from UI
+					summaryPanelPageTableRows.get(index).disposeRowElements();
+					summaryPanelPageTableRows.remove(index);
+					//remove widget from model
+					if (consoleTemplateModel.getSummaryPanel() != null){
+						if (!consoleTemplateModel.getSummaryPanel().getCharts().isEmpty()){
+							
+							consoleTemplateModel.getSummaryPanel().getCharts().remove(index);
+						}
+					}
+				}
 
+				tableWidgets.redraw();
+				
+			}
+		});
+		editor_button_remove.setEditor(buttonRemoveWidget,item, COLUMN_REMOVE_WIDGET_BUTTON);
 		
 		//---------
 		
 		//create internal object with UI elements of this item
-		SummaryPanelPageTableRow summaryPanelPageTableRow = new SummaryPanelPageTableRow(item,textTitle,comboDataset,textWidth,textHeight,comboType,buttonDefineWidget);
+		SummaryPanelPageTableRow summaryPanelPageTableRow = new SummaryPanelPageTableRow(item,textTitle,comboDataset,textWidth,textHeight,comboType,buttonDefineWidget,buttonRemoveWidget);
 		summaryPanelPageTableRows.add(summaryPanelPageTableRow);
 		
 		tableWidgets.redraw();
 		return summaryPanelPageTableRow;
 
+
+	}
+	
+	//search a TableItem inside the collection of SummaryPanelPageTableRow and if found return the index position of the element
+	private int findItemInSummaryPanelPageTableRows(List<SummaryPanelPageTableRow> summaryPanelPageTableRows, TableItem item){
+		int index = -1;
+
+		if (summaryPanelPageTableRows != null){
+			index = 0;
+			boolean found = false;
+			for(SummaryPanelPageTableRow element:summaryPanelPageTableRows){
+				if (element.getTableItem().equals(item)){
+					return index;
+				} else {
+					index++;
+				}
+			}
+			if (!found){
+				index= -1;
+			}
+		}
+		return index;
 
 	}
 	

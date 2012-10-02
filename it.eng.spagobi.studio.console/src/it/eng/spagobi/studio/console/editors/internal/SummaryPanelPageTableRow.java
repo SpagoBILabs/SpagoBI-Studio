@@ -40,9 +40,10 @@ public class SummaryPanelPageTableRow {
 	private Text textHeight;
 	private CCombo comboWidgetType;
 	private Button defineWidgetButton;
+	private Button buttonRemoveWidget;
 
 	
-	public SummaryPanelPageTableRow(TableItem tableItem,Text textTitle,CCombo comboDataset,Text textWidth,Text textHeight,CCombo comboWidgetType,Button defineWidgetButton  ){
+	public SummaryPanelPageTableRow(TableItem tableItem,Text textTitle,CCombo comboDataset,Text textWidth,Text textHeight,CCombo comboWidgetType,Button defineWidgetButton,Button buttonRemoveWidget  ){
 		this.tableItem = tableItem;
 		this.textTitle = textTitle;
 		this.comboDataset = comboDataset;
@@ -50,6 +51,7 @@ public class SummaryPanelPageTableRow {
 		this.textHeight = textHeight;
 		this.comboWidgetType = comboWidgetType;
 		this.defineWidgetButton = defineWidgetButton;
+		this.buttonRemoveWidget = buttonRemoveWidget;
 	}
 	
 	
@@ -180,6 +182,24 @@ public class SummaryPanelPageTableRow {
 
 
 
+	/**
+	 * @return the buttonRemoveWidget
+	 */
+	public Button getButtonRemoveWidget() {
+		return buttonRemoveWidget;
+	}
+
+
+
+	/**
+	 * @param buttonRemoveWidget the buttonRemoveWidget to set
+	 */
+	public void setButtonRemoveWidget(Button buttonRemoveWidget) {
+		this.buttonRemoveWidget = buttonRemoveWidget;
+	}
+
+
+
 	public void disposeRowElements() {
 		tableItem.dispose();
 		textTitle.dispose();
@@ -188,6 +208,7 @@ public class SummaryPanelPageTableRow {
 		textHeight.dispose();
 		comboWidgetType.dispose();
 		defineWidgetButton.dispose();
+		buttonRemoveWidget.dispose();
 	}
 	
 	

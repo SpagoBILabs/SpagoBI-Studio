@@ -482,6 +482,9 @@ public class DetailPanelPage extends AbstractPage {
 		for (DetailPanelPageTableRow detailPanelPageTableRow:detailPanelPageTableRows){
 			detailPanelPageTableRow.disposeRowElements();	
 		}
+		//remove all elements from the internal list
+		detailPanelPageTableRows.clear();
+		
 		tableColumns.clearAll();
 
 		tableColumns.redraw();
