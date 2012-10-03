@@ -21,6 +21,7 @@ public class SpagoBIStudioConstants {
 	public final static String HIGHCHART_ENGINE_EXTENSION="sbihchart";
 	public final static String EXT_ENGINE_EXTENSION="sbiextchart";
 	public final static String JASPER_REPORT_ENGINE_EXTENSION="jrxml";
+	public final static String CONSOLE_TEMPLATE_EXTENSION="console";
 	public final static String BIRT_REPORT_ENGINE_EXTENSION="rptdesign";
 	public final static String DOCUMENT_COMPOSITION_ENGINE_EXTENSION="sbidoccomp";
 	public final static String GEO_ENGINE_EXTENSION="sbigeo";
