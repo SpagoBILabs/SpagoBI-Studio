@@ -16,6 +16,7 @@ import it.eng.spagobi.meta.editor.popup.actions.CreateJPAMappingProjectExplorerA
 import it.eng.spagobi.meta.editor.popup.actions.CreateQueryProjectExplorerAction;
 import it.eng.spagobi.studio.birt.wizards.SpagoBINewBirtReportWizard;
 import it.eng.spagobi.studio.chart.wizards.SpagoBINewChartWizard;
+import it.eng.spagobi.studio.console.wizard.SpagoBINewConsoleTemplateWizard;
 import it.eng.spagobi.studio.core.Activator;
 import it.eng.spagobi.studio.core.services.datamartTemplate.UploadDatamartTemplateService;
 import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
@@ -219,7 +220,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		menu.appendToGroup("group.new", submenuReport);
 		
 
-		actions = new IAction[3];
+		actions = new IAction[4];
 		
 		//Chart
 		ActionContributionItem chartACI = new ActionContributionItem(new Action()
@@ -260,7 +261,6 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		//menu.appendToGroup("group.new", highChartACI);	
 		actions[2] = extChartACI.getAction();
 		
-		
 		SubmenuAction submenuChart = new SubmenuAction(actions, "Chart", "Chart", null, true); 
 		menu.appendToGroup("group.new", submenuChart);
 
@@ -297,6 +297,24 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		actions[0] = dcACI.getAction();
 		SubmenuAction dcDash = new SubmenuAction(actions, "CockPit", "CockPit", null, true); 
 		menu.appendToGroup("group.new", dcDash);
+		
+		actions = new IAction[1];
+
+		//Console Template
+		ActionContributionItem consoleTemplateACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("New Console Template");
+			SpagoBINewConsoleTemplateWizard sbindw = new SpagoBINewConsoleTemplateWizard();	
+			sbindw.launchWizard((IStructuredSelection)currentContext.getSelection(), "New Console Template Wizard");
+		}
+		});
+		consoleTemplateACI.getAction().setText("Console Template");
+		consoleTemplateACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
+		actions[0] = consoleTemplateACI.getAction();
+		
+		
+		SubmenuAction consoleGroup = new SubmenuAction(actions, "Console", "Console", null, true); 
+		menu.appendToGroup("group.new", consoleGroup);
 		
 		actions = new IAction[1];
 		//Geo
