@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Vector;
 
 import it.eng.spagobi.studio.console.dialogs.LiveLinesSettingsDialog;
+import it.eng.spagobi.studio.console.dialogs.MultiLedsSettingsDialog;
+import it.eng.spagobi.studio.console.dialogs.SemaphoreSettingsDialog;
+import it.eng.spagobi.studio.console.dialogs.SpeedometerSettingsDialog;
 import it.eng.spagobi.studio.console.editors.ConsoleEditor;
 import it.eng.spagobi.studio.console.editors.internal.SummaryPanelPageTableRow;
 import it.eng.spagobi.studio.console.model.bo.Chart;
@@ -35,6 +38,9 @@ import it.eng.spagobi.studio.console.model.bo.LayoutManagerConfig;
 import it.eng.spagobi.studio.console.model.bo.SummaryPanel;
 import it.eng.spagobi.studio.console.model.bo.WidgetConfigElement;
 import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementLiveLine;
+import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementMultiLeds;
+import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementSemaphore;
+import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementSpeedometer;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -567,13 +573,39 @@ public class SummaryPanelPage extends AbstractPage {
 						} 
 						
 					} else if (comboType.getText().equals("chart.sbi.multileds")){
-						//TODO
+						MultiLedsSettingsDialog dialog = new MultiLedsSettingsDialog(new Shell());
+						dialog.create();
+						if (dialog.open() == Window.OK) {
+							WidgetConfigElementMultiLeds widgetConfigElementMultiLeds = dialog.getWidgetConfigElementMultiLeds();
+							//replace generic WidgetConfigElement object with specific WidgetConfigElementMultiLeds
+							Chart itemChart = (Chart)item.getData();
+							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							widgetConfigElementMultiLeds = (WidgetConfigElementMultiLeds) copyGenericProperties(widgetConfigElement,widgetConfigElementMultiLeds);
+							itemChart.setWidgetConfig(widgetConfigElementMultiLeds);
+						} 
 						
 					} else if (comboType.getText().equals("chart.sbi.speedometer")){
-						//TODO
-
+						SpeedometerSettingsDialog dialog = new SpeedometerSettingsDialog(new Shell());
+						dialog.create();
+						if (dialog.open() == Window.OK) {
+							WidgetConfigElementSpeedometer widgetConfigElementSpeedometer = dialog.getWidgetConfigElementSpeedometer();
+							//replace generic WidgetConfigElement object with specific WidgetConfigElementSpeedometer
+							Chart itemChart = (Chart)item.getData();
+							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							widgetConfigElementSpeedometer = (WidgetConfigElementSpeedometer) copyGenericProperties(widgetConfigElement,widgetConfigElementSpeedometer);
+							itemChart.setWidgetConfig(widgetConfigElementSpeedometer);
+						} 
 					} else if (comboType.getText().equals("chart.sbi.semaphore")){
-						//TODO
+						SemaphoreSettingsDialog dialog = new SemaphoreSettingsDialog(new Shell());
+						dialog.create();
+						if (dialog.open() == Window.OK) {
+							WidgetConfigElementSemaphore widgetConfigElementSemaphore = dialog.getWidgetConfigElementSemaphore();
+							//replace generic WidgetConfigElement object with specific WidgetConfigElementSemaphore
+							Chart itemChart = (Chart)item.getData();
+							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							widgetConfigElementSemaphore = (WidgetConfigElementSemaphore) copyGenericProperties(widgetConfigElement,widgetConfigElementSemaphore);
+							itemChart.setWidgetConfig(widgetConfigElementSemaphore);
+						} 
 
 					} 
 				}

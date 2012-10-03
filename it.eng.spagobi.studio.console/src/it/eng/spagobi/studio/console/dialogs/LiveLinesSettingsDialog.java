@@ -135,17 +135,6 @@ public class LiveLinesSettingsDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button buttonOK = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
-		buttonOK.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				//first check the inputs
-				if (isValidInput()) {
-			          okPressed();					
-				} else {
-					MessageDialog.openWarning(new Shell(), "Warning", "Please insert all the required values"); 
-				}
-			}
-		});
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
@@ -160,8 +149,13 @@ public class LiveLinesSettingsDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		createWidgetConfigElementLiveLine();
-		super.okPressed();
+		//first check the inputs
+		if (isValidInput()) {
+			createWidgetConfigElementLiveLine();
+			super.okPressed();		
+		} else {
+			MessageDialog.openWarning(new Shell(), "Warning", "Please insert all the required values"); 
+		}			
 	}
 	
 	//create a WidgetConfigElementLiveLine object when OK is pressed

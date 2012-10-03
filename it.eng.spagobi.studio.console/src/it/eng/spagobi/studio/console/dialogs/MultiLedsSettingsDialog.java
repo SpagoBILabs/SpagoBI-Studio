@@ -21,9 +21,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 package it.eng.spagobi.studio.console.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import it.eng.spagobi.studio.console.editors.internal.MultiLedsSettingDialogTableRow;
+import it.eng.spagobi.studio.console.model.bo.Field;
 import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementLiveLine;
 import it.eng.spagobi.studio.console.model.bo.WidgetConfigElementMultiLeds;
 
@@ -34,6 +38,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
@@ -59,6 +64,16 @@ public class MultiLedsSettingsDialog extends Dialog {
 	private Text textFirstIntervalUb;
 	private Text textSecondIntervalUb;
 	private Table table;
+	
+	public static final int COLUMN_NAME = 0;
+	public static final int COLUMN_HEADER = 1;
+	public static final int COLUMN_RANGE_MAX_VALUE = 2;
+	public static final int COLUMN_RANGE_MIN_VALUE = 3;
+	public static final int COLUMN_FIRST_INTERVAL = 4;
+	public static final int COLUMN_SECOND_INTERVAL = 5;
+
+	
+	private List<MultiLedsSettingDialogTableRow> multiLedsSettingDialogTableRows;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -74,6 +89,7 @@ public class MultiLedsSettingsDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		multiLedsSettingDialogTableRows = new ArrayList<MultiLedsSettingDialogTableRow>();
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
 		
@@ -126,9 +142,51 @@ public class MultiLedsSettingsDialog extends Dialog {
 		compositeButtons.setLayout(new GridLayout(2, false));
 		
 		Button btnAddField = new Button(compositeButtons, SWT.NONE);
+		btnAddField.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (checkRequiredInput()){
+					
+					//Add a table Item
+					TableItem item = new TableItem(table, SWT.NONE);
+					item.setText(COLUMN_HEADER, textHeader.getText());
+					item.setText(COLUMN_NAME, textName.getText());
+					item.setText(COLUMN_RANGE_MAX_VALUE, textRangeMaxValue.getText());
+					item.setText(COLUMN_RANGE_MIN_VALUE, textRangeMinValue.getText());
+					item.setText(COLUMN_FIRST_INTERVAL, textFirstIntervalUb.getText());
+					item.setText(COLUMN_SECOND_INTERVAL, textFirstIntervalUb.getText());
+					
+					//Add a corresponding object in the internal model
+					String header = textHeader.getText();
+					String name = textName.getText();
+					int rangeMaxValue = Integer.parseInt(textRangeMaxValue.getText());
+					int rangeMinValue = Integer.parseInt(textRangeMinValue.getText());
+					int firstIntervalUb = Integer.parseInt(textFirstIntervalUb.getText());
+					int secondIntervalUb = Integer.parseInt(textFirstIntervalUb.getText());
+					MultiLedsSettingDialogTableRow newRow = new MultiLedsSettingDialogTableRow(header,name,rangeMaxValue,rangeMinValue,firstIntervalUb,secondIntervalUb);					
+					multiLedsSettingDialogTableRows.add(newRow);
+					
+					//clear input UI
+					clearInputUI();
+					
+				}
+				
+			}
+		});
 		btnAddField.setText("Add Field");
 		
 		Button btnRemoveField = new Button(compositeButtons, SWT.NONE);
+		btnRemoveField.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (table.getSelectionIndex() != -1){
+					//remove from the Table UI
+					table.remove(table.getSelectionIndex());
+					//remove from the internal model
+					multiLedsSettingDialogTableRows.remove(table.getSelectionIndex());
+				}
+			}
+		});
 		btnRemoveField.setText("Remove Field");
 		
 		Composite compositeValues = new Composite(container, SWT.NONE);
@@ -181,17 +239,6 @@ public class MultiLedsSettingsDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button buttonOK = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
-		buttonOK.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				//first check the inputs
-				if (isValidInput()) {
-			          okPressed();					
-				} else {
-					MessageDialog.openWarning(new Shell(), "Warning", "Please insert all the required values"); 
-				}
-			}
-		});
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
@@ -206,20 +253,82 @@ public class MultiLedsSettingsDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		createWidgetConfigElementMultiLeds();
-		super.okPressed();
-	}
-	
-	//create a WidgetConfigElementLiveLine object when OK is pressed
-	public void createWidgetConfigElementMultiLeds() {
+		if (isValidInput()) {
+			createWidgetConfigElementMultiLeds();
+			super.okPressed();
+		} else {
+			MessageDialog.openWarning(new Shell(), "Warning", "Please insert at least one Field "); 
+		}
 
 	}
 	
-	//check if all the required input are inserted
-	private boolean isValidInput() {
+	//create a WidgetConfigElementMultiLeds object when OK is pressed
+	public void createWidgetConfigElementMultiLeds() {
 		//TODO
-		return true;
+		widgetConfigElementMultiLeds = new WidgetConfigElementMultiLeds();
+		Vector<Field> fields = widgetConfigElementMultiLeds.getFields();
+		for (MultiLedsSettingDialogTableRow element:multiLedsSettingDialogTableRows){
+			Field newField = new Field();
+			newField.setHeader(element.getHeader());
+			newField.setName(element.getName());
+			newField.setRangeMaxValue(element.getRangeMaxValue());
+			newField.setRangeMinValue(element.getRangeMinValue());
+			newField.setFirstIntervalUb(element.getFirstIntervalUb());
+			newField.setSecondIntervalUb(element.getSecondIntervalUb());
+			fields.add(newField);
+		}
+		
+		
 	}
+	
+	private boolean checkRequiredInput(){
+		
+		boolean valid = true;
+		if (textHeader.getText().length() == 0) {
+			valid = false;
+		}
+		if (textName.getText().length() == 0) {
+			valid = false;
+		}
+		if (textRangeMaxValue.getText().length() == 0) {
+			valid = false;
+		}
+		if (textRangeMinValue.getText().length() == 0) {
+			valid = false;
+		}		    
+		if (textFirstIntervalUb.getText().length() == 0) {
+			valid = false;
+		}
+		if (textSecondIntervalUb.getText().length() == 0) {
+			valid = false;
+		}
+	
+		return valid;
+	}
+	
+	public void clearInputUI(){
+		textHeader.clearSelection();
+		textHeader.setText("");
+		textName.clearSelection();
+		textName.setText("");
+		textRangeMaxValue.clearSelection();
+		textRangeMaxValue.setText("");		
+		textRangeMinValue.clearSelection();
+		textRangeMinValue.setText("");
+		textFirstIntervalUb.clearSelection();
+		textFirstIntervalUb.setText("");	
+		textSecondIntervalUb.clearSelection();	
+		textSecondIntervalUb.setText("");		
+	}
+	
+	//check if at least one Field is found
+	private boolean isValidInput() {
+		if (!multiLedsSettingDialogTableRows.isEmpty()){
+			return true;
+		} else {
+			return false;
+		}
+	} 
 
 	/**
 	 * @return the widgetConfigElementMultiLeds

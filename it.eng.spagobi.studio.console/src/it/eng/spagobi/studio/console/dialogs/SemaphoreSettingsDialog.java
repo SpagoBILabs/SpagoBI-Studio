@@ -137,17 +137,6 @@ public class SemaphoreSettingsDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button buttonOK = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
-		buttonOK.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				//first check the inputs
-				if (isValidInput()) {
-			          okPressed();					
-				} else {
-					MessageDialog.openWarning(new Shell(), "Warning", "Please insert all the required values"); 
-				}
-			}
-		});
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
@@ -162,11 +151,17 @@ public class SemaphoreSettingsDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		createWidgetConfigElementSemaphore();
-		super.okPressed();
+		//first check the inputs
+		if (isValidInput()) {
+			createWidgetConfigElementSemaphore();
+			super.okPressed();				
+		} else {
+			MessageDialog.openWarning(new Shell(), "Warning", "Please insert all the required values"); 
+		}
+
 	}
 	
-	//create a WidgetConfigElementLiveLine object when OK is pressed
+	//create a WidgetConfigElementSemaphore object when OK is pressed
 	public void createWidgetConfigElementSemaphore() {
 		widgetConfigElementSemaphore = new WidgetConfigElementSemaphore();
 		widgetConfigElementSemaphore.setParamWidth(Integer.parseInt(textParamWidth.getText()));

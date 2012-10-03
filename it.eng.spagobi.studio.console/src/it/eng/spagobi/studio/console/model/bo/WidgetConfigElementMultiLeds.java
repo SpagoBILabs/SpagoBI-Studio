@@ -50,6 +50,7 @@ public class WidgetConfigElementMultiLeds extends WidgetConfigElement {
 	 * @return the fields
 	 */
 	public Vector<Field> getFields() {
+		if(fields == null) fields = new Vector<Field>();
 		return fields;
 	}
 	/**
