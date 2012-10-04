@@ -552,20 +552,26 @@ public class SummaryPanelPage extends AbstractPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				editor.setIsDirty(true);
-				//TODO: open a popup to define the properties of the widget depending on the type
+				//Open a popup to define the properties of the widget depending on the type
 				//check if Widget Type is set
 				if (comboType.getSelectionIndex() == -1){
 					//No type selected
 					MessageDialog.openWarning(new Shell(), "Warning", "No Widget Type Select, please select a type."); 
 				} else {
 					if (comboType.getText().equals("chart.sbi.livelines")){
+						//Search previous widget settings
+						Chart itemChart = (Chart)item.getData();
+						WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
 						LiveLinesSettingsDialog dialog = new LiveLinesSettingsDialog(new Shell());
+						if (widgetConfigElement instanceof WidgetConfigElementLiveLine){
+							dialog.setWidgetConfigElementLiveLine((WidgetConfigElementLiveLine) widgetConfigElement);
+						}
 						dialog.create();
 						if (dialog.open() == Window.OK) {
 							WidgetConfigElementLiveLine widgetConfigElementLiveLine = dialog.getWidgetConfigElementLiveLine();
 							//replace generic WidgetConfigElement object with specific WidgetConfigElementLiveLine
-							Chart itemChart = (Chart)item.getData();
-							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							//Chart itemChart = (Chart)item.getData();
+							//WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
 							widgetConfigElementLiveLine = (WidgetConfigElementLiveLine) copyGenericProperties(widgetConfigElement,widgetConfigElementLiveLine);
 							itemChart.setWidgetConfig(widgetConfigElementLiveLine);
 
@@ -585,24 +591,37 @@ public class SummaryPanelPage extends AbstractPage {
 						} 
 						
 					} else if (comboType.getText().equals("chart.sbi.speedometer")){
+						//Search previous widget settings
+						Chart itemChart = (Chart)item.getData();
+						WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
 						SpeedometerSettingsDialog dialog = new SpeedometerSettingsDialog(new Shell());
+						if (widgetConfigElement instanceof WidgetConfigElementSpeedometer){
+							dialog.setWidgetConfigElementSpeedometer((WidgetConfigElementSpeedometer) widgetConfigElement);
+						}
 						dialog.create();
 						if (dialog.open() == Window.OK) {
 							WidgetConfigElementSpeedometer widgetConfigElementSpeedometer = dialog.getWidgetConfigElementSpeedometer();
 							//replace generic WidgetConfigElement object with specific WidgetConfigElementSpeedometer
-							Chart itemChart = (Chart)item.getData();
-							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							//Chart itemChart = (Chart)item.getData();
+							//WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
 							widgetConfigElementSpeedometer = (WidgetConfigElementSpeedometer) copyGenericProperties(widgetConfigElement,widgetConfigElementSpeedometer);
 							itemChart.setWidgetConfig(widgetConfigElementSpeedometer);
 						} 
 					} else if (comboType.getText().equals("chart.sbi.semaphore")){
+						//Search previous widget settings
+						Chart itemChart = (Chart)item.getData();
+						WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
 						SemaphoreSettingsDialog dialog = new SemaphoreSettingsDialog(new Shell());
+						if (widgetConfigElement instanceof WidgetConfigElementSemaphore){
+							dialog.setWidgetConfigElementSemaphore((WidgetConfigElementSemaphore) widgetConfigElement);
+						}
 						dialog.create();
 						if (dialog.open() == Window.OK) {
 							WidgetConfigElementSemaphore widgetConfigElementSemaphore = dialog.getWidgetConfigElementSemaphore();
 							//replace generic WidgetConfigElement object with specific WidgetConfigElementSemaphore
-							Chart itemChart = (Chart)item.getData();
-							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							//Chart itemChart = (Chart)item.getData();
+							//WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+
 							widgetConfigElementSemaphore = (WidgetConfigElementSemaphore) copyGenericProperties(widgetConfigElement,widgetConfigElementSemaphore);
 							itemChart.setWidgetConfig(widgetConfigElementSemaphore);
 						} 

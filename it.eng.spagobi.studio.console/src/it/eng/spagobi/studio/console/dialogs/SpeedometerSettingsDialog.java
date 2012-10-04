@@ -123,9 +123,25 @@ public class SpeedometerSettingsDialog extends Dialog {
 		new Label(compositeMain, SWT.NONE);
 		new Label(compositeMain, SWT.NONE);
 
+		//---------------------------------------------------
+		//check if existing Widget is found and populate UI
+		if (widgetConfigElementSpeedometer != null){
+			populateUI();
+		}
+		//---------------------------------------------------	
+
 		return container;
 	}
-	
+	public void populateUI(){
+		textParamWidth.setText(String.valueOf(widgetConfigElementSpeedometer.getParamWidth()));
+		textParamHeight.setText(String.valueOf(widgetConfigElementSpeedometer.getParamHeight()));
+		textMinValue.setText(String.valueOf(widgetConfigElementSpeedometer.getMinValue()));
+		textMaxValue.setText(String.valueOf(widgetConfigElementSpeedometer.getMaxValue()));
+		textLowValue.setText(String.valueOf(widgetConfigElementSpeedometer.getLowValue()));
+		textHighValue.setText(String.valueOf(widgetConfigElementSpeedometer.getHighValue()));
+		textField.setText(widgetConfigElementSpeedometer.getField());
+
+	}
 
 
 	/**

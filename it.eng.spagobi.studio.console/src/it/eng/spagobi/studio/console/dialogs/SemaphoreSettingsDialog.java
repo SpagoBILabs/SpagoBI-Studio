@@ -123,8 +123,26 @@ public class SemaphoreSettingsDialog extends Dialog {
 		textField = new Text(compositeMain, SWT.BORDER);
 		new Label(compositeMain, SWT.NONE);
 		new Label(compositeMain, SWT.NONE);
+		
+		//---------------------------------------------------
+		//check if existing Widget is found and populate UI
+		if (widgetConfigElementSemaphore != null){
+			populateUI();
+		}
+		//---------------------------------------------------	
 
 		return container;
+	}
+	
+	public void populateUI(){
+		textParamWidth.setText(String.valueOf(widgetConfigElementSemaphore.getParamWidth()));
+		textParamHeight.setText(String.valueOf(widgetConfigElementSemaphore.getParamHeight()));
+		textMinValue.setText(String.valueOf(widgetConfigElementSemaphore.getRangeMinValue()));
+		textMaxValue.setText(String.valueOf(widgetConfigElementSemaphore.getRangeMaxValue()));
+		textFirstInterval.setText(String.valueOf(widgetConfigElementSemaphore.getRangeFirstInterval()));
+		textSecondInterval.setText(String.valueOf(widgetConfigElementSemaphore.getRangeSecondInterval()));
+		textField.setText(widgetConfigElementSemaphore.getField());
+
 	}
 	
 

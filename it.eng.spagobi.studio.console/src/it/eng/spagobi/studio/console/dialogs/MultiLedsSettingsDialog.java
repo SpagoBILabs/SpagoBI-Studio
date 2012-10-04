@@ -265,7 +265,6 @@ public class MultiLedsSettingsDialog extends Dialog {
 	
 	//create a WidgetConfigElementMultiLeds object when OK is pressed
 	public void createWidgetConfigElementMultiLeds() {
-		//TODO
 		widgetConfigElementMultiLeds = new WidgetConfigElementMultiLeds();
 		Vector<Field> fields = widgetConfigElementMultiLeds.getFields();
 		for (MultiLedsSettingDialogTableRow element:multiLedsSettingDialogTableRows){

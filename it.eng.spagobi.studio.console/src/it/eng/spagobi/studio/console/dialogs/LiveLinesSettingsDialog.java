@@ -121,10 +121,67 @@ public class LiveLinesSettingsDialog extends Dialog {
 		
 		textFields = new Text(compositeValues, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
 		textFields.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
+		//---------------------------------------------------
+		//check if existing Widget is found and populate UI
+		if (widgetConfigElementLiveLine != null){
+			populateUI();
+		}
+		//---------------------------------------------------	
 
 		return container;
 	}
 	
+	public void populateUI(){
+		textRangeminvalue.setText(String.valueOf(widgetConfigElementLiveLine.getRangeMinValue()));
+		textRangemaxvalue.setText(String.valueOf(widgetConfigElementLiveLine.getRangeMaxValue()));
+		textStepY.setText(String.valueOf(widgetConfigElementLiveLine.getStepY()));
+		textDomainvaluenumber.setText(String.valueOf(widgetConfigElementLiveLine.getDomainValueNumber()));
+		
+		Vector<Integer> domainValues = widgetConfigElementLiveLine.getDomainValues();
+		String domainValuesString = joinInteger(domainValues,",");
+		textDomainvalues.setText(domainValuesString);
+		
+		Vector<String> fields = widgetConfigElementLiveLine.getFields();
+		String fieldsString = join(fields,",");
+		textFields.setText(fieldsString);
+	}
+	
+	public static String join(Vector<String> list, String delim) {
+
+	    StringBuilder sb = new StringBuilder();
+
+	    String loopDelim = "";
+
+	    for(String s : list) {
+
+	        sb.append(loopDelim);
+	        sb.append(s);            
+
+	        loopDelim = delim;
+	    }
+
+	    return sb.toString();
+	}
+	
+	public static String joinInteger(Vector<Integer> list, String delim) {
+
+	    StringBuilder sb = new StringBuilder();
+
+	    String loopDelim = "";
+
+	    for(Integer s : list) {
+	    	String token = String.valueOf(s);
+	    	
+	        sb.append(loopDelim);
+	        sb.append(token);            
+
+	        loopDelim = delim;
+	    }
+
+	    return sb.toString();
+	}
+
 
 
 	/**
