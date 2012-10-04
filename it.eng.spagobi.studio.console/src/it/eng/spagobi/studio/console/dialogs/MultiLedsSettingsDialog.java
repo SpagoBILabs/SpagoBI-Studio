@@ -154,7 +154,7 @@ public class MultiLedsSettingsDialog extends Dialog {
 					item.setText(COLUMN_RANGE_MAX_VALUE, textRangeMaxValue.getText());
 					item.setText(COLUMN_RANGE_MIN_VALUE, textRangeMinValue.getText());
 					item.setText(COLUMN_FIRST_INTERVAL, textFirstIntervalUb.getText());
-					item.setText(COLUMN_SECOND_INTERVAL, textFirstIntervalUb.getText());
+					item.setText(COLUMN_SECOND_INTERVAL, textSecondIntervalUb.getText());
 					
 					//Add a corresponding object in the internal model
 					String header = textHeader.getText();
@@ -162,7 +162,7 @@ public class MultiLedsSettingsDialog extends Dialog {
 					int rangeMaxValue = Integer.parseInt(textRangeMaxValue.getText());
 					int rangeMinValue = Integer.parseInt(textRangeMinValue.getText());
 					int firstIntervalUb = Integer.parseInt(textFirstIntervalUb.getText());
-					int secondIntervalUb = Integer.parseInt(textFirstIntervalUb.getText());
+					int secondIntervalUb = Integer.parseInt(textSecondIntervalUb.getText());
 					MultiLedsSettingDialogTableRow newRow = new MultiLedsSettingDialogTableRow(header,name,rangeMaxValue,rangeMinValue,firstIntervalUb,secondIntervalUb);					
 					multiLedsSettingDialogTableRows.add(newRow);
 					
@@ -180,10 +180,11 @@ public class MultiLedsSettingsDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (table.getSelectionIndex() != -1){
-					//remove from the Table UI
-					table.remove(table.getSelectionIndex());
 					//remove from the internal model
 					multiLedsSettingDialogTableRows.remove(table.getSelectionIndex());
+					//remove from the Table UI
+					table.remove(table.getSelectionIndex());
+
 				}
 			}
 		});
