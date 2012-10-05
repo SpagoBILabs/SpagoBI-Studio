@@ -168,6 +168,7 @@ public class SpagoBIStudioConstants {
 	public static final String ICON_WIZARD_BIRT = "objecticon_JASPER.png";
 	public static final String ICON_WIZARD_JASPER = "objecticon_JASPER.png";
 	public static final String ICON_WIZARD_CHART = "objecticon_DASH.png";
+	public static final String ICON_WIZARD_CONSOLE = "objecticon_CONSOLE.gif";
 	public static final String ICON_WIZARD_DASHBOARD = "objecticon_DASH.png";
 	public static final String ICON_WIZARD_DOC_COMP = "objecticon_COMPOSITE_DOCUMENT.png";
 	public static final String ICON_WIZARD_GEO = "objecticon_MAP.png";
