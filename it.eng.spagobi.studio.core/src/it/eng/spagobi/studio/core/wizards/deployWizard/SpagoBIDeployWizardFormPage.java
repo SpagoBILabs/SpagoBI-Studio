@@ -154,7 +154,6 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 					datasourceList=proxyObjects.getServerDataSources().getDataSourceList();
 					functionality=proxyObjects.getServerDocuments().getDocumentsAsTree(null);			
 
-					String ciao= functionality.getId().toString()+" "+functionality.getName()+" label: "+functionality.getName();
 				}
 				catch (Exception e) {
 					if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
@@ -169,8 +168,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 				}
 				monitor.done();
 				if (monitor.isCanceled())
-					logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));		
-				logger.error("Operation not ended",new InterruptedException("The long running operation was cancelled"));
+					logger.error("The long running operation was cancelled");					
 			}
 		};
 
@@ -326,6 +324,14 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 										engineLabelIdMap.put(engine.getLabel(), engine.getId());	
 									}
 								}
+								else // CONSOLE
+									if(typeLabel.equalsIgnoreCase(SpagoBIStudioConstants.CONSOLE_TYPE)
+											&& extension.equals(SpagoBIStudioConstants.CONSOLE_TEMPLATE_EXTENSION)){
+										if(engine.getDriverName().equals(SpagoBIStudioConstants.CONSOLE_ENGINE_DRIVER)){
+											engineCombo.add(engine.getLabel());
+											engineLabelIdMap.put(engine.getLabel(), engine.getId());	
+										}
+									}
 
 							else{
 								engineCombo.add(engine.getLabel());

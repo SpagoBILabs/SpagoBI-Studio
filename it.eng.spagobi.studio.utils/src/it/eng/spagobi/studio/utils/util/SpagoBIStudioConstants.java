@@ -62,12 +62,14 @@ public class SpagoBIStudioConstants {
 	public final static String CHART_ENGINE_CLASS="it.eng.spagobi.engines.chart.SpagoBIChartInternalEngine";
 	public final static String DASHBOARD_ENGINE_CLASS="it.eng.spagobi.engines.dashboard.SpagoBIDashboardInternalEngine";
 	public final static String GEO_ENGINE_DRIVER="it.eng.spagobi.engines.drivers.geo.GeoDriver";
+	public final static String CONSOLE_ENGINE_DRIVER="it.eng.spagobi.engines.drivers.console.ConsoleDriver";
 
 	
 	// ENGINE_TYPE
 	public final static String REPORT_TYPE="REPORT";
 	public final static String CHART_TYPE="DASH";
 	public final static String GEO_TYPE="MAP";
+	public final static String CONSOLE_TYPE="CONSOLE";
 	
 	
 	

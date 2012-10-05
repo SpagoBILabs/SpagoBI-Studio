@@ -90,6 +90,9 @@ public class BiObjectUtilities {
 		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.GEO_ENGINE_EXTENSION)){
 			return SpagoBIConstants.MAP_TYPE_CODE;
 		}		
+		else if(extension.equalsIgnoreCase(SpagoBIStudioConstants.CONSOLE_TEMPLATE_EXTENSION)){
+			return SpagoBIConstants.CONSOLE_TYPE_CODE;
+		}	
 		else if(extension.equalsIgnoreCase("xml")){
 			return SpagoBIConstants.REPORT_TYPE_CODE;
 		}		
