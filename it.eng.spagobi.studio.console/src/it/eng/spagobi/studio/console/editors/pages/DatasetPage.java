@@ -91,7 +91,7 @@ public class DatasetPage extends AbstractPage {
 	}
 	
 	public void drawPage(){
-		datasets = consoleTemplateModel.getDataset();
+		datasets = consoleTemplateModel.getDatasets();
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(this, SWT.NONE);

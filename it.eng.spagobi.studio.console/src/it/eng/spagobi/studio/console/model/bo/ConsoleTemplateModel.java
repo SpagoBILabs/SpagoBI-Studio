@@ -30,22 +30,22 @@ import java.util.Vector;
  */
 public class ConsoleTemplateModel {
 	
-	private Vector<DatasetElement> dataset;
+	private Vector<DatasetElement> datasets;
 	private SummaryPanel summaryPanel;
 	private DetailPanel detailPanel;
 
 	/**
 	 * @param dataset the dataset to set
 	 */
-	public void setDataset(Vector<DatasetElement> dataset) {
-		this.dataset = dataset;
+	public void setDatasets(Vector<DatasetElement> datasets) {
+		this.datasets = datasets;
 	}
 	/**
 	 * @return the dataset
 	 */
-	public Vector<DatasetElement> getDataset() {
-		if(dataset == null) dataset = new Vector<DatasetElement>();
-		return dataset;
+	public Vector<DatasetElement> getDatasets() {
+		if(datasets == null) datasets = new Vector<DatasetElement>();
+		return datasets;
 	}
 	/**
 	 * @return the summaryPanel

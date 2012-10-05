@@ -710,7 +710,7 @@ public class SummaryPanelPage extends AbstractPage {
 	public void populateDatasetLabelCombo(CCombo comboDatasetLabel){
 		comboDatasetLabel.removeAll();
 
-		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+		Vector<DatasetElement> datasets = consoleTemplateModel.getDatasets();
 		if (!datasets.isEmpty() ){
 			for (DatasetElement datasetElement:datasets){
 				comboDatasetLabel.add(datasetElement.getId());

@@ -39,6 +39,7 @@ import it.eng.spagobi.studio.console.model.bo.ColumnConfig;
 import it.eng.spagobi.studio.console.model.bo.ConsoleTemplateModel;
 import it.eng.spagobi.studio.console.model.bo.DatasetElement;
 import it.eng.spagobi.studio.console.model.bo.DetailPanel;
+import it.eng.spagobi.studio.console.model.bo.FilterBar;
 import it.eng.spagobi.studio.console.model.bo.Page;
 import it.eng.spagobi.studio.console.model.bo.TablePage;
 import it.eng.spagobi.studio.utils.bo.Dataset;
@@ -177,7 +178,7 @@ public class DetailPanelPage extends AbstractPage {
 				String dsLabel = null;
 				
 				firstPage.getTable().setDataset(dsId);
-				Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+				Vector<DatasetElement> datasets = consoleTemplateModel.getDatasets();
 				if (!datasets.isEmpty() ){
 					for (DatasetElement datasetElement:datasets){
 						if (datasetElement.getId().equals(dsId)){
@@ -350,6 +351,10 @@ public class DetailPanelPage extends AbstractPage {
 				newPage.setTitle(textTitle.getText());				
 			}
 			TablePage newTable = new TablePage();
+			//by default create a FilterBar that is required
+			FilterBar newFilterBar = new FilterBar();
+			newFilterBar.setType("custom");
+			newTable.setFilterBar(newFilterBar);
 			newPage.setTable(newTable);
 			consoleTemplateModel.getDetailPanel().getPages().add(newPage);
 			firstPage = newPage;
@@ -366,7 +371,7 @@ public class DetailPanelPage extends AbstractPage {
 			String dsId = comboDataset.getItem(index);
 			String dsLabel = null;
 
-			Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+			Vector<DatasetElement> datasets = consoleTemplateModel.getDatasets();
 			if (!datasets.isEmpty() ){
 				for (DatasetElement datasetElement:datasets){
 					if (datasetElement.getId().equals(dsId)){
@@ -423,7 +428,7 @@ public class DetailPanelPage extends AbstractPage {
 	
 	public void populateDatasetCombo(){
 		comboDataset.removeAll();
-		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+		Vector<DatasetElement> datasets = consoleTemplateModel.getDatasets();
 		if (!datasets.isEmpty() ){
 			for (DatasetElement datasetElement:datasets){
 				comboDataset.add(datasetElement.getId());
@@ -452,7 +457,7 @@ public class DetailPanelPage extends AbstractPage {
 		comboDatasetLabel.removeAll();
 		//firstPage.getTable().setDatasetLabels(null);
 
-		Vector<DatasetElement> datasets = consoleTemplateModel.getDataset();
+		Vector<DatasetElement> datasets = consoleTemplateModel.getDatasets();
 		if (!datasets.isEmpty() ){
 			for (DatasetElement datasetElement:datasets){
 				comboDatasetLabel.add(datasetElement.getId());

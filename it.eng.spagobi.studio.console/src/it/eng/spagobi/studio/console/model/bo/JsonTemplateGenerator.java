@@ -87,8 +87,8 @@ public class JsonTemplateGenerator {
 		DatasetElement dataset_one = new DatasetElement();
 		DatasetElement dataset_two = new DatasetElement();
 
-		example.getDataset().add(dataset_one);
-		example.getDataset().add(dataset_two);
+		example.getDatasets().add(dataset_one);
+		example.getDatasets().add(dataset_two);
 		
 		SummaryPanel summaryPanel = new SummaryPanel();
 		example.setSummaryPanel(summaryPanel);
