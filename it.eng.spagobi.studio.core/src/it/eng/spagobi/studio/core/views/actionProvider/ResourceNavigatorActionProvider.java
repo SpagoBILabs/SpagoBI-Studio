@@ -309,7 +309,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		}
 		});
 		consoleTemplateACI.getAction().setText("Console Template");
-		consoleTemplateACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CHART, Activator.PLUGIN_ID));
+		consoleTemplateACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_CONSOLE, Activator.PLUGIN_ID));
 		actions[0] = consoleTemplateACI.getAction();
 		
 		

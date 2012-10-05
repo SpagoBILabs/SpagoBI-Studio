@@ -226,11 +226,46 @@ public class MultiLedsSettingsDialog extends Dialog {
 		TableColumn tblclmnSecondintervalub = new TableColumn(table, SWT.NONE);
 		tblclmnSecondintervalub.setWidth(110);
 		tblclmnSecondintervalub.setText("SecondIntervalUb");
+		
+		//---------------------------------------------------
+		//check if existing Widget is found and populate UI
+		if (widgetConfigElementMultiLeds != null){
+			populateUI();
+		}
+		//---------------------------------------------------	
 
 		return container;
 	}
 	
+	public void populateUI(){
+		Vector<Field> fields = widgetConfigElementMultiLeds.getFields();
+		if (!fields.isEmpty()){
+			for (Field field:fields){
+				createTableItem(field.getHeader(),
+						field.getName(),
+						String.valueOf(field.getRangeMaxValue()),
+						String.valueOf(field.getRangeMinValue()),
+						String.valueOf(field.getFirstIntervalUb()),
+						String.valueOf(field.getSecondIntervalUb()));
+			}
+		}
+	}
+	
+	public void createTableItem(String header,String name,String rangeMaxValue,String rangeMinValue,String firstIntervalUb,String secondIntervalUb){
+		//Add a table Item
+		TableItem item = new TableItem(table, SWT.NONE);
+		item.setText(COLUMN_HEADER, header);
+		item.setText(COLUMN_NAME, name);
+		item.setText(COLUMN_RANGE_MAX_VALUE, rangeMaxValue);
+		item.setText(COLUMN_RANGE_MIN_VALUE, rangeMinValue);
+		item.setText(COLUMN_FIRST_INTERVAL, firstIntervalUb);
+		item.setText(COLUMN_SECOND_INTERVAL, secondIntervalUb);
+		
+		//Add a corresponding object in the internal model
 
+		MultiLedsSettingDialogTableRow newRow = new MultiLedsSettingDialogTableRow(header,name,Integer.valueOf(rangeMaxValue),Integer.valueOf(rangeMinValue),Integer.valueOf(firstIntervalUb),Integer.valueOf(secondIntervalUb));					
+		multiLedsSettingDialogTableRows.add(newRow);
+	}
 
 	/**
 	 * Create contents of the button bar.

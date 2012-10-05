@@ -579,13 +579,19 @@ public class SummaryPanelPage extends AbstractPage {
 						} 
 						
 					} else if (comboType.getText().equals("chart.sbi.multileds")){
+						//Search previous widget settings
+						Chart itemChart = (Chart)item.getData();
+						WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
 						MultiLedsSettingsDialog dialog = new MultiLedsSettingsDialog(new Shell());
+						if (widgetConfigElement instanceof WidgetConfigElementMultiLeds){
+							dialog.setWidgetConfigElementMultiLeds((WidgetConfigElementMultiLeds) widgetConfigElement);
+						}						
 						dialog.create();
 						if (dialog.open() == Window.OK) {
 							WidgetConfigElementMultiLeds widgetConfigElementMultiLeds = dialog.getWidgetConfigElementMultiLeds();
 							//replace generic WidgetConfigElement object with specific WidgetConfigElementMultiLeds
-							Chart itemChart = (Chart)item.getData();
-							WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
+							//Chart itemChart = (Chart)item.getData();
+							//WidgetConfigElement widgetConfigElement = itemChart.getWidgetConfig();
 							widgetConfigElementMultiLeds = (WidgetConfigElementMultiLeds) copyGenericProperties(widgetConfigElement,widgetConfigElementMultiLeds);
 							itemChart.setWidgetConfig(widgetConfigElementMultiLeds);
 						} 
