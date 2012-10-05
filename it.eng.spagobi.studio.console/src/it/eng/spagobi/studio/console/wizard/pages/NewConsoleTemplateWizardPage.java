@@ -103,11 +103,12 @@ public class NewConsoleTemplateWizardPage extends WizardPage {
 
 
 			// Group down
+			/*
 			final Group belowComposite=new Group(all,SWT.BORDER);		
 			belowComposite.setLayoutData(new RowData(500,300));
 			final StackLayout layout = new StackLayout();
 			belowComposite.setLayout(layout);
-
+			*/
 
 
 
