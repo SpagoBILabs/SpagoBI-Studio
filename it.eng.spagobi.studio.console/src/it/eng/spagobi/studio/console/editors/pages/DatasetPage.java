@@ -153,9 +153,16 @@ public class DatasetPage extends AbstractPage {
 					datasetElement.setLabel(comboDatasets.getItem(comboDatasets.getSelectionIndex()));
 					if (!txtRefreshTime.getText().isEmpty()){
 						datasetElement.setRefreshTime(Integer.parseInt(txtRefreshTime.getText()));
+					} else {
+						//set a default value for Refresh Time because is required a value >0
+						datasetElement.setRefreshTime(200);
 					}
+						
 					if (!txtRowsLimit.getText().isEmpty()){
 						datasetElement.setRowsLimit(Integer.parseInt(txtRowsLimit.getText()));
+					} else {
+						//set a default value for Rows Limit because 0 means no rows at all
+						datasetElement.setRowsLimit(200);
 					}
 					if (comboMemoryPagination.getSelectionIndex() != -1){
 						boolean valueMemoryPaginationCombo = Boolean.parseBoolean(comboMemoryPagination.getItem(comboMemoryPagination.getSelectionIndex()));
