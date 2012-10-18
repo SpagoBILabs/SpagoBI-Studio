@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SpagoBI Studio Core Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.core; singleton:=true
-Bundle-Version: 3.5.0
+Bundle-Version: 3.6.0
 Bundle-Activator: it.eng.spagobi.studio.core.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,

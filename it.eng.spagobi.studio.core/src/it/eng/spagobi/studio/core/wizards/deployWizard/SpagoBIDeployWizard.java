@@ -213,15 +213,36 @@ public class SpagoBIDeployWizard extends AbstractSpagoBIDocumentWizard  {
 		template.setContent(dataHandler);
 
 		try {
-			Integer returnCode=proxyServerObjects.getServerDocuments().saveNewDocument(newDocument, template, functionalityId);
-			if(returnCode==null){
-				SpagoBILogger.errorLog("Error during document deploy: Check that label is not already present; if still cannot solve the problem check Server Log", null);			
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error", "Error during file deploy: Check that label is not already present; if still cannot solve the problem check Server Log");		
+			boolean goOn = true;
+
+			// check if document is already present
+			Document existingDoc = proxyServerObjects.getServerDocuments().getDocumentByLabel(newDocument.getLabel());
+
+			if(existingDoc != null){
+				logger.debug("Found existing document with label "+newDocument.getLabel()+": ask for update ");
+				goOn = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Overwrite?", "A document with label "+newDocument.getLabel()+" is already existing; do you want to go on with update?");
+			}
+			else{
+				logger.debug("Not Found existing document with label "+newDocument.getLabel()+": go on with insert.");				
+			}
+
+			if(goOn){
+				Integer returnCode=proxyServerObjects.getServerDocuments().saveNewDocument(newDocument, template, functionalityId);
+
+				if(returnCode==null){
+					SpagoBILogger.errorLog("Error during document deploy: Check that label is not already present; if still cannot solve the problem check Server Log", null);			
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"Error", "Error during file deploy: Check that label is not already present; if still cannot solve the problem check Server Log");		
+					return;
+				}
+
+				//			System.out.println(returnCode);
+				newDocument.setId(returnCode);
+			}
+			else{
+				logger.debug("User choose not to insert. ");
 				return;
 			}
-			//			System.out.println(returnCode);
-			newDocument.setId(returnCode);
 		}  
 
 		catch (Exception e) {

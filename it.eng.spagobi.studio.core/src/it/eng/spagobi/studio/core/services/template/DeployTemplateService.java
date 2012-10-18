@@ -9,6 +9,7 @@
 **/
 package it.eng.spagobi.studio.core.services.template;
 
+import it.eng.spagobi.server.services.api.bo.IDataSet;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.Template;
@@ -119,6 +120,55 @@ public class DeployTemplateService {
 						else{
 							documentException.setNoDocument(false);
 							spagoBIServerObjects.getServerDocuments().uploadTemplate(idInteger, template);
+							
+							
+							// **** Label defined inside template (Ext Chart case) ***
+							// in thecaseof an extChart also te dataset must be re-assigned because it could have been changed
+							String labelInsideXml = null;
+							try {
+									labelInsideXml = fileSel2.getPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL_INSIDE);
+							} catch (CoreException e) {
+								logger.warn("Errorin finding dataset label nto template, go on anyway using server one");
+							}
+							
+							IDataSet found = null; 
+							if(labelInsideXml != null){
+								logger.debug("Set dataset document on server to "+labelInsideXml);
+								IDataSet[] datasets = spagoBIServerObjects.getServerDatasets().getDataSetList();
+								// get the id of the new datset
+								for (int i = 0; i < datasets.length && found == null; i++) {
+									if(datasets[i].getLabel().equals(labelInsideXml)){
+										found = datasets[i];
+									}
+								}
+								if(found != null){
+									Integer id = found.getId();
+									doc.setDataSetId(id);
+									logger.debug("update document with new dataset reference");
+								}
+								else{
+									logger.error("dataset "+labelInsideXml+" not found in server. delete dataset association");									
+									doc.setDataSetId(null);
+								}
+							}
+							
+							// ALl documents case
+							
+							spagoBIServerObjects.getServerDocuments().saveNewDocument(doc, null, null);		
+							
+							// in case of dataset definition changed the dataset label as file metadata must be changed
+							if(found != null){
+								try {
+									fileSel2.setPersistentProperty(SpagoBIStudioConstants.DATASET_ID, found.getId().toString());
+									fileSel2.setPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL, found.getLabel());
+									fileSel2.setPersistentProperty(SpagoBIStudioConstants.DATASET_NAME, found.getName());
+									fileSel2.setPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION, found.getDescription());
+								} catch (CoreException e) {
+									logger.error("Errorn updating file metadata about new dataset associated: go on anyway");
+								}
+							}
+							
+							
 						}
 					}
 
