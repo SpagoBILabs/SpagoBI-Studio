@@ -330,6 +330,7 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 		try {
 			// Create the model of the chart that will store informations
 			extChart = XmlTemplateGenerator.readXml(file); 
+			//file.getPaaa recupera daaset dai metadati e metti quello
 
 		} catch (Exception e) {
 			logger.error("Error during template reading "+e.getMessage(),e);
@@ -451,6 +452,14 @@ public class ExtChartEditor extends MultiPageEditorPart implements IResourceChan
 	public void resourceChanged(IResourceChangeEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public IFile getFile() {
+		return file;
+	}
+
+	public void setFile(IFile file) {
+		this.file = file;
 	}
 
 

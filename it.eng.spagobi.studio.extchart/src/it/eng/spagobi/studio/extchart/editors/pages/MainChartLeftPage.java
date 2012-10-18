@@ -24,6 +24,7 @@ import it.eng.spagobi.studio.extchart.utils.SWTUtils;
 import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
+import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -254,8 +256,10 @@ public class MainChartLeftPage extends AbstractPage {
 
 
 		Combo datasetCombo = createDatasetCombo(compositeProp);
-		createDatasetMetadataTable(compositeProp, datasetCombo);
-
+		if(datasetCombo.getItemCount() != 0){
+			createDatasetMetadataTable(compositeProp, datasetCombo);
+			setDatasetComboDefault(datasetCombo);
+		}
 		sectionProp.setClient(compositeProp);
 		logger.debug("OUT");
 	}
@@ -324,18 +328,55 @@ public class MainChartLeftPage extends AbstractPage {
 		    });
 
 		
+		// if among the file metadata a dataset label is specified
+		// it must be priority to template one,could dataset could have been updated on server
+		// anyway system asks user to avoid him modifying template withut seeing the changes
 		
-		// fill table with default dataset
-		if (extChart != null && extChart.getDataset().getLabel() != null) {
-			logger.debug("dataset selected label is "+extChart.getDataset().getLabel());
-			retrieveDatasetMetadata(container, datasetMetadataTable, extChart.getDataset().getLabel());
-
-		} else {
-			logger.debug("No dataset selected, fill table with empty rows");
-//			for (int i = 0; i < 5; i++) {
-//				TableItem item = new TableItem(datasetMetadataTable, SWT.TRANSPARENT);
-//			}
+		IFile file = editor.getFile();
+		String dsLabel = null;
+		String metadataLabel = null;
+		String templateLabel = null;
+		
+		try{
+			metadataLabel = file.getPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL);
+			logger.debug("dataset asociated on file metadata is "+metadataLabel);
 		}
+		catch (Exception e) {
+			logger.debug("could not get dataset metadata on file, than sarch inside the file for dataset, otherwise let user choose");		
+		}
+		
+		if (extChart != null && extChart.getDataset().getLabel() != null) {
+			templateLabel = extChart.getDataset().getLabel();
+			logger.debug("dataset asociated in template is "+templateLabel);
+		}
+		
+		if(metadataLabel!=null && templateLabel!=null && !metadataLabel.equals(templateLabel)){
+			boolean  template = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"Choose dataset on template?", "Dataset definition on template is different from the one present in server: \nchoose it? \n (If no keeps dataset defined on server)");
+			if(template==true)dsLabel=templateLabel;
+			else dsLabel = metadataLabel;
+			
+		} else if(metadataLabel!=null && templateLabel!=null && metadataLabel.equals(templateLabel)){
+			dsLabel = metadataLabel;
+		} else if(metadataLabel != null){
+			dsLabel = metadataLabel;
+		} else if(templateLabel != null){
+			dsLabel = templateLabel;
+		}
+
+		logger.debug("dataset associated to document is "+dsLabel);
+
+
+		// fill table with default dataset
+		if (dsLabel != null) {
+			extChart.getDataset().setLabel(dsLabel);
+
+			logger.debug("dataset selected label is "+dsLabel);
+			retrieveDatasetMetadata(container, datasetMetadataTable, dsLabel);
+		} else {
+			logger.debug("No dataset selected");
+		}
+		
 		for (int i = 0; i < titles.length; i++) {
 			datasetMetadataTable.getColumn(i).pack();
 		}
@@ -430,13 +471,13 @@ public class MainChartLeftPage extends AbstractPage {
 		catch (NoActiveServerException e1) {
 			logger.error("No active server found", e1);			
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "No active server found");	
+					"Error", "No active server found: check connection and re-open editor");	
 			return null;
 		}
 		catch (Exception e1) {
 			logger.error("Not working server found", e1);			
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Error", "Not working server found");	
+					"Error", "Not working server found: check connection and re-open editor");	
 			return null;
 		}
 		logger.debug("OUT");
@@ -476,6 +517,20 @@ public class MainChartLeftPage extends AbstractPage {
 		Arrays.sort(datasets);
 		datasetCombo.setItems(datasets);
 
+		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		gd.horizontalSpan = 1;
+		gd.horizontalAlignment = SWT.END;
+		gd.grabExcessHorizontalSpace = true;
+		gd.minimumWidth = 120;
+		gd.verticalAlignment = SWT.TOP;		
+		datasetCombo.setLayoutData(gd);
+		
+		logger.debug("OUT");
+		return datasetCombo;
+	}
+	
+	private void setDatasetComboDefault(final Combo datasetCombo){
+		logger.debug("IN");
 		// get the selection one! Index are changed so check out for name
 		String dsLabel = extChart.getDataset().getLabel();
 		if(dsLabel != null){
@@ -492,18 +547,9 @@ public class MainChartLeftPage extends AbstractPage {
 		else{
 			logger.debug("No dataset ios selected");
 		}
-
-		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.horizontalSpan = 1;
-		gd.horizontalAlignment = SWT.END;
-		gd.grabExcessHorizontalSpace = true;
-		gd.minimumWidth = 120;
-		gd.verticalAlignment = SWT.TOP;		
-		datasetCombo.setLayoutData(gd);
-		
 		logger.debug("OUT");
-		return datasetCombo;
 	}
+	
 
 	
 	private void retrieveDatasetMetadata(Composite container, Table dsMetadatatable, String dsLabel) {
