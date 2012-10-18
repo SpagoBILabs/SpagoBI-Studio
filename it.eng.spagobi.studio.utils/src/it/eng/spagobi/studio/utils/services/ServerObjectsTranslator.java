@@ -44,9 +44,11 @@ public class ServerObjectsTranslator {
 
 	static public SDKTemplate createSDKTemplate(ITemplate temp){
 		SDKTemplate sdkTemplate = new SDKTemplate();
-		sdkTemplate.setContent(temp.getContent());
-		sdkTemplate.setFileName(temp.getFileName());
-		sdkTemplate.setFolderName(temp.getFolderName());
+		if(temp != null){
+			sdkTemplate.setContent(temp.getContent());
+			sdkTemplate.setFileName(temp.getFileName());
+			sdkTemplate.setFolderName(temp.getFolderName());
+		}
 		return sdkTemplate;
 	}
 
