@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Geo Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.geo;singleton:=true
-Bundle-Version: 3.4.0
+Bundle-Version: 3.6.0
 Bundle-Activator: it.eng.spagobi.studio.geo.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime;bundle-version="3.4.0",
