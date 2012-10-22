@@ -138,13 +138,16 @@ public class LiveLinesSettingsDialog extends Dialog {
 		textStepY.setText(String.valueOf(widgetConfigElementLiveLine.getStepY()));
 		textDomainvaluenumber.setText(String.valueOf(widgetConfigElementLiveLine.getDomainValueNumber()));
 		
-		Vector<Integer> domainValues = widgetConfigElementLiveLine.getDomainValues();
-		String domainValuesString = joinInteger(domainValues,",");
+		Vector<String> domainValues = widgetConfigElementLiveLine.getDomainValues();
+		String domainValuesString = join(domainValues,",");
 		textDomainvalues.setText(domainValuesString);
 		
 		Vector<String> fields = widgetConfigElementLiveLine.getFields();
-		String fieldsString = join(fields,",");
-		textFields.setText(fieldsString);
+		if (fields != null){
+			String fieldsString = join(fields,",");
+			textFields.setText(fieldsString);			
+		}
+
 	}
 	
 	public static String join(Vector<String> list, String delim) {
@@ -223,19 +226,32 @@ public class LiveLinesSettingsDialog extends Dialog {
 		widgetConfigElementLiveLine.setStepY(Integer.parseInt(textStepY.getText()));
 		widgetConfigElementLiveLine.setDomainValueNumber(Integer.parseInt(textDomainvaluenumber.getText()));
 
-		Vector<Integer> domainValues = widgetConfigElementLiveLine.getDomainValues();
+		Vector<String> domainValues = widgetConfigElementLiveLine.getDomainValues();
 		StringTokenizer st = new StringTokenizer(textDomainvalues.getText(),",");
 		while (st.hasMoreElements()) {
 			String token = st.nextToken();
-			domainValues.add(Integer.parseInt(token));
+			domainValues.add(token);
 		}
 		
-		Vector<String> fields = widgetConfigElementLiveLine.getFields();
-		StringTokenizer stFields = new StringTokenizer(textFields.getText(),",");
-		while (stFields.hasMoreElements()) {
-			String token = stFields.nextToken();
-			fields.add(token);
+		if (textFields.getText().length()>0){
+			Vector<String> fields = widgetConfigElementLiveLine.getFields();
+			if (fields == null){
+				Vector<String> newFields = new Vector<String>();
+				widgetConfigElementLiveLine.setFields(newFields);
+				fields = widgetConfigElementLiveLine.getFields();
+			}
+			StringTokenizer stFields = new StringTokenizer(textFields.getText(),",");
+			while (stFields.hasMoreElements()) {
+				String token = stFields.nextToken();
+				fields.add(token);
+			}
+		} else {
+			//Erased the text field content but a previous fields Vector is found, remove the Vector of Fields for not serializing
+			if (widgetConfigElementLiveLine.getFields() != null){
+				widgetConfigElementLiveLine.setFields(null);
+			}
 		}
+
 	}
 	
 	//check if all the required input are inserted
@@ -253,9 +269,7 @@ public class LiveLinesSettingsDialog extends Dialog {
 		if (textDomainvaluenumber.getText().length() == 0) {
 			valid = false;
 		}		    
-		if (textFields.getText().length() == 0) {
-			valid = false;
-		}
+		
 		return valid;
 	}
 

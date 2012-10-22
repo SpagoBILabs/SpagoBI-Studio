@@ -33,7 +33,7 @@ public class WidgetConfigElementLiveLine extends WidgetConfigElement {
 	private int rangeMaxValue;
 	private int stepY;
 	private int domainValueNumber;
-	private Vector<Integer> domainValues;
+	private Vector<String> domainValues;
 	private Vector<String> fields;
 	/**
 	 * @return the rangeMinValue
@@ -86,22 +86,22 @@ public class WidgetConfigElementLiveLine extends WidgetConfigElement {
 	/**
 	 * @return the domainValues
 	 */
-	public Vector<Integer> getDomainValues() {
-		if(domainValues == null) domainValues = new Vector<Integer>();
+	public Vector<String> getDomainValues() {
+		if(domainValues == null) domainValues = new Vector<String>();
 
 		return domainValues;
 	}
 	/**
 	 * @param domainValues the domainValues to set
 	 */
-	public void setDomainValues(Vector<Integer> domainValues) {
+	public void setDomainValues(Vector<String> domainValues) {
 		this.domainValues = domainValues;
 	}
 	/**
 	 * @return the fields
 	 */
 	public Vector<String> getFields() {
-		if(fields == null) fields = new Vector<String>();
+		//if(fields == null) fields = new Vector<String>();
 
 		return fields;
 	}
