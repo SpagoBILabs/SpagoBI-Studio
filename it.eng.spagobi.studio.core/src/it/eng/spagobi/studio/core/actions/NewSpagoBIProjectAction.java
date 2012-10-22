@@ -5,10 +5,12 @@
  This Source Code Form is subject to the terms of the Mozilla Public
  License, v. 2.0. If a copy of the MPL was not distributed with this file,
  You can obtain one at http://mozilla.org/MPL/2.0/.
- 
-**/
+
+ **/
 package it.eng.spagobi.studio.core.actions;
 
+import it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective;
+import it.eng.spagobi.studio.core.services.intro.PerspectiveOpener;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 
 import org.eclipse.jface.action.IAction;
@@ -26,11 +28,11 @@ import org.slf4j.LoggerFactory;
 public class NewSpagoBIProjectAction implements IWorkbenchWindowActionDelegate {
 
 	private IViewPart view = null;
-	
+
 	ISelection selection;
 
 	private static Logger logger = LoggerFactory.getLogger(NewSpagoBIProjectAction.class);
-	
+
 
 	public void init(IViewPart view) {
 		this.view = view;
@@ -48,27 +50,35 @@ public class NewSpagoBIProjectAction implements IWorkbenchWindowActionDelegate {
 		// Open the wizard dialog
 		dialog.open();
 
+		try{
+
+			PlatformUI.getWorkbench().showPerspective(SpagoBIPerspective.PERSPECTIVE_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow()); 
+		}
+		catch (Exception e) {
+			logger.error("Error in opening SpagoBI perspective. Go on anyway, user can open it manually.");
+		}
+
 		logger.debug("OUT");
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
 		this.selection = selection;
-		
+
 	}
 
 	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void init(IWorkbenchWindow window) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }
