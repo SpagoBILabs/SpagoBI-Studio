@@ -38,7 +38,7 @@ public class SummaryPanel {
 	private boolean hidden;
 	@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 	private int height;
-	private LayoutManagerConfig layoutConfig;
+	private LayoutManagerConfig layoutManagerConfig;
 	private Vector<Chart> charts;
 	/**
 	 * @return the collassable
@@ -91,14 +91,14 @@ public class SummaryPanel {
 	/**
 	 * @return the layoutConfig
 	 */
-	public LayoutManagerConfig getLayoutConfig() {
-		return layoutConfig;
+	public LayoutManagerConfig getLayoutManagerConfig() {
+		return layoutManagerConfig;
 	}
 	/**
 	 * @param layoutConfig the layoutConfig to set
 	 */
-	public void setLayoutConfig(LayoutManagerConfig layoutConfig) {
-		this.layoutConfig = layoutConfig;
+	public void setLayoutManagerConfig(LayoutManagerConfig layoutConfig) {
+		this.layoutManagerConfig = layoutConfig;
 	}
 	/**
 	 * @return the charts

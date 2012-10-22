@@ -94,7 +94,7 @@ public class JsonTemplateGenerator {
 		example.setSummaryPanel(summaryPanel);
 		
 		LayoutManagerConfig layoutManagerConfig = new LayoutManagerConfig();
-		summaryPanel.setLayoutConfig(layoutManagerConfig);
+		summaryPanel.setLayoutManagerConfig(layoutManagerConfig);
 		
 		layoutManagerConfig.getColumnWidths().add(".25");
 		layoutManagerConfig.getColumnWidths().add(".25");

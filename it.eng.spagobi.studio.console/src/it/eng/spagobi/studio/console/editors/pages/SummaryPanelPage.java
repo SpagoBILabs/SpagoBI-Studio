@@ -243,7 +243,7 @@ public class SummaryPanelPage extends AbstractPage {
 		textColumnNumber.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		//Check if previous created object is found
 		if (consoleTemplateModel.getSummaryPanel() != null){
-			int value = consoleTemplateModel.getSummaryPanel().getLayoutConfig().getColumnNumber();
+			int value = consoleTemplateModel.getSummaryPanel().getLayoutManagerConfig().getColumnNumber();
 			String columnNumber = String.valueOf(value);
 			if (value != 0){
 				textColumnNumber.setText(columnNumber);				
@@ -253,7 +253,7 @@ public class SummaryPanelPage extends AbstractPage {
 			public void modifyText(ModifyEvent arg0) {
 				editor.setIsDirty(true);
 				SummaryPanel summaryPanel = getSummaryPanel();
-				LayoutManagerConfig layoutManagerConfig = summaryPanel.getLayoutConfig();
+				LayoutManagerConfig layoutManagerConfig = summaryPanel.getLayoutManagerConfig();
 				int columnNumber =  Integer.parseInt(textColumnNumber.getText());
 				layoutManagerConfig.setColumnNumber(columnNumber);	
 				//update also columnsWidth if necessary 
@@ -275,9 +275,9 @@ public class SummaryPanelPage extends AbstractPage {
 		textColumnsWidth.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		//Check if previous created object is found
 		if (consoleTemplateModel.getSummaryPanel() != null){
-			if (!consoleTemplateModel.getSummaryPanel().getLayoutConfig().getColumnWidths().isEmpty()){
+			if (!consoleTemplateModel.getSummaryPanel().getLayoutManagerConfig().getColumnWidths().isEmpty()){
 				//get first element in ColumnWidths
-				String columnWidth = consoleTemplateModel.getSummaryPanel().getLayoutConfig().getColumnWidths().get(0);		
+				String columnWidth = consoleTemplateModel.getSummaryPanel().getLayoutManagerConfig().getColumnWidths().get(0);		
 				textColumnsWidth.setText(columnWidth);
 			}
 		}	
@@ -731,7 +731,7 @@ public class SummaryPanelPage extends AbstractPage {
 	//columnNumber must be >= 0
 	public void insertColumnsWidth(int columnNumber,String columnsWidth){
 		SummaryPanel summaryPanel = getSummaryPanel();
-		LayoutManagerConfig layoutManagerConfig = summaryPanel.getLayoutConfig();
+		LayoutManagerConfig layoutManagerConfig = summaryPanel.getLayoutManagerConfig();
 		if (layoutManagerConfig != null){
 			Vector<String> columnWidths = layoutManagerConfig.getColumnWidths();
 			columnWidths.clear();
@@ -754,7 +754,7 @@ public class SummaryPanelPage extends AbstractPage {
 			//create also LayoutManagerConfig (with layout set to column by default)
 			LayoutManagerConfig layoutManagerConfig = new LayoutManagerConfig();
 			layoutManagerConfig.setLayout("column");
-			summaryPanel.setLayoutConfig(layoutManagerConfig);
+			summaryPanel.setLayoutManagerConfig(layoutManagerConfig);
 			consoleTemplateModel.setSummaryPanel(summaryPanel);
 
 		}
