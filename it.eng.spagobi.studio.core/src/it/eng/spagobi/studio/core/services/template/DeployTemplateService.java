@@ -150,11 +150,12 @@ public class DeployTemplateService {
 									logger.error("dataset "+labelInsideXml+" not found in server. delete dataset association");									
 									doc.setDataSetId(null);
 								}
+								spagoBIServerObjects.getServerDocuments().saveNewDocument(doc, null, null);		
+
 							}
 							
 							// ALl documents case
 							
-							spagoBIServerObjects.getServerDocuments().saveNewDocument(doc, null, null);		
 							
 							// in case of dataset definition changed the dataset label as file metadata must be changed
 							if(found != null){
