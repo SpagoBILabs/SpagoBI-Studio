@@ -119,8 +119,6 @@ public class DeployTemplateService {
 						}
 						else{
 							documentException.setNoDocument(false);
-							spagoBIServerObjects.getServerDocuments().uploadTemplate(idInteger, template);
-							
 							
 							// **** Label defined inside template (Ext Chart case) ***
 							// in thecaseof an extChart also te dataset must be re-assigned because it could have been changed
@@ -132,7 +130,7 @@ public class DeployTemplateService {
 							}
 							
 							IDataSet found = null; 
-							if(labelInsideXml != null){
+							if(labelInsideXml != null){  // EXT CHART CASE
 								logger.debug("Set dataset document on server to "+labelInsideXml);
 								IDataSet[] datasets = spagoBIServerObjects.getServerDatasets().getDataSetList();
 								// get the id of the new datset
@@ -150,9 +148,13 @@ public class DeployTemplateService {
 									logger.error("dataset "+labelInsideXml+" not found in server. delete dataset association");									
 									doc.setDataSetId(null);
 								}
-								spagoBIServerObjects.getServerDocuments().saveNewDocument(doc, null, null);		
+								spagoBIServerObjects.getServerDocuments().saveNewDocument(doc, template, null);		
 
 							}
+							else{   // OTHER DOCUMENTS CASE
+								spagoBIServerObjects.getServerDocuments().uploadTemplate(idInteger, template);		
+							}
+							
 							
 							// ALl documents case
 							
