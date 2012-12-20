@@ -168,8 +168,8 @@ public class SWTUtils {
 		}
 
 		final Spinner parIntegerSpinner = new Spinner (composite, SWT.BORDER);
-		parIntegerSpinner.setMaximum(1000);
-		parIntegerSpinner.setMinimum(-1000);
+		parIntegerSpinner.setMaximum(1000000);
+		parIntegerSpinner.setMinimum(-1000000);
 
 		if(value != null){
 			parIntegerSpinner.setSelection(value.intValue());
@@ -186,8 +186,8 @@ public class SWTUtils {
 		}
 
 		final Spinner parFloatSpinner = new Spinner (composite, SWT.BORDER);
-		parFloatSpinner.setMaximum(1000);
-		parFloatSpinner.setMinimum(-1000);
+		parFloatSpinner.setMaximum(1000000);
+		parFloatSpinner.setMinimum(-1000000);
 		parFloatSpinner.setDigits(2);
 
 //		if(value != null){
