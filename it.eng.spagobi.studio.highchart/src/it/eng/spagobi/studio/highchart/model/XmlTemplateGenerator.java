@@ -28,9 +28,11 @@ import it.eng.spagobi.studio.highchart.model.bo.Serie;
 import it.eng.spagobi.studio.highchart.model.bo.Series;
 import it.eng.spagobi.studio.highchart.model.bo.SeriesList;
 import it.eng.spagobi.studio.highchart.model.bo.Spline;
+import it.eng.spagobi.studio.highchart.model.bo.Style;
 import it.eng.spagobi.studio.highchart.model.bo.SubTitle;
 import it.eng.spagobi.studio.highchart.model.bo.Title;
 import it.eng.spagobi.studio.highchart.model.bo.TitleAxis;
+import it.eng.spagobi.studio.highchart.model.bo.Tooltip;
 import it.eng.spagobi.studio.highchart.model.bo.XAxis;
 import it.eng.spagobi.studio.highchart.model.bo.YAxis;
 
@@ -400,6 +402,30 @@ public class XmlTemplateGenerator {
 		xstream.useAttributeFor(Legend.class, "width");
 		xstream.aliasField("width", Legend.class, "width");
 
+		
+		xstream.aliasField("TOOLTIP", HighChart.class, "tooltip"); 
+		xstream.useAttributeFor(Tooltip.class, "enabled");
+		xstream.aliasField("enabled", Tooltip.class, "enabled");
+		xstream.useAttributeFor(Tooltip.class, "style");
+		xstream.aliasField("style", Tooltip.class, "style");
+		xstream.useAttributeFor(Tooltip.class, "backgroundColor");
+		xstream.aliasField("backgroundColor", Tooltip.class, "backgroundColor");
+		xstream.useAttributeFor(Tooltip.class, "crosshairs");
+		xstream.aliasField("crosshairs", Tooltip.class, "crosshairs");
+		xstream.useAttributeFor(Tooltip.class, "shadow");
+		xstream.aliasField("shadow", Tooltip.class, "shadow");
+		
+		xstream.aliasField("STYLE", Tooltip.class, "style"); 
+		xstream.useAttributeFor(Style.class, "color");
+		xstream.aliasField("color", Style.class, "color");
+		xstream.useAttributeFor(Style.class, "fontWeight");
+		xstream.aliasField("fontWeight", Style.class, "fontWeight");
+		xstream.useAttributeFor(Style.class, "fontSize");
+		xstream.aliasField("fontSize", Style.class, "fontSize");
+		xstream.useAttributeFor(Style.class, "padding");
+		xstream.aliasField("padding", Style.class, "padding");
+		
+		
 		xstream.aliasField("PLOT_OPTIONS", HighChart.class, "plotOptions");
 		
 		xstream.aliasField("SERIES", PlotOptions.class, "series"); 

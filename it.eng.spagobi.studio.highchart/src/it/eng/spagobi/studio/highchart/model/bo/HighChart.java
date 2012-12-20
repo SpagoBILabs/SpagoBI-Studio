@@ -31,6 +31,7 @@ public class HighChart {
 	private PlotOptions plotOptions;
 	private Drill drill;
 	private SeriesList seriesList;
+	private Tooltip tooltip;
 
 //	private static Logger logger = LoggerFactory.getLogger(HighChart.class);
 
@@ -141,5 +142,12 @@ public class HighChart {
 		}
 		return i;
 	}
+	public Tooltip getTooltip() {
+		return tooltip;
+	}
+	public void setTooltip(Tooltip tooltip) {
+		this.tooltip = tooltip;
+	}
 
+	
 }
