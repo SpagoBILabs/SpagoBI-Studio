@@ -41,6 +41,8 @@ public class ResourceNavigatorHandler {
 	public static final String FILE_BCK_MODEL_HIER = "FileInBckModelHierarchy";
 	public static final String FILE_SERVER_HIER = "FileInServerHierarchy";
 	public static final String FILE_METAQUERY_HIER = "FileInMetaQueryHierarchy";
+	public static final String FILE_OLAP_HIER = "FileInOlapTemplatesHierarchy";
+
 
 	public static final String FOLDER_SYSTEM = "FolderSystem";
 	public static final String FOLDER_PROJECT = "FolderProject";
@@ -72,10 +74,14 @@ public class ResourceNavigatorHandler {
 							if(objSel instanceof IFile && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_METADATA_MODEL, (File)objSel) 
 									&& ((File)objSel).getName().endsWith(SpagoBIStudioConstants.BACKUP_EXTENSION) )
 								toReturn = ResourceNavigatorHandler.FILE_BCK_MODEL_HIER;
-							else
-								if(objSel instanceof IFile && ((File)objSel).getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) 
-										&& isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, ((File)objSel)))
-									toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
+							else 
+								if(objSel instanceof IFile && isFileInHierarchy(SpagoBIStudioConstants.FOLDER_OLAP_TEMPLATES, (File)objSel) 
+									&& ((File)objSel).getName().endsWith(SpagoBIStudioConstants.MONDRIAN_EXTENSION) )
+								toReturn = ResourceNavigatorHandler.FILE_OLAP_HIER;
+								else
+									if(objSel instanceof IFile && ((File)objSel).getName().endsWith(SpagoBIStudioConstants.META_QUERY_EXTENSION) 
+											&& isFileInHierarchy(SpagoBIStudioConstants.FOLDER_DATASET, ((File)objSel)))
+										toReturn = ResourceNavigatorHandler.FILE_METAQUERY_HIER;
 		logger.debug("OUT");
 		return toReturn;
 	}
@@ -184,7 +190,9 @@ public class ResourceNavigatorHandler {
 				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_RESOURCE+"/"+SpagoBIStudioConstants.FOLDER_SERVER,
 				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_RESOURCE+"\\"+SpagoBIStudioConstants.FOLDER_SERVER,
 				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_SERVER,
-				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_RESOURCE
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_RESOURCE,
+				"\\"+projectName+"\\"+SpagoBIStudioConstants.FOLDER_OLAP_TEMPLATES,
+				"/"+projectName+"/"+SpagoBIStudioConstants.FOLDER_OLAP_TEMPLATES
 		};
 
 		for (int i = 0; i < systemFolders.length && !toreturn; i++) {

@@ -30,6 +30,8 @@ public class SpagoBIStudioConstants {
 	public final static String MODEL_EXTENSION="sbimodel";
 	public final static String META_QUERY_EXTENSION="metaquery";
 	public final static String BACKUP_EXTENSION="bck";
+	public final static String MONDRIAN_EXTENSION="xml";
+
 
 	
 	
@@ -83,6 +85,7 @@ public class SpagoBIStudioConstants {
 	public static final String FOLDER_DATASET = "Business Queries";
 	public static final String FOLDER_ANALYSIS = "Business Analysis";	
 	public static final String FOLDER_PRIVATE_DOCUMENTS = "Private Folders";
+	public static final String FOLDER_OLAP_TEMPLATES = "OLAP Templates";	
 	
 	// name of project folder icons 
 	public static final String FOLDER_ICON_RESOURCE= "resources.png";
@@ -96,6 +99,7 @@ public class SpagoBIStudioConstants {
 	public static final String FOLDER_ICON_ANALYSIS = "analysis.png";	
 	public static final String FOLDER_ICON_PRIVATE_DOCUMENTS = "private.png";
 	public static final String FOLDER_ICON_SBI_PROJECT = "sbiproject.gif";
+	public static final String FOLDER_ICON_OLAP_TEMPLATES = "olap.png";
 	
 // 	Component ID
 	public static final String SERVER_EDITOR_ID = "it.eng.spagobi.studio.core.editors.ServerEditor";
@@ -202,6 +206,6 @@ public class SpagoBIStudioConstants {
 	public static final String CONFIG_PROPERTY_FOLDER_PRIVATE_FOLDERS= "Folder_Private_Folders";
 	public static final String CONFIG_PROPERTY_ANALYSIS_DOCUMENT= "AnalysisDocuments";
 	public static final String CONFIG_PROPERTY_FOLDER_BUSINESS_QUERIES= "Folder_Business_Queries";
-	
+	public static final String CONFIG_PROPERTY_FOLDER_OLAP_TEMPLATES= "Folder_Olap_Templates";
 	
 }

@@ -13,7 +13,9 @@ import it.eng.spagobi.sdk.datasets.bo.SDKDataSet;
 import it.eng.spagobi.sdk.datasets.bo.SDKDataSetParameter;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
+import it.eng.spagobi.sdk.documents.bo.SDKSchema;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
+import it.eng.spagobi.sdk.importexport.bo.SDKFile;
 import it.eng.spagobi.server.services.api.bo.IDataSet;
 import it.eng.spagobi.server.services.api.bo.IDataSetParameter;
 import it.eng.spagobi.server.services.api.bo.IDocument;
@@ -90,6 +92,23 @@ public class ServerObjectsTranslator {
 		sdkDataSetParameter.setType(dsPar.getType());
 		sdkDataSetParameter.setValues(dsPar.getValues());
 		return sdkDataSetParameter;
+	}
+	
+	static public SDKSchema createSDKSchema(IDocument newDocument, ITemplate template, String dataSourceLabel){
+		SDKSchema schema = new SDKSchema();
+		schema.setSchemaName(newDocument.getName());
+		if (newDocument.getDescription() != null){
+			schema.setSchemaDescription(newDocument.getDescription());
+		}
+		if ((dataSourceLabel != null) && (dataSourceLabel.length() > 0)){
+			schema.setSchemaDataSourceLbl(dataSourceLabel);
+		}
+		SDKFile schemaFile = new SDKFile();
+		schemaFile.setContent(template.getContent());
+		schemaFile.setFileName(template.getFileName());	
+		schema.setSchemaFile(schemaFile);
+		
+		return schema;
 	}
 
 }

@@ -12,7 +12,10 @@ package it.eng.spagobi.studio.utils.services.serverobjects;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
+import it.eng.spagobi.sdk.documents.bo.SDKSchema;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
+import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
+import it.eng.spagobi.sdk.importexport.bo.SDKFile;
 import it.eng.spagobi.server.services.api.bo.IDocument;
 import it.eng.spagobi.server.services.api.bo.ITemplate;
 import it.eng.spagobi.studio.utils.bo.Document;
@@ -25,6 +28,8 @@ import it.eng.spagobi.studio.utils.services.ServerObjectsTranslator;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +55,24 @@ public class ServerDocuments {
 			proxyHandler.getDocumentsServiceProxy().uploadTemplate(id, sdkTemplate);
 
 		return;
+	}
+	
+	public void uploadMondrianSchema(IDocument newDocument, ITemplate template, String dataSourceLabel ) throws  RemoteException{
+		SDKSchema sdkSchema = ServerObjectsTranslator.createSDKSchema(newDocument, template,dataSourceLabel );
+		if(proxyHandler.getDocumentsServiceProxy() != null)
+
+			try {
+				proxyHandler.getDocumentsServiceProxy().uploadMondrianSchema(sdkSchema);
+				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Success", "Olap Schema correctly uploaded");
+			
+			} catch (NotAllowedOperationException e) {
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+						"Error", "Error during file deploy: NotAllowedOperationException");		
+				e.printStackTrace();
+			} 
+
+	
+		
 	}
 	
 	public void uploadDatamartTemplate(ITemplate template, ITemplate calculatedFields, String dataSourceLabel) throws RemoteException{
@@ -181,5 +204,6 @@ public class ServerDocuments {
 		this.proxyHandler = proxyHandler;
 	}
 
+	
 	
 }
