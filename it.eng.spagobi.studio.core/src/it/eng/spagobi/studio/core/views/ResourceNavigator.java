@@ -102,7 +102,12 @@ public class ResourceNavigator extends org.eclipse.ui.navigator.CommonNavigator 
 					else if(name.equals(SpagoBIStudioConstants.FOLDER_DATASET)){
 						imageToReturn = ImageConstants.dataseDescriptor.createImage();
 						images.add(imageToReturn);
-					}					
+					}				
+					else if(name.equals(SpagoBIStudioConstants.FOLDER_OLAP_TEMPLATES)){
+						imageToReturn = ImageConstants.olapDescriptor.createImage();
+						images.add(imageToReturn);
+					}				
+										
 				}
 				else{
 					// there asre some structure folders that have a father folder

@@ -31,6 +31,7 @@ import it.eng.spagobi.studio.core.views.ResourceNavigator;
 import it.eng.spagobi.studio.core.views.menu.SubmenuAction;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.core.wizards.SpagoBIDeployDatasetWizard;
+import it.eng.spagobi.studio.core.wizards.deployOlapWizard.SpagoBIDeployOlapTemplateWizard;
 import it.eng.spagobi.studio.core.wizards.deployWizard.SpagoBIDeployWizard;
 import it.eng.spagobi.studio.core.wizards.downloadModelWizard.SpagoBIDownloadModelWizard;
 import it.eng.spagobi.studio.core.wizards.downloadWizard.SpagoBIDownloadWizard;
@@ -139,6 +140,11 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 				setJpaNavigator(menu);
 				setUploadDatamartTemplateWizard(menu);
 				setRefreshModelWizard(menu);
+			}
+			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_OLAP_HIER)){ // if it is a file of analysis hierarchy
+				logger.debug("File under olap hierarchy");			
+				setDeployOlapTemplateWizard(menu);
+
 			}
 			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_BCK_MODEL_HIER)){ // if it is a file of backup model
 				logger.debug("File under backup model hierarchy");
@@ -497,6 +503,26 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		downACI.getAction().setText("Deploy Dataset");
 		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DEPLOY, Activator.PLUGIN_ID));
 		menu.appendToGroup("group.new", downACI);
+	}
+	
+	public void setDeployOlapTemplateWizard(IMenuManager menu){
+		ActionContributionItem deployACI = new ActionContributionItem(new Action()
+		{	public void run() {
+			logger.debug("New Deploy Olap Template");
+			SpagoBIDeployOlapTemplateWizard sbiotw = new SpagoBIDeployOlapTemplateWizard();	
+			sbiotw.init(PlatformUI.getWorkbench(),(IStructuredSelection)currentContext.getSelection() );
+			// Create the wizard dialog
+			WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), sbiotw);
+			// Open the wizard dialog
+			dialog.open();	
+			//DeployOlapTemplateService dot = new DeployDatasetService(currentContext.getSelection(), sbiotw); 
+
+			//dot.olapUpload();
+		}
+		});
+		deployACI.getAction().setText("Deploy Olap Template");
+		deployACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DEPLOY, Activator.PLUGIN_ID));
+		menu.appendToGroup("group.new", deployACI);
 	}
 
 	public void setUploadDatamartTemplateWizard(IMenuManager menu){

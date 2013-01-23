@@ -29,6 +29,7 @@ public class ImageConstants {
 	public static final	ImageDescriptor serverActiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_ACTIVE, Activator.PLUGIN_ID);
 	public static final ImageDescriptor serverInactiveDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SERVER_INACTIVE, Activator.PLUGIN_ID);
 	public static final ImageDescriptor sbiProjectDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_SBI_PROJECT, Activator.PLUGIN_ID);
+	public static final ImageDescriptor olapDescriptor=ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.FOLDER_ICON_OLAP_TEMPLATES, Activator.PLUGIN_ID);
 
 	
 }

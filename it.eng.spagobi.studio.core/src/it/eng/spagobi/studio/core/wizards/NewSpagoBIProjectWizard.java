@@ -173,6 +173,15 @@ public class NewSpagoBIProjectWizard extends Wizard implements INewWizard, IExec
 			else{
 				logger.debug("not create "+SpagoBIStudioConstants.FOLDER_ANALYSIS);
 			}
+			
+			if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_OLAP_TEMPLATES)){		
+				logger.debug("created "+SpagoBIStudioConstants.FOLDER_OLAP_TEMPLATES);
+				IFolder olapFolder = projectReference.getFolder(SpagoBIStudioConstants.FOLDER_OLAP_TEMPLATES);
+				olapFolder.create(false, true, monitor);
+			}
+			else{
+				logger.debug("not create "+SpagoBIStudioConstants.FOLDER_OLAP_TEMPLATES);
+			}
 
 			if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_PRIVATE_FOLDERS)){		
 				logger.debug("created "+SpagoBIStudioConstants.FOLDER_PRIVATE_DOCUMENTS);
