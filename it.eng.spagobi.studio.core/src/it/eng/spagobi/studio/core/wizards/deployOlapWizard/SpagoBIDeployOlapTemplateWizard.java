@@ -174,9 +174,8 @@ public class SpagoBIDeployOlapTemplateWizard extends AbstractSpagoBIDocumentWiza
 			Document existingDoc = proxyServerObjects.getServerDocuments().getDocumentByLabel(newDocument.getLabel());
 
 			if(existingDoc != null){
-				logger.debug("Found existing document with label "+newDocument.getLabel()+": need to change label ");
-				goOn = false;
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "A document with label "+newDocument.getLabel()+" is already existing, select another label");
+				logger.debug("Found existing document with label "+newDocument.getLabel()+": ask for update ");
+				goOn = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Overwrite?", "A document with label "+newDocument.getLabel()+" is already existing; do you want to overwrite it?");
 			}
 			else{
 				logger.debug("Not Found existing document with label "+newDocument.getLabel()+": go on with insert.");				
