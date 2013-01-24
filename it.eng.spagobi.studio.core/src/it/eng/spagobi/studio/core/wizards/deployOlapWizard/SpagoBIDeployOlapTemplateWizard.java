@@ -184,7 +184,8 @@ public class SpagoBIDeployOlapTemplateWizard extends AbstractSpagoBIDocumentWiza
 			 
 			if(goOn){
 				proxyServerObjects.getServerDocuments().uploadMondrianSchema(newDocument, template, labelDataSource);
-				SpagoBILogger.infoLog("Document "+label+" has been deployed");		
+				SpagoBILogger.infoLog("Document "+label+" has been deployed");	
+				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Success", "Olap Schema correctly uploaded");
 			}
 			else{
 				logger.debug("User choose not to insert. ");
@@ -198,11 +199,12 @@ public class SpagoBIDeployOlapTemplateWizard extends AbstractSpagoBIDocumentWiza
 				MessageDialog.openError(getShell(), "", "Current user has no permission to deploy document");	
 			}
 			else{
-				SpagoBILogger.errorLog("No comunication with server, cannot deploy document on server", e);			
+				SpagoBILogger.errorLog("Cannot deploy document on server", e);		
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"No comunciation with server", "No comunication with server, cannot deploy document on server");		
+						"Cannot deploy document on server", "Cannot deploy document on server: "+e.getClass().toString());		
 			}
 			return;
+			
 
 		}
 		/*

@@ -66,28 +66,23 @@ import org.slf4j.LoggerFactory;
  */
 
 public class SpagoBIDeployOlapTemplateWizardFormPage extends WizardPage {
-	//private Text labelText;
+
 	private Text nameText;
 	private Text descriptionText;
-	//private Combo engineCombo;
-	//private Combo dataSetCombo; 
+
 	private Combo dataSourceCombo; 
-	//private Combo stateCombo; 
-	//private Spinner refreshSecondsSpinner; 
+
 	String projectName = null;
 
 	private IStructuredSelection selection;
-//	private Tree tree;
+
 	private String typeLabel;
 
-	//private Map<String, Integer> engineLabelIdMap;
-	//private Map<String, Integer> dataSetLabelIdMap;
+
 	private Map<String, Integer> dataSourceLabelIdMap;
 
 	private ProgressMonitorPart monitor;
-	// Filter By type
-	//Engine[] enginesList;
-	//IDataSet[] datasetList;		
+	
 	DataSource[] datasourceList;		
 	Functionality functionality=null;
 	
@@ -103,7 +98,7 @@ public class SpagoBIDeployOlapTemplateWizardFormPage extends WizardPage {
 	public SpagoBIDeployOlapTemplateWizardFormPage(IStructuredSelection selection) {
 		super("wizardPage");
 		setTitle("Deploy Olap Template Wizard");
-		setDescription("Deploy a new document; select the new document properties");
+		setDescription("Deploy a new document: select the new document properties");
 		this.selection = selection;
 	}
 
@@ -114,8 +109,7 @@ public class SpagoBIDeployOlapTemplateWizardFormPage extends WizardPage {
 	public void createControl(Composite parent) {
 		logger.debug("IN");
 		Shell shell = parent.getShell();
-		//shell.setSize(1300,500);
-		monitor=new ProgressMonitorPart(getShell(), null);
+		monitor=new ProgressMonitorPart(new Shell(), null);
 
 
 		Object objSel = selection.toList().get(0);
@@ -190,22 +184,23 @@ public class SpagoBIDeployOlapTemplateWizardFormPage extends WizardPage {
 		}
 
 
-		
+		/*
 		FillLayout fl2=new FillLayout();
 		fl2.type=SWT.HORIZONTAL;
 		parent.setLayout(fl2);
+	*/
 
 
-
-
-		Composite left=new Composite(parent,SWT.BORDER);
+		Composite main = new Composite(parent,SWT.NONE);
+		main.setLayout(new GridLayout(1, false));
+		Composite left=new Composite(main,SWT.BORDER);
+		left.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		GridLayout gl = new GridLayout();
 		int ncol = 2;
 		gl.numColumns = 2;
 		left.setLayout(gl);
 
-		FillLayout fl=new FillLayout();
 		
 		// *************** Left Layout **********************
 
@@ -213,8 +208,10 @@ public class SpagoBIDeployOlapTemplateWizardFormPage extends WizardPage {
 		Label label_1 = new Label(left, SWT.NONE);
 		label_1.setText("Name:");
 		nameText = new Text(left, SWT.BORDER);
-		nameText.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-		nameText.setTextLimit(SpagoBIStudioConstants.BIOBJECT_NAME_LIMIT);
+		GridData gd_nameText = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gd_nameText.widthHint = 146;
+		nameText.setLayoutData(gd_nameText);
+		nameText.setTextLimit(20);
 		nameText.addListener(SWT.KeyUp, new Listener() {
 			public void handleEvent(Event event) {
 				//check if page is complete
@@ -264,6 +261,7 @@ public class SpagoBIDeployOlapTemplateWizardFormPage extends WizardPage {
 		}
 		Arrays.sort(datasourceLabels);
 		dataSourceCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
+		dataSourceCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		dataSourceCombo.setItems(datasourceLabels);
 
 	
