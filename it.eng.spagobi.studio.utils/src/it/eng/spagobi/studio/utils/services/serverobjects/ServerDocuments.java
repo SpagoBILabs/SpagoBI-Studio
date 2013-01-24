@@ -62,9 +62,7 @@ public class ServerDocuments {
 		if(proxyHandler.getDocumentsServiceProxy() != null)
 
 			try {
-				proxyHandler.getDocumentsServiceProxy().uploadMondrianSchema(sdkSchema);
-				MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Success", "Olap Schema correctly uploaded");
-			
+				proxyHandler.getDocumentsServiceProxy().uploadMondrianSchema(sdkSchema);			
 			} catch (NotAllowedOperationException e) {
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 						"Error", "Error during file deploy: NotAllowedOperationException");		
