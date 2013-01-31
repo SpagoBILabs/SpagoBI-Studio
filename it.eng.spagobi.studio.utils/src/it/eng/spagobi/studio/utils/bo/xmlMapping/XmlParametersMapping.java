@@ -28,14 +28,19 @@ public class XmlParametersMapping {
 	public static IFile setFileParametersMetaData(IFile newFile, DocumentParameter[] parameters) throws CoreException{
 		String xml="";
 		ArrayList<DocumentParameter> list=new ArrayList<DocumentParameter>();
-		for (int i = 0; i < parameters.length; i++) {
-			list.add(parameters[i]);
+		if(parameters != null){
+			for (int i = 0; i < parameters.length; i++) {
+				list.add(parameters[i]);
+			}
+			DocumentParameters pars=new DocumentParameters(list);
+
+			XStream xstream = setParametersXStream();
+			xml = xstream.toXML(pars);		
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML,xml);
 		}
-		DocumentParameters pars=new DocumentParameters(list);
-	
-		XStream xstream = setParametersXStream();
-		xml = xstream.toXML(pars);		
-		newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML,xml);
+		else{
+			newFile.setPersistentProperty(SpagoBIStudioConstants.DOCUMENT_PARAMETERS_XML,"");
+		}
 		return newFile;
 	}
 
