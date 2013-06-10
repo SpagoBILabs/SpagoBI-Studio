@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Chart Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.chart;singleton:=true
-Bundle-Version: 3.6.0
+Bundle-Version: 4.0.0
 Bundle-Activator: it.eng.spagobi.studio.chart.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -2,10 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
 Bundle-SymbolicName: it.eng.spagobi.studio.oda;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 4.0.0
 Bundle-ClassPath: .,
  src,
- lib/spagobi-utils-3.0.jar,
  lib/commons-discovery-0.2.jar,
  lib/saaj.jar,
  lib/wsdl4j-1.5.1.jar,
@@ -26,10 +25,11 @@ Bundle-ClassPath: .,
  lib/logback/org.slf4j.api_1.5.11.v20100519-1910.jar,
  lib/commons-logging-api-1.1.jar,
  lib/log4j-1.2.9.jar,
- lib/sbi.utils.json-3.5.1.jar,
  lib/jackson-annotations-2.0.2.jar,
  lib/jackson-core-2.0.2.jar,
- lib/jackson-databind-2.0.2.jar
+ lib/jackson-databind-2.0.2.jar,
+ lib/spagobi-utils-4.0.0.jar,
+ lib/spagobi-utils-json-4.0.0.jar
 Bundle-Activator: it.eng.spagobi.studio.oda.Activator
 Bundle-Localization: plugin
 Export-Package: it.eng.spagobi.commons.constants,

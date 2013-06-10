@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SpagoBI Server API
 Bundle-SymbolicName: it.eng.spagobi.server.services.api;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 4.0.0
 Bundle-Activator: it.eng.spagobi.server.services.api.Activator
 Bundle-Vendor: Engineering
 Require-Bundle: org.eclipse.core.runtime
