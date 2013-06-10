@@ -558,12 +558,16 @@ public class GEOEditor extends EditorPart {
 					Dataset dataset = datasetInfos.get(datasetLabel);
 					/*					it.eng.spagobi.studio.geo.editors.model.geo.Dataset datasetGeo = DatasetBO
 							.setNewDataset(geoDocument, dataset.getJdbcQuery());*/
-					Integer datasourceId = dataset.getJdbcDataSourceId();
-
-
+					
+					//solvedeccoqui
+					//Integer datasourceId = dataset.getJdbcDataSourceId();
 
 					DataSource sdkdataSource;
 					try {
+						Integer datasourceId = 
+							(dataset.getFromConfiguration(Dataset.DATA_SOURCE) != null) ?
+						(Integer)dataset.getFromConfiguration(Dataset.DATA_SOURCE) : null;
+
 						sdkdataSource = sbso.getServerDataSources().getDataSourceById(datasourceId);
 						sdkdataSource.getUrlConnection();
 
