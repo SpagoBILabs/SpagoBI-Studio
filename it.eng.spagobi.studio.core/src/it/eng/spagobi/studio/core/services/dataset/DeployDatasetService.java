@@ -117,8 +117,11 @@ public class DeployDatasetService {
 								logger.debug("query is "+queryStr);					
 								adaptedQueryStrList = DeployDatasetService.adaptQueryToList(queryStr);								
 								logger.debug("adapted query list is "+adaptedQueryStrList);					
+								
+								//solvedeccoqui
 								// only the query may be modified by meta so it is the only refreshed
-								ds.setJsonQuery(adaptedQueryStrList);
+								ds.addToConfiguration(Dataset.QBE_JSON_QUERY, adaptedQueryStrList);
+								//ds.setJsonQuery(adaptedQueryStrList);
 								datasetException.setNoDocument(false);
 								Integer dsId = spagoBIServerObjects.getServerDatasets().saveDataSet(ds);							
 								if(ds == null){

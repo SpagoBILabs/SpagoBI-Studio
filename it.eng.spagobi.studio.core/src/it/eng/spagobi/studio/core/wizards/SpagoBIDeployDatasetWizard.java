@@ -191,6 +191,7 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		String datamart = formPage.getDatamartLabel().getText();
 		Integer dataSourceId = null;
 
+		// toDo: no more needed dataSourceId
 		String labelDataSource = null;
 		int selectedDataSourceIndex=formPage.getDataSourceCombo().getSelectionIndex();
 		if(selectedDataSourceIndex!=-1){
@@ -216,7 +217,29 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		toReturn.setName(name);
 		toReturn.setDescription(description);
 		toReturn.setType(type);
-		toReturn.setJdbcDataSourceId(dataSourceId);
+		
+		
+//eccoqui
+		
+		try{
+			toReturn.addToConfiguration(Dataset.QBE_DATA_SOURCE, labelDataSource);
+		}
+		catch (Exception e) {
+			logger.error("Error in adding dataSource "+labelDataSource+" information to dataset: go on anyway.");		}
+
+		try{
+			toReturn.addToConfiguration(Dataset.QBE_JSON_QUERY, queryAdapted);
+		}
+		catch (Exception e) {
+			logger.error("Error in adding json query "+queryAdapted+" information to dataset: go on anyway.");			}
+
+		try{
+			toReturn.addToConfiguration(Dataset.QBE_DATAMARTS, datamart);
+		}
+		catch (Exception e) {
+			logger.error("Error in adding datamart "+datamart+" information to dataset: go on anyway.");				}
+
+
 		if(transformer){
 			toReturn.setTransformer("PIVOT_TRANSFOMER");
 		}
@@ -224,8 +247,8 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		toReturn.setPivotColumnValue(valuePivot);
 		toReturn.setPivotRowName(rowPivot);
 		toReturn.setNumberingRows(numberedColumnsPivot);
-		toReturn.setJsonQuery(queryAdapted);
-		toReturn.setDatamarts(datamart);
+
+
 		logger.debug("OUT");
 		return toReturn;
 	}
