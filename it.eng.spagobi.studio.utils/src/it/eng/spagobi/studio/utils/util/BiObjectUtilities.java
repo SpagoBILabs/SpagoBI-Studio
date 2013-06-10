@@ -377,12 +377,13 @@ public class BiObjectUtilities {
 			if(dataset.getDescription()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION, dataset.getDescription());
 			}
-			if(dataset.getDatamarts()!=null){
-				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DATAMARTS, dataset.getDatamarts());
-			}
-			if(dataset.getJsonQuery()!=null){
-				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_JSON_QUERY, dataset.getJsonQuery());
-			}
+		//eccoqui
+//			if(dataset.getDatamarts()!=null){
+//				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DATAMARTS, dataset.getDatamarts());
+//			}
+//			if(dataset.getJsonQuery()!=null){
+//				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_JSON_QUERY, dataset.getJsonQuery());
+//			}
 			if(dataset.getTransformer()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_TRANSFORMER, dataset.getTransformer());
 			}

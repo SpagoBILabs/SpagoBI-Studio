@@ -61,15 +61,15 @@ public class ServerObjectsTranslator {
 		sdkDataset.setName(ds.getName());
 		sdkDataset.setDescription(ds.getDescription());
 		sdkDataset.setType(ds.getType());
-		sdkDataset.setJdbcDataSourceId(ds.getJdbcDataSourceId());
+		//sdkDataset.setJdbcDataSourceId(ds.getJdbcDataSourceId());
 		if(ds.getTransformer() != null)
 			sdkDataset.setTransformer(ds.getTransformer().toString());
 		sdkDataset.setNumberingRows(ds.getNumberingRows());
 		sdkDataset.setPivotColumnName(ds.getPivotColumnName());
 		sdkDataset.setPivotColumnValue(ds.getPivotColumnValue());
 		sdkDataset.setPivotRowName(ds.getPivotRowName());
-		sdkDataset.setJsonQuery(ds.getJsonQuery());
-		sdkDataset.setDatamarts(ds.getDatamarts());
+//		sdkDataset.setJsonQuery(ds.getJsonQuery());
+//		sdkDataset.setDatamarts(ds.getDatamarts());
 		
 		SDKDataSetParameter[] sdkDataSetParameters = null;
 		IDataSetParameter[] parArray = ds.getParameters();
@@ -82,6 +82,8 @@ public class ServerObjectsTranslator {
 			}
 		}
 		sdkDataset.setParameters(sdkDataSetParameters);
+		sdkDataset.setConfiguration(ds.getConfiguration());
+		
 		
 		return sdkDataset;
 	}
