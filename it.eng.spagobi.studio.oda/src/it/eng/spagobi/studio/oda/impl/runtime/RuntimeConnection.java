@@ -5,14 +5,17 @@
  This Source Code Form is subject to the terms of the Mozilla Public
  License, v. 2.0. If a copy of the MPL was not distributed with this file,
  You can obtain one at http://mozilla.org/MPL/2.0/.
- 
-**/
+
+ **/
 
 package it.eng.spagobi.studio.oda.impl.runtime;
 
+import it.eng.spagobi.container.ObjectUtils;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.services.proxy.DataSetServiceProxy;
+import it.eng.spagobi.studio.utils.bo.Dataset;
 import it.eng.spagobi.tools.dataset.bo.IDataSet;
+import it.eng.spagobi.utilities.json.JSONUtils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +27,7 @@ import org.eclipse.datatools.connectivity.oda.IConnection;
 import org.eclipse.datatools.connectivity.oda.IDataSetMetaData;
 import org.eclipse.datatools.connectivity.oda.IQuery;
 import org.eclipse.datatools.connectivity.oda.OdaException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,18 +40,18 @@ import com.ibm.icu.util.ULocale;
  */
 public class RuntimeConnection implements IConnection
 {
-	
+
 	boolean isOpen;
-	
+
 	private static Logger logger = LoggerFactory.getLogger(RuntimeConnection.class);
-	
+
 	private DataSetServiceProxy proxyDataset = null;
-	
+
 	public RuntimeConnection(DataSetServiceProxy proxyDataset) {
 		isOpen = false;
 		this.proxyDataset = proxyDataset;
 	}
-	
+
 	/*
 	 * @see org.eclipse.datatools.connectivity.oda.IConnection#open(java.util.Properties)
 	 */
@@ -56,14 +60,28 @@ public class RuntimeConnection implements IConnection
 		logger.trace("IN");
 
 		IDataSet ds = this.proxyDataset.getDataSetByLabel("SBI_DS_HIGH2");
-		System.out.println(ds.getQuery());
+		//solvedeccoqui System.out.println(ds.getQuery());
+		try{
+			Object query = getFromConfiguration(ds.getConfiguration(), Dataset.QBE_JSON_QUERY);
+			if(query == null)
+				query = getFromConfiguration(ds.getConfiguration(), Dataset.QBE_SQL_QUERY);
+
+			if(query!= null){
+				System.out.println(query);
+			}
+		}
+		catch (Exception e) {
+			logger.warn("failed in retrieving query in "+ds.getConfiguration());
+		}
+
+
 		logger.debug("Connection opened");
 		isOpen = true;    
-		
-		logger.trace("OUT");
- 	}
 
-	
+		logger.trace("OUT");
+	}
+
+
 	/*
 	 * @see org.eclipse.datatools.connectivity.oda.IConnection#setAppContext(java.lang.Object)
 	 */
@@ -76,7 +94,7 @@ public class RuntimeConnection implements IConnection
 	 */
 	public void close() throws OdaException
 	{
-	    isOpen = false;
+		isOpen = false;
 	}
 
 	/*
@@ -92,8 +110,8 @@ public class RuntimeConnection implements IConnection
 	 */
 	public IDataSetMetaData getMetaData( String dataSetType ) throws OdaException
 	{
-	    // assumes that this driver supports only one type of data set,
-        // ignores the specified dataSetType
+		// assumes that this driver supports only one type of data set,
+		// ignores the specified dataSetType
 		return null;
 	}
 
@@ -102,8 +120,8 @@ public class RuntimeConnection implements IConnection
 	 */
 	public IQuery newQuery( String dataSetType ) throws OdaException
 	{
-        // assumes that this driver supports only one type of data set,
-        // ignores the specified dataSetType
+		// assumes that this driver supports only one type of data set,
+		// ignores the specified dataSetType
 		return null;
 	}
 
@@ -120,7 +138,7 @@ public class RuntimeConnection implements IConnection
 	 */
 	public void commit() throws OdaException
 	{
-	    // do nothing; assumes no transaction support needed
+		// do nothing; assumes no transaction support needed
 	}
 
 	/*
@@ -128,12 +146,34 @@ public class RuntimeConnection implements IConnection
 	 */
 	public void rollback() throws OdaException
 	{
-        // do nothing; assumes no transaction support needed
+		// do nothing; assumes no transaction support needed
 	}
 	@Override
 	public void setLocale(ULocale arg0) throws OdaException {
 		// TODO Auto-generated method stub
-		
+
 	}
-    
+
+
+	// needed to repeat because using server side IDataset interface
+	public Object getFromConfiguration(String configuration, String fieldName) throws Exception{
+		Object toReturn = null;
+
+		if(configuration != null){
+			try{
+				String config = JSONUtils.escapeJsonString(configuration);
+				JSONObject jsonConf  = ObjectUtils.toJSONObject(config);
+				toReturn = jsonConf.getString(fieldName);			
+			}
+			catch (Exception e) {
+				throw e;
+			}
+		}
+		return toReturn;
+	}
+
+
+
+
+
 }
