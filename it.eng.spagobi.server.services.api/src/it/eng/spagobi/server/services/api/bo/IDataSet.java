@@ -21,14 +21,14 @@ public interface IDataSet {
 	 * 
 	 * @return fileName
 	 */
-	public abstract String getFileName();
-
-	/**
-	 * Sets the fileName value for this SDKDataSet.
-	 * 
-	 * @param fileName
-	 */
-	public abstract void setFileName(String fileName);
+//	public abstract String getFileName();
+//
+//	/**
+//	 * Sets the fileName value for this SDKDataSet.
+//	 * 
+//	 * @param fileName
+//	 */
+//	public abstract void setFileName(String fileName);
 
 	/**
 	 * Gets the id value for this SDKDataSet.
@@ -49,42 +49,42 @@ public interface IDataSet {
 	 * 
 	 * @return javaClassName
 	 */
-	public abstract String getJavaClassName();
-
-	/**
-	 * Sets the javaClassName value for this SDKDataSet.
-	 * 
-	 * @param javaClassName
-	 */
-	public abstract void setJavaClassName(String javaClassName);
-
-	/**
-	 * Gets the jdbcDataSourceId value for this SDKDataSet.
-	 * 
-	 * @return jdbcDataSourceId
-	 */
-	public abstract Integer getJdbcDataSourceId();
-
-	/**
-	 * Sets the jdbcDataSourceId value for this SDKDataSet.
-	 * 
-	 * @param jdbcDataSourceId
-	 */
-	public abstract void setJdbcDataSourceId(Integer jdbcDataSourceId);
-
-	/**
-	 * Gets the jdbcQuery value for this SDKDataSet.
-	 * 
-	 * @return jdbcQuery
-	 */
-	public abstract String getJdbcQuery();
-
-	/**
-	 * Sets the jdbcQuery value for this SDKDataSet.
-	 * 
-	 * @param jdbcQuery
-	 */
-	public abstract void setJdbcQuery(String jdbcQuery);
+//	public abstract String getJavaClassName();
+//
+//	/**
+//	 * Sets the javaClassName value for this SDKDataSet.
+//	 * 
+//	 * @param javaClassName
+//	 */
+//	public abstract void setJavaClassName(String javaClassName);
+//
+//	/**
+//	 * Gets the jdbcDataSourceId value for this SDKDataSet.
+//	 * 
+//	 * @return jdbcDataSourceId
+//	 */
+//	public abstract Integer getJdbcDataSourceId();
+//
+//	/**
+//	 * Sets the jdbcDataSourceId value for this SDKDataSet.
+//	 * 
+//	 * @param jdbcDataSourceId
+//	 */
+//	public abstract void setJdbcDataSourceId(Integer jdbcDataSourceId);
+//
+//	/**
+//	 * Gets the jdbcQuery value for this SDKDataSet.
+//	 * 
+//	 * @return jdbcQuery
+//	 */
+//	public abstract String getJdbcQuery();
+//
+//	/**
+//	 * Sets the jdbcQuery value for this SDKDataSet.
+//	 * 
+//	 * @param jdbcQuery
+//	 */
+//	public abstract void setJdbcQuery(String jdbcQuery);
 
 	/**
 	 * Gets the label value for this SDKDataSet.
@@ -175,28 +175,28 @@ public interface IDataSet {
 	 * 
 	 * @return scriptLanguage
 	 */
-	public abstract String getScriptLanguage();
-
-	/**
-	 * Sets the scriptLanguage value for this SDKDataSet.
-	 * 
-	 * @param scriptLanguage
-	 */
-	public abstract void setScriptLanguage(String scriptLanguage);
+//	public abstract String getScriptLanguage();
+//
+//	/**
+//	 * Sets the scriptLanguage value for this SDKDataSet.
+//	 * 
+//	 * @param scriptLanguage
+//	 */
+//	public abstract void setScriptLanguage(String scriptLanguage);
 
 	/**
 	 * Gets the scriptText value for this SDKDataSet.
 	 * 
 	 * @return scriptText
 	 */
-	public abstract String getScriptText();
-
-	/**
-	 * Sets the scriptText value for this SDKDataSet.
-	 * 
-	 * @param scriptText
-	 */
-	public abstract void setScriptText(String scriptText);
+//	public abstract String getScriptText();
+//
+//	/**
+//	 * Sets the scriptText value for this SDKDataSet.
+//	 * 
+//	 * @param scriptText
+//	 */
+//	public abstract void setScriptText(String scriptText);
 
 	/**
 	 * Gets the type value for this SDKDataSet.
@@ -217,36 +217,50 @@ public interface IDataSet {
 	 * 
 	 * @return webServiceAddress
 	 */
-	public abstract String getWebServiceAddress();
-
-	/**
-	 * Sets the webServiceAddress value for this SDKDataSet.
-	 * 
-	 * @param webServiceAddress
-	 */
-	public abstract void setWebServiceAddress(String webServiceAddress);
-
-	/**
-	 * Gets the webServiceOperation value for this SDKDataSet.
-	 * 
-	 * @return webServiceOperation
-	 */
-	public abstract String getWebServiceOperation();
-
+//	public abstract String getWebServiceAddress();
+//
+//	/**
+//	 * Sets the webServiceAddress value for this SDKDataSet.
+//	 * 
+//	 * @param webServiceAddress
+//	 */
+//	public abstract void setWebServiceAddress(String webServiceAddress);
+//
+//	/**
+//	 * Gets the webServiceOperation value for this SDKDataSet.
+//	 * 
+//	 * @return webServiceOperation
+//	 */
+//	public abstract String getWebServiceOperation();
+//
 	public abstract String getTransformer();
 
 	public abstract void setTransformer(String transformer);
-
-	public abstract String getJsonQuery();
-
-	public abstract void setJsonQuery(String jsonQuery);
-
-	public abstract String getDatamarts();
-
-	public abstract void setDatamarts(String datamarts);
+//
+//	public abstract String getJsonQuery();
+//
+//	public abstract void setJsonQuery(String jsonQuery);
+//
+//	public abstract String getDatamarts();
+//
+//	public abstract void setDatamarts(String datamarts);
 
 	public abstract IDataSetParameter[] getParameters();
 
 	public abstract void setParameters(IDataSetParameter[] parameters);
 
+
+	public String getConfiguration();
+
+
+	public void setConfiguration(String configuration);
+
+	
+	public Object getFromConfiguration(String fieldName) throws Exception;
+	
+	public void addToConfiguration(String fieldName, String fieldValue) throws Exception;
+	
+	
+
+	
 }
