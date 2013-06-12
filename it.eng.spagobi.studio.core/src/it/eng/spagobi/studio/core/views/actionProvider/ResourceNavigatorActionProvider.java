@@ -137,7 +137,7 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 			else if (currentState.equalsIgnoreCase(ResourceNavigatorHandler.FILE_MODEL_HIER)){ // if it is a file of analysis hierarchy
 				logger.debug("File under model hierarchy");
 				setQueryWizard(menu);	
-				setJpaNavigator(menu);
+//				setJpaNavigator(menu);
 				setUploadDatamartTemplateWizard(menu);
 				setRefreshModelWizard(menu);
 			}
@@ -472,19 +472,19 @@ public class ResourceNavigatorActionProvider extends CommonActionProvider {
 		menu.appendToGroup("group.new", queryACI);
 	}
 
-	public void setJpaNavigator(IMenuManager menu){
-		menu.add(new Separator());
-		ActionContributionItem downACI = new ActionContributionItem(new Action()
-		{	public void run() {
-			CreateJPAMappingProjectExplorerAction action = new CreateJPAMappingProjectExplorerAction();
-			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
-			action.run(this);
-		}
-		});
-		downACI.getAction().setText("Jpa Mapping");
-		//		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
-		menu.appendToGroup("group.new", downACI);
-	}
+//	public void setJpaNavigator(IMenuManager menu){
+//		menu.add(new Separator());
+//		ActionContributionItem downACI = new ActionContributionItem(new Action()
+//		{	public void run() {
+//			CreateJPAMappingProjectExplorerAction action = new CreateJPAMappingProjectExplorerAction();
+//			action.setActivePart(this,PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart() );
+//			action.run(this);
+//		}
+//		});
+//		downACI.getAction().setText("Jpa Mapping");
+//		//		downACI.getAction().setImageDescriptor(ImageDescriptorGatherer.getImageDesc(SpagoBIStudioConstants.ICON_WIZARD_DOWNLOAD, Activator.PLUGIN_ID));
+//		menu.appendToGroup("group.new", downACI);
+//	}
 
 	public void setDeployDatasetWizard(IMenuManager menu){
 
