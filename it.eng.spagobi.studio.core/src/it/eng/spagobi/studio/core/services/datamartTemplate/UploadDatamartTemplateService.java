@@ -150,17 +150,17 @@ public class UploadDatamartTemplateService {
 		}
 
 		// search for non mandatory file calculatedFields, rooted in the folder created too
-		String pathToSearchXml = tempDirPathId + java.io.File.separator + businessModel.getName() + java.io.File.separator + "dist"+java.io.File.separator +CALCULATED_FIELD;
-		logger.debug("try reatrieving calculatedFields xml file "+pathToSearch);
-		Path tmppathXml = new Path(pathToSearchXml);
-		java.io.File xmlFile = tmppathXml.toFile();
-		if(xmlFile == null || !xmlFile.exists()){
-			logger.warn("Xml file for calculate dields was not found in "+pathToSearchXml);
-			xmlFile = null;
-		}
-		else{
-			logger.debug("found file for calculate dfields in "+pathToSearchXml+"/dist/datamart.jar");
-		}		
+//		String pathToSearchXml = tempDirPathId + java.io.File.separator + businessModel.getName() + java.io.File.separator + "dist"+java.io.File.separator +CALCULATED_FIELD;
+//		logger.debug("try reatrieving calculatedFields xml file "+pathToSearch);
+//		Path tmppathXml = new Path(pathToSearchXml);
+//		java.io.File xmlFile = tmppathXml.toFile();
+//		if(xmlFile == null || !xmlFile.exists()){
+//			logger.warn("Xml file for calculate dields was not found in "+pathToSearchXml);
+//			xmlFile = null;
+//		}
+//		else{
+//			logger.debug("found file for calculate dfields in "+pathToSearchXml+"/dist/datamart.jar");
+//		}		
 
 
 		SpagoBIServerObjectsFactory spagoBIServerObjects = null;
@@ -182,7 +182,7 @@ public class UploadDatamartTemplateService {
 
 		IRunnableWithProgress monitorCheckExistance = getMonitorCheckExistance(businessModel, spagoBIServerObjects);
 		IRunnableWithProgress monitorForDatasources = getMonitorForDatasources(businessModel, spagoBIServerObjects);
-		IRunnableWithProgress monitorForUpload = getMonitorForUpload(businessModel, spagoBIServerObjects, datamart, xmlFile, fileSel);
+		IRunnableWithProgress monitorForUpload = getMonitorForUpload(businessModel, spagoBIServerObjects, datamart, fileSel);
 
 
 		// Start monitor for upload operation
@@ -330,16 +330,17 @@ public class UploadDatamartTemplateService {
 			final BusinessModel businessModel
 			, final SpagoBIServerObjectsFactory spagoBIServerObjects
 			, final java.io.File datamartFile
-			, final java.io.File xmlFile
 			, final File businessModelFile)
 	{
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-				monitor.beginTask("Deploying model files (datamart.jar and xmlFile for calculated fields " + modelFileName +")", IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Deploying model files (datamart.jar " + modelFileName +")", IProgressMonitor.UNKNOWN);
 
 				Template datamartTemplate = new Template();
 				Template modelTemplate = new Template();
-				Template xmlCalcFieldsTemplate = new Template();
+				
+				// no more passed as separate file
+				//Template xmlCalcFieldsTemplate = new Template();
 
 				//defines properties for datamart file
 				datamartTemplate.setFileName(datamartFile.getName());
@@ -356,16 +357,16 @@ public class UploadDatamartTemplateService {
 
 
 				// defines properties for xml Calculated fields file
-				if(xmlFile != null){
-					xmlCalcFieldsTemplate.setFileName(xmlFile.getName());
-					xmlCalcFieldsTemplate.setFolderName(businessModel.getName());
-					// create templates content
-					FileDataSource xmlDataSource=new FileDataSource(xmlFile);
-					DataHandler xmlDataHandler=new DataHandler(xmlDataSource);
-
-					xmlCalcFieldsTemplate.setContent(xmlDataHandler);
-					logger.debug("built xml calculated fields with content data handler");
-				}
+//				if(xmlFile != null){
+//					xmlCalcFieldsTemplate.setFileName(xmlFile.getName());
+//					xmlCalcFieldsTemplate.setFolderName(businessModel.getName());
+//					// create templates content
+//					FileDataSource xmlDataSource=new FileDataSource(xmlFile);
+//					DataHandler xmlDataHandler=new DataHandler(xmlDataSource);
+//
+//					xmlCalcFieldsTemplate.setContent(xmlDataHandler);
+//					logger.debug("built xml calculated fields with content data handler");
+//				}
 
 				// create templates content
 				try{
@@ -380,7 +381,7 @@ public class UploadDatamartTemplateService {
 
 
 				try {
-					spagoBIServerObjects.getServerDocuments().uploadDatamartTemplate(datamartTemplate, xmlCalcFieldsTemplate, userDataSource);
+					spagoBIServerObjects.getServerDocuments().uploadDatamartTemplate(datamartTemplate, null, userDataSource); //null stands for no more passed cfields.xml file
 				}
 
 				catch (RemoteException e2) {
