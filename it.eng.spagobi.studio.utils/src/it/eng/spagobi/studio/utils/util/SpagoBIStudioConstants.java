@@ -50,8 +50,8 @@ public class SpagoBIStudioConstants {
 	public final static String DOCUMENT_COMPOSITION_ENGINE_LABEL="SpagoBICompositeDocE";
 	
 	public final static int BIOBJECT_LABEL_LIMIT=20;
-	public final static int BIOBJECT_NAME_LIMIT=40;
-	public final static int BIOBJECT_DESCRIPTION_LIMIT=160;
+	public final static int BIOBJECT_NAME_LIMIT=200;
+	public final static int BIOBJECT_DESCRIPTION_LIMIT=400;
 	public final static int DATASET_LABEL_LIMIT=20;
 	public final static int DATASET_NAME_LIMIT=50;
 	public final static int DATASET_DESCR_LIMIT=160;
