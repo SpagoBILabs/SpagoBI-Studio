@@ -16,6 +16,7 @@ import it.eng.spagobi.meta.querybuilder.model.ModelManager;
 import it.eng.spagobi.studio.core.util.ComboSelectionDialog;
 import it.eng.spagobi.studio.utils.bo.DataSource;
 import it.eng.spagobi.studio.utils.bo.Document;
+import it.eng.spagobi.studio.utils.bo.Domain;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
@@ -57,9 +58,13 @@ public class UploadDatamartTemplateService {
 	String modelFileName = null;
 
 	DataSource[] dataSources = null;
+	Domain[] domains = null;
 	String userDataSource = null;
+	String userCategory = null;
+	
 	String messageStatusDocument = "";
 	boolean documentAlreadyPresent = false;
+	boolean modelAlreadyPresent = false;
 
 	public static final String DATAMART_JAR = "datamart.jar";
 	public static final String CALCULATED_FIELD = "cfields_meta.xml";
@@ -173,15 +178,11 @@ public class UploadDatamartTemplateService {
 					"Error", "No server is defined active");
 		}
 
-//		final BusinessModel finalBusinessModel = businessModel;
-//		final File finalBusinessModelFile = fileSel ; 
-//		final java.io.File finalDatamartFile = datamart;
-//		final java.io.File finalXmlFile = xmlFile;
 		final NoActiveServerException noActiveServerException=new NoActiveServerException();
-		final SpagoBIServerObjectsFactory spagoBIServerObjectsFinal = spagoBIServerObjects; 
 
-		IRunnableWithProgress monitorCheckExistance = getMonitorCheckExistance(businessModel, spagoBIServerObjects);
+		IRunnableWithProgress monitorCheckExistance = getMonitorCheckExistance(businessModel, spagoBIServerObjects, fileSel);
 		IRunnableWithProgress monitorForDatasources = getMonitorForDatasources(businessModel, spagoBIServerObjects);
+		IRunnableWithProgress monitorForCategory = getMonitorForCategory(businessModel, spagoBIServerObjects);
 		IRunnableWithProgress monitorForUpload = getMonitorForUpload(businessModel, spagoBIServerObjects, datamart, fileSel);
 
 
@@ -195,33 +196,71 @@ public class UploadDatamartTemplateService {
 			// check if document is already present
 			dialog.run(true, true, monitorCheckExistance);
 
-			if(!documentAlreadyPresent){
+			if(!modelAlreadyPresent){
+				// get datasources
+				dialog.run(true, true, monitorForCategory);
+
+				// ask datasource to user			
+				if(domains != null){
+					logger.debug("found "+(domains != null ? domains.length : "0" )+ " category domains: make user choose one");
+
+					String[] domOptionsArray = null;
+					if(domains != null){
+						Map<String, Domain> mapLabelToDomain = new HashMap<String, Domain> ();
+						int size = domains.length;
+						domOptionsArray = new String[size];
+						for (int i = 0; i < domains.length; i++) {
+							Domain dom  = domains[i];
+							mapLabelToDomain.put(dom.getValueNm(), dom);
+							domOptionsArray[i] = dom.getValueNm();
+						}		
+					}
+
+					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					ComboSelectionDialog csd = new ComboSelectionDialog(shell);						
+					csd = new ComboSelectionDialog(shell);						
+					csd.setMessage("Select Category for model (optional)");
+					csd.setText("Category Selection");
+					csd.setOptions(domOptionsArray);
+					logger.debug("Open category selection dialog");
+					userCategory = csd.open();
+					logger.debug("user selected category  "+userCategory );
+				}
+			}
+			
+			if(!modelAlreadyPresent || !documentAlreadyPresent){
 				// get datasources
 				dialog.run(true, true, monitorForDatasources);
 
 				// ask datasource to user			
 				if(dataSources != null){
-					logger.debug("found "+dataSources.length+ " datasources: make user choose one");
-					Map<String, DataSource> mapLabelToDatasource = new HashMap<String, DataSource> ();
-					int size = dataSources.length;
-					String[] optionsArray = new String[size];
-					for (int i = 0; i < dataSources.length; i++) {
-						DataSource ds = dataSources[i];
-						mapLabelToDatasource.put(ds.getLabel(), ds);
-						optionsArray[i] = ds.getLabel();
+					logger.debug("found "+(dataSources != null ? dataSources.length : "0" )+ " datasources: make user choose one");
+
+					String[] dsOptionsArray = null;
+					if(dataSources != null){
+						Map<String, DataSource> mapLabelToDatasource = new HashMap<String, DataSource> ();
+						int size = dataSources.length;
+						dsOptionsArray = new String[size];
+						for (int i = 0; i < dataSources.length; i++) {
+							DataSource ds = dataSources[i];
+							mapLabelToDatasource.put(ds.getLabel(), ds);
+							dsOptionsArray[i] = ds.getLabel();
+						}
 					}
 
 					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					ComboSelectionDialog csd = new ComboSelectionDialog(shell);	
 					csd.setMessage("Select data source for QBE document (optional)");
 					csd.setText("Data source Selection");
-					csd.setOptions(optionsArray);
+					csd.setOptions(dsOptionsArray);
 					logger.debug("Open datasource selection dialog");
 					userDataSource = csd.open();
-					logger.debug("user selected dataSource "+userDataSource);
-
+					logger.debug("user selected dataSource "+userDataSource );
 				}
 			}
+			
+
+			
 
 			// do the uploads
 			dialog.run(true, true, monitorForUpload);
@@ -276,7 +315,7 @@ public class UploadDatamartTemplateService {
 
 
 	// *******  Runnable block for checking if dopcumetnAlready exists ***********		
-	IRunnableWithProgress getMonitorCheckExistance(final BusinessModel businessModel, final SpagoBIServerObjectsFactory spagoBIServerObjects ){
+	IRunnableWithProgress getMonitorCheckExistance(final BusinessModel businessModel, final SpagoBIServerObjectsFactory spagoBIServerObjects, final File fileSel ){
 		IRunnableWithProgress opCheck = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("check if there is already document with name "+businessModel.getName()+" ", IProgressMonitor.UNKNOWN);
@@ -287,7 +326,7 @@ public class UploadDatamartTemplateService {
 				try{
 
 					Document doc  = spagoBIServerObjects.getServerDocuments().getDocumentByLabel(modelname);
-
+					Template templateModel = spagoBIServerObjects.getServerDocuments().downloadDatamartFile(modelname, fileSel.getName());
 					if(doc != null){
 						documentAlreadyPresent = true;
 						messageStatusDocument = "Detail: QBEDocument with label "+modelname+" was not added because already present in server";
@@ -295,6 +334,15 @@ public class UploadDatamartTemplateService {
 					else{
 						documentAlreadyPresent = false;
 					}
+					
+					if(templateModel != null){
+						modelAlreadyPresent = true;
+						messageStatusDocument += "\n Detail: Meta Model with label "+modelname+" was not added because already present in server";
+					} else{
+						modelAlreadyPresent  = false;
+					}
+
+
 				}
 				catch (RemoteException e2) {
 					logger.error("error in uploading datamart",e2);
@@ -316,7 +364,26 @@ public class UploadDatamartTemplateService {
 					UploadDatamartTemplateService.this.dataSources = spagoBIServerObjects.getServerDataSources().getDataSourceList();
 				}
 				catch (RemoteException e2) {
-					logger.error("error in uploading datamart",e2);
+					logger.error("error in getting datasource",e2);
+					throw new InvocationTargetException(e2);
+				}
+			}
+		};
+		return opDs;
+	}
+	
+	// *******  Runnable block for retrieving Category ***********	
+	IRunnableWithProgress getMonitorForCategory(final BusinessModel businessModel, final SpagoBIServerObjectsFactory spagoBIServerObjects){
+		IRunnableWithProgress opDs = new IRunnableWithProgress() {			
+			public void run(IProgressMonitor monitor) throws InvocationTargetException {
+				monitor.beginTask("Retrieving categories for selection)", IProgressMonitor.UNKNOWN);
+
+				logger.debug("get categories defined");
+				try{
+					UploadDatamartTemplateService.this.domains = spagoBIServerObjects.getServerDomains().getDomainsListByDomainCd("BM_CATEGORY");
+				}
+				catch (RemoteException e2) {
+					logger.error("error in getting categories",e2);
 					throw new InvocationTargetException(e2);
 				}
 			}
@@ -381,7 +448,7 @@ public class UploadDatamartTemplateService {
 
 
 				try {
-					spagoBIServerObjects.getServerDocuments().uploadDatamartTemplate(datamartTemplate, null, userDataSource); //null stands for no more passed cfields.xml file
+					spagoBIServerObjects.getServerDocuments().uploadDatamartTemplate(datamartTemplate, null, userDataSource, userCategory); //null stands for no more passed cfields.xml file
 				}
 
 				catch (RemoteException e2) {

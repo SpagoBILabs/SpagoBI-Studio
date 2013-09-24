@@ -200,6 +200,18 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		if(labelDataSource!=null){
 			dataSourceId=formPage.getDataSourceLabelIdMap().get(labelDataSource);
 		}
+		
+		
+		String labelDomain = null;
+		int selectedDomainIndex=formPage.getCategoryCombo().getSelectionIndex();
+		if(selectedDomainIndex!=-1){
+			labelDomain=formPage.getCategoryCombo().getItem(selectedDomainIndex);
+			logger.debug("Chosen domain category is: "+labelDomain);
+		}
+//		if(labelDomain!=null){
+//			domainId=formPage.getDomainsLabelIdMap().get(labelDomain);
+//		}
+		
 
 		boolean transformer = formPage.getTransformerCheck().getSelection();
 		String columnPivot = pivotPage.getColumnPivotText().getText();
@@ -217,7 +229,7 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		toReturn.setName(name);
 		toReturn.setDescription(description);
 		toReturn.setType(type);
-		
+		toReturn.setCategory(labelDomain);
 		
 //eccoqui
 		

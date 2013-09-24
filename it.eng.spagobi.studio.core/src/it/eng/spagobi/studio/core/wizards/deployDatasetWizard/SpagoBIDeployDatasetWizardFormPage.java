@@ -13,6 +13,7 @@ package it.eng.spagobi.studio.core.wizards.deployDatasetWizard;
 
 import it.eng.spagobi.studio.core.services.dataset.DeployDatasetService;
 import it.eng.spagobi.studio.utils.bo.DataSource;
+import it.eng.spagobi.studio.utils.bo.Domain;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
@@ -75,6 +76,7 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	private Text descriptionText;
 
 	private Combo dataSourceCombo; 
+	private Combo categoryCombo; 
 	private Button transformerCheck;
 
 	private Label typeLabel;
@@ -85,13 +87,17 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	Composite all = null;
 
 	private Map<String, Integer> dataSourceLabelIdMap;
+	private Map<String, Integer> domainsLabelIdMap;
 
+	
 	private ProgressMonitorPart monitor;
 
 	JSONObject jsonObject;
 
 	// Filter By type
-	DataSource[] datasourceList;		
+	DataSource[] datasourceList;	
+	Domain[] domainList;	
+	
 	Functionality functionality=null;
 
 	private static Logger logger = LoggerFactory.getLogger(SpagoBIDeployDatasetWizardFormPage.class);
@@ -216,6 +222,12 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		dataSourceCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
 		dataSourceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		// Category
+		new Label(left, SWT.NONE).setText("Category: ");
+		categoryCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
+		categoryCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		
 		// transformer checkbox
 		new Label(left, SWT.NONE).setText("Transformer: ");
 		transformerCheck = new Button(left, SWT.CHECK);
@@ -278,6 +290,10 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 				try{
 
 					datasourceList=proxyObjects.getServerDataSources().getDataSourceList();
+					logger.debug("datasources retrieved");
+					domainList = proxyObjects.getServerDomains().getDomainsListByDomainCd("CATEGORY_TYPE");
+					logger.debug("domains retrieved");
+
 				}
 				catch (Exception e) {
 					logger.error("No comunication with SpagoBI server",e);		
@@ -317,6 +333,19 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		}
 		Arrays.sort(datasourceLabels);
 		dataSourceCombo.setItems(datasourceLabels);
+		
+		logger.debug("Datasources combo filled");
+		
+		domainsLabelIdMap=new HashMap<String, Integer>();
+		String[] domainsLabels = new String[domainList.length];
+		for (int i = 0; i < domainsLabels.length; i++) {
+			Domain domain =domainList[i];
+			logger.debug("Domain "+domain.getValueNm());
+			domainsLabels[i] = domain.getValueNm();
+			domainsLabelIdMap.put(domain.getValueNm(), domain.getValueId());
+		}
+		Arrays.sort(domainsLabels);
+		categoryCombo.setItems(domainsLabels);
 
 		logger.debug("OUT");
 
@@ -486,6 +515,26 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	@Override
 	public boolean canFlipToNextPage() {
 		return transformerCheck.getSelection();
+	}
+
+
+	public Combo getCategoryCombo() {
+		return categoryCombo;
+	}
+
+
+	public void setCategoryCombo(Combo categoryCombo) {
+		this.categoryCombo = categoryCombo;
+	}
+
+
+	public Map<String, Integer> getDomainsLabelIdMap() {
+		return domainsLabelIdMap;
+	}
+
+
+	public void setDomainsLabelIdMap(Map<String, Integer> domainsLabelIdMap) {
+		this.domainsLabelIdMap = domainsLabelIdMap;
 	}
 
 

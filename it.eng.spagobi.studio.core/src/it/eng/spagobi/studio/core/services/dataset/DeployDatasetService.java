@@ -18,6 +18,7 @@ import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NoDocumentException;
 import it.eng.spagobi.studio.utils.exceptions.NotAllowedOperationStudioException;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
+import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
 
 import java.lang.reflect.InvocationTargetException;
@@ -69,9 +70,11 @@ public class DeployDatasetService {
 
 		String datasetId=null;
 		String datasetLabel=null;
+		String datasetCategory = null;
 		try {
 			datasetId=fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_ID);			
 			datasetLabel=fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_LABEL);
+			datasetCategory=fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_CATEGORY);
 		} catch (CoreException e) {
 			logger.error("Error in retrieving dataset Label", e);		
 		}
@@ -80,7 +83,7 @@ public class DeployDatasetService {
 		boolean automatic = false;
 		boolean newDeployFromOld = false;
 		if(datasetId!=null){
-			logger.debug("Query already associated to dataset"+datasetId+" - "+datasetLabel);	
+			logger.debug("Query already associated to dataset"+datasetId+" - "+datasetLabel+ " - of category "+datasetCategory );	
 			final Integer idInteger=Integer.valueOf(datasetId);
 			final String label2=datasetLabel;
 			final org.eclipse.core.internal.resources.File fileSel2=fileSel;
@@ -89,7 +92,7 @@ public class DeployDatasetService {
 			final NotAllowedOperationStudioException notAllowedOperationStudioException = new NotAllowedOperationStudioException();
 			IRunnableWithProgress op = new IRunnableWithProgress() {			
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
-					monitor.beginTask("Deploying to dataset "+label2, IProgressMonitor.UNKNOWN);
+					monitor.beginTask("Deploying to dataset existing dataset with label: "+label2+" and ID: "+idInteger, IProgressMonitor.UNKNOWN);
 
 					if(projectname == null){
 						projectname = fileSel2.getProject().getName();
@@ -131,6 +134,9 @@ public class DeployDatasetService {
 											"Error while uploading dataset; check server log to have details");	
 									
 								}
+								
+								BiObjectUtilities.setFileDataSetMetaData(fileSel2,ds);
+								
 							}
 							catch (Exception e) {
 								logger.error("error in reading JSON object, update failed", e);
@@ -182,7 +188,7 @@ public class DeployDatasetService {
 				if(datasetException.isNoDocument()){
 					logger.error("Document no more present");			
 					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-							"Error upload", "Dataset is no more present on server; you can do a new deploy");	
+							"Error upload", "Dataset with ID "+idInteger+"  no more present on server; you can do a new deploy");	
 					sbdw.setNewDeployFromOld(true);
 					newDeployFromOld = true;
 				}
@@ -202,8 +208,8 @@ public class DeployDatasetService {
 				}
 
 				if(!newDeployFromOld){
-					MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated dataset "+datasetLabel+" succesfull");		
-					logger.debug("Deployed to the associated document "+datasetLabel+" succesfull");		
+					MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),"Deploy succesfull", "Deployed to the associated dataset with label: "+datasetLabel+" and ID: "+idInteger+" succesfull");		
+					logger.debug("Deployed to the associated document "+datasetLabel+" succesfull: ID: is "+idInteger);		
 					automatic = true;
 				}
 			}

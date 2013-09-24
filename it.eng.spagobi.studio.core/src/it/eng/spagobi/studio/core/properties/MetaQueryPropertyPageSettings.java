@@ -47,6 +47,7 @@ public class MetaQueryPropertyPageSettings implements IPropertyPageSettings {
 		String datasetLabel;
 		String modelName;
 		String modelFileName;
+		String category;
 		try{
 			logger.debug("file "+fileSel.getName());
 			datasetId=fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_ID);
@@ -54,6 +55,8 @@ public class MetaQueryPropertyPageSettings implements IPropertyPageSettings {
 			
 			modelName=fileSel.getPersistentProperty(SpagoBIStudioConstants.MODEL_NAME);
 			modelFileName= fileSel.getPersistentProperty(SpagoBIStudioConstants.MODEL_FILE_NAME);
+			
+			category = fileSel.getPersistentProperty(SpagoBIStudioConstants.DATASET_CATEGORY);
 		}
 		catch (Exception e) {
 			logger.error("error in recovering metadata", e);	
@@ -88,6 +91,9 @@ public class MetaQueryPropertyPageSettings implements IPropertyPageSettings {
 		new Label(docContainer, SWT.NULL).setText("Model file name: ");
 		new Label(docContainer, SWT.NULL).setText(modelFileName);
 
+		new Label(docContainer, SWT.NULL).setText("Category: ");
+		new Label(docContainer, SWT.NULL).setText(category != null ? category : "");
+		
 		logger.debug("OUT");
 
 		return container;
