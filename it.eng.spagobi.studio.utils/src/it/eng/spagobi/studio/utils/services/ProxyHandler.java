@@ -12,6 +12,7 @@ package it.eng.spagobi.studio.utils.services;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
+import it.eng.spagobi.sdk.proxy.DomainsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
 import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.TestConnectionServiceProxy;
@@ -30,7 +31,8 @@ public class ProxyHandler {
 	DocumentsServiceProxy documentsServiceProxy = null;
 	MapsSDKServiceProxy mapsServiceProxy = null;
 	TestConnectionServiceProxy testConnectionServiceProxy = null;
-
+	DomainsServiceProxy domainsServiceProxy = null;
+	
 	String serverName = null;
 
 
@@ -69,6 +71,11 @@ public class ProxyHandler {
 					proxyFactory.getMapsSDKServiceProxy();
 	}
 
+	public DomainsServiceProxy getDomainsServiceProxy() {
+		return (domainsServiceProxy != null) ? 
+				domainsServiceProxy : 
+					proxyFactory.getDomainsServiceProxy();
+	}
 
 
 	public DataSetsSDKServiceProxy getDataSetsSDKServiceProxy() {

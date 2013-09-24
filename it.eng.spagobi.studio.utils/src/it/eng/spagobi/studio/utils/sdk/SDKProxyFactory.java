@@ -12,6 +12,7 @@ package it.eng.spagobi.studio.utils.sdk;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
+import it.eng.spagobi.sdk.proxy.DomainsServiceProxy;
 import it.eng.spagobi.sdk.proxy.EnginesServiceProxy;
 import it.eng.spagobi.sdk.proxy.MapsSDKServiceProxy;
 import it.eng.spagobi.studio.utils.bo.Server;
@@ -63,6 +64,19 @@ public class SDKProxyFactory {
 		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
 		return proxy;
 	}
+	
+	
+	public DomainsServiceProxy getDomainsServiceProxy() {
+		DomainsServiceProxy proxy = new DomainsServiceProxy(server.getUser(), server.getPassword());
+		String serverUrl = server.getUrl();
+		if (serverUrl != null && !serverUrl.endsWith("/")) {
+			serverUrl += "/";
+		}
+		proxy.setEndpoint(serverUrl + "sdk/DomainsService");
+		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
+		return proxy;
+	}
+	
 
 	public DataSetsSDKServiceProxy getDataSetsSDKServiceProxy() {
 		DataSetsSDKServiceProxy proxy = new DataSetsSDKServiceProxy(server.getUser(), server.getPassword());

@@ -83,6 +83,7 @@ public class ServerObjectsTranslator {
 		}
 		sdkDataset.setParameters(sdkDataSetParameters);
 		sdkDataset.setConfiguration(ds.getConfiguration());
+		sdkDataset.setCategory(ds.getCategory());
 		
 		
 		return sdkDataset;

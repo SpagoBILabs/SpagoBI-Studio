@@ -253,10 +253,18 @@ public class BiObjectUtilities {
 			if(dataset.getDescription()!=null){
 				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_DESCRIPTION, dataset.getDescription());
 			}
+			if(dataset.getCategory()!=null){
+				newFile.setPersistentProperty(SpagoBIStudioConstants.DATASET_CATEGORY, dataset.getCategory());
+			}
+			
 		}
 		return newFile;
 	}
 
+	
+	
+	
+	
 	public static IFile setFileDataSourceMetaData(IFile newFile, DataSource datasource) throws CoreException{
 		if(datasource!=null){
 			if(datasource.getId()!=null){

@@ -44,6 +44,9 @@ public class Dataset implements IDataSet {
 	private String type;
 
 	private String configuration;
+	
+	private String category;
+	
 
 	public static final String QUERY = "Query";
 	public static final String QUERY_SCRIPT = "queryScript";
@@ -101,6 +104,8 @@ public class Dataset implements IDataSet {
 		//		scriptText=sdk.getScriptText();
 		type=sdk.getType();
 		configuration = sdk.getConfiguration();
+		category = sdk.getCategory();
+		
 		//		webServiceAddress=sdk.getWebServiceAddress();
 		//		webServiceOperation=sdk.getWebServiceOperation();
 		//		jsonQuery = sdk.getJsonQuery();
@@ -576,6 +581,17 @@ public class Dataset implements IDataSet {
 		toReturn = o.toString();
 		return toReturn;	
 	}
+
+
+	public String getCategory() {
+		return category;
+	}
+
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
 	
 
 }

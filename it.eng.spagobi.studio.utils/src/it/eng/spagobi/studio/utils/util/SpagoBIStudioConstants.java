@@ -126,6 +126,7 @@ public class SpagoBIStudioConstants {
 	public static QualifiedName DATASET_LABEL_INSIDE = new QualifiedName("it.eng.spagobi.sdk.dataset.labelInside", "Label");
 	public static QualifiedName DATASET_NAME = new QualifiedName("it.eng.spagobi.sdk.dataset.name", "Name");
 	public static QualifiedName DATASET_DESCRIPTION = new QualifiedName("it.eng.spagobi.sdk.dataset.description", "Description");
+	public static QualifiedName DATASET_CATEGORY = new QualifiedName("it.eng.spagobi.sdk.dataset.category", "Category");
 	public static QualifiedName DATASET_DATAMARTS = new QualifiedName("it.eng.spagobi.sdk.dataset.datamarts", "Datamarts");
 	public static QualifiedName DATASET_JSON_QUERY = new QualifiedName("it.eng.spagobi.sdk.dataset.jsonQuery", "JsonQuery");
 	public static QualifiedName DATASET_TRANSFORMER = new QualifiedName("it.eng.spagobi.sdk.dataset.transformer", "Transformer");
@@ -133,6 +134,7 @@ public class SpagoBIStudioConstants {
 	public static QualifiedName DATASET_COLUMN_VALUE = new QualifiedName("it.eng.spagobi.sdk.dataset.columnValue", "Column Value");
 	public static QualifiedName DATASET_ROW_NAME = new QualifiedName("it.eng.spagobi.sdk.dataset.rowName", "Row Name");
 
+	
 	public static QualifiedName DATA_SOURCE_ID = new QualifiedName("it.eng.spagobi.sdk.datasource.id", "Identifier");
 	public static QualifiedName DATA_SOURCE_NAME = new QualifiedName("it.eng.spagobi.sdk.datasource.name", "Name");
 	public static QualifiedName DATA_SOURCE_LABEL = new QualifiedName("it.eng.spagobi.sdk.datasource.label", "Label");
