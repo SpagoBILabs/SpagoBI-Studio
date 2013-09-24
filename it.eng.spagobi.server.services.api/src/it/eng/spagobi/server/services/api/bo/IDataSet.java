@@ -261,6 +261,8 @@ public interface IDataSet {
 	public void addToConfiguration(String fieldName, String fieldValue) throws Exception;
 	
 	
+	public void setCategory(String category);
+	public String getCategory();
 
 	
 }
