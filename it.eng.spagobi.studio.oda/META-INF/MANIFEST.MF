@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
 Bundle-SymbolicName: it.eng.spagobi.studio.oda;singleton:=true
-Bundle-Version: 4.0.0
+Bundle-Version: 4.1.0
 Bundle-ClassPath: .,
  src,
  lib/commons-discovery-0.2.jar,
