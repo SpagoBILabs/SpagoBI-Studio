@@ -340,9 +340,9 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		String[] domainsLabels = new String[domainList.length];
 		for (int i = 0; i < domainsLabels.length; i++) {
 			Domain domain =domainList[i];
-			logger.debug("Domain "+domain.getValueNm());
-			domainsLabels[i] = domain.getValueNm();
-			domainsLabelIdMap.put(domain.getValueNm(), domain.getValueId());
+			logger.debug("Domain "+domain.getValueCd());
+			domainsLabels[i] = domain.getValueCd();
+			domainsLabelIdMap.put(domain.getValueCd(), domain.getValueId());
 		}
 		Arrays.sort(domainsLabels);
 		categoryCombo.setItems(domainsLabels);

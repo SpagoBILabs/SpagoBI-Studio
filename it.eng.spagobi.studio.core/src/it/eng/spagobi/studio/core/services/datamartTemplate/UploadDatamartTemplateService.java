@@ -211,8 +211,8 @@ public class UploadDatamartTemplateService {
 						domOptionsArray = new String[size];
 						for (int i = 0; i < domains.length; i++) {
 							Domain dom  = domains[i];
-							mapLabelToDomain.put(dom.getValueNm(), dom);
-							domOptionsArray[i] = dom.getValueNm();
+							mapLabelToDomain.put(dom.getValueCd(), dom);
+							domOptionsArray[i] = dom.getValueCd();
 						}		
 					}
 
