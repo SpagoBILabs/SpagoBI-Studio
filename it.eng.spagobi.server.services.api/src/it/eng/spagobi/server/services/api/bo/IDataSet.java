@@ -264,5 +264,12 @@ public interface IDataSet {
 	public void setCategory(String category);
 	public String getCategory();
 
+	public void setOrganization(String organization);
+	public String getOrganization();
+
+	public void set_public(Boolean _public);
+	public Boolean get_public();
+
+	
 	
 }
