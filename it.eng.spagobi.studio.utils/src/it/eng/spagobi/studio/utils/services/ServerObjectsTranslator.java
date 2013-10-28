@@ -70,6 +70,8 @@ public class ServerObjectsTranslator {
 		sdkDataset.setPivotRowName(ds.getPivotRowName());
 //		sdkDataset.setJsonQuery(ds.getJsonQuery());
 //		sdkDataset.setDatamarts(ds.getDatamarts());
+		sdkDataset.set_public(ds.get_public());
+		sdkDataset.setOrganization(ds.getOrganization());
 		
 		SDKDataSetParameter[] sdkDataSetParameters = null;
 		IDataSetParameter[] parArray = ds.getParameters();

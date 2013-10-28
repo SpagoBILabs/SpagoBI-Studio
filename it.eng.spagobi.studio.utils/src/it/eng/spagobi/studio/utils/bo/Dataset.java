@@ -46,6 +46,12 @@ public class Dataset implements IDataSet {
 	private String configuration;
 	
 	private String category;
+
+	private String organization;
+	
+	private Boolean _public;
+	
+	
 	
 
 	public static final String QUERY = "Query";
@@ -105,6 +111,9 @@ public class Dataset implements IDataSet {
 		type=sdk.getType();
 		configuration = sdk.getConfiguration();
 		category = sdk.getCategory();
+		
+		_public = sdk.get_public();
+		organization = sdk.getOrganization();
 		
 		//		webServiceAddress=sdk.getWebServiceAddress();
 		//		webServiceOperation=sdk.getWebServiceOperation();
@@ -590,6 +599,26 @@ public class Dataset implements IDataSet {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+
+	public String getOrganization() {
+		return organization;
+	}
+
+
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+
+
+	public Boolean get_public() {
+		return _public;
+	}
+
+
+	public void set_public(Boolean _public) {
+		this._public = _public;
 	}
 	
 	
