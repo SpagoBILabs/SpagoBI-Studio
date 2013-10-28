@@ -202,12 +202,27 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		}
 		
 		
+		
 		String labelDomain = null;
 		int selectedDomainIndex=formPage.getCategoryCombo().getSelectionIndex();
 		if(selectedDomainIndex!=-1){
 			labelDomain=formPage.getCategoryCombo().getItem(selectedDomainIndex);
 			logger.debug("Chosen domain category is: "+labelDomain);
 		}
+
+		Boolean _public=false;
+		int publicIndex = formPage.getPublicCombo().getSelectionIndex();
+		if(publicIndex!=-1){
+			String publicString=formPage.getPublicCombo().getItem(publicIndex);
+			logger.debug("Chosen visibility is is: "+publicString);
+			if(publicString.equalsIgnoreCase("Public")){
+				_public = true;
+			}		
+		}
+
+
+		
+		
 //		if(labelDomain!=null){
 //			domainId=formPage.getDomainsLabelIdMap().get(labelDomain);
 //		}
@@ -230,8 +245,6 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		toReturn.setDescription(description);
 		toReturn.setType(type);
 		toReturn.setCategory(labelDomain);
-		
-//eccoqui
 		
 		try{
 			toReturn.addToConfiguration(Dataset.QBE_DATA_SOURCE, labelDataSource);
@@ -259,7 +272,7 @@ public class SpagoBIDeployDatasetWizard extends AbstractSpagoBIDocumentWizard  {
 		toReturn.setPivotColumnValue(valuePivot);
 		toReturn.setPivotRowName(rowPivot);
 		toReturn.setNumberingRows(numberedColumnsPivot);
-
+		toReturn.set_public(_public);
 
 		logger.debug("OUT");
 		return toReturn;

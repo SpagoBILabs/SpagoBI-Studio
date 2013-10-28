@@ -224,7 +224,7 @@ public class DeployDatasetService {
 				sbdw.init(PlatformUI.getWorkbench(), sel);
 				// Create the wizard dialog
 				WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),sbdw);
-
+				dialog.setPageSize(650, 300);
 				// Open the wizard dialog
 				dialog.open();	
 			}

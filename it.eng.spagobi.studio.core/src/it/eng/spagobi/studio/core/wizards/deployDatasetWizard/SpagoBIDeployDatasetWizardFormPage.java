@@ -82,6 +82,10 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	private Label typeLabel;
 	private Label datamartLabel;
 
+	private Label publicLabel;
+	private Combo publicCombo;
+
+	
 	private String query;
 
 	Composite all = null;
@@ -120,9 +124,14 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 	 */
 	public void createControl(final Composite parent) {
 		logger.debug("IN");
+//
+//		this.getShell().setSize(1000, 1000);
+//		super.getShell().setSize(1000,1000);
+//		parent.getShell().setSize(1000, 1000);
+		
 		all=new Composite(parent, SWT.NONE);
 		Shell shell = all.getShell();
-		shell.setSize(650,400);
+		//shell.setSize(650,400);
 		monitor=new ProgressMonitorPart(getShell(), null);
 
 		// get selection file
@@ -222,10 +231,17 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		dataSourceCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
 		dataSourceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		// Visibility public
+		new Label(left, SWT.NONE).setText("Visibility: ");
+		publicCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
+		publicCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		
 		// Category
 		new Label(left, SWT.NONE).setText("Category: ");
 		categoryCombo = new Combo(left, SWT.NONE | SWT.READ_ONLY);
 		categoryCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 
 		
 		// transformer checkbox
@@ -347,6 +363,9 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 		Arrays.sort(domainsLabels);
 		categoryCombo.setItems(domainsLabels);
 
+		publicCombo.add("Private");
+		publicCombo.add("Public");
+		publicCombo.select(0);
 		logger.debug("OUT");
 
 
@@ -535,6 +554,16 @@ public class SpagoBIDeployDatasetWizardFormPage extends WizardPage {
 
 	public void setDomainsLabelIdMap(Map<String, Integer> domainsLabelIdMap) {
 		this.domainsLabelIdMap = domainsLabelIdMap;
+	}
+
+
+	public Combo getPublicCombo() {
+		return publicCombo;
+	}
+
+
+	public void setPublicCombo(Combo publicCombo) {
+		this.publicCombo = publicCombo;
 	}
 
 
