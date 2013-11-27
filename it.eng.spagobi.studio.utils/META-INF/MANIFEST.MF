@@ -42,7 +42,7 @@ Bundle-ClassPath: lib/axis-1.4.jar,
  lib/jackson-annotations-2.0.2.jar,
  lib/jackson-core-2.0.2.jar,
  lib/jackson-databind-2.0.2.jar,
- lib/spagobi-utils-json-4.0.0.jar,
+ lib/spagobi-utils-json-4.1.0.jar,
  lib/spagobi-utils-4.1.0.jar,
  lib/spagobi-utils-json-4.1.0.jar
 Export-Package: it.eng.spagobi.studio.utils,
