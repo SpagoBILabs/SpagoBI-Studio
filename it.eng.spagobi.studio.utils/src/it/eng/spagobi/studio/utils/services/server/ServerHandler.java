@@ -84,15 +84,28 @@ public class ServerHandler {
 		} catch (AxisFault e) {
 			logger.error("test to "+server.getUrl()+ " failed ",e);
 			if (e.getFaultString().startsWith("WSDoAllReceiver")) {
-				message = "Error inconnection: Authentication failed";
+				//message = "Error inconnection: Authentication failed";
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Error inconnection: Authentication failed\n\n\n"+e.getMessage());
 				testResult = false;
 			} else {
-				message = "Could not connect to SpagoBI Server "+e.getMessage();
+				//message = "Could not connect to SpagoBI Server "+e.getMessage();
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Could not connect to SpagoBI Server: Check URL is correct \n\n\n"+e.getMessage());				
 				testResult = false;
 			}
-		} catch (Exception e) {
+		
+		} 
+		catch (java.lang.StringIndexOutOfBoundsException e) {
+			logger.error("test to "+server.getUrl()+ " failed for incorrect URL definition",e);
+			//message = "Could not connect to SpagoBI Server: URL is not well formed: \nan example is http://localhost:8080/SpagoBI (Port is optional): "+e.getMessage();
+			message = "";
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Could not connect to SpagoBI Server: URL is not well formed: \nan example is http://localhost:8080/SpagoBI (Port is optional): \n\n\nError is: "+e.getMessage());
+			
+			testResult = false;
+		}
+		catch (Exception e) {
 			logger.error("test to "+server.getUrl()+ " failed ",e);
-			message = "Could not connect to SpagoBI Server: "+e.getMessage();
+			//message = "Could not connect to SpagoBI Server: "+e.getMessage();
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error", "Could not connect to SpagoBI Server: check URL is correct:\nan URL example is http://localhost:8080/SpagoBI (Port is optional): \n\n\nError is: "+e.getMessage());
 			testResult = false;
 		}
 		logger.debug("OUT");

@@ -9,10 +9,7 @@
 **/
 package it.eng.spagobi.studio.utils.sdk;
 
-import java.util.Iterator;
-
 import it.eng.spagobi.sdk.proxy.AbstractSDKServiceProxy;
-import it.eng.spagobi.tools.dataset.common.dataproxy.IDataProxy;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
@@ -83,7 +80,11 @@ public class ProxyDataRetriever {
 		String toReturn="";
 		int index=URL.indexOf("://");
 		int indexEnd=URL.indexOf(":", index+3);
-
+		// if indexEnd is not found means port has not been specified, then Url is in form http://localhost/SpagoBI
+		if(indexEnd == -1){
+			indexEnd=URL.indexOf('/', index+3);
+		}
+		
 		toReturn=URL.substring(index+3,indexEnd);
 		return toReturn;
 	}
