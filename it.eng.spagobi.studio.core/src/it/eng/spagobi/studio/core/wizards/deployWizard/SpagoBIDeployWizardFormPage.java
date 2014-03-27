@@ -17,6 +17,7 @@ import it.eng.spagobi.studio.utils.bo.Engine;
 import it.eng.spagobi.studio.utils.bo.Functionality;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
 import it.eng.spagobi.studio.utils.exceptions.NotAllowedOperationStudioException;
+import it.eng.spagobi.studio.utils.exceptions.RetrievingObjectsException;
 import it.eng.spagobi.studio.utils.sdk.SDKProxyFactory;
 import it.eng.spagobi.studio.utils.services.SpagoBIServerObjectsFactory;
 import it.eng.spagobi.studio.utils.util.BiObjectUtilities;
@@ -142,18 +143,31 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 
 		final NotAllowedOperationStudioException notAllowedOperationStudioException = new NotAllowedOperationStudioException();	
-
+		final RetrievingObjectsException retrievingObjectsException = new RetrievingObjectsException();	
+		
 		IRunnableWithProgress op = new IRunnableWithProgress() {			
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Deploy a new Document: ", IProgressMonitor.UNKNOWN);
 
+				String monitoring="Engines";
 				try{
 
-					enginesList=proxyObjects.getServerEngines().getEnginesList();
+					enginesList=proxyObjects.getServerEngines().getEnginesList();					
+					monitoring="Datasets";
 					datasetList=proxyObjects.getServerDatasets().getDataSetList();
+					monitoring="Datasources";
 					datasourceList=proxyObjects.getServerDataSources().getDataSourceList();
+					monitoring="Functionalities ";
 					functionality=proxyObjects.getServerDocuments().getDocumentsAsTree(null);			
 
+					if(enginesList == null || datasetList == null || datasourceList == null){
+						String prog = enginesList == null ? "Engines" : 
+										datasetList == null ? "Datasets" :
+											datasourceList == null ? "Datasources" : "";
+						logger.error(prog+" list retrieved is empty: check server log for possible error");		
+						retrievingObjectsException.setObject(prog);
+					}											
+						
 				}
 				catch (Exception e) {
 					if(e.getClass().toString().equalsIgnoreCase("class it.eng.spagobi.sdk.exceptions.NotAllowedOperationException")){	
@@ -161,8 +175,9 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 						notAllowedOperationStudioException.setNotAllowed(true);
 					}
 					else{
-						logger.error("No comunication with SpagoBI server",e);		
-						MessageDialog.openError(getShell(), "No comunication with server", "Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible");	
+						logger.error("Error in retrieving "+monitoring+": check server connection; otherwise check server log",e);		
+						MessageDialog.openError(getShell(), "Error in communication with server", 
+								"Error in comunication with SpagoBi Server ; check its definition and check if the service is avalaible");	
 					}
 					return;
 				}
@@ -175,7 +190,8 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		ProgressMonitorDialog dialog=new ProgressMonitorDialog(getShell());		
 		try {
 			dialog.run(true, true, op);
-		} catch (InvocationTargetException e1) {
+		} 
+		catch (InvocationTargetException e1) {
 			logger.error("Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible",e1);		
 			dialog.close();
 			MessageDialog.openError(getShell(), "No comunication with server", "Error in comunication with SpagoBi Server; check its definition and check if the service is avalaible");	
@@ -188,6 +204,11 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 		}	
 		dialog.close();
 
+		if(retrievingObjectsException.getObject() != null){
+			MessageDialog.openWarning(getShell(), "Empty List", 
+					retrievingObjectsException.getObject()+" list is empty: probably due to an error in server; check server log.");	
+		}
+		
 		if(notAllowedOperationStudioException.isNotAllowed()){
 			logger.error("User has no permission to complete the operation");
 			MessageDialog.openError(getShell(), "Error", "User has no permission to complete the operation");	
@@ -279,9 +300,9 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 
 		engineLabelIdMap=new HashMap<String, Integer>();
 
-
-		for (Engine engine : enginesList) {
-			if(engine.getDocumentType().equalsIgnoreCase(typeLabel)){
+		if(enginesList != null && enginesList.length!=0){
+			for (Engine engine : enginesList) {
+				if(engine.getDocumentType().equalsIgnoreCase(typeLabel)){
 
 				// if type == REPORT select directly the right engine
 				//BIRT
@@ -339,7 +360,7 @@ public class SpagoBIDeployWizardFormPage extends WizardPage {
 							}
 			}
 		}
-
+}
 
 
 
