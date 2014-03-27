@@ -26,9 +26,6 @@ import it.eng.spagobi.server.services.api.exception.MissingParValueException;
 import it.eng.spagobi.server.services.api.exception.NoServerException;
 import it.eng.spagobi.studio.utils.bo.DataStoreMetadata;
 import it.eng.spagobi.studio.utils.bo.Dataset;
-import it.eng.spagobi.studio.utils.bo.DatasetParameter;
-import it.eng.spagobi.studio.utils.bo.Document;
-import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.services.ProxyHandler;
 import it.eng.spagobi.studio.utils.services.ServerObjectsTranslator;
 
