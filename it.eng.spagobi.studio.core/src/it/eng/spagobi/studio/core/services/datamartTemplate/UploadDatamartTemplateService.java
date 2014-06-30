@@ -129,6 +129,7 @@ public class UploadDatamartTemplateService {
 		try{
 			ModelManager modelManager = new ModelManager( businessModel.getParentModel() );
 			modelManager.setMappingsFolder(new java.io.File(tempDirPathId));
+			modelManager.setModelFile(fileSel);
 			modelManager.generateMapping(false);
 		}
 		catch (Exception e) {
