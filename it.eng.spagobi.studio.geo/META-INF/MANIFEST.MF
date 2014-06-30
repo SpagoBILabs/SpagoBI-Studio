@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Geo Plug-in
 Bundle-SymbolicName: it.eng.spagobi.studio.geo;singleton:=true
-Bundle-Version: 4.1.0
+Bundle-Version: 5.0.0
 Bundle-Activator: it.eng.spagobi.studio.geo.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime;bundle-version="3.4.0",
@@ -25,7 +25,7 @@ Bundle-ClassPath: .,
  lib/dom4j.jar,
  lib/org.slf4j.api_1.5.11.v20100519-1910.jar,
  lib/xpp3_min-1.1.4c.jar,
- lib/xstream-1.3.1.jar
+ lib/xstream-1.4.7.jar
 Export-Package: it.eng.spagobi.studio.geo.actions,
  it.eng.spagobi.studio.geo.services,
  it.eng.spagobi.studio.geo.wizards
