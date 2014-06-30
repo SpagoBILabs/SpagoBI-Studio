@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="SpagoBIStudioProductMaker" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="4.0.0" useFeatures="false" includeLaunchers="true">
+<product name="%productName" uid="SpagoBIStudioProductMaker" application="org.eclipse.ui.ide.workbench" version="5.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="eclipse_lg.gif"/>
