@@ -6,7 +6,7 @@
  License, v. 2.0. If a copy of the MPL was not distributed with this file,
  You can obtain one at http://mozilla.org/MPL/2.0/.
  
-**/
+ **/
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition;
 
 import java.util.Iterator;
@@ -14,7 +14,6 @@ import java.util.Vector;
 
 public class Documents {
 	private Vector<Document> documents;
-
 
 	public Vector<Document> getDocuments() {
 		return documents;
@@ -24,20 +23,22 @@ public class Documents {
 		this.documents = documents;
 	}
 
-	/** get a document by label
-	 * 
-	 * @param labeò
+	/**
+	 * get a document by label
+	 *
+	 * @param labe
+	 *            ï¿½
 	 * @return
 	 */
-	public Document getDocumentByLabel(String labeò){
+	public Document getDocumentByLabel(String label) {
 		Document toReturn = null;
 		for (Iterator iterator = documents.iterator(); iterator.hasNext() && toReturn == null;) {
 			Document doc = (Document) iterator.next();
-			if(doc.getSbiObjLabel().equals(labeò)){
+			if (doc.getSbiObjLabel().equals(label)) {
 				toReturn = doc;
 			}
 		}
 		return toReturn;
 	}
-	
+
 }

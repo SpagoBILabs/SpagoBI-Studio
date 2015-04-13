@@ -6,7 +6,7 @@
  License, v. 2.0. If a copy of the MPL was not distributed with this file,
  You can obtain one at http://mozilla.org/MPL/2.0/.
  
-**/
+ **/
 package it.eng.spagobi.studio.documentcomposition.editors.model.documentcomposition;
 
 import java.util.Iterator;
@@ -16,10 +16,10 @@ public class DocumentsConfiguration {
 
 	private String videoWidth;
 	private String videoHeight;
-	private Vector<Document> documents=new Vector<Document>();
+	private Vector<Document> documents = new Vector<Document>();
 
-	private static int VIDEO_WIDTH=1200;
-	private static int VIDEO_HEIGHT=1064;
+	private static int VIDEO_WIDTH = 1200;
+	private static int VIDEO_HEIGHT = 1064;
 
 	public Vector<Document> getDocuments() {
 		return documents;
@@ -46,22 +46,23 @@ public class DocumentsConfiguration {
 	}
 
 	public DocumentsConfiguration() {
-		documents=new Vector<Document>();
-		videoHeight=Integer.valueOf(VIDEO_HEIGHT).toString();
-		videoWidth=Integer.valueOf(VIDEO_WIDTH).toString();
+		documents = new Vector<Document>();
+		videoHeight = Integer.valueOf(VIDEO_HEIGHT).toString();
+		videoWidth = Integer.valueOf(VIDEO_WIDTH).toString();
 	}
 
-
-	/** get a document by label
-	 * 
-	 * @param labeò
+	/**
+	 * get a document by label
+	 *
+	 * @param labe
+	 *            ï¿½
 	 * @return
 	 */
-	public Document getDocumentByLabel(String labeò){
+	public Document getDocumentByLabel(String label) {
 		Document toReturn = null;
 		for (Iterator iterator = documents.iterator(); iterator.hasNext() && toReturn == null;) {
 			Document doc = (Document) iterator.next();
-			if(doc.getSbiObjLabel().equals(labeò)){
+			if (doc.getSbiObjLabel().equals(label)) {
 				toReturn = doc;
 			}
 		}
