@@ -14,6 +14,8 @@ import it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective;
 import java.util.Properties;
 
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.intro.IIntroManager;
+import org.eclipse.ui.intro.IIntroPart;
 import org.eclipse.ui.intro.IIntroSite;
 import org.eclipse.ui.intro.config.IIntroAction;
 import org.slf4j.Logger;
@@ -33,11 +35,11 @@ public class PerspectiveOpener implements IIntroAction {
 			PlatformUI.getWorkbench().showPerspective(SpagoBIPerspective.PERSPECTIVE_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow()); 
 
 		// close intro
-//			IIntroManager introManager = PlatformUI.getWorkbench().getIntroManager();
-//			IIntroPart introPart = introManager.getIntro();
-//			if(introPart != null){
-//				introManager.closeIntro(introPart);
-//			}
+			IIntroManager introManager = PlatformUI.getWorkbench().getIntroManager();
+			IIntroPart introPart = introManager.getIntro();
+			if(introPart != null){
+				introManager.closeIntro(introPart);
+			}
 			
 		}catch(Exception e){
 			logger.error("Error in opening the perspective and closign the welcome view",e);
