@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
 Bundle-SymbolicName: it.eng.spagobi.studio.oda;singleton:=true
-Bundle-Version: 5.0.0
+Bundle-Version: 5.1.0
 Bundle-ClassPath: .,
  src,
  lib/commons-discovery-0.2.jar,
@@ -28,8 +28,8 @@ Bundle-ClassPath: .,
  lib/jackson-core-2.0.2.jar,
  lib/jackson-databind-2.0.2.jar,
  lib/xstream-1.4.7.jar,
- lib/spagobi-utils-5.0.0.jar,
- lib/spagobi-utils-json-5.0.0.jar
+ lib/spagobi-utils-5.1.0.jar,
+ lib/spagobi-utils-json-5.1.0.jar
 Bundle-Activator: it.eng.spagobi.studio.oda.Activator
 Bundle-Localization: plugin
 Export-Package: it.eng.spagobi.commons.constants,
