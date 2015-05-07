@@ -264,7 +264,7 @@
         tooltip="Documents wizard"> 
       </action>
 -->
-      <action
+<!--      <action
             class="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction"
             icon="icons/metadata.png"
             id="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction"
@@ -272,7 +272,7 @@
             style="push"
             toolbarPath="Normal/additions"
             tooltip="New SpagoBI Model">
-      </action>
+      </action> -->
 
 
 
