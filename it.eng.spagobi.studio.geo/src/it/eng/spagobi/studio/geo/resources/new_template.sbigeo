@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MAP>
+  <MAP_RENDERER class_name="it.eng.spagobi.engines.geo.map.renderer.InteractiveMapRenderer">	
+    
+    <GUI_SETTINGS>
+        <WINDOWS>
+          <DEFAULTS>
+            <PARAM name='visible'>true</PARAM>
+            <PARAM name='y'>3</PARAM>
+            <PARAM name='transform'>scale(1.0)</PARAM>
+            <PARAM name='minimized'>true</PARAM>
+            <PARAM name='styles'>
+              <![CDATA[
+              {
+                  winPlaceholderStyles: {"fill":"none","stroke":"dimgray","stroke-width":1.5}
+                  , windowStyles: {"fill":"#fffce6","stroke":"dimgray","stroke-width":1}
+                  , titlebarStyles: {"fill":"steelblue","stroke":"dimgray","stroke-width":1}
+                  , titlebarHeight: 17
+                  , statusbarStyles: {"fill":"aliceblue","stroke":"dimgray","stroke-width":1}
+                  , statusbarHeight: 13
+                  , titletextStyles: {"font-family":"Arial,Helvetica","font-size":14,"fill":"white"}
+                  , statustextStyles: {"font-family":"Arial,Helvetica","font-size":10,"fill":"dimgray"}
+                  , buttonStyles: {"fill":"steelblue","stroke":"white","stroke-width":2}
+              }
+              ]]>
+            </PARAM>          
+          </DEFAULTS>
+          
+          <WINDOW name='navigation'>
+            <PARAM name='visible'>true</PARAM>
+            <PARAM name='title'>Navigazione</PARAM>
+          </WINDOW>
+          
+          <WINDOW name='measures'>
+            <PARAM name='visible'>true</PARAM>
+            <PARAM name='title'>Misure</PARAM>
+          </WINDOW>
+          
+          <WINDOW name='layers'>
+            <PARAM name='visible'>true</PARAM>
+            <PARAM name='title'>Layers</PARAM>
+          </WINDOW>
+          
+    <!--      <WINDOW name='detail'>
+            <PARAM name='visible'>true</PARAM>
+            <PARAM name='title'>Dettagli</PARAM>
+          </WINDOW>
+          -->
+          
+          <WINDOW name='legend'>
+            <PARAM name='visible'>true</PARAM>
+          </WINDOW>
+          
+          <WINDOW name='colourpicker'>
+            <PARAM name='visible'>true</PARAM>
+          </WINDOW>        
+          
+        </WINDOWS>
+  
+        
+        <PARAM name='defaultDrillNav'>false</PARAM>
+        
+        <PARAM name='highlightOnMouseOver'>true</PARAM>
+        <PARAM name='normalizeChartValues'>true</PARAM>
+        <PARAM name='chartScale'>1.0</PARAM>
+        <PARAM name='chartWidth'>80</PARAM>
+        <PARAM name='chartHeight'>160</PARAM>
+        <PARAM name='valueFont'>16px</PARAM>
+        <PARAM name='valueScale'>1.0</PARAM>
+        
+      </GUI_SETTINGS>
+		
+		
+	</MAP_RENDERER>
+
+</MAP>

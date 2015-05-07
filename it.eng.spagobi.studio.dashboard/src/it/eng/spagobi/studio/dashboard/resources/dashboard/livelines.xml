@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DASHBOARD movie='/dashboards/livelines.lzx.swf' displayTitleBar='true'>
+	<DIMENSION width='560' height='200' />
+	<CONF>
+		<PARAMETER name='minYValue' value='0' />
+		<PARAMETER name='maxYValue' value='200' />
+		<PARAMETER name='stepNumValue' value='10' />
+		<PARAMETER name='refreshRate' value='15000' />
+		<PARAMETER name='paramWidth' value='500' />
+		<PARAMETER name='paramHeight' value='300' />
+		<PARAMETER name='refreshRate' value='15000' />
+		<PARAMETER name='stepNumValue' value='10' />
+		<PARAMETER name='minYValue' value='0' />
+		<PARAMETER name='maxYValue' value='200' />
+		<PARAMETER name='stepYValue' value='25' />
+		<PARAMETER name='line1Color' value='0xf92525' />
+		<PARAMETER name='line2Color' value='0x17e512' />
+		<PARAMETER name='line3Color' value='0xbe4ce3' />
+		<PARAMETER name='line4Color' value='0x5420ff' />
+		<PARAMETER name='line5Color' value='0xf442ff' />
+		<PARAMETER name='line6Color' value='0xfb7819' />
+		<PARAMETER name='line7Color' value='0x19fbee' />
+		<PARAMETER name='line8Color' value='0xe570ad' />
+		<PARAMETER name='line9Color' value='0xfd0c23' />
+		<PARAMETER name='line10Color' value='0x4618de' />
+	</CONF>
+	<DATA url="/servlet/AdapterHTTP?ACTION_NAME=GET_DATASET_RESULT">
+	</DATA>
+</DASHBOARD>
+<!-- 
+	the displayTitleBar property works only when the portlet run in singleObjectModality 
+-->
+

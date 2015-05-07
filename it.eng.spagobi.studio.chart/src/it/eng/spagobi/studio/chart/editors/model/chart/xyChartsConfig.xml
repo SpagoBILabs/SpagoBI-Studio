@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<XYCHARTS>
+	<XYCHART name='commons'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/blockchart.xml'>
+		<!-- PARAMETERS FOR ALL BOXCHARTS -->
+		<DIMENSIONS>
+			<DIMENSION name='width' description='width of the chart'
+				type='INTEGER' />
+			<DIMENSION name='height' description='height of the chart'
+				type='INTEGER' />
+		</DIMENSIONS>
+		<COLORS name='background' description='Background color' type='COLOR' defaultValue='#FFFFFF' />		
+		<STYLES type='COMBO'>
+			<STYLE name="STYLE_LABELS_DEFAULT" description='DEFAULT STYLE FOR LABELS'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_X_AXIS_LABELS" description='STYLE FOR X AXIS LABELS'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>	
+			<STYLE name="STYLE_Y_AXIS_LABELS" description='STYLE FOR Y AXIS LABELS'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_TITLE" description='STYLE FOR TITLE'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_SUBTITLE" description='STYLE FOR SUBTITLE'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+			<STYLE name="STYLE_LABELS" description='STYLE LABELS
+			'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,arial,times_new_roman" />
+				<STYLE_INFO name="size" description="" type="INTEGER" />
+				<STYLE_INFO name="color" description="" type="COLOR" />
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" />
+			</STYLE>
+		</STYLES>
+		<CONF>
+			<SECTION name="Parameters">
+				<PARAMETER name='x_label' description='x Axis label'
+					type='STRING' tooltip='label for x axis' />
+				<PARAMETER name='y_label' description='y Axis label'
+					type='STRING' tooltip='label for y axis'/>
+				<PARAMETER name='z_label' description='z Axis label'
+					type='STRING' tooltip='label for z axis'/>
+				<PARAMETER name='n_visualization' description='Number of visualization'
+					type='INTEGER' tooltip='number of visualizations'/>
+				<PARAMETER name='xrange_value_low' description='Low value for x range'
+					type='INTEGER' tooltip='Low value for x range' defaultValue='1'/>	
+				<PARAMETER name='xrange_value_high' description='High value for x range'
+					type='INTEGER' tooltip='High value for x range' defaultValue='100'/>	
+				<PARAMETER name='yrange_value_low' description='Low value for y range'
+					type='INTEGER' tooltip='Low value for y range' defaultValue='1'/>	
+				<PARAMETER name='yrange_value_high' description='High value for y range'
+					type='INTEGER' tooltip='High value for y range' defaultValue='100'/>			
+				<PARAMETER name='grid_width' description='Width of the grid'
+					type='INTEGER' tooltip='Width of the grid' defaultValue='4'/>									
+				<PARAMETER name='grid_height' description='Height of the grid'
+					type='INTEGER' tooltip='Height of the grid' defaultValue='3'/>									
+			</SECTION>
+		</CONF>
+	</XYCHART>
+	<XYCHART name='blockchart'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/blockchart.xml'>
+		<CONF>
+		</CONF>
+		<YRANGES />
+		<ZRANGES />
+	</XYCHART>
+</XYCHARTS>

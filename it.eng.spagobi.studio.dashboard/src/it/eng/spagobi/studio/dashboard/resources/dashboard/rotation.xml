@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DASHBOARD movie='/dashboards/rot.lzx.swf' displayTitleBar='true'>
+	<DIMENSION width='400' height='400' />
+	<CONF>
+		<PARAMETER name='paramWidth' value='400' />
+		<PARAMETER name='paramHeight' value='400' />
+		<PARAMETER name='refreshRate' value='15000' />
+		<PARAMETER name='minValue' value='100' />
+		<PARAMETER name='lowValue' value='295' />
+		<PARAMETER name='highValue' value='340' />
+		<PARAMETER name='maxValue' value='400' />
+		<PARAMETER name='colorArc1' value='0x9cff00' />
+		<PARAMETER name='colorArc2' value='0xfff999' />
+		<PARAMETER name='colorArc3' value='0xff5454' />
+	</CONF>
+	<DATA url="/servlet/AdapterHTTP?ACTION_NAME=GET_DATASET_RESULT">
+	</DATA>
+</DASHBOARD>
+<!-- 
+	the displayTitleBar property works only when the portlet run in singleObjectModality 
+-->

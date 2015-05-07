@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Chart Editor"
+            extensions="sbichart"
+            icon="icons/objecticon_CHART.png"
+            class="it.eng.spagobi.studio.chart.editors.ChartEditor"
+            id="it.eng.spagobi.studio.chart.editors.ChartEditor">
+      </editor>
+   </extension>
+  <!--
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="it.eng.spagobi.studio.chart.popupmenus.ResourceNavigatorContribution"
+            objectClass="org.eclipse.core.internal.resources.Folder"
+            targetID="it.eng.spagobi.studio.core.views.ResourceNavigator"
+            >
+            		<filter name="path" value="*Business_Analysis*"/>
+           <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            icon="icons/sbiproject.gif"            
+            path="additions" 
+            label="SpagoBI Documents"> 
+            <separator name="SpagoBI"/> 
+         </menu> 
+         <action
+            id="it.eng.spagobi.studio.chart.actions.NewChartAction" 
+            label="Chart"
+            icon="icons/objecticon_CHART.png" 
+            style="push"
+            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
+            class="it.eng.spagobi.studio.chart.actions.NewChartAction" />
+            //menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
+      </objectContribution>
+   </extension>
+-->
+
+
+
+
+
+</plugin>

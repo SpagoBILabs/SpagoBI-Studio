@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="it.eng.spagobi.studio.geo.editors.GEOEditor"
+            default="true"
+            extensions="sbigeo"
+            icon="icons/objecticon_MAP.png"
+            id="it.eng.spagobi.studio.geo.editors.GEOEditor"
+            name="GEO Editor">
+      </editor>
+   </extension>
+   <!--
+  <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="it.eng.spagobi.studio.geo.popupmenus.ResourceNavigatorContribution"
+            objectClass="org.eclipse.core.internal.resources.Folder"
+            targetID="it.eng.spagobi.studio.core.views.ResourceNavigator"
+           >
+           		<filter name="path" value="*Business_Analysis*"/>
+           <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            icon="icons/sbiproject.gif"            
+            path="additions" 
+            label="SpagoBI Documents"> 
+            <separator name="SpagoBI"/> 
+         </menu> 
+         
+    <action
+               class="it.eng.spagobi.studio.geo.actions.NewGEOAction"
+               icon="icons/objecticon_MAP.png"
+               id="it.eng.spagobi.studio.geo.actions.NewGEOAction"
+               label="GEO"
+               menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
+               style="push" /> 
+      </objectContribution>
+   </extension>
+   -->
+ </plugin>

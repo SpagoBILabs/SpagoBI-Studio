@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Birt Plug-in
+Bundle-SymbolicName: it.eng.spagobi.studio.birt;singleton:=true
+Bundle-Version: 5.1.0
+Bundle-Activator: it.eng.spagobi.studio.birt.Activator
+Require-Bundle: org.eclipse.core.resources;bundle-version="3.4.2",
+ org.eclipse.ui.navigator;bundle-version="3.3.102",
+ org.eclipse.core.runtime;bundle-version="3.4.0",
+ org.eclipse.ui;bundle-version="3.4.2",
+ it.eng.spagobi.studio.utils;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ClassPath: lib/dom4j.jar,
+ .,
+ lib/ch.qos.logback.classic_0.9.19.v20100519-1505.jar,
+ lib/ch.qos.logback.core_0.9.19.v20100419-1216.jar,
+ lib/ch.qos.logback.slf4j_0.9.19.v20100519-1910.jar,
+ lib/org.slf4j.api_1.5.11.v20100519-1910.jar
+Export-Package: it.eng.spagobi.studio.birt.actions,
+ it.eng.spagobi.studio.birt.services,
+ it.eng.spagobi.studio.birt.wizards

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="false"
+            id="it.eng.spagobi.studio.jasper.editor2"
+            name="name">
+      </editor>
+   </extension>
+   <!--
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="it.eng.spagobi.studio.jasper.popupmenus.ResourceNavigatorContribution"
+            objectClass="org.eclipse.core.internal.resources.Folder"
+            targetID="it.eng.spagobi.studio.core.views.ResourceNavigator"
+            >
+		<filter name="path" value="*Business_Analysis*"/>
+            
+           <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            icon="icons/sbiproject.gif"            
+            path="additions" 
+            label="SpagoBI Documents"> 
+            <separator name="SpagoBI"/> 
+         </menu> 
+         <action
+            id="it.eng.spagobi.studio.jasper.actions.NewJasperAction" 
+            label="Jasper"
+            icon="icons/objecticon_REPORT.png" 
+            style="push"
+            menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
+            class="it.eng.spagobi.studio.jasper.actions.NewJasperAction" />
+      </objectContribution>
+   </extension>
+   -->
+ <extension point = "org.eclipse.ui.editors">
+   <editor
+       id="org.eclipse.ui.IReport"
+       name="IReport Editor"
+       extensions="jrxml"
+       launcher="it.eng.spagobi.studio.jasper.editors.JasperEditor"
+       icon="icons/objecticon_JASPER.png">
+   </editor>
+ </extension>
+    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="SpagoBI Editors Configuration"
+            class="it.eng.spagobi.studio.jasper.preferences.EditorsConfigurationPreferencePage"
+            id="it.eng.spagobi.studio.jasper.preferences.EditorsConfigurationPreferencePage">
+      </page>
+    </extension>    
+</plugin>

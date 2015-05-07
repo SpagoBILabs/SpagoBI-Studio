@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<EXTCHARTS>
+<!-- 	<EXTCHART type='area' imagePath='it/eng/spagobi/studio/extchart/resources/images/areaExtChart.PNG' xAxeName = 'Category'  >
+	</EXTCHART> -->
+	<EXTCHART type='pie' imagePath='it/eng/spagobi/studio/extchart/resources/images/pieExtChart.PNG'  defaultSerieType = 'pie'>
+	</EXTCHART>
+<!--	<EXTCHART type='line' imagePath='it/eng/spagobi/studio/extchart/resources/images/splineExtChart.PNG' xAxeName = ''>
+	</EXTCHART> -->
+	<EXTCHART type='barAndLine' imagePath='it/eng/spagobi/studio/extchart/resources/images/lineExtChart.PNG' xAxeName = 'Category' yAxeName = 'Numeric' defaultSerieType = 'bar'>
+	</EXTCHART>
+	<EXTCHART type='gauge' imagePath='it/eng/spagobi/studio/extchart/resources/images/gaugeExtChart.PNG' defaultSerieType = 'gauge'>
+	</EXTCHART>
+	<!-- <EXTCHART type='scatter' imagePath='it/eng/spagobi/studio/extchart/resources/images/barExtChart.PNG'>
+	</EXTCHART>
+		<EXTCHART type='radar' imagePath='it/eng/spagobi/studio/extchart/resources/images/pieExtChart.PNG' xAxeName = 'radial'>
+	</EXTCHART>
+	 -->
+</EXTCHARTS>

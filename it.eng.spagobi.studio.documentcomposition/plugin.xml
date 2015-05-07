@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="it.eng.spagobi.studio.documentcomposition.editors.DocumentCompositionEditor"
+            default="true"
+            extensions="sbidoccomp"
+            icon="icons/objecticon_COMPOSITE_DOCUMENT.png"
+            id="it.eng.spagobi.studio.documentcomposition.editors.DocumentCompositionEditor"
+            name="Document Composition Editor">
+      </editor>
+   </extension>
+  <!--
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="it.eng.spagobi.studio.documentcomposition.popupmenus.ResourceNavigatorContribution"
+            objectClass="org.eclipse.core.internal.resources.Folder"
+            targetID="it.eng.spagobi.studio.core.views.ResourceNavigator"
+            >
+            		<filter name="path" value="*Business_Analysis*"/>
+           <menu
+            id="it.eng.spagobi.studio.core.main.menu" 
+            icon="icons/sbiproject.gif"            
+            path="additions" 
+            label="SpagoBI Documents"> 
+            <separator name="SpagoBI"/> 
+           </menu>
+           <action
+               class="it.eng.spagobi.studio.documentcomposition.actions.NewDocumentCompositionAction"
+               icon="icons/objecticon_COMPOSITE_DOCUMENT.png"
+               id="it.eng.spagobi.studio.documentcomposition.actions.NewDocumentCompositionAction"
+               label="Document Composition"
+               menubarPath="it.eng.spagobi.studio.core.main.menu/SpagoBI"
+               style="push" />
+
+      </objectContribution>
+   </extension>
+   -->
+   <extension point="org.eclipse.ui.views">
+		<view
+        category="it.eng.spagobi.studio.doccomp"
+        class="it.eng.spagobi.studio.documentcomposition.views.DocumentPropertiesView"
+        icon="icons/propertiesIcon.png"
+        id="it.eng.spagobi.studio.documentcomposition.views.DocumentPropertiesView"
+        name="Document Properties">
+	</view>
+	</extension>
+   <extension point="org.eclipse.ui.views">
+		<view
+        category="it.eng.spagobi.studio.doccomp"
+        class="it.eng.spagobi.studio.documentcomposition.views.DocumentParametersView"
+        icon="icons/iconAnalyticalDriverView.png"
+        id="it.eng.spagobi.studio.documentcomposition.views.DocumentParametersView"
+        name="DocumentParameters">
+	</view>
+	</extension>
+   <extension point="org.eclipse.ui.views">
+		<view
+        category="it.eng.spagobi.studio.doccomp"
+        class="it.eng.spagobi.studio.documentcomposition.views.VideoSizeView"
+        icon="icons/videoSize.png"
+        id="it.eng.spagobi.studio.documentcomposition.views.VideoSizeView"
+        name="Video Size">
+	</view>
+	</extension>
+	
+	<!-- tabs di navigazione -->
+	<extension point="org.eclipse.ui.views">
+    	 <category 
+           id="it.eng.spagobi.studio.doccomp"
+           name="Sbi Studio Doc Composition">
+        </category>
+        <view
+              category="it.eng.spagobi.studio.doccomp"
+              class="it.eng.spagobi.studio.documentcomposition.views.NavigationView"
+              icon="icons\view.gif"
+              id="it.eng.spagobi.studio.documentcomposition.views.NavigationView"
+              name="Navigation"/>
+
+	</extension>	
+
+	
+
+
+
+ </plugin>

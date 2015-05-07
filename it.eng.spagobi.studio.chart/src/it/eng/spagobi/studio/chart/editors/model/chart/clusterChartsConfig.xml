@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CLUSTERCHARTS>
+	<CLUSTERCHART name='commons'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplecluster.xml'>
+		<!-- PARAMETERS FOR ALL CLUSTERCHARTS -->
+		<DIMENSIONS>
+			<DIMENSION name='width' description='width of the chart'
+				type='INTEGER' />
+			<DIMENSION name='height' description='height of the chart'
+				type='INTEGER' />
+		</DIMENSIONS>
+		<COLORS name='background' description='Background color' type='COLOR' defaultValue='#FFFFFF' />		
+		<STYLES type='COMBO'>
+			<STYLE name="STYLE_LABELS_DEFAULT" description='DEFAULT STYLE FOR LABELS' tooltip='choose a default style for labels'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_TITLE" description='STYLE FOR TITLE' tooltip='choose the style for title of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL' />
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_SUBTITLE" description='STYLE FOR SUBTITLE' tooltip='choose the style for subtitle of the chart'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#FF0000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_X_AXIS_LABELS" description='STYLE FOR X AXIS LABELS' tooltip='choose the style for labels on x axis'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#000000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>
+			<STYLE name="STYLE_Y_AXIS_LABELS" description='STYLE FOR Y AXIS LABELS' tooltip='choose the style for labels on y axis'>  <!-- Style means font, size, column, name, color, orientation -->
+				<STYLE_INFO name="font" description="" type="COMBO"
+					values="helvetica,ARIAL,times_new_roman" defaultValue='ARIAL'/>
+				<STYLE_INFO name="size" description="" type="INTEGER" defaultValue='10'/>
+				<STYLE_INFO name="color" description="" type="COLOR" defaultValue='#000000'/>
+				<STYLE_INFO name="orientation" description="" type="COMBO"
+					values="horizontal,vertical" defaultValue='HORIZONTAL'/>
+			</STYLE>			
+		</STYLES>
+		<CONF>
+			<SECTION name="Parameters">
+				<PARAMETER name='x_label' description='Label for x' type='STRING' tooltip='Label for x axis'/>
+				<PARAMETER name='y_label' description='Label for y' type='STRING' tooltip='Label for y axis'/>
+				<PARAMETER name='column_sel' description='Choose a column to be selected' type='STRING' tooltip='Choose a particular serie to be selected'/>
+				<PARAMETER name='default_color' description='Default color' type='COLOR' tooltip='Default color'/>
+			</SECTION>
+		</CONF>
+	</CLUSTERCHART>
+	<CLUSTERCHART name='simplecluster'
+		templatePath='it/eng/spagobi/studio/chart/resources/chart/simplecluster.xml'>
+		<CONF>
+		</CONF>
+	</CLUSTERCHART>
+
+</CLUSTERCHARTS>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+
+<extension point="org.eclipse.ui.activities">
+<category name="Filter GUI Category"  id="org.myorg.category.excludeFromGUI"/>
+<categoryActivityBinding activityId="org.myorg.activity.excludeFromGUI" categoryId="org.myorg.category.excludeFromGUI"/>
+<activity name = "Exclude GUI" description="Exclude GUI" id="org.myorg.activity.excludeFromGUI"/>
+<!--<activityPatternBinding activityId="org.myorg.activity.excludeFromGUI" pattern=".*/org\.eclipse\.ui\.examples\.*"/>
+<activityPatternBinding activityId="org.myorg.activity.excludeFromGUI"  pattern=".*/org.eclipse.search.menu.*"/>
+<activityPatternBinding  activityId="org.myorg.activity.excludeFromGUI" pattern=".*/org.eclipse.edit.menu.*"/>-->
+<activityPatternBinding  activityId="org.myorg.activity.excludeFromGUI" pattern=".*/it.eng.spagobi.studio.core.*"/>
+<defaultEnablement id="org.myorg.activity.excludeFromGUI"/>
+</extension> 
+  
+   
+
+   <extension
+         id="spagoBIStudioBuilder"
+         name="SpagoBIStudio Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="true">
+         <run class="it.eng.spagobi.studio.core.builder.SpagoBIStudioBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="spagoBIStudioNature"
+         name="SpagoBIStudio Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="it.eng.spagobi.studio.core.builder.SpagoBIStudioNature">
+         </run>
+      </runtime>
+      <builder
+            id="it.eng.spagobi.studio.core.spagoBIStudioBuilder">
+      </builder>
+   </extension>
+   <extension point="org.eclipse.ui.views">
+      <category
+            name="SpagoBI"
+            id="it.eng.spagobi.studio.core">
+      </category>
+
+   </extension> 
+	<!-- RESOURCE NAVIGATOR -->
+	<extension
+         point="org.eclipse.ui.views">
+      <view
+            name="SpagoBIStudio Resource Navigator"
+            category="org.myorg.category.excludeFromGUI"
+            class="it.eng.spagobi.studio.core.views.ResourceNavigator"
+            id="it.eng.spagobi.studio.core.views.ResourceNavigator"
+            icon="icons/sbiproject.gif">
+      </view>
+   </extension>
+<!-- VIEWER -->
+	<extension
+         point="org.eclipse.ui.navigator.viewer">
+         <viewer
+             viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator"
+             >
+             <popupMenu
+                allowsPlatformContributions="false"
+                id="org.eclipse.ui.navigator.resourceContent#PopupMenu">  
+             <insertionPoint name="group.new"/>
+             <insertionPoint
+                   name="group.open"
+                   separator="true"/>
+             <insertionPoint name="group.openWith"/>
+                  <insertionPoint name="group.show"/>
+                         <insertionPoint name="group.generate"/>                        
+                         <insertionPoint name="group.build"/>                        
+			<insertionPoint
+                   name="group.edit"
+                   separator="true"/>
+			<insertionPoint
+                   name="group.reorganize"
+                   separator="true"/>
+            <insertionPoint
+                   name="group.port"
+                   separator="true"/>
+           <!-- <insertionPoint
+                   name="group.generate"
+                   separator="true"/>
+            <insertionPoint
+                   name="group.search"
+                   separator="true"/>
+            <insertionPoint
+                   name="group.build"
+                   separator="true"/>
+            <insertionPoint
+                   name="additions"
+                   separator="true"/> -->   
+             <insertionPoint
+                   name="group.properties"
+                   separator="true"/>
+          </popupMenu>
+     	</viewer>
+             
+
+
+	<viewerActionBinding
+    	viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator" >
+        
+        <includes>
+            <actionExtension pattern="org.eclipse.ui.navigator.resources.*" />  
+            <actionExtension pattern="org.eclipse.ui.navigator.*" />  
+			<actionExtension pattern="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider" /> 
+             
+        </includes>
+        <excludes>
+                <actionExtension pattern="org.eclipse.team.*" />
+        </excludes>  
+       	
+	</viewerActionBinding> 
+       	
+    <viewerContentBinding 
+		viewerId="it.eng.spagobi.studio.core.views.ResourceNavigator">
+        <includes>
+       		<contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />		       	      
+	  	   	<contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/>
+        	<contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/> 
+        	<contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
+       </includes>
+        
+    </viewerContentBinding>
+
+       
+   </extension>
+  
+
+   
+   
+   
+   <!-- NAVIGATOR CONTENT -->
+      <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <actionProvider
+            class="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider"
+            id="it.eng.spagobi.studio.core.views.actionProvider.ResourceNavigatorActionProvider"
+            overrides="org.eclipse.ui.navigator.resources.actions.EditActions" 
+            dependsOn="it.eng.spagobi.studio.core.main.menu"
+            priority="highest">
+         <enablement>
+         <!-- A hack to allways be enabled -->
+        <!-- <not>
+            <systemTest
+                  property="MyApp"
+                  value="WONT-EVER-BE-SET">
+            </systemTest>
+         </not>-->
+         </enablement>
+     </actionProvider>
+   </extension>
+   
+   
+   
+   
+   
+	<!-- PERSPECTIVE -->
+   <extension point="org.eclipse.ui.perspectives">
+	   <perspective
+	         name="SpagoBI"
+	         class="it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective"
+	         id="it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective"
+	         icon="icons/sbiproject.gif" >
+	   </perspective>
+	</extension>
+		<!-- PREFERENCE PAGE -->
+   <!-- <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="SpagoBI"
+            class="it.eng.spagobi.studio.core.preferences.SpagoBIPreferencePage"
+            id="it.eng.spagobi.studio.core.preferences.SpagoBIPreferencePage">
+      </page>
+    </extension> -->
+    
+    
+    		<!-- NEW SPAGOBI WIZARD -->
+    		
+    <extension point="org.eclipse.ui.newWizards">
+      <category id="SpagoBI" name="SpagoBI" />
+      <wizard
+            category="SpagoBI"
+            class="it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard"
+            hasPages="true"
+            icon="icons/sbiproject.gif"
+            id="it.eng.spagobi.studio.core.wizards.newSpagoBIProjectWizard"
+            name="SpagoBI Project"
+            project="true" 
+            finalPerspective="it.eng.spagobi.studio.core.perspectives.SpagoBIPerspective" />
+   </extension>
+   
+   
+
+
+
+
+
+<!--       PROPERTY PAGE -->
+<extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="it.eng.spagobi.studio.core.properties.SpagoBIPropertyPage"
+            icon="icons/metadata.png"            
+            id="it.eng.spagobi.studio.core.propertyPage"
+            name="SpagoBI"
+            >
+            <enabledWhen>
+           	<!--  <and> -->
+           	<adapt type="org.eclipse.core.internal.resources.File" />
+            <!--<path type="*Sbi*" />-->
+            <!-- </and> -->
+            </enabledWhen>
+            
+      </page>
+</extension>
+<!--  EDITORS      -->
+   <extension
+         point="org.eclipse.ui.editors">
+      <!-- SERVER EDITOR -->
+      <editor
+            name="Server editor"
+            extensions="sbiserver"
+            icon="icons/server.png"
+            class="it.eng.spagobi.studio.core.editors.ServerEditor"
+            id="it.eng.spagobi.studio.core.editors.ServerEditor">
+      </editor>
+   </extension>
+
+
+
+<!-- INTRO -->
+
+  
+  
+    <extension point="org.eclipse.ui.actionSets">
+   <actionSet
+      id="it.eng.spagobi.studio.core.DocumentActionSet"
+   label="SpagoBI"
+   visible="true"
+           style="pulldown">
+      <action
+            class="it.eng.spagobi.studio.core.actions.NewSpagoBIProjectAction"
+            icon="icons/sbiproject.gif"
+            id="it.eng.spagobi.studio.core.actions.NewSpagoBIProjectAction"
+            label="New SpagoBIProject"
+            style="push"
+            toolbarPath="Normal/additions"
+            tooltip="New SpagoBI Project">
+      </action>
+
+<!--
+ <action
+        class="it.eng.spagobi.studio.core.actions.DocumentsWizardMenuAction"
+        icon="icons/analysis.png"
+        id="it.eng.spagobi.studio.core.actions.DocumentsMenuAction"
+        label="Documents Menu"
+        style="pulldown"
+        toolbarPath="Normal/additions"
+        tooltip="Documents wizard"> 
+      </action>
+-->
+      <action
+            class="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction"
+            icon="icons/metadata.png"
+            id="it.eng.spagobi.meta.editor.business.actions.NewSpagoBIModelAction"
+            label="New SpagoBIModel"
+            style="push"
+            toolbarPath="Normal/additions"
+            tooltip="New SpagoBI Model">
+      </action>
+
+
+
+<!--
+  <menu
+        id="it.eng.spagobi.studio.core.menuW"
+        label="SpagoBI Documents"
+        path="additions">
+     <groupMarker
+           name="content">
+     </groupMarker>
+     <separator
+           name="additions">
+     </separator>
+  </menu>
+  -->
+   </actionSet> 
+</extension>
+  
+
+
+
+
+  
+  
+  
+  
+
+</plugin>
