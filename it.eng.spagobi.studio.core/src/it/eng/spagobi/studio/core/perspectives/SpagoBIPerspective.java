@@ -10,7 +10,10 @@
 **/
 package it.eng.spagobi.studio.core.perspectives;
 
+import java.util.Properties;
+
 import it.eng.spagobi.meta.editor.multi.wizards.SpagoBIModelEditorWizard;
+import it.eng.spagobi.studio.core.util.Utilities;
 import it.eng.spagobi.studio.core.views.ResourceNavigator;
 import it.eng.spagobi.studio.core.wizards.NewSpagoBIProjectWizard;
 import it.eng.spagobi.studio.utils.util.SpagoBIStudioConstants;
@@ -78,10 +81,13 @@ public class SpagoBIPerspective implements IPerspectiveFactory {
 		// add the resource viewer
 		topLeft.addView(IPageLayout.ID_PROJECT_EXPLORER);
 
-		IFolderLayout bottomRight = factory.createFolder("bottomRight", IPageLayout.BOTTOM, 0.85f, factory.getEditorArea());
-		bottomRight.addView(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
-		factory.addShowViewShortcut(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
-		
+		// Add data source property view only in Meta case when models are activated
+		Properties properties = new Utilities().getStudioMetaProperties();	
+		if(Utilities.readBooleanProperty(properties, SpagoBIStudioConstants.CONFIG_PROPERTY_FOLDER_BUSINESS_MODELS)){
+			IFolderLayout bottomRight = factory.createFolder("bottomRight", IPageLayout.BOTTOM, 0.85f, factory.getEditorArea());
+			bottomRight.addView(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
+			factory.addShowViewShortcut(SpagoBIStudioConstants.DATA_SOURCE_EXPLORER_VIEW_ID);
+		}
 		
 	}
 
