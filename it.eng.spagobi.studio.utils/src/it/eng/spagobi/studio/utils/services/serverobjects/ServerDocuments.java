@@ -9,18 +9,19 @@
 **/
 package it.eng.spagobi.studio.utils.services.serverobjects;
 
+import it.eng.spagobi.sdk.documents.bo.SDKAttribute;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
 import it.eng.spagobi.sdk.documents.bo.SDKSchema;
 import it.eng.spagobi.sdk.documents.bo.SDKTemplate;
 import it.eng.spagobi.sdk.exceptions.NotAllowedOperationException;
-import it.eng.spagobi.sdk.importexport.bo.SDKFile;
 import it.eng.spagobi.server.services.api.bo.IDocument;
 import it.eng.spagobi.server.services.api.bo.ITemplate;
 import it.eng.spagobi.studio.utils.bo.Document;
 import it.eng.spagobi.studio.utils.bo.DocumentParameter;
 import it.eng.spagobi.studio.utils.bo.Functionality;
+import it.eng.spagobi.studio.utils.bo.ProfileAttribute;
 import it.eng.spagobi.studio.utils.bo.Template;
 import it.eng.spagobi.studio.utils.services.ProxyHandler;
 import it.eng.spagobi.studio.utils.services.ServerObjectsTranslator;
@@ -184,6 +185,23 @@ public class ServerDocuments {
 		}
 		return toReturn;
 	}
+	
+	
+	public ProfileAttribute[] 	getAllAttributes(String role) throws RemoteException{
+		ProfileAttribute[] toReturn = null;
+		SDKAttribute[] attributes = null;
+
+		if(proxyHandler.getDocumentsServiceProxy()!= null)
+			attributes = proxyHandler.getDocumentsServiceProxy().getAllAttributes(role);
+		if(attributes != null){
+			toReturn = new ProfileAttribute[attributes.length];
+			for (int i = 0; i < attributes.length; i++) {
+				toReturn[i] = new ProfileAttribute(attributes[i]);
+			}
+		}
+		return toReturn;
+	}
+	
 
 	public HashMap<String, String> getAllDatamartModels()  throws RemoteException{
 		HashMap<String,String> toReturn = null;

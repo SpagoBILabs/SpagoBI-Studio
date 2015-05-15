@@ -87,6 +87,8 @@ public class SpagoBIServerObjectsFactory {
 		ds.setProxyHandler(proxyHandler);
 		return ds;	
 		}
+	
+	
 
 
 
