@@ -9,10 +9,7 @@
 **/
 package it.eng.spagobi.studio.utils.bo;
 
-import it.eng.spagobi.sdk.documents.bo.SDKAttribute;
-import it.eng.spagobi.sdk.documents.bo.SDKConstraint;
-import it.eng.spagobi.sdk.documents.bo.SDKDocument;
-import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
+import it.eng.spagobi.sdk.behavioural.bo.SDKAttribute;
 
 public class ProfileAttribute {
 

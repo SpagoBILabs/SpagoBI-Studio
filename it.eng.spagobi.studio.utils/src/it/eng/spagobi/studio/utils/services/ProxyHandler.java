@@ -9,6 +9,7 @@
 **/
 package it.eng.spagobi.studio.utils.services;
 
+import it.eng.spagobi.sdk.proxy.BehaviouralServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
@@ -32,6 +33,7 @@ public class ProxyHandler {
 	MapsSDKServiceProxy mapsServiceProxy = null;
 	TestConnectionServiceProxy testConnectionServiceProxy = null;
 	DomainsServiceProxy domainsServiceProxy = null;
+	BehaviouralServiceProxy	behaviouralServiceProxy = null;
 	
 	String serverName = null;
 
@@ -83,6 +85,7 @@ public class ProxyHandler {
 				dataSetsSDKServiceProxy : 
 					proxyFactory.getDataSetsSDKServiceProxy();
 	}
+	
 
 
 
@@ -104,6 +107,12 @@ public class ProxyHandler {
 	}
 
 
+	public BehaviouralServiceProxy getBehaviouralServiceProxy() {
+		return (behaviouralServiceProxy != null) ? 
+				behaviouralServiceProxy : 
+					proxyFactory.getBehaviouralServiceProxy();
+	}
+	
 
 	public String getServerName() {
 		return serverName;

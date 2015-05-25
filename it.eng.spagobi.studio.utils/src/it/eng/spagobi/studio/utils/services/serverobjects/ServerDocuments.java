@@ -9,7 +9,7 @@
 **/
 package it.eng.spagobi.studio.utils.services.serverobjects;
 
-import it.eng.spagobi.sdk.documents.bo.SDKAttribute;
+import it.eng.spagobi.sdk.behavioural.bo.SDKAttribute;
 import it.eng.spagobi.sdk.documents.bo.SDKDocument;
 import it.eng.spagobi.sdk.documents.bo.SDKDocumentParameter;
 import it.eng.spagobi.sdk.documents.bo.SDKFunctionality;
@@ -66,7 +66,7 @@ public class ServerDocuments {
 				proxyHandler.getDocumentsServiceProxy().uploadMondrianSchema(sdkSchema);			
 			} catch (NotAllowedOperationException e) {
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-						"Error", "Error during file deploy: NotAllowedOperationException");		
+						"Error", "Error during file deploy: NotowedOperationException");		
 				e.printStackTrace();
 			} 
 
@@ -187,12 +187,12 @@ public class ServerDocuments {
 	}
 	
 	
-	public ProfileAttribute[] 	getAllAttributes(String role) throws RemoteException{
+	public ProfileAttribute[] 	getAttributes(String role) throws RemoteException{
 		ProfileAttribute[] toReturn = null;
 		SDKAttribute[] attributes = null;
 
 		if(proxyHandler.getDocumentsServiceProxy()!= null)
-			attributes = proxyHandler.getDocumentsServiceProxy().getAllAttributes(role);
+			attributes = proxyHandler.getBehaviouralServiceProxy().getAllAttributes(role);
 		if(attributes != null){
 			toReturn = new ProfileAttribute[attributes.length];
 			for (int i = 0; i < attributes.length; i++) {

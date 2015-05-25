@@ -11,6 +11,7 @@ package it.eng.spagobi.studio.utils.services;
 
 import it.eng.spagobi.studio.utils.bo.Server;
 import it.eng.spagobi.studio.utils.exceptions.NoActiveServerException;
+import it.eng.spagobi.studio.utils.services.serverobjects.ServerBehavioural;
 import it.eng.spagobi.studio.utils.services.serverobjects.ServerDataSources;
 import it.eng.spagobi.studio.utils.services.serverobjects.ServerDatasets;
 import it.eng.spagobi.studio.utils.services.serverobjects.ServerDocuments;
@@ -84,6 +85,12 @@ public class SpagoBIServerObjectsFactory {
 	
 	public ServerDomains getServerDomains(){
 		ServerDomains ds = new ServerDomains();
+		ds.setProxyHandler(proxyHandler);
+		return ds;	
+		}
+	
+	public ServerBehavioural getServerBehavioural(){
+		ServerBehavioural ds = new ServerBehavioural();
 		ds.setProxyHandler(proxyHandler);
 		return ds;	
 		}

@@ -9,6 +9,7 @@
 **/
 package it.eng.spagobi.studio.utils.sdk;
 
+import it.eng.spagobi.sdk.proxy.BehaviouralServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSetsSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DataSourcesSDKServiceProxy;
 import it.eng.spagobi.sdk.proxy.DocumentsServiceProxy;
@@ -108,6 +109,17 @@ public class SDKProxyFactory {
 			serverUrl += "/";
 		}
 		proxy.setEndpoint(serverUrl + "sdk/MapsSDKService");
+		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
+		return proxy;
+	}
+	
+	public BehaviouralServiceProxy getBehaviouralServiceProxy() {
+		BehaviouralServiceProxy proxy = new BehaviouralServiceProxy(server.getUser(), server.getPassword());
+		String serverUrl = server.getUrl();
+		if (serverUrl != null && !serverUrl.endsWith("/")) {
+			serverUrl += "/";
+		}
+		proxy.setEndpoint(serverUrl + "sdk/BehaviouralService");
 		new ProxyDataRetriever().initProxyData(proxy, serverUrl);
 		return proxy;
 	}
