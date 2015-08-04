@@ -447,14 +447,14 @@ public class UploadDatamartTemplateService {
 			logger.error("error in uploading datamart", e1);
 			String detailMessage = e1.getTargetException() != null ? "\n\nDetail: " + e1.getTargetException().getMessage() : "";
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "error",
-					"Error in uploading datamart: check server definition is right, check server is avalaible and model file is not in use on server."
+					"Error in uploading datamart: check if the server definition is right, if the server is avaiable and the model file is not in use/locked on server."
 							+ detailMessage);
 			dialog.close();
 			return false;
 		} catch (Exception e1) {
 			logger.error("error in uploading datamart", e1);
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "error",
-					"error in uploading datamart: check server definition is right and server is avalaible");
+					"error in uploading datamart: check if the server definition is right and the server is avaiable");
 			dialog.close();
 			return false;
 		}
